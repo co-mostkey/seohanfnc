@@ -1,0 +1,250 @@
+{
+  "dailyStats": [
+    {
+      "date": "2024-01-01",
+      "visitors": 127,
+      "inquiries": 3,
+      "productViews": 245
+    },
+    {
+      "date": "2024-01-02",
+      "visitors": 89,
+      "inquiries": 2,
+      "productViews": 178
+    },
+    {
+      "date": "2024-01-03",
+      "visitors": 156,
+      "inquiries": 5,
+      "productViews": 312
+    },
+    {
+      "date": "2024-01-04",
+      "visitors": 134,
+      "inquiries": 4,
+      "productViews": 267
+    },
+    {
+      "date": "2024-01-05",
+      "visitors": 98,
+      "inquiries": 1,
+      "productViews": 189
+    },
+    {
+      "date": "2024-01-06",
+      "visitors": 76,
+      "inquiries": 2,
+      "productViews": 145
+    },
+    {
+      "date": "2024-01-07",
+      "visitors": 82,
+      "inquiries": 1,
+      "productViews": 156
+    },
+    {
+      "date": "2024-01-08",
+      "visitors": 145,
+      "inquiries": 6,
+      "productViews": 289
+    },
+    {
+      "date": "2024-01-09",
+      "visitors": 167,
+      "inquiries": 4,
+      "productViews": 334
+    },
+    {
+      "date": "2024-01-10",
+      "visitors": 123,
+      "inquiries": 3,
+      "productViews": 245
+    },
+    {
+      "date": "2024-01-11",
+      "visitors": 189,
+      "inquiries": 7,
+      "productViews": 378
+    },
+    {
+      "date": "2024-01-12",
+      "visitors": 156,
+      "inquiries": 5,
+      "productViews": 312
+    },
+    {
+      "date": "2024-01-13",
+      "visitors": 134,
+      "inquiries": 3,
+      "productViews": 267
+    },
+    {
+      "date": "2024-01-14",
+      "visitors": 98,
+      "inquiries": 2,
+      "productViews": 189
+    },
+    {
+      "date": "2024-01-15",
+      "visitors": 112,
+      "inquiries": 4,
+      "productViews": 223
+    },
+    {
+      "date": "2024-01-16",
+      "visitors": 145,
+      "inquiries": 3,
+      "productViews": 289
+    },
+    {
+      "date": "2024-01-17",
+      "visitors": 167,
+      "inquiries": 6,
+      "productViews": 334
+    },
+    {
+      "date": "2024-01-18",
+      "visitors": 178,
+      "inquiries": 5,
+      "productViews": 356
+    },
+    {
+      "date": "2024-01-19",
+      "visitors": 134,
+      "inquiries": 4,
+      "productViews": 267
+    },
+    {
+      "date": "2024-01-20",
+      "visitors": 89,
+      "inquiries": 2,
+      "productViews": 178
+    },
+    {
+      "date": "2024-01-21",
+      "visitors": 76,
+      "inquiries": 1,
+      "productViews": 145
+    },
+    {
+      "date": "2024-01-22",
+      "visitors": 123,
+      "inquiries": 3,
+      "productViews": 245
+    },
+    {
+      "date": "2024-01-23",
+      "visitors": 156,
+      "inquiries": 5,
+      "productViews": 312
+    },
+    {
+      "date": "2024-01-24",
+      "visitors": 189,
+      "inquiries": 7,
+      "productViews": 378
+    },
+    {
+      "date": "2024-01-25",
+      "visitors": 167,
+      "inquiries": 4,
+      "productViews": 334
+    },
+    {
+      "date": "2024-01-26",
+      "visitors": 145,
+      "inquiries": 6,
+      "productViews": 289
+    },
+    {
+      "date": "2024-01-27",
+      "visitors": 134,
+      "inquiries": 3,
+      "productViews": 267
+    },
+    {
+      "date": "2024-01-28",
+      "visitors": 112,
+      "inquiries": 2,
+      "productViews": 223
+    },
+    {
+      "date": "2024-01-29",
+      "visitors": 98,
+      "inquiries": 4,
+      "productViews": 189
+    },
+    {
+      "date": "2024-01-30",
+      "visitors": 156,
+      "inquiries": 5,
+      "productViews": 312
+    }
+  ],
+  "popularProducts": [
+    {
+      "name": "공기안전매트",
+      "views": 1234,
+      "change": "+12%",
+      "category": "안전장비"
+    },
+    {
+      "name": "완강기",
+      "views": 987,
+      "change": "+8%",
+      "category": "피난장비"
+    },
+    {
+      "name": "인명구조대",
+      "views": 756,
+      "change": "+15%",
+      "category": "구조장비"
+    },
+    {
+      "name": "소화기",
+      "views": 543,
+      "change": "+5%",
+      "category": "소방장비"
+    }
+  ],
+  "recentInquiries": [
+    {
+      "id": "INQ-2024-001",
+      "date": "2024-01-30",
+      "type": "제품문의",
+      "subject": "공기안전매트 견적 요청",
+      "status": "답변완료",
+      "priority": "normal"
+    },
+    {
+      "id": "INQ-2024-002",
+      "date": "2024-01-29",
+      "type": "기술지원",
+      "subject": "완강기 설치 문의",
+      "status": "처리중",
+      "priority": "high"
+    },
+    {
+      "id": "INQ-2024-003",
+      "date": "2024-01-28",
+      "type": "견적요청",
+      "subject": "소방장비 일괄 구매",
+      "status": "답변완료",
+      "priority": "normal"
+    },
+    {
+      "id": "INQ-2024-004",
+      "date": "2024-01-27",
+      "type": "제품문의",
+      "subject": "인명구조대 사양 문의",
+      "status": "답변완료",
+      "priority": "low"
+    }
+  ],
+  "metadata": {
+    "lastUpdated": "2024-01-30T10:30:00.000Z",
+    "dataSource": "실제 웹사이트 로그",
+    "updateFrequency": "daily",
+    "retentionPeriod": "90days"
+  }
+} 

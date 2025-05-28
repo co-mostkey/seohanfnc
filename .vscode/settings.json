@@ -1,0 +1,33 @@
+{
+    "typescript.tsserver.nodePath": "",
+    "typescript.tsserver.log": "normal",
+    "typescript.tsserver.maxTsServerMemory": 8192,
+    "editor.cursorBlinking": "blink",
+    "npm.packageManager": "pnpm",
+    
+    // Windsurf 관련 설정
+    "windsurf.debug": true,
+    "windsurf.stream.maxBuffer": 8192,
+    "windsurf.server.timeout": 30000,
+    "windsurf.client.reconnect": true,
+    "windsurf.client.maxRetries": 5,
+    "windsurf.client.retryDelay": 2000,
+    
+    // Next.js 관련 설정
+    "js/ts.implicitProjectConfig.experimentalDecorators": true,
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    
+    // 에디터 성능 최적화
+    "files.watcherExclude": {
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/node_modules/**": true,
+        "**/.next/**": true
+    },
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/.next": true
+    },
+    "editor.formatOnSave": true
+}

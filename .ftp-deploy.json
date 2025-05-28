@@ -1,0 +1,13 @@
+{
+  "user": "FTP_USER",
+  "password": "FTP_PASS",
+  "host": "ftp.yourserver.com",
+  "port": 21,
+  "localRoot": "C:\\Users\\comos\\main_seohan-website\\out-sample",
+  "remoteRoot": "/public_html/sample/",
+  "include": ["*", "**/*"],
+  "exclude": [".git/**", "node_modules/**", "scripts/**"],
+  "deleteRemote": false,
+  "forcePasv": true,
+  "sftp": false
+} 

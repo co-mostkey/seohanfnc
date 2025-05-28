@@ -1,0 +1,107 @@
+{
+    "approvalDocuments": [
+        {
+            "id": "approval-001",
+            "title": "제품 안전 인증서",
+            "description": "에어매트 제품 안전 인증 관련 서류",
+            "category": "인증서",
+            "fileType": "pdf",
+            "fileName": "product-safety-certificate.pdf",
+            "filePath": "/documents/approval/product-safety-certificate.pdf",
+            "fileSize": "2.5MB",
+            "uploadDate": "2024-01-15",
+            "lastModified": "2024-01-15",
+            "isPublic": true,
+            "downloadCount": 0,
+            "tags": [
+                "안전",
+                "인증",
+                "에어매트"
+            ],
+            "version": "1.0"
+        },
+        {
+            "id": "approval-002",
+            "title": "제품 카탈로그 2024",
+            "description": "2024년 최신 제품 카탈로그",
+            "category": "카탈로그",
+            "fileType": "pdf",
+            "fileName": "product-catalog-2024.pdf",
+            "filePath": "/documents/approval/product-catalog-2024.pdf",
+            "fileSize": "15.2MB",
+            "uploadDate": "2024-01-01",
+            "lastModified": "2024-01-01",
+            "isPublic": true,
+            "downloadCount": 0,
+            "tags": [
+                "카탈로그",
+                "제품",
+                "2024"
+            ],
+            "version": "2024.1"
+        }
+    ],
+    "generalDocuments": [
+        {
+            "id": "general-001",
+            "title": "제품 설치 가이드",
+            "description": "에어매트 제품 설치 및 사용 가이드",
+            "category": "설치가이드",
+            "fileType": "pdf",
+            "fileName": "installation-guide.pdf",
+            "filePath": "/documents/general/installation-guide.pdf",
+            "fileSize": "5.8MB",
+            "uploadDate": "2024-01-10",
+            "lastModified": "2024-01-10",
+            "isPublic": true,
+            "downloadCount": 0,
+            "tags": [
+                "설치",
+                "가이드",
+                "사용법"
+            ],
+            "version": "1.2"
+        },
+        {
+            "id": "general-002",
+            "title": "유지보수 매뉴얼",
+            "description": "제품 유지보수 및 점검 매뉴얼",
+            "category": "매뉴얼",
+            "fileType": "pdf",
+            "fileName": "maintenance-manual.pdf",
+            "filePath": "/documents/general/maintenance-manual.pdf",
+            "fileSize": "3.2MB",
+            "uploadDate": "2024-01-05",
+            "lastModified": "2024-01-05",
+            "isPublic": true,
+            "downloadCount": 0,
+            "tags": [
+                "유지보수",
+                "점검",
+                "매뉴얼"
+            ],
+            "version": "1.1"
+        }
+    ],
+    "categories": {
+        "approval": [
+            "인증서",
+            "카탈로그",
+            "승인서류",
+            "시험성적서"
+        ],
+        "general": [
+            "설치가이드",
+            "매뉴얼",
+            "기술자료",
+            "사양서",
+            "도면"
+        ]
+    },
+    "metadata": {
+        "lastUpdated": "2024-01-15T10:00:00Z",
+        "totalApprovalDocuments": 2,
+        "totalGeneralDocuments": 2,
+        "totalDownloads": 0
+    }
+}

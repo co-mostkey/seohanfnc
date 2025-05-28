@@ -1,0 +1,66 @@
+{
+    "users": [
+        {
+            "id": "intranet-admin-001",
+            "username": "intranet_admin",
+            "password": "$2b$10$hashedPasswordForIntranetAdmin123",
+            "email": "intranet_admin@seohanfc.com",
+            "role": "인트라넷관리자",
+            "name": "인트라넷 관리자",
+            "department": "IT팀",
+            "position": "팀장",
+            "employeeId": "EMP001",
+            "isActive": true,
+            "createdAt": "2024-01-01T00:00:00.000Z",
+            "lastLogin": null,
+            "permissions": [
+                "intranet.admin",
+                "intranet.users.manage",
+                "intranet.content.manage",
+                "intranet.access.all"
+            ]
+        }
+    ],
+    "roles": {
+        "인트라넷관리자": {
+            "name": "인트라넷관리자",
+            "description": "인트라넷 전체 관리 권한",
+            "permissions": [
+                "intranet.admin",
+                "intranet.users.manage",
+                "intranet.content.manage",
+                "intranet.access.all"
+            ],
+            "level": 100
+        },
+        "팀장": {
+            "name": "팀장",
+            "description": "팀 관리 권한",
+            "permissions": [
+                "intranet.team.manage",
+                "intranet.documents.manage",
+                "intranet.notices.write"
+            ],
+            "level": 70
+        },
+        "직원": {
+            "name": "직원",
+            "description": "일반 직원 권한",
+            "permissions": [
+                "intranet.access",
+                "intranet.documents.read",
+                "intranet.notices.read"
+            ],
+            "level": 30
+        }
+    },
+    "sessions": [],
+    "pendingUsers": [],
+    "metadata": {
+        "lastUpdated": "2024-01-01T00:00:00.000Z",
+        "totalUsers": 1,
+        "activeUsers": 1,
+        "totalSessions": 0,
+        "pendingApprovals": 0
+    }
+}

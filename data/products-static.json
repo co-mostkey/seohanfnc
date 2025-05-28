@@ -1,0 +1,88 @@
+{
+  "categories": [
+    {
+      "id": "fall-prevention",
+      "nameKo": "낙하방지장치",
+      "nameEn": "Fall Prevention",
+      "descriptionKo": "고소작업 시 안전을 지켜주는 낙하방지장치입니다.",
+      "descriptionEn": "Fall prevention equipment for high-altitude work."
+    },
+    {
+      "id": "rescue",
+      "nameKo": "구조장비",
+      "nameEn": "Rescue Equipment",
+      "descriptionKo": "화재 및 재난 상황에서 생명을 구하는 구조장비입니다.",
+      "descriptionEn": "Rescue equipment for fire and disaster situations."
+    },
+    {
+      "id": "evacuation",
+      "nameKo": "피난장비",
+      "nameEn": "Evacuation Equipment",
+      "descriptionKo": "화재 시 안전한 대피를 돕는 피난장비입니다.",
+      "descriptionEn": "Evacuation equipment for safe evacuation in case of fire."
+    },
+    {
+      "id": "prevention",
+      "nameKo": "화재예방",
+      "nameEn": "Fire Prevention",
+      "descriptionKo": "화재 발생을 예방하는 장비들입니다.",
+      "descriptionEn": "Equipment to prevent fire incidents."
+    }
+  ],
+  "products": [
+    {
+      "id": "fall-prevention-mat",
+      "nameKo": "낙상방지매트",
+      "nameEn": "Fall Prevention Mat",
+      "descriptionKo": "다양한 환경에서 낙상 사고를 방지하는 안전 매트입니다.",
+      "descriptionEn": "Safety mat to prevent falling accidents in various environments.",
+      "category": "fall-prevention",
+      "image": "/images/products/fall-prevention-mat.jpg"
+    },
+    {
+      "id": "rescue-chute",
+      "nameKo": "구조용 슈트",
+      "nameEn": "Rescue Chute",
+      "descriptionKo": "화재 대피 시 사용하는 안전 슈트입니다.",
+      "descriptionEn": "Safety suit for fire evacuation.",
+      "category": "rescue",
+      "image": "/images/products/rescue-chute.jpg"
+    },
+    {
+      "id": "rescue-mat",
+      "nameKo": "구조용 매트",
+      "nameEn": "Rescue Mat",
+      "descriptionKo": "구조 작업 시 사용하는 특수 매트입니다.",
+      "descriptionEn": "Special mat for rescue operations.",
+      "category": "rescue",
+      "image": "/images/products/rescue-mat.jpg"
+    },
+    {
+      "id": "rescue-descender",
+      "nameKo": "구조용 하강기",
+      "nameEn": "Rescue Descender",
+      "descriptionKo": "고층 건물에서 안전한 하강을 돕는 장비입니다.",
+      "descriptionEn": "Equipment to help safe descent from high-rise buildings.",
+      "category": "evacuation",
+      "image": "/images/products/rescue-descender.jpg"
+    },
+    {
+      "id": "simple-rescue-descender",
+      "nameKo": "간이 구조용 하강기",
+      "nameEn": "Simple Rescue Descender",
+      "descriptionKo": "긴급 상황에서 빠르게 설치하여 사용할 수 있는 하강기입니다.",
+      "descriptionEn": "A descender that can be quickly installed and used in emergency situations.",
+      "category": "evacuation",
+      "image": "/images/products/simple-rescue-descender.jpg"
+    },
+    {
+      "id": "ev-flood-prevention",
+      "nameKo": "EV 침수 방지 장치",
+      "nameEn": "Elevator Flood Prevention Device",
+      "descriptionKo": "엘리베이터 침수를 방지하는 안전 장치입니다.",
+      "descriptionEn": "Safety device to prevent elevator flooding.",
+      "category": "prevention",
+      "image": "/images/products/ev-flood-prevention.jpg"
+    }
+  ]
+} 

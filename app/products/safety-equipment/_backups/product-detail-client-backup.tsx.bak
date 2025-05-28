@@ -1,0 +1,359 @@
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { cn } from '@/lib/utils';
+import { MessageSquare, FileText, Shield, Check, Download } from 'lucide-react';
+
+// 분리된 컴포넌트들 가져오기
+import ProductHeader from '@/components/products/safety-equipment/ProductHeader';
+import ProductModelViewer from '@/components/products/safety-equipment/ProductModelViewer';
+import ProductSpecifications from '@/components/products/safety-equipment/ProductSpecifications';
+import ProductTestData from '@/components/products/safety-equipment/ProductTestData';
+import ProductFeatures from '@/components/products/safety-equipment/ProductFeatures';
+import ProductCautions from '@/components/products/safety-equipment/ProductCautions';
+import ProductDocuments from '@/components/products/safety-equipment/ProductDocuments';
+
+/**
+ * 안전장비 제품 상세 인터페이스
+ */
+interface ProductDetailProps {
+  productId: string;
+  productName: string;
+  description: string;
+  specifications: Record<string, string>;
+  features: Array<{ title: string; description: string }>;
+  fallbackImage: string;
+  documents?: Array<{
+    id: string;
+    nameKo: string;
+    path: string;
+    type: string;
+  }>;
+  specTable?: any;
+  cautions?: string[];
+  category?: string;
+}
+
+/**
+ * 안전장비 제품 상세 페이지 클라이언트 컴포넌트
+ * 
+ * 3D 모델을 메인 비주얼로 사용하며, 로딩 중이거나 모델이 없을 경우 대체 이미지를 표시합니다.
+ * 제품 상세 정보, 사양, 특징, 주의사항 등을 탭으로 구분하여 보여줍니다.
+ */
+export default function SafetyEquipmentProductDetail({
+  productId,
+  productName,
+  description,
+  specifications,
+  features,
+  fallbackImage,
+  documents,
+  specTable,
+  cautions,
+  category = 'safety-equipment'
+}: ProductDetailProps) {
+  // 활성화된 탭 상태
+  const [activeTab, setActiveTab] = useState<'overview' | 'features' | 'documents'>('overview');
+
+  // 스크롤 애니메이션 효과를 위한 상태
+  const [scrollY, setScrollY] = useState(0);
+  
+  // 스크롤 이벤트 수신
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+    
+    // 스크롤 이벤트 리스너 등록
+    window.addEventListener('scroll', handleScroll);
+    
+    // 컬렉트 단계에서 이벤트 리스너 제거
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+  
+  return (
+    // React Fragment로 감싸서 불필요한 div 레이어 제거
+    <>
+      {/* 메인 비주얼 이미지 영역 - 페이지 최상단 (전체 화면) */}
+      <div className="fixed inset-0 w-full h-screen overflow-hidden -z-10">
+        {/* 메인 비주얼 이미지 - 제품별 동적 경로 */}
+        <div className="absolute inset-0 w-full h-full">
+          <Image 
+            src={`/images/products/${productId}/main/visual.jpg`}
+            alt={productName}
+            fill
+            priority
+            className="object-cover object-center"
+            sizes="100vw"
+          />
+          
+          {/* 그라디언트 오버레이 - 텍스트 가독성 향상 */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-gray-900/80 to-gray-900/20"></div>
+          
+          {/* 비주얼 이미지 위에 떠있는 기하학적 요소들 - 역동적인 느낌 */}
+          <div className="absolute top-[15%] left-[10%] w-40 h-40 rounded-full border border-white/10 bg-red-500/30 blur-xl animate-pulse"></div>
+          <div className="absolute bottom-[30%] right-[20%] w-80 h-80 rounded-full border border-white/10 bg-red-500/25 blur-xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+          <div className="absolute bottom-[40%] left-[30%] w-32 h-32 rounded-full border border-white/10 bg-red-500/35 blur-xl animate-pulse" style={{ animationDelay: '1.5s' }}></div>
+        </div>
+      </div>
+      
+      {/* 상단 헤더 및 제품명 (고정요소) */}
+      <header className="fixed top-0 left-0 w-full bg-gradient-to-b from-black/80 to-transparent pt-8 pb-16 px-6 md:px-10 z-30">
+        <h1 className="text-3xl md:text-5xl font-bold text-white mb-4 drop-shadow-xl max-w-5xl mx-auto">
+          {productName}
+        </h1>
+        <p className="text-lg text-gray-200 max-w-3xl mx-auto line-clamp-2">
+          {description && description.length > 150 ? `${description.substring(0, 150)}...` : description}
+        </p>
+      </header>
+      
+      {/* 네비게이션 버튼 (고정요소) */}
+      <nav className="fixed bottom-8 left-0 right-0 mx-auto w-full max-w-xl px-4 flex justify-center items-center gap-3 z-30">
+        <div className="flex flex-wrap gap-3 justify-center items-center w-full bg-gray-900/60 backdrop-blur-lg p-3 rounded-xl border border-gray-800/50 shadow-2xl">
+          <button
+            className={`px-4 py-2 ${activeTab === 'overview' ? 'bg-red-600/80' : 'bg-gray-800/80'} border ${activeTab === 'overview' ? 'border-red-400/50' : 'border-gray-700/50'} hover:bg-red-600/70 text-white rounded-md flex items-center transition-all`}
+            onClick={() => {
+              setActiveTab('overview');
+              const element = document.getElementById('product-content');
+              if (element) {
+                const offset = element.offsetTop - 100;
+                window.scrollTo({ top: offset, behavior: 'smooth' });
+              }
+            }}
+          >
+            <FileText className="w-4 h-4 mr-2 text-white" />
+            제품 상세
+          </button>
+          
+          <button
+            className={`px-4 py-2 ${activeTab === 'features' ? 'bg-red-600/80' : 'bg-gray-800/80'} border ${activeTab === 'features' ? 'border-red-400/50' : 'border-gray-700/50'} hover:bg-red-600/70 text-white rounded-md flex items-center transition-all`}
+            onClick={() => {
+              setActiveTab('features');
+              const element = document.getElementById('product-content');
+              if (element) {
+                const offset = element.offsetTop - 100;
+                window.scrollTo({ top: offset, behavior: 'smooth' });
+              }
+            }}
+          >
+            <Check className="w-4 h-4 mr-2 text-white" />
+            제품 특징
+          </button>
+          
+          <button
+            className={`px-4 py-2 ${activeTab === 'documents' ? 'bg-red-600/80' : 'bg-gray-800/80'} border ${activeTab === 'documents' ? 'border-red-400/50' : 'border-gray-700/50'} hover:bg-red-600/70 text-white rounded-md flex items-center transition-all`}
+            onClick={() => {
+              setActiveTab('documents');
+              const element = document.getElementById('product-content');
+              if (element) {
+                const offset = element.offsetTop - 100;
+                window.scrollTo({ top: offset, behavior: 'smooth' });
+              }
+            }}
+          >
+            <Download className="w-4 h-4 mr-2 text-white" />
+            자료
+          </button>
+        </div>
+      </nav>
+      
+      {/* 메인 컨텐츠 영역 - 화면 기준 100vh에서 시작하도록 설정 */}
+      <main className="min-h-screen pt-[100vh]">
+        {/* 제품 상세 컨테이너 - 불투명 디자인 과감하게 적용 */}
+        <section id="product-content" className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16 relative z-10">
+          <div className="relative bg-gray-900/90 backdrop-blur-lg border border-red-900/30 shadow-2xl overflow-hidden rounded-2xl">
+          {/* 배경 장식 요소 - 레드 계열 불투명 그라디언트 과감하게 */}
+          <div className="absolute -top-80 -right-80 w-[800px] h-[800px] rounded-full bg-red-500/30 blur-3xl"></div>
+          <div className="absolute -bottom-80 -left-80 w-[800px] h-[800px] rounded-full bg-red-400/20 blur-3xl"></div>
+          <div className="absolute top-40 left-1/2 w-[400px] h-[400px] rounded-full bg-red-300/25 blur-3xl"></div>
+          
+          {/* 상세 정보 레이아웃 */}
+          <div className="relative z-10 p-6 md:p-8 lg:p-10">
+            {/* 컨텐츠 영역 */}
+            <div>
+              {/* 제품 상세 정보 탭 */}
+              {activeTab === 'overview' && (
+                <div className="space-y-8">
+                  {/* 제품 소개 및 모델 섹션 */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    {/* 좌측 - 3D 모델/이미지 갤러리 */}
+                    <div className="animate-fadeIn">
+                      <ProductModelViewer 
+                        productId={productId}
+                        productName={productName}
+                        fallbackImage={fallbackImage}
+                      />
+                    </div>
+                    
+                    {/* 우측 - 제품 정보 */}
+                    <div className="space-y-6">
+                      {/* 제품 제목 및 설명 */}
+                      <ProductHeader 
+                        productName={productName}
+                        description={description}
+                      />
+                      
+                      {/* 기능 아이콘 */}
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="flex items-center p-3.5 rounded-lg bg-red-900/20 border border-red-900/30 hover:bg-red-900/30 transition-colors">
+                          <div className="p-2 rounded-full bg-red-900/30 mr-3">
+                            <Shield className="h-5 w-5 text-red-400" />
+                          </div>
+                          <div className="flex-1">
+                            <h3 className="text-sm font-medium text-white">안전 인증</h3>
+                            <p className="text-xs text-gray-400">품질 보증</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center p-3.5 rounded-lg bg-blue-900/20 border border-blue-900/30 hover:bg-blue-900/30 transition-colors">
+                          <div className="p-2 rounded-full bg-blue-900/30 mr-3">
+                            <Shield className="h-5 w-5 text-blue-400" />
+                          </div>
+                          <div className="flex-1">
+                            <h3 className="text-sm font-medium text-white">안전 인증</h3>
+                            <p className="text-xs text-gray-400">안전기준 충족</p>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* 버튼 그룹 */}
+                      <div className="space-y-3">
+                        {/* 제품 문의하기 버튼 */}
+                        <Link
+                          href="/contact"
+                          className="flex justify-center w-full items-center px-5 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium transition-all duration-300 shadow-lg hover:shadow-blue-600/30"
+                        >
+                          <MessageSquare className="h-5 w-5 mr-2" />
+                          제품 문의하기
+                            </div>
+                            <div className="flex-1">
+                              <h3 className="text-sm font-medium text-white">안전 인증</h3>
+                              <p className="text-xs text-gray-400">품질 보증</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center p-3.5 rounded-lg bg-blue-900/20 border border-blue-900/30 hover:bg-blue-900/30 transition-colors">
+                            <div className="p-2 rounded-full bg-blue-900/30 mr-3">
+                              <Shield className="h-5 w-5 text-blue-400" />
+                            </div>
+                            <div className="flex-1">
+                              <h3 className="text-sm font-medium text-white">안전 인증</h3>
+                              <p className="text-xs text-gray-400">안전기준 충족</p>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* 버튼 그룹 */}
+                        <div className="space-y-3">
+                          {/* 제품 문의하기 버튼 */}
+                          <Link
+                            href="/contact"
+                            className="flex justify-center w-full items-center px-5 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium transition-all duration-300 shadow-lg hover:shadow-blue-600/30"
+                          >
+                            <MessageSquare className="h-5 w-5 mr-2" />
+                            제품 문의하기
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* 제품 사양 섹션 */}
+                    <div id="specificationSection">
+                      <ProductSpecifications 
+                        specifications={specifications}
+                        specTable={specTable}
+                      />
+                    </div>
+                    
+                    {/* 충격흡수 비교 데이터 */}
+                    <ProductTestData productId={productId} />
+                    
+                    {/* 분석 결과 설명 */}
+                    <div className="mt-4 p-3 bg-red-900/20 rounded-md border border-red-900/30 text-sm">
+                      <p className="text-white font-medium mb-2">※ 분석결과</p>
+                      <ul className="text-gray-300 space-y-1.5 text-sm">
+                        <li className="flex">
+                          <span className="text-amber-400 mr-1.5">•</span>
+                          <span>공기안전매트는 여러 종류의 안전장비 중 최저의 충격흡수량을 보이고 있습니다.</span>
+                        </li>
+                        <li className="flex">
+                          <span className="text-amber-400 mr-1.5">•</span>
+                          <span>낙하자의 자세, 날씨, 지형 등 환경적 요인에 의해 충격흡수량이 차이가 있을 수 있으나</span>
+                        </li>
+                        <li className="flex">
+                          <span className="text-amber-400 mr-1.5">•</span>
+                          <span>독일 기준 : 충격수량 (80 ~ 90 (g) 이내) 에 의거 '인명구조매트'와 '공기안전매트'가 적합한 장비임이 확인되었습니다.</span>
+                        </li>
+                        <li className="flex mt-2">
+                          <span className="text-green-400 mr-1.5">•</span>
+                          <span>공기안전매트는 약 [6/1000] 충격이 감소하였습니다.</span>
+                        </li>
+                      </ul>
+                    </div>
+                    
+                    {/* 주의사항 섹션 */}
+                    {cautions && cautions.length > 0 && (
+                      <ProductCautions cautions={cautions} />
+                    )}
+                  </div>
+                )}
+
+                {/* 제품 특징 탭 */}
+                {activeTab === 'features' && (
+                  <ProductFeatures features={features} />
+                )}
+
+                {/* 문서 탭 */}
+                {activeTab === 'documents' && documents && (
+                  <ProductDocuments documents={documents} />
+                )}
+              </div>
+              
+              {/* 충격흡수 비교 데이터 */}
+              <ProductTestData productId={productId} />
+              {/* 분석 결과 설명 */}
+              <div className="mt-4 p-3 bg-red-900/20 rounded-md border border-red-900/30 text-sm">
+                <p className="text-white font-medium mb-2">※ 분석결과</p>
+                <ul className="text-gray-300 space-y-1.5 text-sm">
+                  <li className="flex">
+                    <span className="text-amber-400 mr-1.5">•</span>
+                    <span>공기안전매트는 여러 종류의 안전장비 중 최저의 충격흡수량을 보이고 있습니다.</span>
+                  </li>
+                  <li className="flex">
+                    <span className="text-amber-400 mr-1.5">•</span>
+                    <span>낙하자의 자세, 날씨, 지형 등 환경적 요인에 의해 충격흡수량이 차이가 있을 수 있으나</span>
+                  </li>
+                  <li className="flex">
+                    <span className="text-amber-400 mr-1.5">•</span>
+                    <span>독일 기준 : 충격수량 (80 ~ 90 (g) 이내) 에 의거 '인명구조매트'와 '공기안전매트'가 적합한 장비임이 확인되었습니다.</span>
+                  </li>
+                  <li className="flex mt-2">
+                    <span className="text-green-400 mr-1.5">•</span>
+                    <span>공기안전매트는 약 [6/1000] 충격이 감소하였습니다.</span>
+                  </li>
+                </ul>
+              </div>
+              {/* 주의사항 섹션 */}
+              {cautions && cautions.length > 0 && (
+                <ProductCautions cautions={cautions} />
+              )}
+            </div>
+          )}
+
+          {/* 제품 특징 탭 */}
+          {activeTab === 'features' && (
+            <ProductFeatures features={features} />
+          )}
+
+          {/* 문서 탭 */}
+          {activeTab === 'documents' && documents && (
+            <ProductDocuments documents={documents} />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+</> 

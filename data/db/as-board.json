@@ -1,0 +1,21 @@
+[
+  {
+    "id": "5e33d46f-1554-4bd9-85b7-fa5a88b67df5",
+    "title": "테스트 _문의작성",
+    "author": "테스트",
+    "email": "test@tset.com",
+    "content": "test",
+    "createdAt": "2025-05-24T18:56:16.049Z",
+    "updatedAt": "2025-05-24T18:56:16.049Z"
+  },
+  {
+    "id": "9cbb238e-2914-45f2-8ca6-5213602c06fe",
+    "title": "테스트",
+    "author": "테스트",
+    "email": "test@tset.com",
+    "content": "테스트as",
+    "status": "pending",
+    "createdAt": "2025-05-21T22:04:49.088Z",
+    "updatedAt": "2025-05-21T22:04:49.088Z"
+  }
+]

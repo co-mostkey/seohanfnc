@@ -1,0 +1,43 @@
+{
+  "common": {
+    "home": "Home",
+    "about": "About",
+    "services": "Services",
+    "products": "Products",
+    "contact": "Contact",
+    "login": "Login",
+    "signup": "Sign Up",
+    "search": "Search",
+    "menu": "Menu",
+    "close": "Close",
+    "language": "Language",
+    "korean": "Korean",
+    "english": "English"
+  },
+  "buttons": {
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous"
+  },
+  "form": {
+    "required": "This field is required",
+    "email": "Please enter a valid email address",
+    "password": "Password must be at least 8 characters",
+    "name": "Please enter your name",
+    "phone": "Please enter your phone number"
+  },
+  "messages": {
+    "welcome": "Welcome!",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Operation completed successfully",
+    "noResults": "No results found",
+    "confirmDelete": "Are you sure you want to delete?"
+  }
+}

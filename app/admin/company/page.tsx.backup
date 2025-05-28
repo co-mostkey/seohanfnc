@@ -1,0 +1,2101 @@
+"use client";
+
+import React, { useEffect, useState, useRef } from 'react';
+import { ADMIN_HEADING_STYLES, ADMIN_FONT_STYLES, ADMIN_UI, ADMIN_CARD_STYLES, ADMIN_BUTTON_SIZES, ADMIN_INPUT_STYLES } from '@/lib/admin-ui-constants';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
+import { CompanyInfo, Logo3DSettings, CoreValueItem, AwardItem } from '@/types/company';
+import { toast } from 'sonner';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
+import { FileUpload } from '@/components/admin/FileUpload';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Switch } from "@/components/ui/switch";
+import { Slider } from "@/components/ui/slider";
+import {
+    ImageIcon, Info, MessageSquareText, Sparkles, Building, Users, Phone, Mail, LinkIcon, MapPin, Clock, Globe, Edit3, AlignLeft,
+    RotateCcw, Save, TrendingUp, ImagePlus, Wallpaper, Eye, EyeOff, Palette, Cog, Rotate3d, Target, Brain, BriefcaseBusiness,
+    ScrollText, Award, Gem, PlusCircle, Trash2, GripVertical, ExternalLink,
+    CheckCheck, Lightbulb, Handshake, Scale, Recycle, // coreValues 아이콘들
+    CheckCircle, // 추가
+    FlaskConical, // 추가
+    ShieldCheck // 추가
+} from 'lucide-react';
+import type { LucideProps } from 'lucide-react'; // Import LucideProps
+import { format } from 'date-fns';
+import { cn } from '@/lib/utils';
+import { v4 as uuidv4 } from 'uuid';
+import Image from 'next/image';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"; // Select 컴포넌트 임포트
+import Logo3D from '@/components/ui/3D/Logo3D'; // Logo3D 컴포넌트 임포트
+import HistoryTimeline from '@/components/admin/HistoryTimeline'; // Import HistoryTimeline component
+import { Download } from 'lucide-react'; // Import Download icon
+
+// Lucide 아이콘 이름과 실제 컴포넌트를 매핑하는 객체 (파일 최상단으로 이동)
+const LucideIcons: { [key: string]: React.FC<LucideProps> } = { // Update type here
+    Award,
+    Building,
+    CheckCircle, // 수정: CheckCircle 임포트 후, CheckCircle, 형태로 사용
+    Cpu: Cog, // Cpu 아이콘이 없으므로 Cog로 대체 (또는 다른 적절한 아이콘)
+    FlaskConical, // 수정: FlaskConical 임포트 후, FlaskConical, 형태로 사용
+    Lightbulb,
+    Recycle,
+    ShieldCheck, // 수정: ShieldCheck 임포트 후, ShieldCheck, 형태로 사용 (또는 ShieldCheck: ShieldCheck)
+    Users,
+    Zap: Sparkles, // Zap 아이콘이 없으므로 Sparkles로 대체
+    Target,
+    Gem,
+    Handshake,
+    TrendingUp,
+    Landmark: Building, // Landmark 아이콘이 없으므로 Building으로 대체
+    History: ScrollText, // History 아이콘이 없으므로 ScrollText로 대체
+    Sparkles,
+    ImageIcon,
+    MessageSquareText,
+    Info,
+    Phone,
+    Mail,
+    LinkIcon,
+    MapPin,
+    Clock,
+    Globe,
+    Edit3,
+    AlignLeft,
+    RotateCcw,
+    Save,
+    ImagePlus,
+    Wallpaper,
+    Eye,
+    EyeOff,
+    Palette,
+    Cog,
+    Rotate3d,
+    Brain,
+    BriefcaseBusiness,
+    ScrollText,
+    PlusCircle,
+    Trash2,
+    GripVertical,
+    ExternalLink,
+    CheckCheck,
+    Scale,
+};
+
+const defaultLogo3DSettings: Logo3DSettings = {
+    enableRotation: true,
+    rotationSpeed: 0.0015,
+    stylePreset: 'default',
+    modelScale: 1,
+    glbFileUrl: '',
+    viewerBackgroundType: 'transparent', // 기본값: 투명
+    viewerBackgroundColor: '#FFFFFF', // 기본 배경색 (타입이 'color'일 때 사용)
+    viewerBackgroundHdriPath: '/hdri/studio_small_03_1k.hdr', // 기본 HDRI 경로 (타입이 'hdri'일 때 사용)
+};
+
+const defaultData: CompanyInfo = {
+    id: 'default',
+    nameKo: '',
+    nameEn: '',
+    addressKo: '',
+    addressEn: '',
+    phone: '',
+    fax: '',
+    email: '',
+    supportEmail: '',
+    businessHours: '',
+    CEO: '',
+    businessNumber: '',
+    established: '',
+    description: '',
+    intro: '',
+    philosophy: '',
+    aboutPageMainTitleFormat: '{nameKo} 회사소개',
+    aboutPageSectionTitleFormat: '안전 기술의 미래, <br className="hidden sm:block" /> {nameKo}가 만들어갑니다.',
+    aboutPageMainTitleClassName: 'text-4xl sm:text-5xl lg:text-6xl font-extrabold text-center mb-6 leading-tight tracking-tight text-primary-500', // 키컬러(primary-500)로 변경
+    logoUrl: '',
+    aboutPageVisualUrl: '',
+    aboutPageHeroImageUrl: '',
+    showAboutIntroSection: true,
+    logo3dSettings: { ...defaultLogo3DSettings },
+    socialLinks: { facebook: '', instagram: '', youtube: '', blog: '', linkedin: '' },
+    philosophyStatement: '',
+    coreValues: [
+        { id: 'safety', icon: 'CheckCheck', mainTitle: '안전 제일', subTitle: '모든 활동의 최우선 가치는 사람의 안전입니다.', description: '안전 규정 및 표준 준수\n철저한 위험성 평가 및 예방\n안전 의식 내재화를 위한 교육 강화\n안전한 작업 환경 조성' },
+        { id: 'innovation', icon: 'Lightbulb', mainTitle: '기술 혁신', subTitle: '끊임없는 연구개발로 안전 기술의 미래를 선도합니다.', description: '지속적인 R&D 투자 확대\n차세대 안전 기술 및 신소재 개발\n창의적인 아이디어 발굴 및 사업화\n변화를 두려워하지 않는 도전 정신' },
+        { id: 'customer', icon: 'Handshake', mainTitle: '고객 중심', subTitle: '고객의 신뢰와 만족을 최고의 가치로 생각합니다.', description: '고객의 소리에 귀 기울이는 소통\n고객의 기대를 뛰어넘는 제품과 서비스\n신속하고 정확한 기술 지원\n고객과의 장기적인 파트너십 구축' },
+        { id: 'integrity', icon: 'Scale', mainTitle: '정직과 신뢰', subTitle: '투명하고 윤리적인 경영으로 사회적 책임을 다합니다.', description: '법규 및 윤리 규범 준수\n공정하고 투명한 업무 처리\n정직한 기업 문화 조성\n이해관계자와의 신뢰 관계 구축' },
+        { id: 'sustainability', icon: 'Recycle', mainTitle: '지속가능경영', subTitle: '환경과 사회를 생각하며 미래 세대를 위한 가치를 만듭니다.', description: '친환경 제품 개발 및 생산 확대\n에너지 효율 개선 및 탄소 배출 감축\n자원 재활용 및 폐기물 관리 강화\n지역사회 공헌 및 상생 협력' },
+    ],
+    businessType: `소방안전 장비
+공기안전매트, 완강기, 구조대 등 다양한 소방안전 장비 개발 및 생산
+- 공기안전매트
+    - 완강기 및 간이완강기
+- 인명구조대
+    - 소화기 및 소화장치
+
+산업안전 솔루션
+산업 현장의 안전을 위한 다양한 솔루션 제공
+    - 산업용 안전 장비
+        - 안전 방재 시스템
+            - 안전 교육 및 훈련
+                - 위험 평가 및 컨설팅
+
+연구개발
+미래 안전 기술을 위한 지속적인 연구개발
+    - 신소재 개발
+        - 안전 기술 연구
+            - 제품 품질 향상
+                - 산학 협력 프로젝트`,
+    employees: '',
+    annualRevenue: '',
+    website: '',
+    history: `2018년
+01월: ISO 9001: 2015 인증 획득[Q209412]
+09월: 한국산업은행으로 부터 4차 산업 유망기업인[KDB - TECH]기업으로 선정
+
+2017년
+03월: [완강기] 및[간이완강기] 신규 형식승인 취득
+03월: 초동대처 기동형[인명구조매트] 개발 KFI 인증 취득
+05월: 터키 공기안전매트 수출
+10월: [충청북도 중소기업 경영대상] 수상 - 충청북도 도지사상
+
+2016년
+01월: 충주시 '성실납세자' 3년 연속 선정
+02월: 서울 동국대학교와 산학협력 연구기술 협약 체결
+03월: 연구소기업 '(주) 서한 디앤에스' 설립
+04월: 베트남 경찰국 관공서 공기안전매트 / 이동식 구조대 4차 수출
+
+2015년
+03월: '중소기업청'으로부터[수출 유망 기업]으로 선정
+05월: 몽골 소방방재청 공기안전매트 / 소방차용 구조대 3차 수출
+12월: '여성가족부'의[가족친화 인증기업]인증
+
+2000년
+03월: (주) 서한 에프 앤 씨로 법인 전환
+
+1992년
+05월: 서한상사 설립`,
+    vision: `서한에프앤씨는 끊임없는 기술 개발과 최고의 품질을 바탕으로,\n전 세계 고객에게 가장 신뢰받는 안전 솔루션을 제공하여\n인류의 안전과 행복 증진에 기여하는 것을 목표로 합니다.`,
+    awardsAndCertifications: [],
+    latitude: '',
+    longitude: '',
+    mapApiKey: '',
+    directions: '',
+    transportation: '',
+};
+
+const AdminCompanyPage = () => {
+    const [data, setData] = useState<CompanyInfo>(defaultData);
+    const [loading, setLoading] = useState(true);
+    const [saving, setSaving] = useState(false);
+    const [previewOpen, setPreviewOpen] = useState(false);
+    const [originalData, setOriginalData] = useState<CompanyInfo>(defaultData);
+    const [logo3dUpdating, setLogo3dUpdating] = useState(false); // 3D 로고 업데이트 상태 추가
+    const [historyStyleDialogOpen, setHistoryStyleDialogOpen] = useState(false); // 연혁 스타일 다이얼로그 상태
+    const [historyCustomStyles, setHistoryCustomStyles] = useState({
+        colorScheme: 'default', // default, blue, green, purple, orange
+        timelineStyle: 'modern', // modern, classic, minimal
+        showIcons: true,
+        showDates: true,
+        compactMode: false
+    }); // 연혁 커스텀 스타일 상태
+
+    // 3D 로고 설정 디바운싱을 위한 ref
+    const logo3dUpdateTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                console.log('Admin Company Page - Fetching data...');
+                const res = await fetch('/api/admin/company', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Cache-Control': 'no-cache'
+                    }
+                });
+
+                console.log('Admin Company Page - Response status:', res.status);
+
+                if (res.ok) {
+                    const fetchedData = await res.json();
+                    console.log('Admin Company Page - Data fetched successfully:', fetchedData);
+
+                    const newSocialLinks = {
+                        ...(defaultData.socialLinks || {}),
+                        ...(fetchedData.socialLinks || {}),
+                    };
+                    const newLogo3DSettings = { // Logo3DSettings 병합 로직 강화
+                        ...defaultLogo3DSettings, // 기본값으로 시작
+                        ...(fetchedData.logo3dSettings || {}), // 저장된 값으로 덮어쓰기
+                        // glbFileUrl은 fetchedData 우선, 없으면 defaultData (이미 defaultLogo3DSettings에 포함됨)
+                        glbFileUrl: fetchedData.logo3dSettings?.glbFileUrl || defaultLogo3DSettings.glbFileUrl,
+                        // 나머지 필드들도 fetchedData 우선 적용 (이미 스프레드 연산자로 처리됨)
+                    };
+                    const mergedData = {
+                        ...defaultData,
+                        ...fetchedData,
+                        socialLinks: newSocialLinks,
+                        showAboutIntroSection: fetchedData.showAboutIntroSection !== undefined ? fetchedData.showAboutIntroSection : defaultData.showAboutIntroSection,
+                        logo3dSettings: newLogo3DSettings,
+                        philosophyStatement: fetchedData.philosophyStatement || defaultData.philosophyStatement || '',
+                        coreValues: (fetchedData.coreValues && fetchedData.coreValues.length > 0) ? fetchedData.coreValues : defaultData.coreValues || [],
+                        awardsAndCertifications: (fetchedData.awardsAndCertifications && fetchedData.awardsAndCertifications.length > 0) ? fetchedData.awardsAndCertifications : defaultData.awardsAndCertifications || [],
+                        aboutPageMainTitleClassName: fetchedData.aboutPageMainTitleClassName || defaultData.aboutPageMainTitleClassName,
+                    };
+                    setData(mergedData);
+                    setOriginalData(mergedData);
+                } else {
+                    console.error('Admin Company Page - Response not ok:', res.status, res.statusText);
+                    const errorText = await res.text();
+                    console.error('Admin Company Page - Error response:', errorText);
+                    toast.error(`회사 정보를 불러오는데 실패했습니다. (${res.status})`);
+                    setData(defaultData);
+                    setOriginalData(defaultData);
+                }
+            } catch (error) {
+                console.error('Admin Company Page - Fetch error:', error);
+                toast.error(`회사 정보 로딩 중 오류가 발생했습니다: ${error.message}`);
+
+                // 오류 발생 시에도 기본 데이터 구조를 유지
+                const fallbackData = {
+                    ...defaultData,
+                    awardsAndCertifications: defaultData.awardsAndCertifications || []
+                };
+                setData(fallbackData);
+                setOriginalData(fallbackData);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+
+        // Cleanup function
+        return () => {
+            if (logo3dUpdateTimeoutRef.current) {
+                clearTimeout(logo3dUpdateTimeoutRef.current);
+            }
+        };
+    }, []);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, parent?: keyof CompanyInfo | 'logo3dSettings') => {
+        const { name, value } = e.target;
+        if (parent === 'logo3dSettings') {
+            // 3D 로고 설정 변경 시 디바운싱 적용
+            setLogo3dUpdating(true);
+
+            if (logo3dUpdateTimeoutRef.current) {
+                clearTimeout(logo3dUpdateTimeoutRef.current);
+            }
+
+            setData(prev => ({
+                ...prev,
+                logo3dSettings: {
+                    ...(prev.logo3dSettings || {}),
+                    [name]: (name === 'rotationSpeed' || name === 'modelScale') ? parseFloat(value) : value,
+                },
+            }));
+
+            logo3dUpdateTimeoutRef.current = setTimeout(() => {
+                setLogo3dUpdating(false);
+            }, 300);
+        } else if (parent) {
+            setData(prev => ({
+                ...prev,
+                [parent as keyof CompanyInfo]: {
+                    ...(prev[parent as keyof CompanyInfo] as object),
+                    [name]: value,
+                },
+            }));
+        } else {
+            setData(prev => ({ ...prev, [name]: value }));
+        }
+    };
+
+    const handleSwitchChange = (checked: boolean, name: keyof CompanyInfo | keyof Logo3DSettings, parent?: 'logo3dSettings') => {
+        if (parent === 'logo3dSettings') {
+            // 3D 로고 설정 변경 시 디바운싱 적용
+            setLogo3dUpdating(true);
+
+            if (logo3dUpdateTimeoutRef.current) {
+                clearTimeout(logo3dUpdateTimeoutRef.current);
+            }
+
+            setData(prev => ({
+                ...prev,
+                logo3dSettings: {
+                    ...(prev.logo3dSettings || {}),
+                    [name as keyof Logo3DSettings]: checked,
+                },
+            }));
+
+            logo3dUpdateTimeoutRef.current = setTimeout(() => {
+                setLogo3dUpdating(false);
+            }, 300);
+        } else {
+            setData(prev => ({ ...prev, [name as keyof CompanyInfo]: checked }));
+        }
+    };
+
+    const handleSliderChange = (value: number[], name: keyof Logo3DSettings, parent: 'logo3dSettings') => {
+        if (parent === 'logo3dSettings') {
+            // 3D 로고 설정 변경 시 디바운싱 적용
+            setLogo3dUpdating(true);
+
+            if (logo3dUpdateTimeoutRef.current) {
+                clearTimeout(logo3dUpdateTimeoutRef.current);
+            }
+
+            setData(prev => ({
+                ...prev,
+                logo3dSettings: {
+                    ...(prev.logo3dSettings || {}),
+                    [name]: value[0],
+                }
+            }));
+
+            logo3dUpdateTimeoutRef.current = setTimeout(() => {
+                setLogo3dUpdating(false);
+            }, 300);
+        }
+    };
+
+    const handleLogoUpload = (uploadedFile: { url: string }) => {
+        setData(prev => ({ ...prev, logoUrl: uploadedFile.url }));
+        toast.success('회사 로고가 업로드되었습니다. 변경사항을 저장해주세요.');
+    };
+
+    const handleAboutVisualUpload = (uploadedFile: { url: string }) => {
+        setData(prev => ({ ...prev, aboutPageVisualUrl: uploadedFile.url }));
+        toast.success('About 페이지 대표 이미지가 업로드되었습니다. 변경사항을 저장해주세요.');
+    };
+
+    const handleAboutHeroImageUpload = (uploadedFile: { url: string }) => {
+        setData(prev => ({ ...prev, aboutPageHeroImageUrl: uploadedFile.url }));
+        toast.success('About 페이지 히어로 이미지가 업로드되었습니다. 변경사항을 저장해주세요.');
+    };
+
+    const handleLogo3DGlbUpload = (uploadedFile: { url: string }) => {
+        setData(prev => ({
+            ...prev,
+            logo3dSettings: {
+                ...(prev.logo3dSettings || defaultLogo3DSettings),
+                glbFileUrl: uploadedFile.url,
+            },
+        }));
+        toast.success('3D 로고 GLB 파일이 업로드되었습니다. 변경사항을 저장해주세요.');
+    };
+
+    const resetChanges = () => {
+        setData(originalData);
+        toast.info('변경 사항이 초기화되었습니다.');
+    };
+
+    const handleSave = async () => {
+        setSaving(true);
+        try {
+            const res = await fetch('/api/admin/company', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+            });
+            if (res.ok) {
+                const savedData = await res.json();
+                const newSocialLinks = {
+                    ...(defaultData.socialLinks || {}),
+                    ...(savedData.socialLinks || {}),
+                };
+                const newLogo3DSettings = {
+                    ...(defaultData.logo3dSettings || {}),
+                    ...(savedData.logo3dSettings || {}),
+                };
+                const mergedData = {
+                    ...defaultData,
+                    ...savedData,
+                    socialLinks: newSocialLinks,
+                    showAboutIntroSection: savedData.showAboutIntroSection !== undefined ? savedData.showAboutIntroSection : defaultData.showAboutIntroSection,
+                    logo3dSettings: newLogo3DSettings,
+                    philosophyStatement: savedData.philosophyStatement || defaultData.philosophyStatement || '',
+                    coreValues: savedData.coreValues || [],
+                    awardsAndCertifications: savedData.awardsAndCertifications || [],
+                    aboutPageMainTitleClassName: savedData.aboutPageMainTitleClassName || defaultData.aboutPageMainTitleClassName, // 추가
+                };
+                setData(mergedData);
+                setOriginalData(mergedData);
+                toast.success('회사 정보가 성공적으로 저장되었습니다.');
+            } else {
+                const errorData = await res.json();
+                toast.error(`저장 실패: ${errorData.message || '알 수 없는 오류'}`);
+            }
+        } catch (error) {
+            console.error('Error saving company data:', error);
+            toast.error('회사 정보 저장 중 오류가 발생했습니다.');
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    const handleCoreValueItemChange = (index: number, e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
+        setData(prev => {
+            const updatedCoreValues = [...(prev.coreValues || [])];
+            updatedCoreValues[index] = {
+                ...(updatedCoreValues[index] || { id: uuidv4() }),
+                [name]: value,
+            };
+            return { ...prev, coreValues: updatedCoreValues };
+        });
+    };
+
+    const addCoreValueItem = () => {
+        setData(prev => ({
+            ...prev,
+            coreValues: [...(prev.coreValues || []), { id: uuidv4(), icon: 'Sparkles', mainTitle: '', subTitle: '', description: '' }],
+        }));
+    };
+
+    const removeCoreValueItem = (index: number) => {
+        setData(prev => ({
+            ...prev,
+            coreValues: (prev.coreValues || []).filter((_, i) => i !== index),
+        }));
+    };
+
+    const handleAwardItemChange = (index: number, e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
+        setData(prev => {
+            const updatedAwards = [...(prev.awardsAndCertifications || [])];
+            if (updatedAwards[index]) {
+                updatedAwards[index] = { ...updatedAwards[index], [name]: value };
+            }
+            return { ...prev, awardsAndCertifications: updatedAwards };
+        });
+    };
+
+    const handleAwardImageUpload = (index: number, uploadedFile: { url: string }) => {
+        setData(prev => {
+            const updatedAwards = [...(prev.awardsAndCertifications || [])];
+            if (updatedAwards[index]) {
+                updatedAwards[index] = { ...updatedAwards[index], imageUrl: uploadedFile.url };
+            }
+            return { ...prev, awardsAndCertifications: updatedAwards };
+        });
+        toast.success(`인증/수상 항목 ${index + 1}의 이미지가 업로드되었습니다. 변경사항을 저장해주세요.`);
+    };
+
+    const addAwardItem = () => {
+        setData(prev => ({
+            ...prev,
+            awardsAndCertifications: [
+                ...(prev.awardsAndCertifications || []),
+                { id: uuidv4(), title: '', description: '', year: '', issuingOrganization: '', imageUrl: '', link: '' }
+            ]
+        }));
+    };
+
+    const removeAwardItem = (index: number) => {
+        setData(prev => ({
+            ...prev,
+            awardsAndCertifications: (prev.awardsAndCertifications || []).filter((_, i) => i !== index)
+        }));
+    };
+
+    const handleSelectChange = (value: string, name: keyof Logo3DSettings, parent: 'logo3dSettings') => {
+        if (parent === 'logo3dSettings') {
+            // 3D 로고 설정 변경 시 디바운싱 적용
+            setLogo3dUpdating(true);
+
+            if (logo3dUpdateTimeoutRef.current) {
+                clearTimeout(logo3dUpdateTimeoutRef.current);
+            }
+
+            setData(prev => {
+                const newLogoSettings = {
+                    ...(prev.logo3dSettings || {}),
+                    [name]: value,
+                };
+                // 배경 유형 변경 시 관련 값 초기화 또는 기본값 설정 (선택적)
+                if (name === 'viewerBackgroundType') {
+                    if (value === 'color') {
+                        newLogoSettings.viewerBackgroundHdriPath = defaultLogo3DSettings.viewerBackgroundHdriPath; // HDRI 경로 초기화/기본값
+                    } else if (value === 'hdri') {
+                        newLogoSettings.viewerBackgroundColor = defaultLogo3DSettings.viewerBackgroundColor; // 색상값 초기화/기본값
+                    } else if (value === 'transparent') {
+                        newLogoSettings.viewerBackgroundColor = defaultLogo3DSettings.viewerBackgroundColor;
+                        newLogoSettings.viewerBackgroundHdriPath = defaultLogo3DSettings.viewerBackgroundHdriPath;
+                    }
+                }
+                return {
+                    ...prev,
+                    logo3dSettings: newLogoSettings,
+                };
+            });
+
+            logo3dUpdateTimeoutRef.current = setTimeout(() => {
+                setLogo3dUpdating(false);
+            }, 300);
+        }
+    };
+
+    if (loading) {
+        return <div className="p-6">로딩 중...</div>;
+    }
+
+    const isChanged = JSON.stringify(data) !== JSON.stringify(originalData);
+
+    // HTML/CSS 복사 및 다운로드 함수들
+    const copyHistoryHTML = async () => {
+        try {
+            const htmlContent = generateHistoryHTML(data.history, historyCustomStyles);
+            await navigator.clipboard.writeText(htmlContent);
+            toast.success('HTML 코드가 클립보드에 복사되었습니다.');
+        } catch (error) {
+            toast.error('복사에 실패했습니다.');
+        }
+    };
+
+    const copyHistoryCSS = async () => {
+        try {
+            const cssContent = generateHistoryCSS(historyCustomStyles);
+            await navigator.clipboard.writeText(cssContent);
+            toast.success('CSS 코드가 클립보드에 복사되었습니다.');
+        } catch (error) {
+            toast.error('복사에 실패했습니다.');
+        }
+    };
+
+    const downloadHistoryCode = () => {
+        try {
+            const htmlContent = generateHistoryHTML(data.history, historyCustomStyles);
+            const cssContent = generateHistoryCSS(historyCustomStyles);
+
+            const fullContent = `<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회사 연혁 타임라인</title>
+    <style>
+${cssContent}
+    </style>
+</head>
+<body>
+    <div class="timeline-container">
+        <h1>회사 연혁</h1>
+${htmlContent}
+    </div>
+</body>
+</html>`;
+
+            const blob = new Blob([fullContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${data.nameKo || '회사'}_연혁_타임라인.html`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            toast.success('HTML 파일이 다운로드되었습니다.');
+        } catch (error) {
+            toast.error('다운로드에 실패했습니다.');
+        }
+    };
+
+    // HTML 생성 함수
+    const generateHistoryHTML = (historyText: string, styles: typeof historyCustomStyles) => {
+        if (!historyText) return '';
+
+        const lines = historyText.split('\n').filter(line => line.trim());
+        let html = '';
+        let currentYear = '';
+
+        for (const line of lines) {
+            const trimmedLine = line.trim();
+            if (!trimmedLine) continue;
+
+            // 연도 패턴 매칭
+            const yearMatch = trimmedLine.match(/^(\d{4})년/);
+            if (yearMatch) {
+                if (currentYear) html += '    </div>\n'; // 이전 연도 닫기
+                currentYear = yearMatch[1];
+                html += `    <div class="year-section" data-year="${currentYear}">\n`;
+                html += `        <div class="year-header">\n`;
+                html += `            <h2 class="year-title">${currentYear}년</h2>\n`;
+                html += `        </div>\n`;
+                html += `        <div class="events-container">\n`;
+                continue;
+            }
+
+            // 월/일 이벤트 패턴 매칭
+            const eventMatch = trimmedLine.match(/^(\d{1,2})월(?:\s*(\d{1,2})일)?:\s*(.+)$/);
+            if (eventMatch && currentYear) {
+                const month = eventMatch[1];
+                const day = eventMatch[2];
+                const title = eventMatch[3];
+                const isHighlighted = title.includes('[') && title.includes(']');
+                const eventType = detectEventType(title);
+
+                html += `            <div class="event-item ${isHighlighted ? 'highlighted' : ''}" data-type="${eventType}">\n`;
+                if (styles.showIcons) {
+                    html += `                <div class="event-icon ${eventType}"></div>\n`;
+                }
+                html += `                <div class="event-content">\n`;
+                if (styles.showDates) {
+                    html += `                    <div class="event-date">${month}월${day ? ` ${day}일` : ''}</div>\n`;
+                }
+                html += `                    <div class="event-title">${title}</div>\n`;
+                html += `                </div>\n`;
+                html += `            </div>\n`;
+                continue;
+            }
+
+            // 들여쓰기된 세부 내용
+            if (line.startsWith('    ') || line.startsWith('\t')) {
+                const detail = trimmedLine.replace(/^[-•]\s*/, '');
+                html += `                    <div class="event-detail">${detail}</div>\n`;
+            }
+        }
+
+        if (currentYear) html += '        </div>\n    </div>\n'; // 마지막 연도 닫기
+
+        return html;
+    };
+
+    // CSS 생성 함수
+    const generateHistoryCSS = (styles: typeof historyCustomStyles) => {
+        const colorSchemes = {
+            default: {
+                primary: '#3b82f6',
+                secondary: '#10b981',
+                accent: '#f59e0b',
+                text: '#1f2937'
+            },
+            blue: {
+                primary: '#3b82f6',
+                secondary: '#1e40af',
+                accent: '#60a5fa',
+                text: '#1e3a8a'
+            },
+            green: {
+                primary: '#10b981',
+                secondary: '#047857',
+                accent: '#34d399',
+                text: '#064e3b'
+            },
+            purple: {
+                primary: '#8b5cf6',
+                secondary: '#7c3aed',
+                accent: '#a78bfa',
+                text: '#581c87'
+            },
+            orange: {
+                primary: '#f59e0b',
+                secondary: '#d97706',
+                accent: '#fbbf24',
+                text: '#92400e'
+            }
+        };
+
+        const colors = colorSchemes[styles.colorScheme as keyof typeof colorSchemes] || colorSchemes.default;
+
+        return `.timeline-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.6;
+    color: ${colors.text};
+}
+
+.timeline-container h1 {
+    text-align: center;
+    color: ${colors.primary};
+    margin-bottom: 40px;
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.year-section {
+    margin-bottom: ${styles.compactMode ? '20px' : '40px'};
+    position: relative;
+}
+
+.year-header {
+    margin-bottom: ${styles.compactMode ? '15px' : '25px'};
+    padding-bottom: 10px;
+    border-bottom: 2px solid ${colors.primary};
+}
+
+.year-title {
+    color: ${colors.primary};
+    font-size: ${styles.compactMode ? '1.5rem' : '2rem'};
+    font-weight: bold;
+    margin: 0;
+}
+
+.events-container {
+    position: relative;
+    padding-left: ${styles.timelineStyle === 'minimal' ? '0' : '30px'};
+}
+
+${styles.timelineStyle !== 'minimal' ? `
+.events-container::before {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, ${colors.primary}, ${colors.secondary});
+}
+` : ''}
+
+.event-item {
+    position: relative;
+    margin-bottom: ${styles.compactMode ? '15px' : '25px'};
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    padding: ${styles.compactMode ? '10px' : '15px'};
+    background: #f8fafc;
+    border-radius: 8px;
+    border-left: 4px solid ${colors.secondary};
+    ${styles.timelineStyle === 'classic' ? 'box-shadow: 0 2px 4px rgba(0,0,0,0.1);' : ''}
+}
+
+.event-item.highlighted {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    border-left-color: ${colors.accent};
+}
+
+${styles.showIcons ? `
+.event-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    color: white;
+    flex-shrink: 0;
+}
+
+.event-icon.award { background: #f59e0b; }
+.event-icon.establishment { background: #3b82f6; }
+.event-icon.export { background: #10b981; }
+.event-icon.development { background: #8b5cf6; }
+.event-icon.general { background: #6b7280; }
+
+.event-icon.award::before { content: '🏆'; }
+.event-icon.establishment::before { content: '🏢'; }
+.event-icon.export::before { content: '🌍'; }
+.event-icon.development::before { content: '🚀'; }
+.event-icon.general::before { content: '📅'; }
+` : ''}
+
+.event-content {
+    flex: 1;
+}
+
+${styles.showDates ? `
+.event-date {
+    font-size: 0.875rem;
+    color: ${colors.secondary};
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+` : ''}
+
+.event-title {
+    font-weight: 600;
+    color: ${colors.text};
+    font-size: ${styles.compactMode ? '0.95rem' : '1rem'};
+    line-height: 1.5;
+}
+
+.event-detail {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin-top: 8px;
+    padding-left: 15px;
+    position: relative;
+}
+
+.event-detail::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: ${colors.secondary};
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .timeline-container {
+        padding: 15px;
+    }
+    
+    .timeline-container h1 {
+        font-size: 2rem;
+        margin-bottom: 30px;
+    }
+    
+    .year-title {
+        font-size: 1.5rem;
+    }
+    
+    .events-container {
+        padding-left: ${styles.timelineStyle === 'minimal' ? '0' : '20px'};
+    }
+    
+    .event-item {
+        padding: 12px;
+        gap: 10px;
+    }
+}`;
+    };
+
+    // 이벤트 유형을 자동으로 감지하는 함수
+    const detectEventType = (text: string): 'award' | 'establishment' | 'export' | 'development' | 'general' => {
+        const lowerText = text.toLowerCase();
+
+        if (lowerText.includes('인증') || lowerText.includes('수상') || lowerText.includes('상') || lowerText.includes('선정')) {
+            return 'award';
+        }
+        if (lowerText.includes('설립') || lowerText.includes('창립') || lowerText.includes('법인') || lowerText.includes('전환')) {
+            return 'establishment';
+        }
+        if (lowerText.includes('수출') || lowerText.includes('계약') || lowerText.includes('협약') || lowerText.includes('체결')) {
+            return 'export';
+        }
+        if (lowerText.includes('개발') || lowerText.includes('출시') || lowerText.includes('완료') || lowerText.includes('취득')) {
+            return 'development';
+        }
+
+        return 'general';
+    };
+
+    <div className={ADMIN_CARD_STYLES.DEFAULT}>
+        <div className={cn(ADMIN_CARD_STYLES.CONTENT, "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6")}>
+            <div>
+                <Label htmlFor="nameKo" className={cn(ADMIN_INPUT_STYLES.LABEL, 'flex items-center', ADMIN_UI.TEXT_SM)}>
+                    <Building className="mr-2 h-4 w-4" /> 회사명 (한글)
+                </Label>
+                <Input id="nameKo" name="nameKo" value={data.nameKo} onChange={handleChange} placeholder="(주)서한에프앤씨" className={ADMIN_INPUT_STYLES.INPUT} />
+            </div>
+            <div>
+                <Label htmlFor="nameEn" className={cn(ADMIN_INPUT_STYLES.LABEL, 'flex items-center', ADMIN_UI.TEXT_SM)}>
+                    <Globe className="mr-2 h-4 w-4" /> 회사명 (영문)
+                </Label>
+                <Input id="nameEn" name="nameEn" value={data.nameEn || ''} onChange={handleChange} placeholder="Seohan F&C Co., Ltd." className={ADMIN_INPUT_STYLES.INPUT} />
+            </div>
+            <div>
+                <Label htmlFor="CEO" className={cn(ADMIN_INPUT_STYLES.LABEL, 'flex items-center', ADMIN_UI.TEXT_SM)}>
+                    <Users className="mr-2 h-4 w-4" /> 대표이사
+                </Label>
+                <Input id="CEO" name="CEO" value={data.CEO || ''} onChange={handleChange} placeholder="홍길동" className={ADMIN_INPUT_STYLES.INPUT} />
+            </div>
+            <div>
+                <Label htmlFor="businessNumber" className={cn(ADMIN_INPUT_STYLES.LABEL, 'flex items-center', ADMIN_UI.TEXT_SM)}>
+                    <Info className="mr-2 h-4 w-4" /> 사업자 등록번호
+                </Label>
+                <Input id="businessNumber" name="businessNumber" value={data.businessNumber || ''} onChange={handleChange} placeholder="123-45-67890" className={ADMIN_INPUT_STYLES.INPUT} />
+            </div>
+            <div>
+                <Label htmlFor="established" className={cn(ADMIN_INPUT_STYLES.LABEL, 'flex items-center', ADMIN_UI.TEXT_SM)}>
+                    <Clock className="mr-2 h-4 w-4" /> 설립일
+                </Label>
+                <Input id="established" name="established" type="date" value={data.established || ''} onChange={handleChange} className={ADMIN_INPUT_STYLES.INPUT} />
+            </div>
+        </div>
+    </div>
+                    </div >
+                </TabsContent >
+
+                <TabsContent value="logo3d">
+                    <div className="space-y-6">
+                        <div className={ADMIN_CARD_STYLES.DEFAULT}>
+                            <div className={ADMIN_CARD_STYLES.CONTENT}>
+                                <FileUpload
+                                    endpoint="logo3DModel"
+                                    fileType="company/logo3d"
+                                    onUploadSuccess={handleLogo3DGlbUpload}
+                                    buttonText="GLB 모델 업로드 (.glb)"
+                                    accept=".glb"
+                                    maxSizeMb={20}
+                                />
+                                {data.logo3dSettings?.glbFileUrl && (
+                                    <div className="mt-3 space-y-1">
+                                        <p className={cn(ADMIN_INPUT_STYLES.LABEL, ADMIN_UI.TEXT_SM)}>현재 모델 파일:</p>
+                                        <a
+                                            href={data.logo3dSettings.glbFileUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className={cn(ADMIN_UI.TEXT_LINK, ADMIN_UI.TEXT_SM, "text-sm break-all")}
+                                        >
+                                            {data.logo3dSettings.glbFileUrl.split('/').pop() || data.logo3dSettings.glbFileUrl}
+                                        </a>
+                                    </div>
+                                )}
+                                <p className="text-xs text-gray-400 mt-2">3D 로고에 사용될 GLB 파일을 업로드합니다. 파일 확장자는 <code>.glb</code> 여야 합니다.</p>
+                            </div>
+                        </div>
+
+                        {/* 3D 로고 미리보기 추가 */}
+                        {data.logo3dSettings && (
+                            <div className={cn(ADMIN_CARD_STYLES.DEFAULT, "h-[400px]")}>
+                                <div className={cn(ADMIN_CARD_STYLES.CONTENT, "h-full")}>
+                                    <div className="flex items-center justify-between mb-3">
+                                        <h3 className={cn(ADMIN_HEADING_STYLES.SUBSECTION_TITLE)}>실시간 미리보기</h3>
+                                        <div className="flex items-center gap-2">
+                                            {logo3dUpdating && (
+                                                <div className="flex items-center text-xs text-blue-400">
+                                                    <div className="animate-spin rounded-full h-3 w-3 border-b border-blue-400 mr-1"></div>
+                                                    업데이트 중...
+                                                </div>
+                                            )}
+                                            <div className="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">
+                                                스타일: {data.logo3dSettings.stylePreset || 'default'}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="w-full h-[calc(100%-3rem)] rounded-lg overflow-hidden border border-gray-700 bg-gray-900/50 relative">
+                                        <React.Suspense fallback={
+                                            <div className="w-full h-full flex items-center justify-center">
+                                                <div className="text-center">
+                                                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 mx-auto mb-2"></div>
+                                                    <p className="text-sm text-gray-400">3D 모델 로딩 중...</p>
+                                                </div>
+                                            </div>
+                                        }>
+                                            <Logo3D settings={data.logo3dSettings} />
+                                        </React.Suspense>
+                                        {!data.logo3dSettings.glbFileUrl && (
+                                            <div className="absolute top-2 right-2 bg-yellow-600/80 text-yellow-100 text-xs px-2 py-1 rounded">
+                                                기본 모델
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        <div className={ADMIN_CARD_STYLES.DEFAULT}>
+                            <div className={ADMIN_CARD_STYLES.CONTENT}>
+                                <div className="flex items-center justify-between mb-4">
+                                    <Label htmlFor="enableRotation" className={cn(ADMIN_INPUT_STYLES.LABEL, 'flex items-center', ADMIN_UI.TEXT_SM)}>
+                                        {data.logo3dSettings?.enableRotation ? <Eye className="mr-2 h-5 w-5 text-green-500" /> : <EyeOff className="mr-2 h-5 w-5 text-red-500" />} 자동 회전
+                                    </Label>
+                                    <Switch
+                                        id="enableRotation"
+                                        checked={!!data.logo3dSettings?.enableRotation} // boolean 값으로 명확히
+                                        onCheckedChange={(checked) => handleSwitchChange(checked, 'enableRotation', 'logo3dSettings')}
+                                    />
+                                </div>
+                                {data.logo3dSettings?.enableRotation && (
+                                    <div className="space-y-2">
+                                        <Label htmlFor="rotationSpeed" className={cn(ADMIN_INPUT_STYLES.LABEL, ADMIN_UI.TEXT_SM)}>회전 속도 (기본값: 0.0015)</Label>
+                                        <div className="flex items-center gap-2">
+                                            <Slider
+                                                id="rotationSpeed"
+                                                min={0.0001}
+                                                max={0.01}
+                                                step={0.0001}
+                                                value={[data.logo3dSettings?.rotationSpeed || defaultLogo3DSettings.rotationSpeed!]}
+                                                onValueChange={(value) => handleSliderChange(value, 'rotationSpeed', 'logo3dSettings')}
+                                                className="w-[calc(100%-5rem)]"
+                                            />
+                                            <Input
+                                                type="number"
+                                                value={data.logo3dSettings?.rotationSpeed || defaultLogo3DSettings.rotationSpeed!}
+                                                onChange={(e) => handleChange(e, 'logo3dSettings')}
+                                                name="rotationSpeed"
+                                                className="w-20 appearance-none [-moz-appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                                step={0.0001}
+                                            />
+                                        </div>
+                                        <p className="text-xs text-gray-400">값이 클수록 빠르게 회전합니다.</p>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* 스타일 프리셋, 배경색, 모델 크기 설정 UI */}
+                        <div className={ADMIN_CARD_STYLES.DEFAULT}>
+                            <div className={ADMIN_CARD_STYLES.CONTENT}>
+                                <div className="space-y-4">
+                                    <div>
+                                        <Label htmlFor="stylePreset" className={cn(ADMIN_INPUT_STYLES.LABEL, ADMIN_UI.TEXT_SM)}>스타일 프리셋</Label>
+                                        <Select
+                                            value={data.logo3dSettings?.stylePreset || defaultLogo3DSettings.stylePreset!}
+                                            onValueChange={(value) => handleSelectChange(value, 'stylePreset', 'logo3dSettings')}
+                                        >
+                                            <SelectTrigger className={ADMIN_INPUT_STYLES.INPUT}>
+                                                <SelectValue placeholder="프리셋 선택" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="default">기본 (Default)</SelectItem>
+                                                <SelectItem value="metallic">메탈릭 (Metallic)</SelectItem>
+                                                <SelectItem value="vibrant">생동감 (Vibrant)</SelectItem>
+                                                <SelectItem value="darkElegant">어둡고 우아하게 (Dark Elegant)</SelectItem>
+                                                <SelectItem value="minimalLight">미니멀 라이트 (Minimal Light)</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                        <p className="text-xs text-gray-400 mt-1">3D 로고의 전체적인 분위기를 선택합니다.</p>
+                                    </div>
+
+                                    <div>
+                                        <Label htmlFor="viewerBackgroundColor" className={cn(ADMIN_INPUT_STYLES.LABEL, ADMIN_UI.TEXT_SM)}>뷰어 배경색</Label>
+                                        <Input
+                                            id="viewerBackgroundColor"
+                                            name="viewerBackgroundColor"
+                                            value={data.logo3dSettings?.viewerBackgroundColor || defaultLogo3DSettings.viewerBackgroundColor!}
+                                            onChange={(e) => handleChange(e, 'logo3dSettings')}
+                                            className={ADMIN_INPUT_STYLES.INPUT}
+                                            placeholder="예: transparent, #FFFFFF, rgba(0,0,0,0.5)"
+                                        />
+                                        <p className="text-xs text-gray-400 mt-1">배경색을 입력합니다. 투명하게 하려면 'transparent'를 입력하세요.</p>
+                                    </div>
+
+                                    <div>
+                                        <Label htmlFor="modelScale" className={cn(ADMIN_INPUT_STYLES.LABEL, ADMIN_UI.TEXT_SM)}>모델 크기 (기본값: 1)</Label>
+                                        <div className="flex items-center gap-2">
+                                            <Slider
+                                                id="modelScale"
+                                                min={0.1}
+                                                max={3}
+                                                step={0.05}
+                                                value={[data.logo3dSettings?.modelScale || defaultLogo3DSettings.modelScale!]}
+                                                onValueChange={(value) => handleSliderChange(value, 'modelScale', 'logo3dSettings')}
+                                                className="w-[calc(100%-5rem)]"
+                                            />
+                                            <Input
+                                                type="number"
+                                                name="modelScale"
+                                                value={data.logo3dSettings?.modelScale || defaultLogo3DSettings.modelScale!}
+                                                onChange={(e) => handleChange(e, 'logo3dSettings')}
+                                                className="w-20 appearance-none [-moz-appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                                step={0.05}
+                                                min={0.1}
+                                                max={3}
+                                            />
+                                        </div>
+                                        <p className="text-xs text-gray-400">3D 모델의 전체 크기를 조절합니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* 기존 색상 설정 UI 제거 */}
+                        {/*
+                        <div className={ADMIN_CARD_STYLES.DEFAULT}>
+                            <div className={ADMIN_CARD_STYLES.CONTENT}>
+                                <div className="space-y-3">
+                                    <div className="space-y-2">
+                                        <Label htmlFor="colorS" className={cn(ADMIN_INPUT_STYLES.LABEL, ADMIN_UI.TEXT_SM)}>'S' 마크 색상 (예: #FF3030)</Label>
+                                <Input
+                                            id="colorS"
+                                            name="colorS"
+                                            value={data.logo3dSettings?.colorS || defaultLogo3DSettings.colorS!}
+                                            onChange={(e) => handleChange(e, 'logo3dSettings')}
+                                            className={ADMIN_INPUT_STYLES.INPUT}
+                                            placeholder="#RRGGBB"
+                                />
+                            </div>
+                                     // ... 다른 색상 입력 필드들 ...
+                                </div>
+                            </div>
+                        </div>
+                        */}
+
+                        {/* 기존 안내 문구 제거 또는 조건부 렌더링 (여기서는 일단 제거) */}
+                        {/*
+                        <div className="mt-6 p-4 border border-dashed border-yellow-500/50 rounded-md bg-yellow-500/10">
+                            <p className="text-sm text-yellow-300">
+                                <Info className="inline h-4 w-4 mr-1" /> 현재 3D 로고 미리보기는 제공되지 않습니다. About 페이지에서 '인사말 및 회사개요' 섹션의 대표 이미지를 제거한 후 실제 모습을 확인해주세요.
+                            </p>
+                        </div>
+                        */}
+                    </div>
+                </TabsContent>
+
+                <TabsContent value="vision">
+                    <div className="space-y-6">
+                        <div className={ADMIN_CARD_STYLES.DEFAULT}>
+                            <div className={ADMIN_CARD_STYLES.CONTENT}>
+                                <Label htmlFor="vision" className={cn(ADMIN_INPUT_STYLES.LABEL, ADMIN_UI.TEXT_SM)}>비전 상세 내용</Label>
+                                <Textarea
+                                    id="vision"
+                                    name="vision"
+                                    value={data.vision || ''}
+                                    onChange={handleChange}
+                                    placeholder="회사의 비전을 상세히 기술해주세요. 줄바꿈을 사용하여 여러 문단을 작성할 수 있습니다."
+                                    className={ADMIN_INPUT_STYLES.INPUT}
+                                    rows={15}
+                                />
+                                <p className="text-xs text-gray-400 mt-1">이 내용은 웹사이트의 회사 비전 관련 페이지 또는 섹션에 표시될 수 있습니다.</p>
+                            </div>
+                        </div>
+                    </div>
+                </TabsContent>
+
+                <TabsContent value="philosophy">
+                    <div className="space-y-6">
+                        <div className={ADMIN_CARD_STYLES.DEFAULT}>
+                            <div className={ADMIN_CARD_STYLES.CONTENT}>
+                                <Label htmlFor="philosophyStatement" className={cn(ADMIN_INPUT_STYLES.LABEL, ADMIN_UI.TEXT_SM)}>경영 철학 상세 내용</Label>
+                                <Textarea
+                                    id="philosophyStatement"
+                                    name="philosophyStatement"
+                                    value={data.philosophyStatement || ''}
+                                    onChange={handleChange}
+                                    placeholder="회사의 독립적인 경영 철학을 상세히 기술해주세요. 이 내용은 웹사이트의 경영 철학 섹션에 표시됩니다."
+                                    className={ADMIN_INPUT_STYLES.INPUT}
+                                    rows={15}
+                                />
+                                <p className="text-xs text-gray-400 mt-1">이 내용은 웹사이트의 경영 철학 관련 페이지 또는 섹션에 독립적으로 표시됩니다.</p>
+                            </div>
+                        </div>
+                    </div>
+                </TabsContent>
+
+                <TabsContent value="coreValues">
+                    <div className="space-y-6">
+                        <div className="flex justify-end">
+                            <Button onClick={addCoreValueItem} className={cn(ADMIN_UI.BUTTON_PRIMARY, ADMIN_BUTTON_SIZES.SM)}>
+                                <PlusCircle className="mr-2 h-4 w-4" /> 핵심가치 추가
+                            </Button>
+                        </div>
+                        {(data.coreValues || []).map((item, index) => (
+                            <div key={item.id || index} className={cn(ADMIN_CARD_STYLES.DEFAULT, "relative")}>
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="absolute top-2 right-2 text-red-500 hover:text-red-700"
+                                    onClick={() => removeCoreValueItem(index)}
+                                >
+                                    <Trash2 className="h-4 w-4" />
+                                </Button>
+                                <div className={ADMIN_CARD_STYLES.CONTENT}>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <Label htmlFor={`coreValue-icon-${index}`} className={cn(ADMIN_INPUT_STYLES.LABEL, ADMIN_UI.TEXT_SM)}>아이콘 (Lucide 아이콘 이름)</Label>
+                                            <Input
+                                                id={`coreValue-icon-${index}`}
+                                                name="icon"
+                                                value={item.icon || ''}
+                                                onChange={(e) => handleCoreValueItemChange(index, e)}
+                                                placeholder="예: Zap, Shield, Target"
+                                                className={ADMIN_INPUT_STYLES.INPUT}
+                                            />
+                                            <p className="text-xs text-gray-400 mt-1">Lucide 아이콘 이름을 입력하세요. <a href="https://lucide.dev/icons/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">여기</a>서 찾아보세요.</p>
+                                        </div>
+                                        <div>
+                                            <Label htmlFor={`coreValue-mainTitle-${index}`} className={cn(ADMIN_INPUT_STYLES.LABEL, ADMIN_UI.TEXT_SM)}>메인 타이틀</Label>
+                                            <Input
+                                                id={`coreValue-mainTitle-${index}`}
+                                                name="mainTitle"
+                                                value={item.mainTitle || ''}
+                                                onChange={(e) => handleCoreValueItemChange(index, e)}
+                                                placeholder="핵심가치 메인 제목"
+                                                className={ADMIN_INPUT_STYLES.INPUT}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="mt-4">
+                                        <Label htmlFor={`coreValue-subTitle-${index}`} className={cn(ADMIN_INPUT_STYLES.LABEL, ADMIN_UI.TEXT_SM)}>서브 타이틀</Label>
+                                        <Input
+                                            id={`coreValue-subTitle-${index}`}
+                                            name="subTitle"
+                                            value={item.subTitle || ''}
+                                            onChange={(e) => handleCoreValueItemChange(index, e)}
+                                            placeholder="핵심가치 부제목 (선택 사항)"
+                                            className={ADMIN_INPUT_STYLES.INPUT}
+                                        />
+                                    </div>
+                                    <div className="mt-4">
+                                        <Label htmlFor={`coreValue-description-${index}`} className={cn(ADMIN_INPUT_STYLES.LABEL, ADMIN_UI.TEXT_SM)}>본문 내용</Label>
+                                        <Textarea
+                                            id={`coreValue-description-${index}`}
+                                            name="description"
+                                            value={item.description || ''}
+                                            onChange={(e) => handleCoreValueItemChange(index, e)}
+                                            placeholder="핵심가치에 대한 상세 설명"
+                                            className={ADMIN_INPUT_STYLES.INPUT}
+                                            rows={4}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                        {(!data.coreValues || data.coreValues.length === 0) && (
+                            <p className={cn(ADMIN_UI.TEXT_MUTED, "text-center py-8")}>등록된 핵심가치가 없습니다. '핵심가치 추가' 버튼을 눌러 새 항목을 만드세요.</p>
+                        )}
+                    </div>
+                </TabsContent>
+
+                <TabsContent value="mainBusiness">
+                    <div className="space-y-6">
+                        <div className={ADMIN_CARD_STYLES.DEFAULT}>
+                            <div className={ADMIN_CARD_STYLES.CONTENT}>
+                                <Label htmlFor="businessType" className={cn(ADMIN_INPUT_STYLES.LABEL, ADMIN_UI.TEXT_SM)}>주요 사업 영역 상세 설명</Label>
+                                <Textarea
+                                    id="businessType"
+                                    name="businessType"
+                                    value={data.businessType || ''}
+                                    onChange={handleChange}
+                                    placeholder="회사의 주요 사업 분야 및 서비스에 대해 상세히 기술해주세요. 줄바꿈으로 여러 항목을 구분할 수 있습니다."
+                                    className={ADMIN_INPUT_STYLES.INPUT}
+                                    rows={15}
+                                />
+                                <p className="text-xs text-gray-400 mt-1">이 내용은 웹사이트의 사업 소개 관련 페이지에 표시될 수 있습니다. '세부 정보' 탭의 '주요 사업' 항목과 동일한 데이터를 사용합니다.</p>
+                            </div>
+                        </div>
+                    </div>
+                </TabsContent>
+
+                <TabsContent value="keyHistory">
+                    <div className="space-y-6">
+                        {/* 연혁 입력 섹션 */}
+                        <div className={ADMIN_CARD_STYLES.DEFAULT}>
+                            <div className={ADMIN_CARD_STYLES.CONTENT}>
+                                <Label htmlFor="history" className={cn(ADMIN_INPUT_STYLES.LABEL, ADMIN_UI.TEXT_SM)}>주요 연혁 상세 내용</Label>
+                                <Textarea
+                                    id="history"
+                                    name="history"
+                                    value={data.history || ''}
+                                    onChange={handleChange}
+                                    placeholder="회사의 주요 연혁을 시간 순서대로 상세히 기술해주세요. 예: 'YYYY년 MM월: 주요 이벤트 내용'"
+                                    className={ADMIN_INPUT_STYLES.INPUT}
+                                    rows={20}
+                                />
+                                <p className="text-xs text-gray-400 mt-1">이 내용은 웹사이트의 회사 연혁 페이지에 표시될 수 있습니다. '세부 정보' 탭의 '회사 연혁 (간략히)' 항목과 동일한 데이터를 사용합니다.</p>
+                            </div>
+                        </div>
+
+                        {/* 연혁 비주얼 미리보기 섹션 */}
+                        {data.history && (
+                            <div className={ADMIN_CARD_STYLES.DEFAULT}>
+                                <div className={ADMIN_CARD_STYLES.CONTENT}>
+                                    <div className="flex items-center justify-between mb-4">
+                                        <h3 className={cn(ADMIN_HEADING_STYLES.SUBSECTION_TITLE, "flex items-center")}>
+                                            <ScrollText className="mr-2 h-5 w-5 text-blue-400" />
+                                            연혁 타임라인 미리보기
+                                        </h3>
+                                        <div className="flex items-center gap-2">
+                                            <Button
+                                                onClick={() => setHistoryStyleDialogOpen(true)}
+                                                variant="outline"
+                                                size="sm"
+                                                className="text-blue-400 border-blue-400 hover:bg-blue-400/10"
+                                            >
+                                                <Palette className="mr-1 h-4 w-4" />
+                                                스타일 설정
+                                            </Button>
+                                            <div className="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">
+                                                자동 생성됨
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="max-h-96 overflow-y-auto border border-gray-700 rounded-lg p-4 bg-gray-900/50">
+                                        <HistoryTimeline
+                                            historyText={data.history}
+                                            customStyles={historyCustomStyles}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* 작성 규칙 안내 섹션 */}
+                        <div className={cn(ADMIN_CARD_STYLES.DEFAULT, "border-blue-500/30")}>
+                            <div className={ADMIN_CARD_STYLES.CONTENT}>
+                                <h3 className={cn(ADMIN_HEADING_STYLES.SUBSECTION_TITLE, "flex items-center text-blue-400 mb-4")}>
+                                    <Info className="mr-2 h-5 w-5" />
+                                    연혁 작성 규칙 및 비주얼 자동 적용 안내
+                                </h3>
+
+                                <div className="space-y-4 text-sm text-gray-300">
+                                    <div className="bg-gray-800/50 p-4 rounded-lg">
+                                        <h4 className="font-semibold text-blue-300 mb-2">📝 기본 작성 형식</h4>
+                                        <div className="space-y-2 text-xs">
+                                            <p><code className="bg-gray-700 px-1 rounded">YYYY년</code> 또는 <code className="bg-gray-700 px-1 rounded">YYYY년 MM월</code>로 시작하는 줄은 자동으로 연도 헤더로 인식됩니다.</p>
+                                            <p><code className="bg-gray-700 px-1 rounded">MM월:</code> 또는 <code className="bg-gray-700 px-1 rounded">MM월 DD일:</code>로 시작하는 줄은 해당 연도의 세부 이벤트로 표시됩니다.</p>
+                                            <p>들여쓰기(공백 또는 탭)된 줄은 상위 이벤트의 세부 내용으로 처리됩니다.</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="bg-gray-800/50 p-4 rounded-lg">
+                                        <h4 className="font-semibold text-green-300 mb-2">✅ 올바른 예시</h4>
+                                        <pre className="text-xs bg-gray-900 p-3 rounded border-l-4 border-green-500 overflow-x-auto">
+                                            {`2018년
+01월: ISO 9001: 2015 인증 획득[Q209412]
+09월: 한국산업은행으로 부터 4차 산업 유망기업인[KDB - TECH]기업으로 선정
+
+2017년 3월
+03월: [완강기] 및[간이완강기] 신규 형식승인 취득
+    - 소방청 형식승인 완료
+    - 안전성 테스트 통과
+05월: 터키 공기안전매트 수출
+10월: [충청북도 중소기업 경영대상] 수상 - 충청북도 도지사상`}
+                                        </pre>
+                                    </div>
+
+                                    <div className="bg-gray-800/50 p-4 rounded-lg">
+                                        <h4 className="font-semibold text-orange-300 mb-2">🎨 비주얼 자동 적용 규칙</h4>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                                            <div>
+                                                <p className="font-medium text-orange-200 mb-1">연도별 색상 구분:</p>
+                                                <ul className="space-y-1 ml-4">
+                                                    <li>• 최신 연도: <span className="text-blue-400">파란색</span></li>
+                                                    <li>• 중간 연도: <span className="text-green-400">초록색</span></li>
+                                                    <li>• 과거 연도: <span className="text-gray-400">회색</span></li>
+                                                </ul>
+                                            </div>
+                                            <div>
+                                                <p className="font-medium text-orange-200 mb-1">이벤트 유형별 아이콘:</p>
+                                                <ul className="space-y-1 ml-4">
+                                                    <li>• 인증/수상: 🏆 트로피</li>
+                                                    <li>• 설립/창립: 🏢 건물</li>
+                                                    <li>• 수출/계약: 🌍 글로브</li>
+                                                    <li>• 개발/출시: 🚀 로켓</li>
+                                                    <li>• 기타: 📅 캘린더</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="bg-gray-800/50 p-4 rounded-lg">
+                                        <h4 className="font-semibold text-purple-300 mb-2">💡 작성 팁</h4>
+                                        <div className="text-xs space-y-1">
+                                            <p>• 연도는 내림차순(최신 → 과거)으로 작성하면 타임라인이 더 보기 좋습니다.</p>
+                                            <p>• 중요한 이벤트는 대괄호 <code className="bg-gray-700 px-1 rounded">[내용]</code>로 강조할 수 있습니다.</p>
+                                            <p>• 세부 내용은 들여쓰기로 구조화하여 가독성을 높이세요.</p>
+                                            <p>• 월/일 정보가 있으면 더 정확한 타임라인이 생성됩니다.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </TabsContent>
+
+                <TabsContent value="awards" className="pt-6">
+                    <div className={ADMIN_CARD_STYLES.DEFAULT}>
+                        <div className={cn(ADMIN_CARD_STYLES.HEADER, "flex justify-between items-center")}>
+                            <h3 className={cn(ADMIN_HEADING_STYLES.CARD_TITLE, "flex items-center")}>
+                                <Award className="w-5 h-5 mr-3 text-orange-400" />인증 및 수상 관리
+                            </h3>
+                            <Button onClick={addAwardItem} size="sm" className={ADMIN_UI.BUTTON_PRIMARY}>
+                                <PlusCircle className="w-4 h-4 mr-2" /> 항목 추가
+                            </Button>
+                        </div>
+                        <div className={ADMIN_CARD_STYLES.CONTENT}>
+                            {(data.awardsAndCertifications && data.awardsAndCertifications.length > 0) ? (
+                                <div className="space-y-6">
+                                    {data.awardsAndCertifications.map((item, index) => (
+                                        <div key={item.id || `award-${index}`} className={cn(ADMIN_CARD_STYLES.ACCENT, "p-6 rounded-xl shadow-lg relative")}>
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                onClick={() => removeAwardItem(index)}
+                                                className="absolute top-3 right-3 text-gray-400 hover:text-red-500 hover:bg-red-900/30 w-8 h-8"
+                                                title={`항목 ${index + 1} 삭제`}
+                                            >
+                                                <Trash2 className="w-4 h-4" />
+                                            </Button>
+                                            <h4 className={cn(ADMIN_HEADING_STYLES.SUBSECTION_TITLE, "text-orange-300 mb-4 border-b border-gray-700 pb-2")}>항목 {index + 1}</h4>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                                                <div className="md:col-span-1 space-y-4">
+                                                    <div className={ADMIN_INPUT_STYLES.WRAPPER}>
+                                                        <Label htmlFor={`award-title-${item.id || index}`} className={ADMIN_INPUT_STYLES.LABEL}>제목 <span className="text-red-500">*</span></Label>
+                                                        <Input
+                                                            id={`award-title-${item.id || index}`}
+                                                            name="title"
+                                                            value={item.title}
+                                                            onChange={(e) => handleAwardItemChange(index, e)}
+                                                            className={ADMIN_INPUT_STYLES.INPUT}
+                                                            placeholder="예: ISO 9001 인증"
+                                                            required
+                                                        />
+                                                    </div>
+                                                    <div className={ADMIN_INPUT_STYLES.WRAPPER}>
+                                                        <Label htmlFor={`award-year-${item.id || index}`} className={ADMIN_INPUT_STYLES.LABEL}>취득 연도</Label>
+                                                        <Input id={`award-year-${item.id || index}`} name="year" value={item.year || ''} onChange={(e) => handleAwardItemChange(index, e)} className={ADMIN_INPUT_STYLES.INPUT} placeholder="예: 2023" />
+                                                    </div>
+                                                    <div className={ADMIN_INPUT_STYLES.WRAPPER}>
+                                                        <Label htmlFor={`award-org-${item.id || index}`} className={ADMIN_INPUT_STYLES.LABEL}>발행 기관</Label>
+                                                        <Input id={`award-org-${item.id || index}`} name="issuingOrganization" value={item.issuingOrganization || ''} onChange={(e) => handleAwardItemChange(index, e)} className={ADMIN_INPUT_STYLES.INPUT} placeholder="예: 국제표준화기구" />
+                                                    </div>
+                                                    <div className={ADMIN_INPUT_STYLES.WRAPPER}>
+                                                        <Label htmlFor={`award-link-${item.id || index}`} className={ADMIN_INPUT_STYLES.LABEL}>관련 링크 (선택)</Label>
+                                                        <div className="flex items-center">
+                                                            <Input id={`award-link-${item.id || index}`} name="link" type="url" value={item.link || ''} onChange={(e) => handleAwardItemChange(index, e)} className={cn(ADMIN_INPUT_STYLES.INPUT, 'rounded-r-none')} placeholder="https://example.com/award" />
+                                                            <Button type="button" variant="outline" size="icon" className="rounded-l-none border-l-0 h-10 w-10 hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed" disabled={!item.link || !item.link.startsWith('http')} onClick={() => item.link && window.open(item.link, '_blank')} title="링크 열기">
+                                                                <ExternalLink className="h-4 w-4" />
+                                                            </Button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="md:col-span-1 space-y-4">
+                                                    <div className={ADMIN_INPUT_STYLES.WRAPPER}>
+                                                        <Label htmlFor={`award-image-${item.id || index}`} className={ADMIN_INPUT_STYLES.LABEL}>이미지 파일</Label>
+                                                        <FileUpload endpoint="companyAwardImage" onUploadSuccess={(file) => handleAwardImageUpload(index, file)} currentImageUrl={item.imageUrl} accept="image/jpeg, image/png, image/gif, image/webp" maxSizeMb={5} buttonText="이미지 선택 또는 변경" idSuffix={item.id || `award-image-${index}`} fileType="awards" />
+                                                        <p className={cn(ADMIN_INPUT_STYLES.HELPER, "mt-1.5")}>
+                                                            권장: A4 비율(세로). 최대 5MB. (JPG, PNG, GIF, WEBP)
+                                                        </p>
+                                                    </div>
+                                                    <div className={ADMIN_INPUT_STYLES.WRAPPER}>
+                                                        <Label htmlFor={`award-desc-${item.id || index}`} className={ADMIN_INPUT_STYLES.LABEL}>세부 설명 (선택)</Label>
+                                                        <Textarea id={`award-desc-${item.id || index}`} name="description" value={item.description || ''} onChange={(e) => handleAwardItemChange(index, e)} className={ADMIN_INPUT_STYLES.INPUT} rows={4} placeholder="인증/수상에 대한 간략한 설명을 입력하세요." />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="text-center py-12 border-2 border-dashed border-gray-700 rounded-lg bg-gray-800/30">
+                                    <Award className="mx-auto h-12 w-12 text-gray-500" />
+                                    <h3 className="mt-3 text-lg font-semibold text-gray-300">등록된 인증/수상 정보가 없습니다.</h3>
+                                    <p className="mt-1.5 text-sm text-gray-400">
+                                        '항목 추가' 버튼을 클릭하여 첫 번째 인증/수상 정보를 등록하세요.
+                                    </p>
+                                    <Button onClick={addAwardItem} size="sm" className={cn("mt-6", ADMIN_UI.BUTTON_PRIMARY)}>
+                                        <PlusCircle className="w-4 h-4 mr-2" /> 첫 항목 추가하기
+                                    </Button>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </TabsContent>
+
+                <TabsContent value="contact">
+                    <div className="space-y-6">
+                        <div className={ADMIN_CARD_STYLES.DEFAULT}>
+                            <div className={cn(ADMIN_CARD_STYLES.CONTENT, "grid grid-cols-1 md:grid-cols-2 gap-6")}>
+                                <div>
+                                    <Label htmlFor="addressKo" className={cn(ADMIN_INPUT_STYLES.LABEL, 'flex items-center', ADMIN_UI.TEXT_SM)}>
+                                        <MapPin className="mr-2 h-4 w-4" /> 주소 (한글)
+                                    </Label>
+                                    <Input id="addressKo" name="addressKo" value={data.addressKo} onChange={handleChange} placeholder="서울특별시 강남구 테헤란로" className={ADMIN_INPUT_STYLES.INPUT} />
+                                </div>
+                                <div>
+                                    <Label htmlFor="addressEn" className={cn(ADMIN_INPUT_STYLES.LABEL, 'flex items-center', ADMIN_UI.TEXT_SM)}>
+                                        <Globe className="mr-2 h-4 w-4" /> 주소 (영문)
+                                    </Label>
+                                    <Input id="addressEn" name="addressEn" value={data.addressEn || ''} onChange={handleChange} placeholder="Teheran-ro, Gangnam-gu, Seoul" className={ADMIN_INPUT_STYLES.INPUT} />
+                                </div>
+                                <div>
+                                    <Label htmlFor="phone" className={cn(ADMIN_INPUT_STYLES.LABEL, 'flex items-center', ADMIN_UI.TEXT_SM)}>
+                                        <Phone className="mr-2 h-4 w-4" /> 대표 전화번호
+                                    </Label>
+                                    <Input id="phone" name="phone" value={data.phone || ''} onChange={handleChange} placeholder="02-1234-5678" className={ADMIN_INPUT_STYLES.INPUT} />
+                                </div>
+                                <div>
+                                    <Label htmlFor="fax" className={cn(ADMIN_INPUT_STYLES.LABEL, 'flex items-center', ADMIN_UI.TEXT_SM)}>
+                                        <Phone className="mr-2 h-4 w-4 transform scale-x-[-1]" /> 팩스번호
+                                    </Label>
+                                    <Input id="fax" name="fax" value={data.fax || ''} onChange={handleChange} placeholder="02-1234-5679" className={ADMIN_INPUT_STYLES.INPUT} />
+                                </div>
+                                <div>
+                                    <Label htmlFor="email" className={cn(ADMIN_INPUT_STYLES.LABEL, 'flex items-center', ADMIN_UI.TEXT_SM)}>
+                                        <Mail className="mr-2 h-4 w-4" /> 대표 이메일
+                                    </Label>
+                                    <Input id="email" name="email" type="email" value={data.email || ''} onChange={handleChange} placeholder="contact@company.com" className={ADMIN_INPUT_STYLES.INPUT} />
+                                </div>
+                                <div>
+                                    <Label htmlFor="supportEmail" className={cn(ADMIN_INPUT_STYLES.LABEL, 'flex items-center', ADMIN_UI.TEXT_SM)}>
+                                        <Mail className="mr-2 h-4 w-4" /> 고객지원 이메일
+                                    </Label>
+                                    <Input id="supportEmail" name="supportEmail" type="email" value={data.supportEmail || ''} onChange={handleChange} placeholder="support@company.com" className={ADMIN_INPUT_STYLES.INPUT} />
+                                </div>
+                                <div>
+                                    <Label htmlFor="website" className={cn(ADMIN_INPUT_STYLES.LABEL, 'flex items-center', ADMIN_UI.TEXT_SM)}>
+                                        <LinkIcon className="mr-2 h-4 w-4" /> 웹사이트 주소
+                                    </Label>
+                                    <Input id="website" name="website" type="url" value={data.website || ''} onChange={handleChange} placeholder="https://www.company.com" className={ADMIN_INPUT_STYLES.INPUT} />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </TabsContent>
+
+                <TabsContent value="details">
+                    <div className="space-y-6">
+                        <div className={ADMIN_CARD_STYLES.DEFAULT}>
+                            <div className={cn(ADMIN_CARD_STYLES.CONTENT, "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6")}>
+                                <div>
+                                    <Label htmlFor="businessType_summary" className={cn(ADMIN_INPUT_STYLES.LABEL, 'flex items-center', ADMIN_UI.TEXT_SM)}>
+                                        <Info className="mr-2 h-4 w-4" /> 주요 사업 (요약)
+                                    </Label>
+                                    <Input id="businessType_summary" name="businessType" value={data.businessType || ''} onChange={handleChange} placeholder="소방안전장비 제조 및 판매" className={ADMIN_INPUT_STYLES.INPUT} />
+                                    <p className="text-xs text-gray-400 mt-1">상세 내용은 '주요사업' 탭에서 관리합니다.</p>
+                                </div>
+                                <div>
+                                    <Label htmlFor="employees" className={cn(ADMIN_INPUT_STYLES.LABEL, 'flex items-center', ADMIN_UI.TEXT_SM)}>
+                                        <Users className="mr-2 h-4 w-4" /> 임직원 수
+                                    </Label>
+                                    <Input id="employees" name="employees" value={data.employees || ''} onChange={handleChange} placeholder="100명" className={ADMIN_INPUT_STYLES.INPUT} />
+                                </div>
+                                <div>
+                                    <Label htmlFor="annualRevenue" className={cn(ADMIN_INPUT_STYLES.LABEL, 'flex items-center', ADMIN_UI.TEXT_SM)}>
+                                        <TrendingUp className="mr-2 h-4 w-4" /> 연매출
+                                    </Label>
+                                    <Input id="annualRevenue" name="annualRevenue" value={data.annualRevenue || ''} onChange={handleChange} placeholder="100억원" className={ADMIN_INPUT_STYLES.INPUT} />
+                                </div>
+                                <div>
+                                    <Label htmlFor="businessHours" className={cn(ADMIN_INPUT_STYLES.LABEL, 'flex items-center', ADMIN_UI.TEXT_SM)}>
+                                        <Clock className="mr-2 h-4 w-4" /> 영업시간
+                                    </Label>
+                                    <Input id="businessHours" name="businessHours" value={data.businessHours || ''} onChange={handleChange} placeholder="평일 09:00 - 18:00" className={ADMIN_INPUT_STYLES.INPUT} />
+                                </div>
+                            </div>
+                        </div>
+                        <div className={ADMIN_CARD_STYLES.DEFAULT}>
+                            <div className={cn(ADMIN_CARD_STYLES.CONTENT, "grid grid-cols-1 md:grid-cols-3 gap-6")}>
+                                <div>
+                                    <Label htmlFor="history_summary" className={cn(ADMIN_INPUT_STYLES.LABEL, 'flex items-center', ADMIN_UI.TEXT_SM)}>
+                                        <Info className="mr-2 h-4 w-4" /> 회사 연혁 (요약)
+                                    </Label>
+                                    <Textarea id="history_summary" name="history" value={data.history || ''} onChange={handleChange} placeholder="2020년: ...\n2021년: ..." className={ADMIN_INPUT_STYLES.INPUT} rows={3} />
+                                    <p className="text-xs text-gray-400 mt-1">상세 내용은 '주요연혁' 탭에서 관리합니다.</p>
+                                </div>
+                                <div>
+                                    <Label htmlFor="vision_summary" className={cn(ADMIN_INPUT_STYLES.LABEL, 'flex items-center', ADMIN_UI.TEXT_SM)}>
+                                        <Info className="mr-2 h-4 w-4" /> 회사 비전 (요약)
+                                    </Label>
+                                    <Textarea id="vision_summary" name="vision" value={data.vision || ''} onChange={handleChange} placeholder="글로벌 리더..." className={ADMIN_INPUT_STYLES.INPUT} rows={3} />
+                                    <p className="text-xs text-gray-400 mt-1">상세 내용은 '비전' 탭에서 관리합니다.</p>
+                                </div>
+                                <div>
+                                    <Label htmlFor="awards_summary" className={cn(ADMIN_INPUT_STYLES.LABEL, 'flex items-center', ADMIN_UI.TEXT_SM)}>
+                                        <Info className="mr-2 h-4 w-4" /> 주요 수상 내역 (요약)
+                                    </Label>
+                                    <Textarea id="awards_summary" name="awards" value={data.awards || ''} onChange={handleChange} placeholder="2022년: 장관상 ..." className={ADMIN_INPUT_STYLES.INPUT} rows={3} />
+                                    <p className="text-xs text-gray-400 mt-1">상세 내용은 '인증/수상' 탭에서 관리합니다.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </TabsContent>
+
+                <TabsContent value="social">
+                    <div className="space-y-6">
+                        <div className={ADMIN_CARD_STYLES.DEFAULT}>
+                            <div className={cn(ADMIN_CARD_STYLES.CONTENT, "grid grid-cols-1 md:grid-cols-2 gap-6")}>
+                                {(Object.keys(data.socialLinks || {}) as Array<keyof typeof defaultData.socialLinks>).map((key) => (
+                                    <div key={key}>
+                                        <Label htmlFor={key} className={cn(ADMIN_INPUT_STYLES.LABEL, 'capitalize flex items-center', ADMIN_UI.TEXT_SM)}>
+                                            <LinkIcon className="mr-2 h-4 w-4" /> {key}
+                                        </Label>
+                                        <Input
+                                            id={key}
+                                            name={key}
+                                            value={data.socialLinks?.[key] || ''}
+                                            onChange={(e) => handleChange(e, 'socialLinks')}
+                                            placeholder={`https://www.${key}.com/yourpage`}
+                                            className={ADMIN_INPUT_STYLES.INPUT}
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </TabsContent>
+
+                <TabsContent value="location">
+                    <div className="space-y-6">
+                        <div className={ADMIN_CARD_STYLES.DEFAULT}>
+                            <div className={cn(ADMIN_CARD_STYLES.CONTENT, "grid grid-cols-1 md:grid-cols-2 gap-6")}>
+                                <div>
+                                    <Label htmlFor="latitude" className={cn(ADMIN_INPUT_STYLES.LABEL, 'flex items-center', ADMIN_UI.TEXT_SM)}>
+                                        <MapPin className="mr-2 h-4 w-4" /> 위도 (Latitude)
+                                    </Label>
+                                    <Input id="latitude" name="latitude" value={data.latitude || ''} onChange={handleChange} placeholder="37.503720" className={ADMIN_INPUT_STYLES.INPUT} />
+                                </div>
+                                <div>
+                                    <Label htmlFor="longitude" className={cn(ADMIN_INPUT_STYLES.LABEL, 'flex items-center', ADMIN_UI.TEXT_SM)}>
+                                        <MapPin className="mr-2 h-4 w-4" /> 경도 (Longitude)
+                                    </Label>
+                                    <Input id="longitude" name="longitude" value={data.longitude || ''} onChange={handleChange} placeholder="127.044879" className={ADMIN_INPUT_STYLES.INPUT} />
+                                </div>
+                                <div className="md:col-span-2">
+                                    <Label htmlFor="mapApiKey" className={cn(ADMIN_INPUT_STYLES.LABEL, 'flex items-center', ADMIN_UI.TEXT_SM)}>
+                                        <Info className="mr-2 h-4 w-4" /> 지도 API 키 (필요한 경우)
+                                    </Label>
+                                    <Input id="mapApiKey" name="mapApiKey" value={data.mapApiKey || ''} onChange={handleChange} placeholder="Google Maps API Key or Kakao Maps API Key" className={ADMIN_INPUT_STYLES.INPUT} />
+                                </div>
+                            </div>
+                        </div>
+                        <div className={ADMIN_CARD_STYLES.DEFAULT}>
+                            <div className={ADMIN_CARD_STYLES.CONTENT}>
+                                <div className="space-y-3">
+                                    <div>
+                                        <Label htmlFor="directions" className={cn(ADMIN_INPUT_STYLES.LABEL, 'flex items-center', ADMIN_UI.TEXT_SM)}>
+                                            <Info className="mr-2 h-4 w-4" /> 오시는 길 설명
+                                        </Label>
+                                        <Textarea id="directions" name="directions" value={data.directions || ''} onChange={handleChange} placeholder="지하철 2호선 강남역 10번 출구에서 도보 5분" className={ADMIN_INPUT_STYLES.INPUT} rows={3} />
+                                    </div>
+                                    <div>
+                                        <Label htmlFor="transportation" className={cn(ADMIN_INPUT_STYLES.LABEL, 'flex items-center', ADMIN_UI.TEXT_SM)}>
+                                            <Info className="mr-2 h-4 w-4" /> 대중교통 정보
+                                        </Label>
+                                        <Textarea id="transportation" name="transportation" value={data.transportation || ''} onChange={handleChange} placeholder="버스: 140, 402, 407번\n지하철: 신분당선 강남역" className={ADMIN_INPUT_STYLES.INPUT} rows={3} />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </TabsContent>
+
+                <TabsContent value="preview">
+                    <div className={cn(ADMIN_CARD_STYLES.DEFAULT, "mt-6")}>
+                        <div className={ADMIN_CARD_STYLES.HEADER}>
+                            <h4 className={cn(ADMIN_HEADING_STYLES.CARD_TITLE, "flex items-center")}>
+                                <ImageIcon className="w-5 h-5 mr-2 text-orange-400" /> 회사 정보 미리보기
+                            </h4>
+                        </div>
+                        <div className={ADMIN_CARD_STYLES.CONTENT}>
+                            <div className="p-4 md:p-6 border border-gray-700/40 rounded-lg bg-gray-900/50">
+                                <div className="flex flex-col md:flex-row items-start md:items-center gap-4 pb-4 border-b border-gray-700/30">
+                                    {data.logoUrl && (
+                                        <img
+                                            src={data.logoUrl}
+                                            alt={data.nameKo || 'Company Logo'}
+                                            className="h-12 object-contain bg-gray-700 p-1 rounded"
+                                        />
+                                    )}
+                                    <div>
+                                        <h1 className="text-xl font-bold text-orange-500">{data.nameKo}</h1>
+                                        {data.nameEn && <p className="text-sm text-gray-300">{data.nameEn}</p>}
+                                    </div>
+                                </div>
+
+                                {data.description && (
+                                    <div className="py-4 border-b border-gray-700/30">
+                                        <p className="text-gray-300 italic whitespace-pre-wrap">{data.description}</p>
+                                    </div>
+                                )}
+
+                                <div className="py-4 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                                    <div>
+                                        <h3 className="text-sm text-gray-400 mb-1">주소</h3>
+                                        <p className="text-gray-200">{data.addressKo || 'N/A'}</p>
+                                    </div>
+                                    <div>
+                                        <h3 className="text-sm text-gray-400 mb-1">연락처</h3>
+                                        <p className="text-gray-200">전화: {data.phone || 'N/A'}</p>
+                                        <p className="text-gray-200">이메일: {data.email || 'N/A'}</p>
+                                        <p className="text-gray-200">팩스: {data.fax || 'N/A'}</p>
+                                    </div>
+                                    <div>
+                                        <h3 className="text-sm text-gray-400 mb-1">기업 정보</h3>
+                                        <p className="text-gray-200">대표자: {data.CEO || 'N/A'}</p>
+                                        <p className="text-gray-200">사업자번호: {data.businessNumber || 'N/A'}</p>
+                                        <p className="text-gray-200">설립일: {data.established ? format(new Date(data.established), 'yyyy년 M월 d일') : 'N/A'}</p>
+                                    </div>
+                                    <div>
+                                        <h3 className="text-sm text-gray-400 mb-1">소셜 미디어</h3>
+                                        <div className="flex flex-wrap gap-x-3 gap-y-1 mt-1">
+                                            {data.socialLinks?.facebook && <a href={data.socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">Facebook</a>}
+                                            {data.socialLinks?.instagram && <a href={data.socialLinks.instagram} target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:underline">Instagram</a>}
+                                            {data.socialLinks?.youtube && <a href={data.socialLinks.youtube} target="_blank" rel="noopener noreferrer" className="text-red-400 hover:underline">YouTube</a>}
+                                            {data.socialLinks?.linkedin && <a href={data.socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">LinkedIn</a>}
+                                            {data.socialLinks?.blog && <a href={data.socialLinks.blog} target="_blank" rel="noopener noreferrer" className="text-green-400 hover:underline">Blog</a>}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {(data.vision || data.philosophyStatement || (data.coreValues && data.coreValues.length > 0) || data.businessType || data.history || (data.awardsAndCertifications && data.awardsAndCertifications.length > 0)) && (
+                                    <div className="border-t border-gray-700/30 pt-4 mt-2 space-y-4">
+                                        {data.vision && (
+                                            <div>
+                                                <h3 className="text-sm text-gray-400 mb-1">비전</h3>
+                                                <p className="text-gray-300 whitespace-pre-wrap">{data.vision}</p>
+                                            </div>
+                                        )}
+                                        {data.philosophyStatement && (
+                                            <div>
+                                                <h3 className="text-sm text-gray-400 mb-1">경영철학</h3>
+                                                <p className="text-gray-300 whitespace-pre-wrap">{data.philosophyStatement}</p>
+                                            </div>
+                                        )}
+                                        {data.coreValues && data.coreValues.length > 0 && (
+                                            <div>
+                                                <h3 className={cn(ADMIN_INPUT_STYLES.LABEL, "mb-2")}>핵심가치</h3> {/* ADMIN_INPUT_STYLES.LABEL 사용 */}
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                                    {data.coreValues.slice(0, 4).map(cv => {
+                                                        const IconLookup = cv.icon && LucideIcons[cv.icon];
+                                                        const IconComponent: React.FC<LucideProps> = IconLookup ? IconLookup : Sparkles; // Ensure type
+                                                        return (
+                                                            <div key={cv.id} className="bg-gray-700/50 p-3 rounded-md border border-gray-600/50">
+                                                                <div className="flex items-center mb-1.5">
+                                                                    <IconComponent className="w-5 h-5 mr-2 text-orange-400 flex-shrink-0" />
+                                                                    <h5 className="text-sm font-semibold text-gray-100 truncate" title={cv.mainTitle}>{cv.mainTitle}</h5>
+                                                                </div>
+                                                                {cv.subTitle && <p className="text-xs text-gray-400 mb-1 -mt-1 ml-7 truncate" title={cv.subTitle}>{cv.subTitle}</p>}
+                                                            </div>
+                                                        );
+                                                    })}
+                                                </div>
+                                            </div>
+                                        )}
+                                        {data.businessType && (
+                                            <div>
+                                                <h3 className={ADMIN_INPUT_STYLES.LABEL}>주요사업</h3> {/* ADMIN_INPUT_STYLES.LABEL 사용 */}
+                                                <p className="text-gray-300 whitespace-pre-wrap line-clamp-3">{data.businessType}</p>
+                                            </div>
+                                        )}
+                                        {data.history && (
+                                            <div>
+                                                <h3 className={ADMIN_INPUT_STYLES.LABEL}>연혁</h3> {/* ADMIN_INPUT_STYLES.LABEL 사용 */}
+                                                <p className="text-gray-300 whitespace-pre-line line-clamp-3">{data.history}</p>
+                                            </div>
+                                        )}
+                                        {data.awardsAndCertifications && data.awardsAndCertifications.length > 0 && (
+                                            <div>
+                                                <h3 className={cn(ADMIN_INPUT_STYLES.LABEL, "flex items-center mb-1")}> {/* ADMIN_INPUT_STYLES.LABEL 사용 */}
+                                                    <Award className="w-4 h-4 mr-2 text-orange-400" /> 주요 인증 및 수상
+                                                </h3>
+                                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-2">
+                                                    {data.awardsAndCertifications.slice(0, 6).map(award => (
+                                                        <div key={award.id || award.title} className="bg-gray-700/50 p-2 rounded-md text-center border border-gray-600/50">
+                                                            {award.imageUrl && (
+                                                                <div className="relative w-full aspect-[210/297] mb-1.5 rounded overflow-hidden bg-gray-600/50">
+                                                                    <Image
+                                                                        src={award.imageUrl.startsWith('/') ? `${process.env.NEXT_PUBLIC_BASE_PATH || ''}${award.imageUrl}` : award.imageUrl}
+                                                                        alt={award.title || 'Award Image'}
+                                                                        fill
+                                                                        className="object-contain p-0.5"
+                                                                        unoptimized={award.imageUrl.startsWith('http')}
+                                                                        onError={(e) => { (e.target as HTMLImageElement).src = `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/images/placeholder-a4.png`; }}
+                                                                    />
+                                                                </div>
+                                                            )}
+                                                            <h5 className="text-[11px] font-semibold text-orange-300 truncate leading-tight" title={award.title}>{award.title}</h5>
+                                                            {award.year && <p className="text-[10px] text-gray-400">{award.year}</p>}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </TabsContent>
+            </Tabs >
+
+    <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
+        <DialogContent className={cn(ADMIN_CARD_STYLES.DEFAULT, "max-w-3xl w-full bg-gray-800 text-gray-100")}>
+            <DialogHeader>
+                <DialogTitle className={cn(ADMIN_UI.TEXT_PRIMARY, ADMIN_HEADING_STYLES.SECTION_TITLE)}>
+                    회사 정보 미리보기
+                </DialogTitle>
+            </DialogHeader>
+            <div className="mt-4 space-y-4 max-h-[80vh] overflow-y-auto p-1">
+                <div className="p-4 md:p-6 border border-gray-700/40 rounded-lg bg-gray-900/50">
+                    <div className="flex flex-col md:flex-row items-start md:items-center gap-4 pb-4 border-b border-gray-700/30">
+                        {data.logoUrl && (
+                            <img
+                                src={data.logoUrl}
+                                alt={data.nameKo || 'Company Logo'}
+                                className="h-12 object-contain bg-gray-700 p-1 rounded"
+                            />
+                        )}
+                        <div>
+                            <h1 className="text-xl font-bold text-orange-500">{data.nameKo}</h1>
+                            {data.nameEn && <p className="text-sm text-gray-300">{data.nameEn}</p>}
+                        </div>
+                    </div>
+
+                    {data.description && (
+                        <div className="py-4 border-b border-gray-700/30">
+                            <p className="text-gray-300 italic whitespace-pre-wrap">{data.description}</p>
+                        </div>
+                    )}
+
+                    <div className="py-4 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                        <div>
+                            <h3 className={ADMIN_INPUT_STYLES.LABEL}>주소</h3>
+                            <p className="text-gray-200">{data.addressKo || 'N/A'}</p>
+                        </div>
+                        <div>
+                            <h3 className={ADMIN_INPUT_STYLES.LABEL}>연락처</h3>
+                            <p className="text-gray-200">전화: {data.phone || 'N/A'}</p>
+                            <p className="text-gray-200">이메일: {data.email || 'N/A'}</p>
+                            <p className="text-gray-200">팩스: {data.fax || 'N/A'}</p>
+                        </div>
+                        <div>
+                            <h3 className={ADMIN_INPUT_STYLES.LABEL}>기업 정보</h3>
+                            <p className="text-gray-200">대표자: {data.CEO || 'N/A'}</p>
+                            <p className="text-gray-200">사업자번호: {data.businessNumber || 'N/A'}</p>
+                            <p className="text-gray-200">설립일: {data.established ? format(new Date(data.established), 'yyyy년 M월 d일') : 'N/A'}</p>
+                        </div>
+                        <div>
+                            <h3 className={ADMIN_INPUT_STYLES.LABEL}>소셜 미디어</h3>
+                            <div className="flex flex-wrap gap-x-3 gap-y-1 mt-1">
+                                {data.socialLinks?.facebook && <a href={data.socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">Facebook</a>}
+                                {data.socialLinks?.instagram && <a href={data.socialLinks.instagram} target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:underline">Instagram</a>}
+                                {data.socialLinks?.youtube && <a href={data.socialLinks.youtube} target="_blank" rel="noopener noreferrer" className="text-red-400 hover:underline">YouTube</a>}
+                                {data.socialLinks?.linkedin && <a href={data.socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">LinkedIn</a>}
+                                {data.socialLinks?.blog && <a href={data.socialLinks.blog} target="_blank" rel="noopener noreferrer" className="text-green-400 hover:underline">Blog</a>}
+                            </div>
+                        </div>
+                    </div>
+
+                    {(data.vision || data.philosophyStatement || (data.coreValues && data.coreValues.length > 0) || data.businessType || data.history || (data.awardsAndCertifications && data.awardsAndCertifications.length > 0)) && (
+                        <div className="border-t border-gray-700/30 pt-4 mt-2 space-y-4">
+                            {data.vision && (
+                                <div>
+                                    <h3 className={ADMIN_INPUT_STYLES.LABEL}>비전</h3>
+                                    <p className="text-gray-300 whitespace-pre-wrap">{data.vision}</p>
+                                </div>
+                            )}
+                            {data.philosophyStatement && (
+                                <div>
+                                    <h3 className={ADMIN_INPUT_STYLES.LABEL}>경영철학</h3>
+                                    <p className="text-gray-300 whitespace-pre-wrap">{data.philosophyStatement}</p>
+                                </div>
+                            )}
+                            {data.coreValues && data.coreValues.length > 0 && (
+                                <div>
+                                    <h3 className={cn(ADMIN_INPUT_STYLES.LABEL, "mb-2")}>핵심가치</h3>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        {data.coreValues.slice(0, 4).map(cv => {
+                                            const IconLookup = cv.icon && LucideIcons[cv.icon];
+                                            const IconComponent: React.FC<LucideProps> = IconLookup ? IconLookup : Sparkles; // Ensure type
+                                            return (
+                                                <div key={cv.id} className="bg-gray-700/50 p-3 rounded-md border border-gray-600/50">
+                                                    <div className="flex items-center mb-1.5">
+                                                        <IconComponent className="w-5 h-5 mr-2 text-orange-400 flex-shrink-0" />
+                                                        <h5 className="text-sm font-semibold text-gray-100 truncate" title={cv.mainTitle}>{cv.mainTitle}</h5>
+                                                    </div>
+                                                    {cv.subTitle && <p className="text-xs text-gray-400 mb-1 -mt-1 ml-7 truncate" title={cv.subTitle}>{cv.subTitle}</p>}
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            )}
+                            {data.businessType && (
+                                <div>
+                                    <h3 className={ADMIN_INPUT_STYLES.LABEL}>주요사업</h3>
+                                    <p className="text-gray-300 whitespace-pre-wrap line-clamp-3">{data.businessType}</p>
+                                </div>
+                            )}
+                            {data.history && (
+                                <div>
+                                    <h3 className={ADMIN_INPUT_STYLES.LABEL}>연혁</h3>
+                                    <p className="text-gray-300 whitespace-pre-line line-clamp-3">{data.history}</p>
+                                </div>
+                            )}
+                            {data.awardsAndCertifications && data.awardsAndCertifications.length > 0 && (
+                                <div>
+                                    <h3 className={cn(ADMIN_INPUT_STYLES.LABEL, "flex items-center mb-1")}>
+                                        <Award className="w-4 h-4 mr-2 text-orange-400" /> 주요 인증 및 수상
+                                    </h3>
+                                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-2">
+                                        {data.awardsAndCertifications.slice(0, 6).map(award => (
+                                            <div key={award.id || award.title} className="bg-gray-700/50 p-2 rounded-md text-center border border-gray-600/50">
+                                                {award.imageUrl && (
+                                                    <div className="relative w-full aspect-[210/297] mb-1.5 rounded overflow-hidden bg-gray-600/50">
+                                                        <Image
+                                                            src={award.imageUrl.startsWith('/') ? `${process.env.NEXT_PUBLIC_BASE_PATH || ''}${award.imageUrl}` : award.imageUrl}
+                                                            alt={award.title || 'Award Image'}
+                                                            fill
+                                                            className="object-contain p-0.5"
+                                                            unoptimized={award.imageUrl.startsWith('http')}
+                                                            onError={(e) => { (e.target as HTMLImageElement).src = `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/images/placeholder-a4.png`; }}
+                                                        />
+                                                    </div>
+                                                )}
+                                                <h5 className="text-[11px] font-semibold text-orange-300 truncate leading-tight" title={award.title}>{award.title}</h5>
+                                                {award.year && <p className="text-[10px] text-gray-400">{award.year}</p>}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </div>
+            </div>
+        </DialogContent>
+    </Dialog>
+
+{/* 연혁 스타일 설정 다이얼로그 */ }
+<Dialog open={historyStyleDialogOpen} onOpenChange={setHistoryStyleDialogOpen}>
+    <DialogContent className={cn(ADMIN_CARD_STYLES.DEFAULT, "max-w-4xl w-full bg-gray-800 text-gray-100")}>
+        <DialogHeader>
+            <DialogTitle className={cn(ADMIN_UI.TEXT_PRIMARY, ADMIN_HEADING_STYLES.SECTION_TITLE, "flex items-center")}>
+                <Palette className="mr-2 h-5 w-5" />
+                연혁 타임라인 스타일 설정
+            </DialogTitle>
+        </DialogHeader>
+        <div className="mt-4 space-y-6 max-h-[80vh] overflow-y-auto">
+            {/* 스타일 설정 옵션 */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                    <div>
+                        <Label className={cn(ADMIN_INPUT_STYLES.LABEL, "mb-2 block")}>색상 스키마</Label>
+                        <Select
+                            value={historyCustomStyles.colorScheme}
+                            onValueChange={(value) => setHistoryCustomStyles(prev => ({ ...prev, colorScheme: value }))}
+                        >
+                            <SelectTrigger className={ADMIN_INPUT_STYLES.INPUT}>
+                                <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="default">기본 (다채로운)</SelectItem>
+                                <SelectItem value="blue">파란색 계열</SelectItem>
+                                <SelectItem value="green">초록색 계열</SelectItem>
+                                <SelectItem value="purple">보라색 계열</SelectItem>
+                                <SelectItem value="orange">주황색 계열</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    <div>
+                        <Label className={cn(ADMIN_INPUT_STYLES.LABEL, "mb-2 block")}>타임라인 스타일</Label>
+                        <Select
+                            value={historyCustomStyles.timelineStyle}
+                            onValueChange={(value) => setHistoryCustomStyles(prev => ({ ...prev, timelineStyle: value }))}
+                        >
+                            <SelectTrigger className={ADMIN_INPUT_STYLES.INPUT}>
+                                <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="modern">모던 (기본)</SelectItem>
+                                <SelectItem value="classic">클래식</SelectItem>
+                                <SelectItem value="minimal">미니멀</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                            <Label className={ADMIN_INPUT_STYLES.LABEL}>아이콘 표시</Label>
+                            <Switch
+                                checked={historyCustomStyles.showIcons}
+                                onCheckedChange={(checked) => setHistoryCustomStyles(prev => ({ ...prev, showIcons: checked }))}
+                            />
+                        </div>
+                        <div className="flex items-center justify-between">
+                            <Label className={ADMIN_INPUT_STYLES.LABEL}>날짜 표시</Label>
+                            <Switch
+                                checked={historyCustomStyles.showDates}
+                                onCheckedChange={(checked) => setHistoryCustomStyles(prev => ({ ...prev, showDates: checked }))}
+                            />
+                        </div>
+                        <div className="flex items-center justify-between">
+                            <Label className={ADMIN_INPUT_STYLES.LABEL}>컴팩트 모드</Label>
+                            <Switch
+                                checked={historyCustomStyles.compactMode}
+                                onCheckedChange={(checked) => setHistoryCustomStyles(prev => ({ ...prev, compactMode: checked }))}
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                {/* 미리보기 */}
+                <div>
+                    <Label className={cn(ADMIN_INPUT_STYLES.LABEL, "mb-2 block")}>미리보기</Label>
+                    <div className="border border-gray-700 rounded-lg p-4 bg-gray-900/50 max-h-80 overflow-y-auto">
+                        {data.history ? (
+                            <HistoryTimeline
+                                historyText={data.history}
+                                customStyles={historyCustomStyles}
+                            />
+                        ) : (
+                            <div className="text-center py-8 text-gray-400">
+                                <ScrollText className="mx-auto h-8 w-8 mb-2" />
+                                <p className="text-sm">연혁 데이터를 먼저 입력해주세요.</p>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+
+            {/* HTML/CSS 복사 섹션 */}
+            {data.history && (
+                <div className="space-y-4">
+                    <Separator className="bg-gray-700" />
+                    <div>
+                        <Label className={cn(ADMIN_INPUT_STYLES.LABEL, "mb-2 block flex items-center")}>
+                            <ExternalLink className="mr-2 h-4 w-4" />
+                            생성된 HTML/CSS 코드
+                        </Label>
+                        <div className="space-y-2">
+                            <div className="flex gap-2">
+                                <Button
+                                    onClick={() => copyHistoryHTML()}
+                                    variant="outline"
+                                    size="sm"
+                                    className="text-green-400 border-green-400 hover:bg-green-400/10"
+                                >
+                                    <Save className="mr-1 h-4 w-4" />
+                                    HTML 복사
+                                </Button>
+                                <Button
+                                    onClick={() => copyHistoryCSS()}
+                                    variant="outline"
+                                    size="sm"
+                                    className="text-blue-400 border-blue-400 hover:bg-blue-400/10"
+                                >
+                                    <Palette className="mr-1 h-4 w-4" />
+                                    CSS 복사
+                                </Button>
+                                <Button
+                                    onClick={() => downloadHistoryCode()}
+                                    variant="outline"
+                                    size="sm"
+                                    className="text-purple-400 border-purple-400 hover:bg-purple-400/10"
+                                >
+                                    <Download className="mr-1 h-4 w-4" />
+                                    파일 다운로드
+                                </Button>
+                            </div>
+                            <p className="text-xs text-gray-400">
+                                생성된 코드를 복사하여 다른 웹사이트나 문서에서 사용할 수 있습니다.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            <div className="flex justify-end gap-2 pt-4 border-t border-gray-700">
+                <Button
+                    onClick={() => setHistoryStyleDialogOpen(false)}
+                    variant="outline"
+                    className={ADMIN_UI.BUTTON_OUTLINE}
+                >
+                    닫기
+                </Button>
+                <Button
+                    onClick={() => {
+                        toast.success('스타일 설정이 적용되었습니다.');
+                        setHistoryStyleDialogOpen(false);
+                    }}
+                    className={ADMIN_UI.BUTTON_PRIMARY}
+                >
+                    적용
+                </Button>
+            </div>
+        </div>
+    </DialogContent>
+</Dialog>
+        </div >
+    );
+};
+
+export default AdminCompanyPage; 

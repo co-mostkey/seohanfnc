@@ -1,0 +1,336 @@
+{
+  "nameKo": "주식회사 서한에프앤씨",
+  "nameEn": "Seohan F&C",
+  "CEO": "홍길동123",
+  "established": "2000-01-01",
+  "businessNumber": "123-45-67890",
+  "phone": "02-1234-5678",
+  "fax": "02-1234-5679",
+  "email": "test@seohanfnc.com",
+  "address": "서울특별시 강남구 테헤란로 123",
+  "website": "https://www.seohanfnc.com",
+  "logoUrl": "/uploads/company/logo/1748016484114-bce99d6c.png",
+  "logo3dSettings": {
+    "enableRotation": true,
+    "rotationSpeed": 0.0048,
+    "stylePreset": "metallic",
+    "modelScale": 1,
+    "glbFileUrl": "/images/3dlogo-3d.glb",
+    "viewerBackgroundType": "transparent",
+    "viewerBackgroundColor": "#FFFFFF",
+    "viewerBackgroundHdriPath": "",
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "autoRotate": true
+  },
+  "description": "서한에프앤씨는 안전 기술을 선도하는 기업입니다.",
+  "intro": "서한에프앤씨는 고객의 안전을 최우선으로 생각하며, 혁신적인 기술과 최상의 품질로 신뢰받는 제품 및 서비스를 제공합니다.",
+  "philosophy": "인간 존중, 기술 혁신, 사회 공헌을 핵심 가치로 삼아 지속 가능한 성장을 추구합니다.",
+  "vision": "글로벌 안전 솔루션 리더",
+  "coreValues": [
+    {
+      "id": "value1",
+      "icon": "Lightbulb",
+      "mainTitle": "기술혁신",
+      "subTitle": "Technological Innovation",
+      "description": "끊임없는 연구개발과 첨단 기술 도입으로 업계 최고 수준의 기술력을 확보하고, 안전 기술의 새로운 기준을 제시합니다."
+    },
+    {
+      "id": "value2",
+      "icon": "Users",
+      "mainTitle": "고객중심",
+      "subTitle": "Customer Centric",
+      "description": "고객의 목소리에 귀 기울이고, 고객의 안전과 만족을 최우선으로 하는 제품과 서비스를 제공합니다."
+    },
+    {
+      "id": "value3",
+      "icon": "ShieldCheck",
+      "mainTitle": "절대안전",
+      "subTitle": "Absolute Safety",
+      "description": "안전에 대한 타협 없는 원칙을 고수하며, 모든 과정에서 최고의 안전 기준을 적용하여 신뢰할 수 있는 환경을 만듭니다."
+    }
+  ],
+  "history": "서한 에프앤씨 연혁\n2018년\n01월: ISO 9001:2015 인증 획득 [Q209412]\n09월: 한국산업은행으로 부터 4차 산업 유망기업인 [KDB-TECH]기업으로 선정\n\n2017년\n03월: [완강기] 및 [간이완강기] 신규 형식승인 취득\n03월: 초동대처 기동형 [인명구조매트] 개발 KFI 인증 취득\n05월: 터키 공기안전매트 수출\n10월: [충청북도 중소기업 경영대상] 수상 - 충청북도 도지사상\n\n2016년\n01월: 충주시 '성실납세자' 3년 연속 선정\n02월: 서울 동국대학교와 산학협력 연구기술 협약 체결\n03월: 연구소기업 '(주) 서한 디앤에스' 설립\n04월: 베트남 경찰국 관공서 공기안전매트 / 이동식 구조대 4차 수출\n\n2015년\n03월: '중소기업청'으로부터 [수출 유망 기업]으로 선정\n05월: 몽골 소방방재청 공기안전매트 / 소방차용 구조대 3차 수출\n12월: '여성가족부'의 [가족친화 인증기업] 인증\n\n2014년\n01월: 고용노동부로부터 '강소기업'으로 선정\n06월: 베트남 경찰국 공기안전매트 3차 수출\n11월: 특허등 산업재산권 4건 추가 등록 (완강기, 공기안전매트, 소화기 등)\n\n2013년\n01월: 세계 최초의 기계식 무화약 점화장치를 이용한 자동소화장치 \"Safe-g\" 개발\n08월: 특허기술을 활용해 기능을 강화한 신형 완강기 개발 -KFI 형식인증취득\n\n2012년\n01월: [미래 창조 과학부]인정 기업부설 \"서한 기술 연구소\" 설립\n03월: 미국 Anchor Bridge사에 터키 해군용 공기안전매트 수출\n\n2011년\n10월: \"중소기업청\"으로부터 [이노비즈 기업]으로 선정(기술혁신형 중소기업)\n10월: \"소방방재청\" 주관으로부터 [대한민국 안전대상] 우수제품상 수상\n\n2010년\n03월: \"한국산업은행\"으로부터 [유망중소기업]으로 선정\n11월: \"중국 국가소방장구 질량중심\"으로부터 공기안전매트, 구조대 제품인증\n\n2009년\n06월: \"소방방재청\" 소방산업 육성 및 기여 공로로 소방방재청장상 수상\n06월: \"독일\" VETTER사 공기안전매트 및 공기주입식 인명구조막 수출\n11월: 중국 현지법인 개설 (화학 및 소방제품 제조 판매)\n\n2008년\n05월: \"러시아\" 완강기 수출\n10월: \"중국\" 심천 소방국 \"공기주입식 인명구조막\" 수출\n\n2007년\n03월: \"공기주입식 인명구조막\" 개발\n05월: \"공기주입식 인명구조막\" 특허 취득\n11월: \"중소기업청\"으로 부터 [경영혁신형 중소기업]으로 선정\n\n2006년\n02월: \"완강기 설치대\" KFI 인증 획득\n06월: \"구조대\" 베트남 수출\n09월: \"공기안전매트\" 터키 수출\n11월: \"공기안전매트\" 중국 요녕성 소방국 수출\n\n2005년\n01월: \"중국 A&F유한공사\"와 현지 합작 판매법인 설립\n10월: \"이란\" 국가 소방국에 공기안전매트 수출\n12월: \"홍콩\" 소방국에 공기안전매트 수출\n\n2004년\n02월: \"중국 국가소방장구질량감찰검사중심\"로 부터 완강기 품질인증 획득\n07월: \"중국 A&F유한공사\"에 공기안전매트, 완강기 및 소방기구 수출\n11월: 중국 심양 소방국에 공기안전매트 수출\n11월: 중국 대련 소방국에 공기안전매트 수출\n11월: ISO9001 품질경영시스템 인증 획득\n\n2003년\n03월: \"베트남\"으로 완강기 및 공기안전매트 수출\n\n2002년\n10월: 완강기 및 간이완강기 및 구조대 형식승인 취득\n\n2001년\n05월: \"이집트\" 및 중동지역에 공기안전매트(팬식) 수출\n\n2000년\n03월: (주) 서한 에프 앤 씨로 법인 전환\n\n1998년\n08월: \"서한상사\" 공기안전매트 제조 및 판매\n\n",
+  "businessType": "스마트 소방 시스템 제조\n  - 지능형 화재 감지기\n  - 자동 소화 설비\n산업 안전 컨설팅 및 교육\n  - 위험성 평가\n  - 안전 관리 시스템 구축\n산업 안전 컨설팅 및 교육\n  - 위험성 평가\n  - 안전 관리 시스템 구축",
+  "philosophyStatement": "우리는 인간의 생명과 재산을 보호하는 것을 최우선 가치로 삼고, 혁신적인 기술과 최고의 품질을 통해 안전한 사회를 만들어가는 데 헌신합니다.",
+  "awardsAndCertifications": [
+    {
+      "id": "9fea8f1a-2dc7-4afb-820c-51ce91551f77",
+      "title": "ISO 9001:2008 품질경영시스템인증서",
+      "imageUrl": "/uploads/awards/9fea8f1a-2dc7-4afb-820c-51ce91551f77.jpg",
+      "description": "",
+      "year": "",
+      "issuingOrganization": ""
+    },
+    {
+      "id": "00bd72f7-da0a-4af1-9e5b-ff25a0c9de3e",
+      "title": "INNO-BIZ 기술혁신형 중소기업확인서",
+      "imageUrl": "/uploads/awards/00bd72f7-da0a-4af1-9e5b-ff25a0c9de3e.jpg",
+      "description": "",
+      "year": "",
+      "issuingOrganization": ""
+    },
+    {
+      "id": "9230569f-d8e4-4a50-ad3e-f09aabb87405",
+      "title": "MAIN-BIZ 경영혁신형 중소기업확인서",
+      "imageUrl": "/uploads/awards/9230569f-d8e4-4a50-ad3e-f09aabb87405.jpg",
+      "description": "",
+      "year": "",
+      "issuingOrganization": ""
+    },
+    {
+      "id": "3a1deab1-5f82-4946-97ae-a3ec87e0fa18",
+      "title": "서한기술연구소 인증서",
+      "imageUrl": "/uploads/awards/3a1deab1-5f82-4946-97ae-a3ec87e0fa18.jpg",
+      "description": "",
+      "year": "",
+      "issuingOrganization": ""
+    },
+    {
+      "id": "61b4c010-fee4-4c6c-8da1-90dddb534f30",
+      "title": "가족친화인증서",
+      "imageUrl": "/uploads/awards/61b4c010-fee4-4c6c-8da1-90dddb534f30.jpg",
+      "description": "",
+      "year": "",
+      "issuingOrganization": ""
+    },
+    {
+      "id": "bf1455cc-5fd1-473c-b8eb-2a2070642a58",
+      "title": "강소기업확인서",
+      "imageUrl": "/uploads/awards/bf1455cc-5fd1-473c-b8eb-2a2070642a58.jpg",
+      "description": "",
+      "year": "",
+      "issuingOrganization": ""
+    },
+    {
+      "id": "049bc602-33c7-4469-825b-6c2e45839ae3",
+      "title": "대한민국안전대상",
+      "imageUrl": "/uploads/awards/049bc602-33c7-4469-825b-6c2e45839ae3.jpg",
+      "description": "",
+      "year": "",
+      "issuingOrganization": ""
+    },
+    {
+      "id": "8c9b7d16-68b0-4c93-af26-62906d1977d7",
+      "title": "소방방재청상",
+      "imageUrl": "/uploads/awards/8c9b7d16-68b0-4c93-af26-62906d1977d7.jpg",
+      "description": "",
+      "year": "",
+      "issuingOrganization": ""
+    },
+    {
+      "id": "f2edd868-bf2c-4cdf-b16a-c4d5a5741010",
+      "title": "피난기구용 완강기",
+      "imageUrl": "/uploads/awards/f2edd868-bf2c-4cdf-b16a-c4d5a5741010.jpg",
+      "description": "",
+      "year": "",
+      "issuingOrganization": ""
+    },
+    {
+      "id": "b7377d90-1459-45ff-b209-3f67daf50a2b",
+      "title": "공기주입형 인명구조매트",
+      "imageUrl": "/uploads/awards/b7377d90-1459-45ff-b209-3f67daf50a2b.jpg",
+      "description": "",
+      "year": "",
+      "issuingOrganization": ""
+    },
+    {
+      "id": "b972e497-36fb-4dcc-80a9-fc47d3bd49ed",
+      "title": "자동소화기의 작동장치",
+      "imageUrl": "/uploads/awards/b972e497-36fb-4dcc-80a9-fc47d3bd49ed.jpg",
+      "description": "",
+      "year": "",
+      "issuingOrganization": ""
+    },
+    {
+      "id": "0b845001-c8fc-4503-8087-9a626a313d48",
+      "title": "이중점화유니트의 고체에어로졸 소화기",
+      "imageUrl": "/uploads/awards/0b845001-c8fc-4503-8087-9a626a313d48.jpg",
+      "description": "",
+      "year": "",
+      "issuingOrganization": ""
+    },
+    {
+      "id": "e9b38d90-f9e1-4821-9ba7-bf0398ab9852",
+      "title": "전지를 이용한 소화기 작동장치",
+      "imageUrl": "/uploads/awards/e9b38d90-f9e1-4821-9ba7-bf0398ab9852.jpg",
+      "description": "",
+      "year": "",
+      "issuingOrganization": ""
+    },
+    {
+      "id": "925b3b0e-2968-47cc-9ea7-a3983f9e9753",
+      "title": "유도 전류를 이용한 소화기 작동장치",
+      "imageUrl": "/uploads/awards/925b3b0e-2968-47cc-9ea7-a3983f9e9753.jpg",
+      "description": "",
+      "year": "",
+      "issuingOrganization": ""
+    },
+    {
+      "id": "8c248254-8d66-4766-a761-170116d895b0",
+      "title": "해치형 비상 피난장치",
+      "imageUrl": "/uploads/awards/8c248254-8d66-4766-a761-170116d895b0.jpg",
+      "description": "",
+      "year": "",
+      "issuingOrganization": ""
+    },
+    {
+      "id": "476032dd-a5d5-4544-876b-6362b63f7388",
+      "title": "이동식 인명 구조용 안전매트",
+      "imageUrl": "/uploads/awards/476032dd-a5d5-4544-876b-6362b63f7388.jpg",
+      "description": "",
+      "year": "",
+      "issuingOrganization": ""
+    },
+    {
+      "id": "329fc0ae-a361-4ceb-83eb-c863e9a2f81c",
+      "title": "피난기구용 완강기",
+      "imageUrl": "/uploads/awards/329fc0ae-a361-4ceb-83eb-c863e9a2f81c.jpg",
+      "description": "",
+      "year": "",
+      "issuingOrganization": ""
+    },
+    {
+      "id": "b0f7f540-0a3d-4708-9840-d4b6da3bd94b",
+      "title": "완강기용 브레이크기어",
+      "imageUrl": "/uploads/awards/b0f7f540-0a3d-4708-9840-d4b6da3bd94b.jpg",
+      "description": "",
+      "year": "",
+      "issuingOrganization": ""
+    },
+    {
+      "id": "5b33a513-5d1e-4451-a2a5-0c3590f68df0",
+      "title": "이동식 인명구조용 매트",
+      "imageUrl": "/uploads/awards/5b33a513-5d1e-4451-a2a5-0c3590f68df0.jpg",
+      "description": "",
+      "year": "",
+      "issuingOrganization": ""
+    },
+    {
+      "id": "a8717101-4d18-4803-9bd8-79cc52b9c7ac",
+      "title": "완강기 커버",
+      "imageUrl": "/uploads/awards/a8717101-4d18-4803-9bd8-79cc52b9c7ac.jpg",
+      "description": "",
+      "year": "",
+      "issuingOrganization": ""
+    }
+  ],
+  "aboutPageHeroImageUrl": "/uploads/company/about-hero/1748176855605-2fa197d6.png",
+  "aboutPageMainTitleFormat": "{nameKo}, 안전의 기준을 제시합니다",
+  "aboutPageSectionTitleFormat": "{nameKo}의 약속과 비전",
+  "showAboutIntroSection": true,
+  "aboutPageVisualUrl": "",
+  "researchPage": {
+    "hero": {
+      "title": "미래를 선도하는 기술 혁신, 서한에프앤씨",
+      "subtitle": "지속적인 연구개발 투자를 통해 안전 기술의 새로운 가능성을 탐구하고 실현합니다.",
+      "backgroundColor": "transparent",
+      "backgroundImageUrl": "/images/research/research_hero_bg.jpg",
+      "backgroundOpacity": 0.25,
+      "backgroundOverlayColor": "rgba(15, 23, 42, 0.6)"
+    },
+    "introduction": {
+      "title": "창의와 도전으로 일구는 안전의 미래",
+      "description": "서한에프앤씨 연구개발센터는 소방 안전 분야의 기술적 한계를 넘어서기 위한 끊임없는 도전을 이어가고 있습니다.\n우리는 기초 연구에서부터 상용화 기술 개발에 이르기까지 전 과정에 걸쳐 혁신을 추구하며, IoT, AI, 빅데이터 등 첨단 기술을 융합하여 보다 지능적이고 효율적인 안전 솔루션을 창출합니다.",
+      "imageUrl": ""
+    },
+    "areas": {
+      "title": "핵심 연구개발 분야",
+      "items": [
+        {
+          "id": "area1",
+          "title": "지능형 화재 예측 및 대응",
+          "description": "AI 및 빅데이터 분석을 통한 화재 발생 위험도 예측 및 최적 대응 알고리즘 개발.",
+          "icon": "Cpu"
+        },
+        {
+          "id": "area2",
+          "title": "차세대 친환경 소화약제",
+          "description": "환경 영향을 최소화하고 소화 성능은 극대화한 혁신적인 소화약제 및 시스템 연구.",
+          "icon": "Recycle"
+        },
+        {
+          "id": "area3",
+          "title": "스마트 안전관제 플랫폼",
+          "description": "IoT 센서 네트워크와 통합 관제 시스템을 통한 실시간 위험 모니터링 및 원격 제어 기술 개발.",
+          "icon": "ShieldCheck"
+        },
+        {
+          "id": "area4",
+          "title": "고기능성 안전 소재",
+          "description": "극한 환경에서도 성능을 유지하는 내화, 방폭, 경량 신소재 개발 및 제품 적용 연구.",
+          "icon": "FlaskConical"
+        }
+      ]
+    },
+    "achievements": {
+      "title": "대표 연구개발 성과",
+      "items": [
+        {
+          "id": "ach1",
+          "year": "2023",
+          "title": "실시간 위험 예측 AI 모델 정확도 98.5% 달성",
+          "details": "산업 현장 데이터를 기반으로 한 딥러닝 모델 고도화 성공."
+        },
+        {
+          "id": "ach2",
+          "year": "2022",
+          "title": "잔존물 없는 친환경 가스계 소화설비 상용화",
+          "details": "국제 환경 규제 기준 만족 및 소화 성능 20% 향상."
+        },
+        {
+          "id": "ach3",
+          "year": "2021",
+          "title": "클라우드 기반 스마트 안전관리 플랫폼 출시",
+          "details": "다중 사업장 통합 관리 및 모바일 연동 기능 제공."
+        }
+      ]
+    },
+    "awardsSectionTitle": "주요 인증 및 특허 현황",
+    "infrastructure": {
+      "title": "최첨단 연구 인프라와 전문 인력",
+      "description": "국제 공인 시험기관 수준의 자체 테스트 설비와 분석 장비를 보유하고 있으며, 석박사급 전문 연구인력이 혁신 기술 개발을 주도합니다.\n국내외 유수 대학 및 연구기관과의 긴밀한 협력 네트워크를 통해 개방형 R&D 생태계를 구축하고 있습니다.",
+      "imageUrl": ""
+    }
+  },
+  "id": "default",
+  "addressKo": "테스트 주소 ",
+  "addressEn": "test",
+  "supportEmail": "test@seohanfnc.com",
+  "businessHours": "",
+  "aboutPageMainTitleClassName": "text-4xl text size-20 -500 또는 그라데이션 t text-red-500 font-medium",
+  "socialLinks": {
+    "facebook": "",
+    "instagram": "",
+    "youtube": "",
+    "blog": "",
+    "linkedin": ""
+  },
+  "employees": "",
+  "annualRevenue": "",
+  "latitude": "",
+  "longitude": "",
+  "mapApiKey": "",
+  "directions": "오시는길 테스트 설명",
+  "transportation": "대중교통정보 테스트 설명",
+  "historyStyles": {
+    "colorScheme": "orange",
+    "timelineStyle": "classic",
+    "showIcons": false,
+    "showDates": true,
+    "compactMode": false
+  }
+}

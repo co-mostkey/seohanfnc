@@ -1,0 +1,262 @@
+{
+  "id": "default",
+  "nameKo": "주식회사 서한에프앤씨",
+  "addressKo": "",
+  "businessType": "제조, 도소매",
+  "established": "2000-03-29",
+  "employees": "",
+  "website": "https://seohanfnc.com",
+  "logoUrl": "/logo.png",
+  "socialLinks": {
+    "facebook": "",
+    "instagram": "",
+    "youtube": "",
+    "blog": "",
+    "linkedin": ""
+  },
+  "nameEn": "Seohan F&C Co., Ltd.",
+  "businessNumber": " 106-81-87890",
+  "CEO": "윤철구",
+  "description": "1992년 설립 이래, 최고의 기술력과 품질로 고객의 안전을 책임지는 소방 전문기업입니다.",
+  "philosophy": "",
+  "intro": "저희 주식회사 서한에프앤씨는 설립 이후 소방 및 안전 분야에서 혁신적인 기술과 최상의 품질로 고객 여러분의 신뢰를 받아왔습니다. 인간의 생명과 재산을 보호하는 것을 최우선 가치로 삼고, 끊임없는 연구개발을 통해 보다 안전하고 편리한 세상을 만들어가기 위해 노력하고 있습니다.\n첨단 기술력과 축적된 노하우를 바탕으로 국내외 소방안전 기준을 충족하는 다양한 제품을 생산하고 있으며, 고객 맞춤형 솔루션 제공을 통해 산업 현장의 안전 수준을 한 단계 높이는 데 기여하고 있습니다. 앞으로도 서한에프앤씨는 안전 기술의 선두주자로서 사회적 책임을 다하고, 지속 가능한 성장을 통해 더 큰 가치를 창출해 나갈 것을 약속드립니다.",
+  "addressEn": "",
+  "phone": "",
+  "fax": "",
+  "email": "",
+  "supportEmail": "",
+  "businessHours": "",
+  "aboutPageMainTitleFormat": "{nameKo} 회사소개",
+  "aboutPageSectionTitleFormat": "안전 기술의 미래, <br className=\"hidden sm:block\" /> {nameKo}가 만들어갑니다.",
+  "aboutPageVisualUrl": "",
+  "aboutPageHeroImageUrl": "",
+  "showAboutIntroSection": true,
+  "annualRevenue": "",
+  "history": "    2018년\n    01월: ISO 9001:2015 인증 획득 [Q209412]\n    09월: 한국산업은행으로 부터 4차 산업 유망기업인 [KDB-TECH]기업으로 선정\n\n    2017년\n    03월: [완강기] 및 [간이완강기] 신규 형식승인 취득\n    03월: 초동대처 기동형 [인명구조매트] 개발 KFI 인증 취득\n    05월: 터키 공기안전매트 수출\n    10월: [충청북도 중소기업 경영대상] 수상 - 충청북도 도지사상\n\n    2016년\n    01월: 충주시 '성실납세자' 3년 연속 선정\n    02월: 서울 동국대학교와 산학협력 연구기술 협약 체결\n    03월: 연구소기업 '(주) 서한 디앤에스' 설립\n    04월: 베트남 경찰국 관공서 공기안전매트 / 이동식 구조대 4차 수출\n\n    2015년\n    03월: '중소기업청'으로부터 [수출 유망 기업]으로 선정\n    05월: 몽골 소방방재청 공기안전매트 / 소방차용 구조대 3차 수출\n    12월: '여성가족부'의 [가족친화 인증기업] 인증\n\n    2000년\n    03월: (주) 서한 에프 앤 씨로 법인 전환\n\n    1992년\n    05월: 서한상사 설립",
+  "vision": "OUR VISION\n“글로벌 소방안전 기술을 선도하는 혁신 기업”\n\n서한에프앤씨는 끊임없는 기술 개발과 최고의 품질을 바탕으로,\n전 세계 고객에게 가장 신뢰받는 안전 솔루션을 제공하여\n인류의 안전과 행복 증진에 기여하는 것을 목표로 합니다.\n",
+  "awards": "",
+  "latitude": "",
+  "longitude": "",
+  "mapApiKey": "",
+  "directions": "",
+  "transportation": "",
+  "logo3dSettings": {
+    "enableRotation": true,
+    "rotationSpeed": 0.0041,
+    "stylePreset": "vibrant",
+    "viewerBackgroundColor": "transparent",
+    "modelScale": 1.5,
+    "glbFileUrl": "",
+    "colorS": "#FF3030",
+    "colorText": "#FFFFFF",
+    "colorRing": "#C5C5C5"
+  },
+  "coreValues": [
+    {
+      "id": "73d76cf3-5284-4bc3-9bcb-a3dc95b02e49",
+      "icon": "Sparkles",
+      "mainTitle": "안전 제일",
+      "subTitle": "모든 활동의 최우선 가치는 사람의 안전입니다.",
+      "description": "안전 규정 및 표준 준수\n철저한 위험성 평가 및 예방\n안전 의식 내재화를 위한 교육 강화\n안전한 작업 환경 조성"
+    },
+    {
+      "id": "1b2cc25b-0f61-4917-9393-0e044c4b6939",
+      "icon": "Sparkles",
+      "mainTitle": "기술 혁신",
+      "subTitle": "끊임없는 연구개발로 안전 기술의 미래를 선도합니다.",
+      "description": "지속적인 R&D 투자 확대\n차세대 안전 기술 및 신소재 개발\n창의적인 아이디어 발굴 및 사업화\n변화를 두려워하지 않는 도전 정신"
+    },
+    {
+      "id": "95639d80-5180-4e18-9880-5721a711e91e",
+      "icon": "Sparkles",
+      "mainTitle": "고객 중심",
+      "subTitle": "고객의 신뢰와 만족을 최고의 가치로 생각합니다.",
+      "description": "고객의 소리에 귀 기울이는 소통\n고객의 기대를 뛰어넘는 제품과 서비스\n신속하고 정확한 기술 지원\n고객과의 장기적인 파트너십 구축"
+    },
+    {
+      "id": "08c23a12-91fe-4440-8695-cc4437b82e54",
+      "icon": "Sparkles",
+      "mainTitle": "정직과 신뢰",
+      "subTitle": "투명하고 윤리적인 경영으로 사회적 책임을 다합니다.",
+      "description": "법규 및 윤리 규범 준수\n공정하고 투명한 업무 처리\n정직한 기업 문화 조성\n이해관계자와의 신뢰 관계 구축"
+    },
+    {
+      "id": "2499fe8d-07d8-4a67-a991-3bb5112778cc",
+      "icon": "Sparkles",
+      "mainTitle": "지속가능경영",
+      "subTitle": "환경과 사회를 생각하며 미래 세대를 위한 가치를 만듭니다.",
+      "description": "친환경 제품 개발 및 생산 확대\n에너지 효율 개선 및 탄소 배출 감축\n자원 재활용 및 폐기물 관리 강화\n지역사회 공헌 및 상생 협력"
+    },
+    {
+      "id": "97594c0c-7f2a-42db-9f44-06ad229e1a5f",
+      "icon": "Sparkles",
+      "mainTitle": "",
+      "subTitle": "",
+      "description": ""
+    }
+  ],
+  "philosophyStatement": "",
+  "awardsAndCertifications": [
+    {
+      "id": "4093d01c-230f-44f0-bd7f-b3b8d1bb0346",
+      "title": "ISO 9001:2008 품질경영시스템인증서",
+      "imageUrl": "/uploads/awards/9fea8f1a-2dc7-4afb-820c-51ce91551f77.jpg",
+      "description": "",
+      "year": "",
+      "link": ""
+    },
+    {
+      "id": "50f30599-28b3-4892-a6c7-fa6b2e9cbdda",
+      "title": "INNO-BIZ 기술혁신형 중소기업확인서",
+      "imageUrl": "/uploads/awards/00bd72f7-da0a-4af1-9e5b-ff25a0c9de3e.jpg",
+      "description": "",
+      "year": "",
+      "link": ""
+    },
+    {
+      "id": "7fa9fd48-a6dc-4163-a1c6-a30c1a3f043d",
+      "title": "MAIN-BIZ 경영혁신형 중소기업확인서",
+      "imageUrl": "/uploads/awards/9230569f-d8e4-4a50-ad3e-f09aabb87405.jpg",
+      "description": "",
+      "year": "",
+      "link": ""
+    },
+    {
+      "id": "27a91837-1cb2-4547-a40e-73bc03eaeec6",
+      "title": "서한기술연구소 인증서",
+      "imageUrl": "/uploads/awards/3a1deab1-5f82-4946-97ae-a3ec87e0fa18.jpg",
+      "description": "",
+      "year": "",
+      "link": ""
+    },
+    {
+      "id": "b5ea41f4-db79-4db2-8d41-7c6f7dd593c0",
+      "title": "가족친화인증서",
+      "imageUrl": "/uploads/awards/61b4c010-fee4-4c6c-8da1-90dddb534f30.jpg",
+      "description": "",
+      "year": "",
+      "link": ""
+    },
+    {
+      "id": "8353fcb7-7d98-4f9a-b23b-eacf497159c7",
+      "title": "강소기업확인서",
+      "imageUrl": "/uploads/awards/bf1455cc-5fd1-473c-b8eb-2a2070642a58.jpg",
+      "description": "",
+      "year": "",
+      "link": ""
+    },
+    {
+      "id": "43bdde43-98df-42f7-898b-164cf8c1304c",
+      "title": "대한민국안전대상",
+      "imageUrl": "/uploads/awards/049bc602-33c7-4469-825b-6c2e45839ae3.jpg",
+      "description": "",
+      "year": "",
+      "link": ""
+    },
+    {
+      "id": "89b39e76-17fe-4b2a-855d-c0f7f4a436c4",
+      "title": "소방방재청상",
+      "imageUrl": "/uploads/awards/8c9b7d16-68b0-4c93-af26-62906d1977d7.jpg",
+      "description": "",
+      "year": "",
+      "link": ""
+    },
+    {
+      "id": "a61ec4fb-9123-4f56-adbd-e90c8d9bfe72",
+      "title": "피난기구용 완강기",
+      "imageUrl": "/uploads/awards/f2edd868-bf2c-4cdf-b16a-c4d5a5741010.jpg",
+      "description": "",
+      "year": "",
+      "link": ""
+    },
+    {
+      "id": "1331b680-6434-4296-b844-4ac338cfae61",
+      "title": "공기주입형 인명구조매트",
+      "imageUrl": "/uploads/awards/b7377d90-1459-45ff-b209-3f67daf50a2b.jpg",
+      "description": "",
+      "year": "",
+      "link": ""
+    },
+    {
+      "id": "1ff1d6c9-6fb3-4224-838e-fb4f240b37fb",
+      "title": "자동소화기의 작동장치",
+      "imageUrl": "/uploads/awards/b972e497-36fb-4dcc-80a9-fc47d3bd49ed.jpg",
+      "description": "",
+      "year": "",
+      "link": ""
+    },
+    {
+      "id": "04365403-1cd1-4dcd-8391-e3c1970ecf89",
+      "title": "이중점화유니트의 고체에어로졸 소화기",
+      "imageUrl": "/uploads/awards/0b845001-c8fc-4503-8087-9a626a313d48.jpg",
+      "description": "",
+      "year": "",
+      "link": ""
+    },
+    {
+      "id": "c8bcdc6e-dc8a-4ba3-a5e2-226453fa679e",
+      "title": "전지를 이용한 소화기 작동장치",
+      "imageUrl": "/uploads/awards/e9b38d90-f9e1-4821-9ba7-bf0398ab9852.jpg",
+      "description": "",
+      "year": "",
+      "link": ""
+    },
+    {
+      "id": "ab555833-5319-446b-9dde-cb3184654057",
+      "title": "유도 전류를 이용한 소화기 작동장치",
+      "imageUrl": "/uploads/awards/925b3b0e-2968-47cc-9ea7-a3983f9e9753.jpg",
+      "description": "",
+      "year": "",
+      "link": ""
+    },
+    {
+      "id": "c03ee548-8414-4d6e-836c-0e4707b1e224",
+      "title": "해치형 비상 피난장치",
+      "imageUrl": "/uploads/awards/8c248254-8d66-4766-a761-170116d895b0.jpg",
+      "description": "",
+      "year": "",
+      "link": ""
+    },
+    {
+      "id": "b9931c95-5a53-4378-92b2-e2332251aca9",
+      "title": "이동식 인명 구조용 안전매트",
+      "imageUrl": "/uploads/awards/476032dd-a5d5-4544-876b-6362b63f7388.jpg",
+      "description": "",
+      "year": "",
+      "link": ""
+    },
+    {
+      "id": "d4749e9d-3035-4c0e-b5a5-5f5f5fd33d72",
+      "title": "피난기구용 완강기",
+      "imageUrl": "/uploads/awards/329fc0ae-a361-4ceb-83eb-c863e9a2f81c.jpg",
+      "description": "",
+      "year": "",
+      "link": ""
+    },
+    {
+      "id": "e1d199ae-14ef-4473-bd8a-58b9033f544f",
+      "title": "완강기용 브레이크기어",
+      "imageUrl": "/uploads/awards/b0f7f540-0a3d-4708-9840-d4b6da3bd94b.jpg",
+      "description": "",
+      "year": "",
+      "link": ""
+    },
+    {
+      "id": "ad79e53e-7c07-4d31-bb26-33cecc47c9cf",
+      "title": "이동식 인명구조용 매트",
+      "imageUrl": "/uploads/awards/5b33a513-5d1e-4451-a2a5-0c3590f68df0.jpg",
+      "description": "",
+      "year": "",
+      "link": ""
+    },
+    {
+      "id": "6ac50452-596c-4f5e-912b-f881204b0450",
+      "title": "완강기 커버",
+      "imageUrl": "/uploads/awards/a8717101-4d18-4803-9bd8-79cc52b9c7ac.jpg",
+      "description": "",
+      "year": "",
+      "link": ""
+    }
+  ],
+  "aboutPageMainTitleClassName": "text-4xl sm:text-5xl lg:text-6xl font-extrabold text-center mb-6 leading-tight tracking-tight  bg-clip-text text-transparent bg-gradient-to-r from-red-400 to-orange-400"
+}

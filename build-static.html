@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>서한F&C 샘플 - 정적 사이트 빌드 안내</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .status {
+            background: #e9ecef;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #007bff;
+        }
+
+        .error {
+            background: #f8d7da;
+            border-left-color: #dc3545;
+            color: #721c24;
+        }
+
+        .success {
+            background: #d4edda;
+            border-left-color: #28a745;
+            color: #155724;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border-left-color: #ffc107;
+            color: #856404;
+        }
+
+        code {
+            background: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🚀 서한F&C 웹사이트 샘플 - 정적 사이트 빌드</h1>
+
+        <div class="status error">
+            <h3>⚠️ 현재 서버 환경 문제점</h3>
+            <ul>
+                <li><strong>PHP 5.3.13p1</strong> - 너무 구버전 (2012년)</li>
+                <li><strong>shell_exec 비활성화</strong> - 서버 명령어 실행 불가</li>
+                <li><strong>Node.js 미설치</strong> - Next.js 실행 불가</li>
+                <li><strong>복잡한 PHP 스크립트 오류</strong> - 최신 문법 미지원</li>
+            </ul>
+        </div>
+
+        <div class="status success">
+            <h3>✅ 권장 해결책: 정적 사이트 빌드</h3>
+            <p>Next.js를 정적 HTML/CSS/JS 파일로 빌드하여 업로드하는 방법입니다.</p>
+            <p>이 방법은 <strong>어떤 서버에서도 작동</strong>하며, PHP나 Node.js가 필요하지 않습니다.</p>
+        </div>
+
+        <h3>🔧 정적 빌드 생성 방법</h3>
+
+        <div class="status">
+            <h4>1단계: 로컬에서 정적 빌드 생성</h4>
+            <p>개발 컴퓨터에서 다음 명령어를 실행하세요:</p>
+            <div class="code-block">
+                # next.config.js 수정 (output: 'export' 추가)
+                # 그 다음 빌드 실행
+                pnpm build
+
+                # 정적 파일들이 'out' 폴더에 생성됩니다
+            </div>
+        </div>
+
+        <div class="status">
+            <h4>2단계: 'out' 폴더 내용을 FTP로 업로드</h4>
+            <p>생성된 <code>out</code> 폴더의 모든 내용을 sample 폴더에 업로드하세요.</p>
+            <ul>
+                <li>index.html</li>
+                <li>_next/ 폴더</li>
+                <li>images/ 폴더</li>
+                <li>기타 정적 파일들</li>
+            </ul>
+        </div>
+
+        <div class="status">
+            <h4>3단계: 웹사이트 접속</h4>
+            <p>업로드 완료 후 다음 주소로 접속:</p>
+            <div class="code-block">http://www.shfnc.com/sample/</div>
+        </div>
+
+        <h3>🎯 정적 빌드의 장점</h3>
+        <div class="status success">
+            <ul>
+                <li>✅ <strong>어떤 서버에서도 작동</strong> - PHP, Node.js 불필요</li>
+                <li>✅ <strong>빠른 로딩 속도</strong> - 정적 파일 서빙</li>
+                <li>✅ <strong>안정성</strong> - 서버 오류 없음</li>
+                <li>✅ <strong>보안</strong> - 서버 사이드 취약점 없음</li>
+                <li>✅ <strong>CDN 호환</strong> - 전 세계 빠른 접속</li>
+            </ul>
+        </div>
+
+        <h3>⚠️ 정적 빌드의 제한사항</h3>
+        <div class="status warning">
+            <ul>
+                <li>❌ <strong>관리자 페이지 기능 제한</strong> - 파일 수정 불가</li>
+                <li>❌ <strong>인트라넷 로그인 불가</strong> - 서버 사이드 인증 필요</li>
+                <li>❌ <strong>동적 데이터 업데이트 불가</strong> - 실시간 변경 불가</li>
+                <li>❌ <strong>API 기능 없음</strong> - 서버 API 호출 불가</li>
+            </ul>
+        </div>
+
+        <h3>🔄 대안 방법들</h3>
+
+        <div class="status">
+            <h4>방법 1: 다른 호스팅 사용</h4>
+            <ul>
+                <li><strong>Vercel</strong> - Next.js 전용 호스팅 (무료)</li>
+                <li><strong>Netlify</strong> - 정적 사이트 호스팅 (무료)</li>
+                <li><strong>GitHub Pages</strong> - 정적 사이트 호스팅 (무료)</li>
+                <li><strong>NHN 클라우드</strong> - Node.js 지원 호스팅</li>
+            </ul>
+        </div>
+
+        <div class="status">
+            <h4>방법 2: 호스팅 업체 문의</h4>
+            <p>현재 호스팅 업체에 다음을 요청:</p>
+            <ul>
+                <li>PHP 8.x 버전 업그레이드</li>
+                <li>Node.js 설치</li>
+                <li>shell_exec 함수 활성화</li>
+                <li>SSH 접속 권한</li>
+            </ul>
+        </div>
+
+        <h3>📞 즉시 실행 가능한 방법</h3>
+        <div class="status success">
+            <p><strong>지금 당장 할 수 있는 것:</strong></p>
+            <ol>
+                <li>로컬에서 <code>pnpm build</code> 실행</li>
+                <li><code>out</code> 폴더 생성 확인</li>
+                <li>FileZilla로 <code>out</code> 폴더 내용을 sample에 업로드</li>
+                <li><code>http://www.shfnc.com/sample/</code> 접속 테스트</li>
+            </ol>
+        </div>
+
+        <div class="status">
+            <p><strong>📧 지원:</strong> 추가 도움이 필요하면 언제든 문의하세요.</p>
+            <p><strong>📋 현재 시간:</strong> <span id="current-time"></span></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('current-time').textContent = new Date().toLocaleString('ko-KR');
+        setInterval(function () {
+            document.getElementById('current-time').textContent = new Date().toLocaleString('ko-KR');
+        }, 5000);
+    </script>
+</body>
+
+</html>

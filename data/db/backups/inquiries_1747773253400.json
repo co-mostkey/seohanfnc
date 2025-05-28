@@ -1,0 +1,194 @@
+[
+  {
+    "id": "inq-73657286-c568-4aa4-9416-a0802dabb7e4",
+    "title": "견적 문의: 11 (1개)",
+    "content": "제품 카테고리: 소독장비\n제품명: 11\n수량: 1개\n\n추가 요청사항:\n없음",
+    "customerName": "테스트",
+    "customerEmail": "test@tset.com",
+    "customerPhone": "01012341234",
+    "company": "11",
+    "type": "quotation",
+    "productName": "11",
+    "status": "pending",
+    "priority": "medium",
+    "isFeatured": false,
+    "attachments": [],
+    "responses": [],
+    "isRead": false,
+    "createdAt": "2025-05-20T20:11:05.665Z",
+    "updatedAt": "2025-05-20T20:11:05.665Z"
+  },
+  {
+    "id": "inq-001",
+    "type": "product",
+    "title": "Cylinder-Type-SafetyAirMat 제품 견적 문의",
+    "content": "안녕하세요,\n        \n귀사의 Cylinder-Type-SafetyAirMat 제품에 대한 견적을 요청드립니다.\n물류창고에 설치할 목적으로 10개 정도 필요합니다.\n        \n배송 및 설치 관련 정보도 함께 알려주시면 감사하겠습니다.",
+    "customerName": "김철수",
+    "customerEmail": "customer@example.com",
+    "customerPhone": "010-1234-5678",
+    "company": "한국물류 주식회사",
+    "productId": "prod-001",
+    "productName": "Cylinder-Type-SafetyAirMat",
+    "status": "pending",
+    "priority": "medium",
+    "isRead": false,
+    "isFeatured": false,
+    "responses": [],
+    "attachments": [],
+    "sourceUrl": "/products/safety-equipment/Cylinder-Type-SafetyAirMat",
+    "createdAt": "2025-05-15T09:30:00Z",
+    "updatedAt": "2025-05-15T09:30:00Z"
+  },
+  {
+    "id": "inq-002",
+    "type": "partnership",
+    "title": "기업 제휴 문의",
+    "content": "안녕하세요,\n        \n저희 회사는 건설 안전장비 유통업체입니다.\n서한에프앤씨 제품 중 안전 매트 시리즈에 대한 제휴 판매를 문의드립니다.\n        \n미팅 가능한 시간이 있으시면 연락 부탁드립니다.",
+    "customerName": "박영희",
+    "customerEmail": "partner@example.com",
+    "customerPhone": "010-9876-5432",
+    "company": "안전제일 건설장비",
+    "status": "in_progress",
+    "priority": "high",
+    "isRead": true,
+    "isFeatured": true,
+    "responses": [
+      {
+        "id": "resp-001",
+        "inquiryId": "inq-002",
+        "content": "안녕하세요, 문의주셔서 감사합니다. 제휴 관련 담당자를 통해 연락드리겠습니다.",
+        "isPublic": true,
+        "author": "이지원",
+        "authorId": "staff-001",
+        "authorRole": "영업팀장",
+        "attachments": [],
+        "createdAt": "2025-05-15T14:20:00Z",
+        "updatedAt": "2025-05-15T14:20:00Z"
+      }
+    ],
+    "attachments": [],
+    "tags": [
+      "partnership",
+      "distributor"
+    ],
+    "adminNotes": "우수 유통업체, 적극 검토 필요",
+    "createdAt": "2025-05-15T10:15:00Z",
+    "updatedAt": "2025-05-15T14:20:00Z"
+  },
+  {
+    "id": "inq-003",
+    "type": "service",
+    "title": "설치된 제품 A/S 요청",
+    "content": "지난 달 설치한 안전 매트에 문제가 발생했습니다.\n공기가 새는 것 같으니 점검 부탁드립니다.\n        \n설치 위치: 서울시 강남구 테헤란로 123\n설치일: 2025년 4월 10일",
+    "customerName": "정민수",
+    "customerEmail": "service@example.com",
+    "customerPhone": "010-5555-7777",
+    "company": "스마트 로지스틱스",
+    "status": "completed",
+    "priority": "urgent",
+    "isRead": true,
+    "isFeatured": false,
+    "responses": [
+      {
+        "id": "resp-002",
+        "inquiryId": "inq-003",
+        "content": "안녕하세요, A/S 요청 접수되었습니다. 5월 16일 오전 10시에 방문 예정입니다.",
+        "isPublic": true,
+        "author": "김기술",
+        "authorId": "staff-002",
+        "authorRole": "A/S팀",
+        "attachments": [],
+        "createdAt": "2025-05-15T11:10:00Z",
+        "updatedAt": "2025-05-15T11:10:00Z"
+      },
+      {
+        "id": "resp-003",
+        "inquiryId": "inq-003",
+        "content": "방문 완료, 에어밸브 교체 작업 진행했습니다. 고객 만족도 높음.",
+        "isPublic": false,
+        "author": "김기술",
+        "authorId": "staff-002",
+        "authorRole": "A/S팀",
+        "attachments": [],
+        "createdAt": "2025-05-16T12:30:00Z",
+        "updatedAt": "2025-05-16T12:30:00Z"
+      }
+    ],
+    "attachments": [
+      {
+        "id": "attach-001",
+        "inquiryId": "inq-003",
+        "filename": "problem-photo.jpg",
+        "originalFilename": "문제사진.jpg",
+        "filesize": 1500000,
+        "mimetype": "image/jpeg",
+        "path": "/uploads/inquiries/inq-003/problem-photo.jpg",
+        "url": "/uploads/inquiries/inq-003/problem-photo.jpg",
+        "isImage": true,
+        "createdAt": "2025-05-15T11:00:00Z"
+      }
+    ],
+    "createdAt": "2025-05-15T11:00:00Z",
+    "updatedAt": "2025-05-16T12:30:00Z"
+  },
+  {
+    "id": "inq-004",
+    "type": "other",
+    "title": "카탈로그 요청",
+    "content": "최신 제품 카탈로그를 이메일로 보내주실 수 있을까요?",
+    "customerName": "최지수",
+    "customerEmail": "catalog@example.com",
+    "status": "completed",
+    "priority": "low",
+    "isRead": true,
+    "isFeatured": false,
+    "responses": [
+      {
+        "id": "resp-004",
+        "inquiryId": "inq-004",
+        "content": "안녕하세요, 요청하신 카탈로그를 첨부파일로 보내드립니다.",
+        "isPublic": true,
+        "author": "관리자",
+        "authorId": "admin",
+        "authorRole": "관리자",
+        "attachments": [
+          {
+            "id": "attach-002",
+            "inquiryId": "inq-004",
+            "responseId": "resp-004",
+            "filename": "catalog-2025.pdf",
+            "originalFilename": "서한에프앤씨_카탈로그_2025.pdf",
+            "filesize": 8500000,
+            "mimetype": "application/pdf",
+            "path": "/uploads/inquiries/inq-004/catalog-2025.pdf",
+            "url": "/uploads/inquiries/inq-004/catalog-2025.pdf",
+            "isImage": false,
+            "createdAt": "2025-05-15T15:45:00Z"
+          }
+        ],
+        "createdAt": "2025-05-15T15:45:00Z",
+        "updatedAt": "2025-05-15T15:45:00Z"
+      }
+    ],
+    "attachments": [],
+    "createdAt": "2025-05-15T14:50:00Z",
+    "updatedAt": "2025-05-15T15:45:00Z"
+  },
+  {
+    "id": "inq-005",
+    "type": "support",
+    "title": "매뉴얼 문의",
+    "content": "구매한 제품의 매뉴얼이 없어 문의드립니다. 전자 매뉴얼 또는 PDF로 받을 수 있을까요?",
+    "customerName": "이지은",
+    "customerEmail": "support@example.com",
+    "customerPhone": "010-2222-3333",
+    "status": "pending",
+    "priority": "medium",
+    "isRead": false,
+    "isFeatured": false,
+    "responses": [],
+    "attachments": [],
+    "createdAt": "2025-05-16T09:10:00Z",
+    "updatedAt": "2025-05-16T09:10:00Z"
+  }
+]

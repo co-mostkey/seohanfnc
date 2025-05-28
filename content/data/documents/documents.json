@@ -1,0 +1,145 @@
+{
+  "categories": [
+    {
+      "id": "approvals",
+      "nameKo": "승인서류",
+      "nameEn": "Approval Documents",
+      "nameCn": "认证文件",
+      "documents": [
+        {
+          "id": "rescue-descender-approval",
+          "nameKo": "형식승인-신형완강기-완24-1",
+          "nameEn": "Type Approval - New Rescue Descender - 24-1",
+          "nameCn": "型式认证 - 新型救援缓降器 - 24-1",
+          "path": "/documents/형식승인-신형완강기-완24-1 검사성적서포함.pdf",
+          "date": "2024-01-15",
+          "productId": "rescue-descender"
+        },
+        {
+          "id": "simple-rescue-descender-approval",
+          "nameKo": "형식승인-신형간이완강기-간완24-1",
+          "nameEn": "Type Approval - New Simple Rescue Descender - 24-1",
+          "nameCn": "型式认证 - 新型简易救援缓降器 - 24-1",
+          "path": "/documents/형식승인-신형간이완강기-간완24-1 검사성적서포함.pdf",
+          "date": "2024-01-15",
+          "productId": "simple-rescue-descender"
+        },
+        {
+          "id": "vertical-rescue-chute-approval",
+          "nameKo": "형식승인-수직구조대 구24-2",
+          "nameEn": "Type Approval - Vertical Rescue Chute - 24-2",
+          "nameCn": "型式认证 - 垂直救援滑道 - 24-2",
+          "path": "/documents/형식승인-수직구조대 구24-2 검사성적서포함4~70m.pdf",
+          "date": "2024-01-15",
+          "productId": "rescue-chute"
+        },
+        {
+          "id": "inclined-rescue-chute-approval",
+          "nameKo": "구24-1 경사구조대",
+          "nameEn": "Inclined Rescue Chute - 24-1",
+          "nameCn": "倾斜救援滑道 - 24-1",
+          "path": "/documents/구24-1 경사구조대 검사성적서포함.pdf",
+          "date": "2024-01-15",
+          "productId": "rescue-chute"
+        },
+        {
+          "id": "rescue-mat-approval",
+          "nameKo": "17-1 인명구조매트 형식승인서",
+          "nameEn": "Type Approval - Rescue Mat - 17-1",
+          "nameCn": "型式认证 - 救生垫 - 17-1",
+          "path": "/documents/17-1 인명구조매트 형식승인서-1.pdf",
+          "date": "2017-01-01",
+          "productId": "rescue-mat"
+        },
+        {
+          "id": "certificate-company-registration",
+          "nameKo": "(주)서한에프앤씨 사업자등록증",
+          "nameEn": "Seohan F&C Business Registration Certificate",
+          "nameCn": "西韩F&C株式会社营业执照",
+          "path": "/documents/(주)서한에프앤씨 사업자등록증_최신.pdf",
+          "date": "2024-01-01",
+          "productId": null
+        },
+        {
+          "id": "factory-registration",
+          "nameKo": "(주)서한에프앤씨 공장등록증명서",
+          "nameEn": "Seohan F&C Factory Registration Certificate",
+          "nameCn": "西韩F&C株式会社工厂注册证明",
+          "path": "/documents/(주)서한에프앤씨_공장등록증명서_20240828  최근.pdf",
+          "date": "2024-08-28",
+          "productId": null
+        }
+      ]
+    },
+    {
+      "id": "manuals",
+      "nameKo": "설명서",
+      "nameEn": "Manuals",
+      "nameCn": "使用手册",
+      "documents": [
+        {
+          "id": "rescue-descender-manual",
+          "nameKo": "완강기 사용설명서",
+          "nameEn": "Rescue Descender Manual",
+          "nameCn": "救援缓降器使用手册",
+          "path": "/documents/new 완강기 사용설명서.pdf",
+          "date": "2023-01-01",
+          "productId": "rescue-descender"
+        },
+        {
+          "id": "rescue-descender-manual-2",
+          "nameKo": "완강기사용설명서-2절형",
+          "nameEn": "Rescue Descender Manual - 2 Section Type",
+          "nameCn": "救援缓降器使用手册 - 2节型",
+          "path": "/documents/완강기사용설명서-2절형.jpg",
+          "date": "2023-01-01",
+          "productId": "rescue-descender"
+        },
+        {
+          "id": "rescue-descender-manual-1",
+          "nameKo": "완강기사용설명서-1절형",
+          "nameEn": "Rescue Descender Manual - 1 Section Type",
+          "nameCn": "救援缓降器使用手册 - 1节型",
+          "path": "/documents/완강기사용설명서-1절형.jpg",
+          "date": "2023-01-01",
+          "productId": "rescue-descender"
+        }
+      ]
+    },
+    {
+      "id": "catalogs",
+      "nameKo": "카탈로그",
+      "nameEn": "Catalogs",
+      "nameCn": "目录",
+      "documents": [
+        {
+          "id": "company-catalog",
+          "nameKo": "서한에프앤씨 카탈로그",
+          "nameEn": "Seohan F&C Catalog",
+          "nameCn": "西韩F&C目录",
+          "path": "/documents/SHFNC_Korean_catalog_240125.pdf",
+          "date": "2024-01-25",
+          "productId": null
+        },
+        {
+          "id": "fall-prevention-mat-catalog",
+          "nameKo": "추락방지매트 카달로그",
+          "nameEn": "Fall Prevention Mat Catalog",
+          "nameCn": "防坠落垫目录",
+          "path": "/documents/추락방지매트 카달로그.pdf",
+          "date": "2022-01-01",
+          "productId": "fall-prevention-mat"
+        },
+        {
+          "id": "ev-flood-prevention-catalog",
+          "nameKo": "전기차침수조 카탈록",
+          "nameEn": "EV Flood Prevention System Catalog",
+          "nameCn": "电动车防浸系统目录",
+          "path": "/documents/전기차침수조_카탈록111.pdf",
+          "date": "2023-01-01",
+          "productId": "ev-flood-prevention"
+        }
+      ]
+    }
+  ]
+} 

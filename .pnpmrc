@@ -1,0 +1,4 @@
+strict-peer-dependencies=false
+resolution-mode=highest
+use-node-version=18.x
+prefer-workspace-packages=true

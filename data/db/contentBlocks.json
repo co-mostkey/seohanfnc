@@ -1,0 +1,9 @@
+[
+  {
+    "id": "quote-info",
+    "title": "안내사항",
+    "content": "<ul class=\"space-y-1 text-sm text-blue-700 dark:text-blue-300/90\"><li>견적 요청 시 제품명과 수량을 정확히 기재해주시면 더 빠른 회신이 가능합니다.</li><li>접수된 내용은 담당자 확인 후 영업일 기준 1~2일 이내에 입력하신 연락처로 회신드립니다.</li><li>긴급한 문의는 고객센터(<span class=\"font-semibold\">02-1234-5678</span>)로 연락 바랍니다.</li></ul>",
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  }
+]

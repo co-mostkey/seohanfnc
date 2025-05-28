@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>서한F&C 샘플 사이트 - 진단 페이지</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            margin: 8px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+
+        .button:hover {
+            background: #0056b3;
+        }
+
+        .status {
+            background: #e9ecef;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #007bff;
+        }
+
+        .error {
+            background: #f8d7da;
+            border-left-color: #dc3545;
+            color: #721c24;
+        }
+
+        .success {
+            background: #d4edda;
+            border-left-color: #28a745;
+            color: #155724;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🚀 서한F&C 웹사이트 샘플 진단</h1>
+
+        <div class="status error">
+            <h3>⚠️ 현재 상황</h3>
+            <p>PHP 제어판에서 500 에러가 발생하고 있습니다.</p>
+            <p>이는 다음 중 하나의 문제일 가능성이 높습니다:</p>
+            <ul>
+                <li>PHP가 설치되지 않음</li>
+                <li>PHP 버전 호환성 문제</li>
+                <li>서버 설정 문제</li>
+                <li>파일 권한 문제</li>
+            </ul>
+        </div>
+
+        <h3>🔍 단계별 진단</h3>
+
+        <div class="status">
+            <h4>1단계: 기본 PHP 테스트</h4>
+            <a href="simple-test.php" class="button" target="_blank">기본 PHP 테스트</a>
+            <p>가장 간단한 PHP 파일이 작동하는지 확인</p>
+        </div>
+
+        <div class="status">
+            <h4>2단계: PHP 정보 확인</h4>
+            <a href="info.php" class="button" target="_blank">PHP 정보 보기</a>
+            <p>PHP 버전과 설정 정보 확인</p>
+        </div>
+
+        <div class="status">
+            <h4>3단계: 환경 테스트</h4>
+            <a href="test.php" class="button" target="_blank">환경 테스트</a>
+            <p>Node.js, shell_exec 등 필요한 기능 확인</p>
+        </div>
+
+        <div class="status">
+            <h4>4단계: 안전한 제어판</h4>
+            <a href="control-panel-safe.php" class="button" target="_blank">안전한 제어판</a>
+            <p>에러 처리가 강화된 제어판</p>
+        </div>
+
+        <h3>🛠️ 문제 해결 방법</h3>
+
+        <div class="status">
+            <h4>PHP가 작동하지 않는 경우:</h4>
+            <ol>
+                <li>호스팅 업체에 PHP 활성화 요청</li>
+                <li>PHP 버전을 7.4 이상으로 설정 요청</li>
+                <li>파일 확장자가 .php인지 확인</li>
+                <li>파일 권한을 644로 설정</li>
+            </ol>
+        </div>
+
+        <div class="status">
+            <h4>대안 방법:</h4>
+            <ol>
+                <li><strong>SSH 접속</strong>: 호스팅 업체에 SSH 접속 권한 요청</li>
+                <li><strong>cPanel/Plesk</strong>: 웹 호스팅 제어판의 터미널 기능 사용</li>
+                <li><strong>Node.js 호스팅</strong>: Vercel, Netlify 등 Node.js 전용 호스팅 사용</li>
+                <li><strong>정적 빌드</strong>: Next.js를 정적 사이트로 빌드하여 업로드</li>
+            </ol>
+        </div>
+
+        <h3>📞 호스팅 업체 문의 사항</h3>
+        <div class="status">
+            <p>다음 사항들을 호스팅 업체에 문의하세요:</p>
+            <ul>
+                <li>✅ PHP 7.4 이상 지원 여부</li>
+                <li>✅ shell_exec 함수 활성화 가능 여부</li>
+                <li>✅ Node.js 설치 가능 여부</li>
+                <li>✅ SSH 접속 권한 제공 여부</li>
+                <li>✅ 포트 3000 개방 가능 여부</li>
+                <li>✅ 백그라운드 프로세스 실행 허용 여부</li>
+            </ul>
+        </div>
+
+        <h3>🎯 즉시 확인할 사항</h3>
+        <div class="status success">
+            <p><strong>지금 바로 확인하세요:</strong></p>
+            <ol>
+                <li>위의 "기본 PHP 테스트" 버튼을 클릭</li>
+                <li>페이지가 정상 표시되면 PHP는 작동함</li>
+                <li>500 에러가 나면 PHP 설정 문제</li>
+                <li>결과에 따라 다음 단계 진행</li>
+            </ol>
+        </div>
+
+        <div class="status">
+            <p><strong>📧 지원:</strong> 문제가 계속되면 호스팅 업체 기술지원팀에 문의하세요.</p>
+            <p><strong>📋 현재 시간:</strong> <span id="current-time"></span></p>
+        </div>
+    </div>
+
+    <script>
+        // 현재 시간 표시
+        document.getElementById('current-time').textContent = new Date().toLocaleString('ko-KR');
+
+        // 5초마다 시간 업데이트
+        setInterval(function () {
+            document.getElementById('current-time').textContent = new Date().toLocaleString('ko-KR');
+        }, 5000);
+    </script>
+</body>
+
+</html>

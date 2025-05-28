@@ -1,0 +1,272 @@
+"use client";
+
+import React from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { Metadata } from 'next';
+import { ProductDetailImage } from '@/components/products/ProductDetailImage';
+import { FeatureCard } from '@/components/products/FeatureCard';
+import { SpecTable } from '@/components/products/SpecTable';
+import { Product } from '@/types/product';
+import { ArrowLeft, Download, ChevronLeft } from 'lucide-react';
+import RelatedProducts from '@/components/products/RelatedProducts';
+import { Button } from '@/components/ui/button';
+import { notFound } from 'next/navigation';
+import { SimpleBreadcrumb } from '@/components/ui/Breadcrumb';
+import { PageHeading } from '@/components/ui/PageHeading';
+import { DownloadCard } from '@/components/ui/DownloadCard';
+import { findProductById, getAllProducts, getCategoryName, getRelatedProducts } from '@/data/products';
+import ProductDetailFrameLayout from '@/components/layouts/ProductDetailFrameLayout';
+import MobileBottomNav from '@/components/ui/MobileBottomNav';
+import { useEffect, useState } from 'react';
+
+type ProductPageProps = {
+  params: {
+    id: string;
+  };
+};
+
+// 제품 상세 페이지 클라이언트 컴포넌트
+export default function ProductDetailPage({ params }: ProductPageProps) {
+  const productId = params.id;
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [categoryName, setCategoryName] = useState('');
+  const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
+  const [transformedImages, setTransformedImages] = useState<Array<{src: string, alt: string}>>([]);
+  
+  // 제품 데이터 로드
+  useEffect(() => {
+    async function loadProductData() {
+      try {
+        const productData = findProductById(productId);
+        
+        if (!productData) {
+          setLoading(false);
+          return;
+        }
+        
+        setProduct(productData);
+        
+        // 카테고리명 설정
+        const catName = productData.category ? getCategoryName(productData.category) : '기타';
+        setCategoryName(catName);
+        
+        // 관련 제품 로드
+        const related = productData.relatedProducts 
+          ? productData.relatedProducts.map(id => findProductById(id)).filter(Boolean) as Product[]
+          : [];
+        setRelatedProducts(related);
+        
+        // 이미지 변환
+        const images = [];
+        
+        // 기본 이미지가 있으면 추가
+        if (productData.image) {
+          images.push({
+            src: productData.image,
+            alt: getSafeString(productData.name, '제품')
+          });
+        }
+        
+        // 추가 이미지 처리
+        if (productData.images && productData.images.length > 0) {
+          productData.images.forEach((img: any) => {
+            images.push({
+              src: typeof img === 'string' ? img : (img.path || img.url || ''),
+              alt: getSafeString(productData.name, '제품')
+            });
+          });
+        }
+        
+        // 이미지가 없는 경우 기본 이미지 추가
+        if (images.length === 0) {
+          images.push({
+            src: '/images/placeholder.jpg',
+            alt: getSafeString(productData.name, '제품')
+          });
+        }
+        
+        setTransformedImages(images);
+        setLoading(false);
+      } catch (error) {
+        console.error('제품 데이터 로드 오류:', error);
+        setLoading(false);
+      }
+    }
+    
+    loadProductData();
+  }, [productId]);
+  
+  // 문자열 값을 안전하게 가져오는 헬퍼 함수
+  const getSafeString = (value: any, fallback: string = ''): string => {
+    if (!value) return fallback;
+    if (typeof value === 'string') return value;
+    if (typeof value === 'object' && value.ko) return value.ko;
+    return String(value) || fallback;
+  };
+  
+  // 로딩 중 상태 표시
+  if (loading) {
+    return (
+      <ProductDetailFrameLayout>
+        <div className="flex items-center justify-center min-h-[50vh]">
+          <div className="animate-pulse text-gray-400">로딩 중...</div>
+        </div>
+      </ProductDetailFrameLayout>
+    );
+  }
+  
+  // 제품이 없는 경우
+  if (!product) {
+    return (
+      <ProductDetailFrameLayout>
+        <div className="flex flex-col items-center justify-center min-h-[50vh] text-center">
+          <h2 className="text-2xl font-bold text-white mb-4">제품을 찾을 수 없습니다</h2>
+          <p className="text-gray-400 mb-6">요청하신 제품 정보가 존재하지 않습니다.</p>
+          <Button asChild variant="default">
+            <Link href="/products">
+              <ChevronLeft className="h-4 w-4 mr-2" />
+              제품 목록으로 돌아가기
+            </Link>
+          </Button>
+        </div>
+      </ProductDetailFrameLayout>
+    );
+  }
+  
+  // 제품 속성 안전하게 가져오기
+  const productName = getSafeString(product.name, '제품');
+  const productDescription = getSafeString(product.description, '');
+  const productLongDescription = getSafeString(product.longDescription, '');
+  
+  // 브레드크럼 아이템
+  const breadcrumbItems = [
+    { text: '홈', href: '/' },
+    { text: '제품', href: '/products' },
+    { text: categoryName, href: `/products/category/${product.category}` },
+    { text: productName, href: `/products/${product.id}`, active: true }
+  ];
+  
+  return (
+    <ProductDetailFrameLayout>
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* 브레드크럼 */}
+        <div className="mb-6">
+          <SimpleBreadcrumb items={breadcrumbItems} />
+        </div>
+        
+        {/* 페이지 타이틀 */}
+        <div className="mb-8">
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">{productName}</h1>
+          <p className="text-gray-400">{categoryName}</p>
+        </div>
+        
+        {/* 제품 상세 컨테이너 */}
+        <div className="bg-gray-900/60 backdrop-blur-md border border-gray-800/50 rounded-xl p-6 overflow-hidden shadow-xl">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+            {/* 제품 이미지 */}
+            <div className="w-full">
+              {transformedImages.length > 0 ? (
+                <ProductDetailImage images={transformedImages} />
+              ) : (
+                <div className="relative aspect-square bg-gray-800 rounded-lg flex items-center justify-center">
+                  <span className="text-gray-400">이미지가 없습니다</span>
+                </div>
+              )}
+            </div>
+
+            {/* 제품 정보 */}
+            <div className="flex flex-col">
+              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+                {productName}
+              </h2>
+              
+              <div className="bg-gray-800/50 border border-gray-700/50 p-4 rounded-lg mb-6">
+                <div className="text-sm text-gray-400 mb-2">
+                  카테고리: {categoryName}
+                </div>
+                {productDescription && (
+                  <p className="text-gray-300 text-lg">
+                    {productDescription}
+                  </p>
+                )}
+              </div>
+              
+              {/* 제품 목록으로 돌아가기 링크 */}
+              <div className="mt-auto">
+                <Link
+                  href="/products" 
+                  className="inline-flex items-center text-sm text-gray-300 hover:text-blue-400"
+                >
+                  <ChevronLeft className="h-4 w-4 mr-1" />
+                  제품 목록으로 돌아가기
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* 상세 설명 */}
+          {productLongDescription && (
+            <div className="mb-12">
+              <h2 className="text-2xl font-bold text-white mb-4">제품 상세 정보</h2>
+              <div className="prose prose-invert max-w-none bg-gray-800/30 p-6 rounded-lg border border-gray-700/50">
+                <div dangerouslySetInnerHTML={{ __html: productLongDescription }} />
+              </div>
+            </div>
+          )}
+
+          {/* 주요 특징 */}
+          {product.features && product.features.length > 0 && (
+            <div className="mb-12">
+              <h2 className="text-2xl font-bold text-white mb-6">주요 특징</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {product.features.map((feature: any, index: number) => (
+                  <FeatureCard
+                    key={index}
+                    title={getSafeString(feature.title)}
+                    description={getSafeString(feature.description)}
+                    icon={feature.icon}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* 제품 사양 */}
+          {product.specifications && Object.keys(product.specifications).length > 0 && (
+            <div className="mb-12">
+              <h2 className="text-2xl font-bold text-white mb-6">제품 사양</h2>
+              <SpecTable specifications={product.specifications} />
+            </div>
+          )}
+
+          {/* 제품 문서 */}
+          {product.documents && product.documents.length > 0 && (
+            <div className="mb-12">
+              <h2 className="text-2xl font-bold text-white mb-6">제품 문서</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {product.documents.map((doc: any, index: number) => (
+                  <DownloadCard
+                    key={index}
+                    title={getSafeString(doc.name || doc.title, '문서 ' + (index + 1))}
+                    url={doc.path || doc.url}
+                    fileType={doc.type}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* 관련 제품 */}
+          {relatedProducts.length > 0 && (
+            <div>
+              <h2 className="text-2xl font-bold text-white mb-6">관련 제품</h2>
+              <RelatedProducts products={relatedProducts} />
+            </div>
+          )}
+        </div>
+      </div>
+    </ProductDetailFrameLayout>
+  );
+}

@@ -1,0 +1,390 @@
+{
+  "categories": [
+    {
+      "id": "safety-equipment",
+      "nameKo": "안전장비",
+      "nameEn": "Safety Equipment",
+      "nameCn": "安全设备",
+      "descriptionKo": "품질 좋은 안전장비로 작업 현장의 안전을 확보하고 사고를 예방합니다.",
+      "descriptionEn": "Quality safety equipment to secure workplace safety and prevent accidents.",
+      "descriptionCn": "优质安全设备，确保工作场所安全，预防事故。",
+      "image": "/images/products/safety-equipment.jpg",
+      "products": [
+        {
+          "id": "Cylinder-Type-SafetyAirMat",
+          "nameKo": "실린더형 공기안전매트",
+          "nameEn": "Cylinder Type Safety Air Mat",
+          "nameCn": "防坠落垫",
+          "descriptionKo": "화재 또는 재난 상황 발생 시 고층에서 낙하하는 피난자를 구조하기 위한 인명구조 장비입니다. 압축 공기를 사용하여 빠르게 공기 기둥을 팽창시켜 안전한 착지 지점을 제공합니다.",
+          "descriptionEn": "A life-saving equipment designed to rescue people falling from high floors during fire or disaster situations. It uses compressed air to quickly inflate air columns, providing a safe landing point.",
+          "descriptionCn": "一种救生设备，旨在火灾或灾难情况下救援从高层坠落的人员。它使用压缩空气快速膨胀空气柱，提供安全着陆点。",
+          "image": "/images/products/Cylinder-Type-SafetyAirMat.jpg",
+          "longDescription": "<p>실린더형 공기안전매트는 화재 또는 재난 상황 발생 시 고층에서 낙하하는 피난자를 구조하기 위한 인명구조 장비입니다. 압축 공기를 사용하여 빠르게 공기 기둥을 팽창시켜 안전한 착지 지점을 제공합니다.</p><p>한국소방산업기술원의 제품 승인을 받았습니다 (제품 승인 번호: 19-4-1). 층수에 따라 다양한 모델이 있으며, 빠른 설치 시간과 안전한 연속 대피가 가능하도록 설계되었습니다.</p><p>각 모델에는 공기 주입 밸브와 실린더가 장착되어 있어 신속한 팽창이 가능하며, 소방관 공기 호흡기와 호환되도록 설계되어 비상 상황에서도 유연하게 대응할 수 있습니다.</p>",
+          "features": [
+            {
+              "title": "신속한 설치 시간",
+              "description": "25초에서 80초 내에 설치 완료 가능한 빠른 대응 시스템"
+            },
+            {
+              "title": "다양한 모델 옵션",
+              "description": "5F A 타입, 5F B 타입, 10F 타입 및 15F 타입 등 층수별 맞춤형 모델"
+            },
+            {
+              "title": "안전한 연속 대피",
+              "description": "8초에서 35초까지의 연속 대피 시간 제공"
+            },
+            {
+              "title": "한국소방산업기술원 승인",
+              "description": "제품 승인 번호 19-4-1로 공인된 안전 장비"
+            },
+            {
+              "title": "소방 장비 호환성",
+              "description": "소방관 공기 호흡기와 호환되어 비상 상황에서 유연한 대응 가능"
+            }
+          ],
+          "specifications": {
+            "모델": "5F A 타입, 5F B 타입, 10F 타입, 15F 타입",
+            "승인 번호": "한국소방산업기술원 제품 승인 번호: 19-4-1"
+          },
+          "specTable": [
+            {
+              "title": "구분",
+              "5F_A": "5F A 형",
+              "5F_B": "5F B 형",
+              "10F": "10F 형",
+              "15F": "15F 형"
+            },
+            {
+              "title": "제품 규격 (m)",
+              "5F_A": "3.5 x 3.5 x 1.7 (m)",
+              "5F_B": "4 x 4 x 2 (m)",
+              "10F": "5 x 7 x 2.5 (m)",
+              "15F": "6 x 8 x 3 (m)"
+            },
+            {
+              "title": "제품 중량 (kg)",
+              "5F_A": "55 kg",
+              "5F_B": "85 kg",
+              "10F": "110 kg",
+              "15F": "170 kg"
+            },
+            {
+              "title": "설치 시간 (초)",
+              "5F_A": "25 초",
+              "5F_B": "40 초",
+              "10F": "60 초",
+              "15F": "80 초"
+            },
+            {
+              "title": "연속 대피 시간 (초)",
+              "5F_A": "8 초",
+              "5F_B": "17 초",
+              "10F": "25 초",
+              "15F": "35 초"
+            },
+            {
+              "title": "주입 밸브 수량",
+              "5F_A": "1 개",
+              "5F_B": "1 개",
+              "10F": "2 개",
+              "15F": "2 개"
+            },
+            {
+              "title": "실린더 수량",
+              "5F_A": "1 개",
+              "5F_B": "1 개",
+              "10F": "2 개",
+              "15F": "3 개"
+            },
+            {
+              "title": "관련 검사",
+              "5F_A": "한국소방산업기술원 제품 승인품",
+              "5F_B": "한국소방산업기술원 제품 승인품",
+              "10F": "자체 검사",
+              "15F": "자체 검사"
+            }
+          ],
+          "documents": [
+            {
+              "id": "safety-air-mat-manual",
+              "nameKo": "공기안전매트 사용설명서",
+              "nameEn": "Safety Air Mat Manual",
+              "nameCn": "安全气垫使用手册",
+              "path": "/documents/공기안전매트_사용설명서.pdf",
+              "type": "pdf"
+            },
+            {
+              "id": "safety-air-mat-certificate",
+              "nameKo": "공기안전매트 인증서",
+              "nameEn": "Safety Air Mat Certificate",
+              "nameCn": "安全气垫认证",
+              "path": "/documents/공기안전매트_인증서.pdf",
+              "type": "pdf"
+            },
+            {
+              "id": "fall-prevention-mat-catalog",
+              "nameKo": "추락방지매트 카달로그",
+              "nameEn": "Fall Prevention Mat Catalog",
+              "nameCn": "防坠落垫目录",
+              "path": "/documents/추락방지매트_카달로그.pdf",
+              "type": "pdf"
+            }
+          ],
+          "cautions": [
+            "반드시 1회에 1인만 낙하해야 합니다. 다음 탈출자는 매트가 원래 모양으로 돌아온 후에 뛰어내려야 합니다.",
+            "실린더 압력을 정기적으로 확인해야 합니다. 실린더 압력이 부족하거나 실린더가 없는 경우 소방관 공기 호흡기와 호환되도록 설계되었습니다.",
+            "매트 설치 시 탈출자가 매트 중앙에 낙하하도록 위치를 선정해야 합니다."
+          ]
+        },
+        {
+          "id": "Lifesaving-Mat",
+          "nameKo": "인명구조 매트",
+          "nameEn": "Lifesaving Mat",
+          "nameCn": "救生垫",
+          "descriptionKo": "비상 상황 발생 시 고층에서 낙하하는 인원을 안전하게 구조하기 위한 특수 제작된 생명 구조 장비입니다. 경량 소재와 신속한 설치 시간으로 인명 구조에 최적화되어 있습니다.",
+          "descriptionEn": "A specially designed life-saving equipment for safely rescuing people falling from high floors in emergency situations. Optimized for life-saving with lightweight materials and rapid installation time.",
+          "descriptionCn": "一种专门设计的救生设备，用于在紧急情况下安全地救援从高层坠落的人员。采用轻质材料和快速安装时间，优化了救生效果。",
+          "image": "/images/products/Lifesaving-Mat.jpg",
+          "longDescription": "<p>인명구조 매트는 화재 및 긴급 상황에서 고층 건물에서 낙하하는 인원들을 안전하게 구조하기 위해 개발된 첨단 안전 장비입니다. 특수 설계된 완충 구조와 내구성 높은 소재로 제작되어 충격을 효과적으로 흡수하고 분산시킵니다.</p><p>신속하게 설치할 수 있는 설계로 긴급 상황에서 소중한 시간을 절약하며, 다양한 층수에 맞게 최적화된 여러 모델이 제공됩니다. 또한 인체공학적 구조로 낙하 충격을 최소화하고 부상 위험을 크게 줄입니다.</p><p>경량 소재를 사용하여 이동과 배치가 용이하며, 접이식 구조로 보관 및 운송이 편리합니다. 긴급 구조 상황에서 신뢰할 수 있는 안전 솔루션입니다.</p>",
+          "features": [
+            {
+              "title": "경량 소재 사용",
+              "description": "고강도 경량 소재로 제작되어 쉽게 운반하고 빠르게 설치 가능"
+            },
+            {
+              "title": "신속한 설치",
+              "description": "30초 이내 신속한 설치로 긴급 상황 대응 능력 향상"
+            },
+            {
+              "title": "충격 흡수 구조",
+              "description": "특수 설계된 내부 구조로 낙하 충격을 효과적으로 흡수 및 분산"
+            },
+            {
+              "title": "다양한 환경 적응성",
+              "description": "다양한 지형과 환경에서 안정적으로 사용 가능한 설계"
+            },
+            {
+              "title": "접이식 구조",
+              "description": "사용 후 쉽게 접어서 보관 및 운송이 편리한 구조"
+            }
+          ],
+          "specifications": {
+            "모델": "Standard 모델, Premium 모델",
+            "재질": "고강도 폴리에스터, 특수 충격 흡수 소재"
+          },
+          "specTable": [
+            {
+              "title": "구분",
+              "Standard": "Standard 모델",
+              "Premium": "Premium 모델"
+            },
+            {
+              "title": "제품 규격 (m)",
+              "Standard": "4 x 4 x 1.5 (m)",
+              "Premium": "5 x 5 x 2 (m)"
+            },
+            {
+              "title": "제품 중량 (kg)",
+              "Standard": "40 kg",
+              "Premium": "65 kg"
+            },
+            {
+              "title": "설치 시간 (초)",
+              "Standard": "20 초",
+              "Premium": "30 초"
+            },
+            {
+              "title": "최대 낙하 높이",
+              "Standard": "15m (약 5층)",
+              "Premium": "25m (약 8층)"
+            },
+            {
+              "title": "재질",
+              "Standard": "고강도 폴리에스터",
+              "Premium": "특수 충격 흡수 소재"
+            }
+          ],
+          "documents": [
+            {
+              "id": "lifesaving-mat-manual",
+              "nameKo": "인명구조 매트 사용설명서",
+              "nameEn": "Lifesaving Mat Manual",
+              "nameCn": "救生垫使用手册",
+              "path": "/documents/인명구조매트_사용설명서.pdf",
+              "type": "pdf"
+            },
+            {
+              "id": "lifesaving-mat-certificate",
+              "nameKo": "인명구조 매트 품질인증서",
+              "nameEn": "Lifesaving Mat Quality Certificate",
+              "nameCn": "救生垫质量认证",
+              "path": "/documents/인명구조매트_품질인증서.pdf",
+              "type": "pdf"
+            }
+          ],
+          "cautions": [
+            "사용 전 매트의 상태를 반드시 점검하고 손상된 부분이 있는지 확인해야 합니다.",
+            "매트 설치 시 평평한 곳에 설치하고 장애물이 없는지 확인해야 합니다.",
+            "긴급 상황에서는 전문 구조대의 지시에 따라 사용해야 합니다.",
+            "사용 후에는 반드시 점검 및 청소를 실시하고 적절한 조건에서 보관해야 합니다."
+          ]
+        },
+        {
+          "id": "Fan-Type-Air-Safety-Mat",
+          "nameKo": "팬형 공기안전매트",
+          "nameEn": "Fan Type Air Safety Mat",
+          "nameCn": "风扇式安全气垫",
+          "descriptionKo": "화재시 또는 재난상황 발생시 고층에서 낙하하는 피난자를 구조하고자, 전기펜에 의해 바람을 불어넣어 형성되어지는 인명구조 장비입니다.",
+          "descriptionEn": "An innovative safety mat that uses fans to inject air. It can be quickly deployed in emergency situations due to its lightweight design and rapid installation time.",
+          "descriptionCn": "创新型安全气垫，使用风扇注入空气。由于轻量化设计和快速安装时间，可以在紧急情况下迅速部署。",
+          "image": "/images/products/Fan-Type-Air-Safety-Mat.jpg",
+          "longDescription": "<p>화재시 또는 재난상황 발생시 고층에서 낙하하는 피난자를 구조하고자, 전기펜에 의해 바람을 불어넣어 형성되어지는 인명구조 장비입니다.</p><p>제품승인번호 : 공매 23-1</p><p>고층 건물이나 고소작업장에서의 비상 상황 대처에 효과적인 인명구조 장비로, 한국소방산업기술원의 제품 승인을 받았습니다. 전기펜을 활용하여 빠르게 매트를 팅창시키미로 비상 대피 상황에서 신속한 조치가 가능합니다.</p><p>층수에 따라 5F 형, 10F 형, 15F 형, 20F 형으로 다양하게 제공되며, 각 모델별로 최적화된 설치 시간과 연속 대피 시간을 갖추고 있습니다.</p>",
+          "features": [
+            {
+              "title": "고효율 팬 시스템",
+              "description": "강력한 팬 시스템으로 60초 이내에 매트 팽창이 가능한 빠른 설치 속도"
+            },
+            {
+              "title": "경량 디자인",
+              "description": "30% 더 가벼운 무게로 이동과 설치가 용이한 설계"
+            },
+            {
+              "title": "내구성 있는 소재",
+              "description": "특수 코팅된 폴리에스터 소재로 내구성과 내마모성 강화"
+            },
+            {
+              "title": "에너지 효율성",
+              "description": "저전력 고효율 팬 사용으로 배터리 또는 일반 전원으로 작동 가능"
+            },
+            {
+              "title": "내후성 설계",
+              "description": "다양한 기후 조건에서도 안정적으로 사용 가능한 내후성 설계"
+              "nameCn": "风扇式安全气垫认证",
+              "path": "/documents/팬형안전매트_인증서.pdf",
+              "type": "pdf"
+            }
+          ],
+          "cautions": [
+            "사용 전 팬 작동 상태와 전원을 반드시 확인해야 합니다.",
+            "강한 바람이 부는 환경에서는 매트가 움직이지 않도록 고정해야 합니다.",
+            "매트 설치 시 평평한 곳에 설치하고 날카로운 물체가 없는지 확인해야 합니다.",
+            "전원 공급이 중단될 경우를 대비하여 항상 예비 전원(배터리)을 준비해야 합니다."
+          ]
+        },
+        {
+          "id": "Training-Air-Mattress-Fall-Prevention-Mat",
+          "nameKo": "훈련용 에어매트(추락방지매트)",
+          "nameEn": "Training Air Mattress (Fall Prevention Mat)",
+          "nameCn": "训练用气垫(防坠落垫)",
+          "descriptionKo": "공기주입을 통한 에어백을 형성하여, 지상에 설치하는 안전을 위한 보조장비로서 평시에는 고소 작업 또는 훈련 등의 상황에서 추락사고를 예방하고, 화재에 의한 피난 또는 응급상황 발생시에는 요구조자의 추락을 막아주는 안전장비입니다.",
+          "descriptionEn": "A safety mat designed for fire training and fall prevention, featuring premium materials and durability optimized for fire training sites.",
+          "descriptionCn": "为火灾训练和防坠落设计的安全垫，采用优质材料，耐用性强，专为消防训练场地优化。",
+          "image": "/images/products/Training-Air-Mattress-Fall-Prevention-Mat.jpg",
+          "longDescription": "<p>훈련용 에어매트(추락방지매트)는 공기주입을 통한 에어백을 형성하여, 지상에 설치하는 안전을 위한 보조장비입니다. 평시에는 고소 작업 또는 훈련 등의 상황에서 추락사고를 예방하고, 화재에 의한 피난 또는 응급상황 발생시에는 요구조자의 추락을 막아주는 안전장비입니다.</p><p>협소공간 구조용으로 사용이 가능하며, 블록처럼 적재가 가능한 구조로 신속한 초동 대처에 유리합니다. 부피가 적어 출동차량에 많은 수량 적재가 가능하며, 무게가 가벼워 사고현장 이동에 유리합니다. 추가로 충격흡수력이 뛰어나 효과적인 안전 장비로 사용됩니다.</p>",
+          "features": [
+            {
+              "title": "협소공간 구조용",
+              "description": "협소한 공간에서도 사용이 가능한 안전 장비"
+            },
+            {
+              "title": "블록식 적재 가능",
+              "description": "블록처럼 적재가 가능한 효율적인 구조"
+            },
+            {
+              "title": "빠른 초동 대처",
+              "description": "신속한 초동 대처가 가능한 안전 장비"
+            },
+            {
+              "title": "경량 구조",
+              "description": "무게가 가벼워 사고현장 이동에 유리한 설계"
+            },
+            {
+              "title": "우수한 충격흡수력",
+              "description": "뛰어난 충격흡수력으로 사고 방지 효과 우수"
+            }
+          ],
+          "specifications": {
+            "모델명": "TRS-3, TRS-4, TRS-5, TRS-6",
+            "소재": "방수, 방염코팅 PVC 타포린 / 인명구조용 공기안전매트와 동일 재질",
+            "적용높이": "3.5m",
+            "기타옵션": "화염, 용접 작업 적용시 특수방염 실리카 원단을 적용하여 생산이 가능함"
+          },
+          "specTable": [
+            {
+              "title": "구분",
+              "TRS_3": "TRS-3",
+              "TRS_4": "TRS-4",
+              "TRS_5": "TRS-5",
+              "TRS_6": "TRS-6"
+            },
+            {
+              "title": "규격 (mm)",
+              "TRS_3": "1,500×2,000×650",
+              "TRS_4": "1,500×4,000×650",
+              "TRS_5": "2,000×3,000×650",
+              "TRS_6": "1,500×2,000×700"
+            },
+            {
+              "title": "재질",
+              "TRS_3": "방수, 방염코팅 PVC 타포린",
+              "TRS_4": "방수, 방염코팅 PVC 타포린",
+              "TRS_5": "방수, 방염코팅 PVC 타포린",
+              "TRS_6": "방수 PVC 타포린"
+            },
+            {
+              "title": "중량 (kg)",
+              "TRS_3": "16 kg",
+              "TRS_4": "27 kg",
+              "TRS_5": "27 kg",
+              "TRS_6": "10 kg"
+            },
+            {
+              "title": "설치시간(에어블로워)",
+              "TRS_3": "25 sec.",
+              "TRS_4": "55 sec.",
+              "TRS_5": "55 sec.",
+              "TRS_6": "30 sec."
+            },
+            {
+              "title": "설치시간(고압실린더)",
+              "TRS_3": "8 sec.",
+              "TRS_4": "15 sec.",
+              "TRS_5": "15 sec.",
+              "TRS_6": "적용안됨"
+            },
+            {
+              "title": "적용높이 (m)",
+              "TRS_3": "3.5 m",
+              "TRS_4": "3.5 m",
+              "TRS_5": "3.5 m",
+              "TRS_6": "3.5 m"
+            }
+          ],
+          "documents": [
+            {
+              "id": "training-mat-manual",
+              "nameKo": "훈련용 에어매트 사용설명서",
+              "nameEn": "Training Air Mat Manual",
+              "type": "pdf",
+              "url": "/documents/training-mat-manual.pdf"
+            },
+            {
+              "id": "training-mat-certification",
+              "nameKo": "안전인증서",
+              "nameEn": "Safety Certification",
+              "type": "pdf",
+              "url": "/documents/training-mat-certification.pdf"
+            }
+          ],
+          "cautions": [
+            "훈련 전 반드시 매트의 상태를 점검하고 적정 공기압을 확인하세요.",
+            "날카로운 물체로부터 매트를 보호하고 손상된 상태로 사용하지 마세요.",
+            "훈련 시 반드시 전문 지도자의 감독 하에 진행하세요.",
+            "사용 후에는 공기를 완전히 빼고 깨끗하게 세척한 후 건조된 상태로 보관하세요.",
+            "과도한 하중이나 지정된 사용 높이를 초과하여 사용하지 마세요."
+          ]
+        }
+      ]
+    }
+  ]
+}

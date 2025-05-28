@@ -1,0 +1,15 @@
+{
+  "logoUrl": "/logo.png",
+  "primaryColor": "#FF7A00",
+  "secondaryColor": "#1E293B",
+  "accentColor": "#4463ef",
+  "backgroundColor": "#121212",
+  "textColor": "#ffffff",
+  "footerText": "© 2025 서한F&C. All rights reserved.",
+  "darkMode": true,
+  "fontPrimary": "Pretendard",
+  "fontSecondary": "Arial",
+  "borderRadius": "medium",
+  "fontSize": "medium",
+  "spacing": "compact"
+}
