@@ -7,7 +7,6 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   // Railway 배포 최적화
-  output: 'standalone',
   experimental: {
     // Railway 배포에 최적화된 설정
   },
