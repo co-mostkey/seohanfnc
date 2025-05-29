@@ -1,0 +1,298 @@
+{
+  "summary": {
+    "totalFiles": 515,
+    "filesWithStaticPaths": 35,
+    "pathCounts": {
+      "images": 58,
+      "videos": 0,
+      "other": 2
+    }
+  },
+  "filesList": [
+    {
+      "file": "app\\about\\greeting\\page.tsx",
+      "paths": [
+        "/images/patterns/grid-pattern.svg",
+        "/images/about/ceo-placeholder.jpg"
+      ]
+    },
+    {
+      "file": "app\\about\\history\\page.tsx",
+      "paths": [
+        "/images/patterns/grid-pattern.svg"
+      ]
+    },
+    {
+      "file": "app\\about\\location\\page.tsx",
+      "paths": [
+        "/images/patterns/grid-pattern.svg"
+      ]
+    },
+    {
+      "file": "app\\about\\vision\\page.tsx",
+      "paths": [
+        "/images/patterns/grid-pattern.svg"
+      ]
+    },
+    {
+      "file": "app\\admin\\notices\\create\\page.tsx",
+      "paths": [
+        "/logo.png"
+      ]
+    },
+    {
+      "file": "app\\admin\\products\\page.tsx",
+      "paths": [
+        "/images/placeholder-product.png"
+      ]
+    },
+    {
+      "file": "app\\intranet\\admin\\dashboard\\page.tsx",
+      "paths": [
+        "/images/logos/google-calendar.svg",
+        "/images/logos/microsoft-365.svg",
+        "/images/logos/slack.svg",
+        "/images/avatars/avatar-1.jpg",
+        "/images/avatars/avatar-2.jpg",
+        "/images/avatars/avatar-3.jpg"
+      ]
+    },
+    {
+      "file": "app\\intranet\\dashboard\\page.tsx",
+      "paths": [
+        "/images/avatars/avatar-1.jpg",
+        "/images/avatars/avatar-2.jpg",
+        "/images/avatars/avatar-3.jpg",
+        "/images/avatars/avatar-5.jpg",
+        "/images/avatars/avatar-8.jpg",
+        "/images/avatars/avatar-9.jpg",
+        "/images/avatars/avatar-10.jpg",
+        "/images/avatars/avatar-18.jpg",
+        "/images/avatars/avatar-11.jpg"
+      ]
+    },
+    {
+      "file": "app\\products\\airslide\\Vertical-Rescue-Equipment\\client.tsx",
+      "paths": [
+        "/images/products/Vertical-Rescue-Equipment/main/visual.jpg"
+      ]
+    },
+    {
+      "file": "app\\products\\descender-footrest-and-case\\client.tsx",
+      "paths": [
+        "/images/products/descender-footrest-and-case/main/visual.jpg",
+        "/images/products/descender-footrest-and-case/main00.jpg",
+        "/images/products/descender-footrest-and-case/hero_placeholder-2.jpg",
+        "/images/products/descender-footrest-and-case/main.jpg"
+      ]
+    },
+    {
+      "file": "app\\products\\descender-hanger-summary\\client.tsx",
+      "paths": [
+        "/images/products/Descending-Life-line-Hanger/thumbnail.jpg"
+      ]
+    },
+    {
+      "file": "app\\products\\Fire-Truck-Rescue-Equipment\\client.tsx",
+      "paths": [
+        "/images/products/Fire-Truck-Rescue-Equipment/main/visual.jpg"
+      ]
+    },
+    {
+      "file": "app\\products\\Indoor-Human-Disinfector\\client.tsx",
+      "paths": [
+        "/images/products/Indoor-Human-Disinfector/main/visual.jpg"
+      ]
+    },
+    {
+      "file": "app\\products\\Outdoor-Human-Disinfector\\client.tsx",
+      "paths": [
+        "/images/products/Outdoor-Human-Disinfector/main/visual.jpg"
+      ]
+    },
+    {
+      "file": "app\\products\\Portable-Water-Tank\\client.tsx",
+      "paths": [
+        "/images/products/Portable-Water-Tank/main/visual.jpg"
+      ]
+    },
+    {
+      "file": "app\\products\\safety-equipment\\Air-Slide\\client.tsx",
+      "paths": [
+        "/images/products/Air-Slide/main/visual.jpg"
+      ]
+    },
+    {
+      "file": "app\\products\\safety-equipment\\product-detail-client.tsx",
+      "paths": [
+        "/images/products/Cylinder-Type-SafetyAirMat/data/Cylinder-Type-SafetyAirMat-test1.jpg",
+        "/images/products/Cylinder-Type-SafetyAirMat/data/Cylinder-Type-SafetyAirMat-test2.jpg"
+      ]
+    },
+    {
+      "file": "app\\products\\safety-equipment\\Vehicle-Disinfector\\client.tsx",
+      "paths": [
+        "/images/products/Vehicle-Disinfector/thumbnail.jpg"
+      ]
+    },
+    {
+      "file": "app\\products\\safety-equipment\\_backups\\product-detail-client-new.tsx",
+      "paths": [
+        "/images/products/default-visual.jpg",
+        "/images/patterns/dot-pattern.png"
+      ]
+    },
+    {
+      "file": "app\\products\\Sloping-Rescue-Chute\\client.tsx",
+      "paths": [
+        "/images/products/Sloping-Rescue-Chute/main/visual.jpg"
+      ]
+    },
+    {
+      "file": "app\\products\\Solid-Aerosol-Extinguisher\\client.tsx",
+      "paths": [
+        "/images/products/Solid-Aerosol-Extinguisher/main/visual.jpg"
+      ]
+    },
+    {
+      "file": "app\\products\\Vertical-Rescue-Equipment\\client.tsx",
+      "paths": [
+        "/images/products/Vertical-Rescue-Equipment/main/visual.jpg"
+      ]
+    },
+    {
+      "file": "app\\products\\[id]\\page-client-original.tsx",
+      "paths": [
+        "/images/products/default-visual.jpg",
+        "/images/patterns/dot-pattern.png"
+      ]
+    },
+    {
+      "file": "app\\products\\[id]\\page-client.tsx",
+      "paths": [
+        "/images/products/default-visual.png",
+        "/images/patterns/dot-pattern.png"
+      ]
+    },
+    {
+      "file": "app\\research\\page.jsx",
+      "paths": [
+        "/research"
+      ]
+    },
+    {
+      "file": "app\\support\\faq\\page.tsx",
+      "paths": [
+        "/images/patterns/grid-pattern.svg"
+      ]
+    },
+    {
+      "file": "app\\support\\notice\\page.tsx",
+      "paths": [
+        "/hero/hero_01.png"
+      ]
+    },
+    {
+      "file": "app\\support\\notice\\[id]\\page.tsx",
+      "paths": [
+        "/hero/hero_01.png"
+      ]
+    },
+    {
+      "file": "components\\hero-slider.tsx",
+      "paths": [
+        "/grid-pattern.png"
+      ]
+    },
+    {
+      "file": "components\\layouts\\ProductDetailFrameLayout.tsx",
+      "paths": [
+        "/images/products/safety-mat-bg.jpg",
+        "/images/products/visuals/safety-air-cushion.png",
+        "/images/grid-pattern.png"
+      ]
+    },
+    {
+      "file": "components\\partner-logos.tsx",
+      "paths": [
+        "/placeholder.svg?height=60&width=120"
+      ]
+    },
+    {
+      "file": "components\\products\\detail\\ProductDetailClient.tsx",
+      "paths": [
+        "/images/products/default-visual.jpg",
+        "/images/patterns/dot-pattern.png"
+      ]
+    },
+    {
+      "file": "components\\products\\safety-equipment\\ProductTestData.tsx",
+      "paths": [
+        "/images/products/Cylinder-Type-SafetyAirMat/data/Cylinder-Type-SafetyAirMat-test1.jpg",
+        "/images/products/Cylinder-Type-SafetyAirMat/data/Cylinder-Type-SafetyAirMat-test2.jpg"
+      ]
+    },
+    {
+      "file": "components\\products\\SafetyEquipmentRelatedProducts.tsx",
+      "paths": [
+        "/images/fallback-image.jpg"
+      ]
+    },
+    {
+      "file": "components\\support\\NoticeDetailClient.tsx",
+      "paths": [
+        "/hero/hero_01.png"
+      ]
+    }
+  ],
+  "uniquePaths": {
+    "images": [
+      "/images/patterns/grid-pattern.svg",
+      "/images/about/ceo-placeholder.jpg",
+      "/logo.png",
+      "/images/placeholder-product.png",
+      "/images/logos/google-calendar.svg",
+      "/images/logos/microsoft-365.svg",
+      "/images/logos/slack.svg",
+      "/images/avatars/avatar-1.jpg",
+      "/images/avatars/avatar-2.jpg",
+      "/images/avatars/avatar-3.jpg",
+      "/images/avatars/avatar-5.jpg",
+      "/images/avatars/avatar-8.jpg",
+      "/images/avatars/avatar-9.jpg",
+      "/images/avatars/avatar-10.jpg",
+      "/images/avatars/avatar-18.jpg",
+      "/images/avatars/avatar-11.jpg",
+      "/images/products/Vertical-Rescue-Equipment/main/visual.jpg",
+      "/images/products/descender-footrest-and-case/main/visual.jpg",
+      "/images/products/descender-footrest-and-case/main00.jpg",
+      "/images/products/descender-footrest-and-case/hero_placeholder-2.jpg",
+      "/images/products/descender-footrest-and-case/main.jpg",
+      "/images/products/Descending-Life-line-Hanger/thumbnail.jpg",
+      "/images/products/Fire-Truck-Rescue-Equipment/main/visual.jpg",
+      "/images/products/Indoor-Human-Disinfector/main/visual.jpg",
+      "/images/products/Outdoor-Human-Disinfector/main/visual.jpg",
+      "/images/products/Portable-Water-Tank/main/visual.jpg",
+      "/images/products/Air-Slide/main/visual.jpg",
+      "/images/products/Cylinder-Type-SafetyAirMat/data/Cylinder-Type-SafetyAirMat-test1.jpg",
+      "/images/products/Cylinder-Type-SafetyAirMat/data/Cylinder-Type-SafetyAirMat-test2.jpg",
+      "/images/products/Vehicle-Disinfector/thumbnail.jpg",
+      "/images/products/default-visual.jpg",
+      "/images/patterns/dot-pattern.png",
+      "/images/products/Sloping-Rescue-Chute/main/visual.jpg",
+      "/images/products/Solid-Aerosol-Extinguisher/main/visual.jpg",
+      "/images/products/default-visual.png",
+      "/hero/hero_01.png",
+      "/grid-pattern.png",
+      "/images/products/safety-mat-bg.jpg",
+      "/images/products/visuals/safety-air-cushion.png",
+      "/images/grid-pattern.png",
+      "/images/fallback-image.jpg"
+    ],
+    "videos": [],
+    "other": [
+      "/research",
+      "/placeholder.svg?height=60&width=120"
+    ]
+  }
+}

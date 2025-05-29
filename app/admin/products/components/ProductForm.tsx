@@ -235,7 +235,8 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 toast.error(`서버 파일 삭제 실패: ${result.message || result.error || '알 수 없는 오류'}`);
             }
         } catch (err: any) {
-            toast.error(`파일 삭제 중 클라이언트 오류 발생: ${err.message}`);
+            const errorMessage = err instanceof Error ? err.message : String(err);
+            toast.error(`파일 삭제 중 클라이언트 오류 발생: ${errorMessage}`);
             console.error("File delete error:", err);
         }
     };
@@ -256,13 +257,13 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 // gallery_images_data의 id 필드 보장
                 gallery_images_data: data.gallery_images_data?.map(item => ({
                     ...item,
-                    id: item.id || `gallery-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+                    id: item.id || `gallery-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`
                 })) || [],
 
                 // videos의 id 필드 보장
                 videos: data.videos?.map(item => ({
                     ...item,
-                    id: item.id || `video-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+                    id: item.id || `video-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`
                 })) || [],
 
                 // documents의 id 필드 보장
@@ -275,7 +276,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 
                     return {
                         ...item,
-                        id: item.id || `doc-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                        id: item.id || `doc-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`,
                         name: item.name || 'Untitled Document',
                         nameKo: item.nameKo || item.name || '제목 없는 문서',
                         url: item.url || item.path || '',
@@ -285,9 +286,10 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 }) || [],
 
                 // specifications 배열을 객체로 변환
-                specifications: data.specifications?.reduce((acc, spec) => {
+                specifications: data.specifications?.reduce((acc: Record<string, string>, spec: any) => {
                     if (spec.key && spec.value) {
-                        acc[spec.key] = spec.value;
+                        // spec.key를 명시적으로 string으로 변환하여 symbol 오류 방지
+                        acc[String(spec.key)] = String(spec.value);
                     }
                     return acc;
                 }, {} as Record<string, string>) || {},
@@ -333,7 +335,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         <form
             onSubmit={handleSubmit(
                 onFormSubmit,
-                (validationErrors) => {
+                (validationErrors: any) => {
                     console.error('=== Form Validation Failed ===');
                     console.error('Validation errors:', validationErrors);
                     console.error('Error details:', JSON.stringify(validationErrors, null, 2));
