@@ -17,7 +17,7 @@ import { DownloadCard } from '@/components/ui/DownloadCard';
 import { findProductById, getCategoryName } from '@/data/products';
 import ProductDetailFrameLayout from '@/components/layouts/ProductDetailFrameLayout';
 import { Badge } from '@/components/ui/badge';
-import { cn } from '@/lib/utils';
+import { cn, getImagePath } from '@/lib/utils';
 import { ProductVideoSection } from '@/components/products/ProductVideoSection';
 
 // 제품 비주얼 이미지 경로 처리 함수
@@ -274,7 +274,7 @@ export function ProductDetailClient({ productId }: ProductDetailClientProps) {
               priority
               onError={(e) => {
                 console.error('비주얼 이미지 로드 오류', productId);
-                (e.target as HTMLImageElement).src = '/images/products/default-visual.jpg';
+                (e.target as HTMLImageElement).src = getImagePath('/images/products/default-visual.jpg');
               }}
             />
           </div>

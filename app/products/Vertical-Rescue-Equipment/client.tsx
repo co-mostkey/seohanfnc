@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ProductDetailClientProps } from '@/types/component-props';
-import { cn } from '@/lib/utils';
+import { cn, getImagePath } from '@/lib/utils';
 import ProductFeaturesComponent from '@/components/products/safety-equipment/ProductFeatures';
 import { ModelSpecTable } from '@/components/products/ModelSpecTable';
 import ProductImageGallery from '@/components/products/safety-equipment/ProductImageGallery';
@@ -141,7 +141,7 @@ const ProductDetail: React.FC<ProductDetailClientProps> = ({
         <div className="relative min-h-screen text-white">
             <div className="fixed inset-0 z-0">
                 <Image
-                    src="/images/products/Vertical-Rescue-Equipment/main/visual.jpg"
+                    src={getImagePath('/images/products/Vertical-Rescue-Equipment/main/visual.jpg')}
                     alt={`${currentProductName} 비주얼 배경`}
                     fill
                     className="object-cover object-center"
