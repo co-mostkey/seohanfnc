@@ -9,7 +9,7 @@ const nextConfig = {
   // Railway 배포 최적화
   output: 'standalone',
   experimental: {
-    outputFileTracingRoot: undefined,
+    // Railway 배포에 최적화된 설정
   },
   async rewrites() {
     return [
