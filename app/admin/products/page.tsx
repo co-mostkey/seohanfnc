@@ -137,8 +137,8 @@ function SortableTableRow({
         {product.approvalNumber ? <Badge variant="outline" className={`${ADMIN_UI.BORDER_MEDIUM} ${ADMIN_UI.TEXT_SECONDARY}`} style={ADMIN_FONT_STYLES.BADGE}>{product.approvalNumber}</Badge> : 'N/A'}
       </TableCell>
       <TableCell className="hidden 2xl:table-cell p-2">
-        <div className={`text-xs ${ADMIN_UI.TEXT_SECONDARY} max-w-[200px] truncate`} style={ADMIN_FONT_STYLES.BODY_TEXT} title={product.descriptionKo || product.description || ''}>
-          {product.descriptionKo || product.description || 'N/A'}
+        <div className={`text-xs ${ADMIN_UI.TEXT_SECONDARY} max-w-[200px] truncate`} style={ADMIN_FONT_STYLES.BODY_TEXT} title={product.descriptionKo || (typeof product.description === 'string' ? product.description : product.description?.ko) || ''}>
+          {product.descriptionKo || (typeof product.description === 'string' ? product.description : product.description?.ko) || 'N/A'}
         </div>
       </TableCell>
       <TableCell className="hidden md:table-cell p-2">
@@ -1069,7 +1069,7 @@ function AdminProductsContent() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start" className={`${ADMIN_UI.BG_SECONDARY} ${ADMIN_UI.BORDER_LIGHT}`}>
-                <DropdownMenuLabel style={ADMIN_FONT_STYLES.MENU_LABEL}>정렬 기준</DropdownMenuLabel>
+                <DropdownMenuLabel style={ADMIN_FONT_STYLES.MENU_ITEM}>정렬 기준</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => handleSort('sortOrder')} className={`hover:${ADMIN_UI.BG_HOVER} ${ADMIN_UI.TEXT_SECONDARY}`} style={ADMIN_FONT_STYLES.MENU_ITEM}>
                   <Move className="mr-2 h-4 w-4" /> 사용자 정의 순서
@@ -1115,7 +1115,7 @@ function AdminProductsContent() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start" className={`${ADMIN_UI.BG_SECONDARY} ${ADMIN_UI.BORDER_LIGHT}`}>
-                <DropdownMenuLabel style={ADMIN_FONT_STYLES.MENU_LABEL}>그룹화 기준</DropdownMenuLabel>
+                <DropdownMenuLabel style={ADMIN_FONT_STYLES.MENU_ITEM}>그룹화 기준</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => handleGroupBy('')} className={`hover:${ADMIN_UI.BG_HOVER} ${ADMIN_UI.TEXT_SECONDARY}`} style={ADMIN_FONT_STYLES.MENU_ITEM}>
                   그룹화 해제

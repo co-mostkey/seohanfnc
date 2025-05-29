@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
+import type { Viewport } from 'next';
 import { PromotionItem, PromotionType, DeliveryRecord } from '@/types/promotion';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,17 +17,22 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
-import { Trash2, PlusCircle, AlertTriangle, Info, Loader2 } from 'lucide-react';
+import { Trash2, PlusCircle, AlertTriangle, Info, Loader2, Save, ArrowLeft } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
+import Link from 'next/link';
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
 const promotionTypeLabels: Record<PromotionType, string> = {
-    mainHeroVideo: '메인 히어로 비디오',
     video: '일반 비디오',
     image: '이미지',
     document: '문서',
     deliveryRecordList: '납품 실적 목록',
+    mainTitleBoxMultiVideo: '메인 다중 비디오'
+};
+
+export const viewport: Viewport = {
+    themeColor: 'black',
 };
 
 export default function EditPromotionPage() {
@@ -34,24 +40,13 @@ export default function EditPromotionPage() {
     const params = useParams();
     const promotionId = params?.id as string;
 
-    const [formData, setFormData] = useState<Partial<PromotionItem>>({
-        title: '',
-        type: 'video',
-        order: 0,
-        isVisible: true,
-        description: '',
-        videoUrl: '',
-        thumbnailUrl: '',
-        imageUrl: '',
-        documentUrl: '',
-        fileName: '',
-        records: [],
-    });
+    const [promotionData, setPromotionData] = useState<PromotionItem | null>(null);
+    const [formData, setFormData] = useState<Partial<PromotionItem>>({});
     const [deliveryRecords, setDeliveryRecords] = useState<DeliveryRecord[]>([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [initialError, setInitialError] = useState<string | null>(null); // 데이터 로딩 전용 에러 상태
+    const [initialError, setInitialError] = useState<string | null>(null);
 
     useEffect(() => {
         if (promotionId) {
@@ -67,11 +62,12 @@ export default function EditPromotionPage() {
                         throw new Error('홍보 자료를 불러오는데 실패했습니다.');
                     }
                     const data: PromotionItem = await response.json();
-                    setFormData(data); // API에서 받은 전체 데이터로 formData 설정
+                    setPromotionData(data);
+                    setFormData(data);
                     if (data.type === 'deliveryRecordList' && data.records) {
                         setDeliveryRecords(data.records);
                     } else {
-                        setDeliveryRecords([]); // 다른 타입이거나 records가 없으면 초기화
+                        setDeliveryRecords([]);
                     }
                 } catch (err: any) {
                     setInitialError(err.message || '데이터 로딩 중 알 수 없는 오류가 발생했습니다.');
@@ -89,7 +85,7 @@ export default function EditPromotionPage() {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value, type } = e.target;
-        setError(null); // 입력 시 기존 제출 오류 메시지 제거
+        setError(null);
         if (type === 'checkbox') {
             const { checked } = e.target as HTMLInputElement;
             setFormData(prev => ({ ...prev, [name]: checked }));
@@ -102,26 +98,23 @@ export default function EditPromotionPage() {
 
     const handleTypeChange = (value: string) => {
         const newType = value as PromotionType;
-        setError(null); // 입력 시 기존 제출 오류 메시지 제거
+        setError(null);
         setFormData(prev => {
             const newState: Partial<PromotionItem> = {
                 ...prev,
                 type: newType,
             };
-            // 타입 변경 시 관련 필드만 유지하고 나머지는 초기화 또는 undefined로 설정
-            newState.videoUrl = (newType === 'video' || newType === 'mainHeroVideo') ? prev.videoUrl : '';
-            newState.thumbnailUrl = (newType === 'video' || newType === 'mainHeroVideo') ? prev.thumbnailUrl : '';
-            newState.imageUrl = newType === 'image' ? prev.imageUrl : '';
-            newState.documentUrl = newType === 'document' ? prev.documentUrl : '';
-            newState.fileName = newType === 'document' ? prev.fileName : '';
+            newState.videoUrl = newType === 'video' ? prev.videoUrl : undefined;
+            newState.thumbnailUrl = newType === 'video' ? prev.thumbnailUrl : undefined;
+            newState.videoUrls = newType === 'mainTitleBoxMultiVideo' ? (prev.videoUrls || ['']) : undefined;
+            newState.imageUrl = newType === 'image' ? prev.imageUrl : undefined;
+            newState.documentUrl = newType === 'document' ? prev.documentUrl : undefined;
+            newState.fileName = newType === 'document' ? prev.fileName : undefined;
 
             if (newType !== 'deliveryRecordList') {
-                newState.records = []; // deliveryRecordList가 아니면 records 초기화
+                newState.records = [];
                 setDeliveryRecords([]);
             } else {
-                // deliveryRecordList로 변경 시, 기존 deliveryRecords 상태를 유지하거나, formData.records를 사용
-                // 여기서는 deliveryRecords 상태가 이미 관리되고 있으므로 별도 조치 필요 없음
-                // 단, 최초 로딩 시 deliveryRecordList 였다가 다른 타입으로 변경 후 다시 deliveryRecordList로 돌아올 때를 대비
                 setDeliveryRecords(prev.records || []);
             }
             return newState;
@@ -133,7 +126,7 @@ export default function EditPromotionPage() {
         setDeliveryRecords(prev => [...prev, { id: uuidv4(), company: '', project: '', date: '', isApartment: false }]);
     };
 
-    const handleDeliveryRecordChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleDeliveryRecordChange = (index: number, e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value, type } = e.target;
         setError(null);
         const updatedRecords = [...deliveryRecords];
@@ -151,6 +144,28 @@ export default function EditPromotionPage() {
         setDeliveryRecords(prev => prev.filter((_, i) => i !== index));
     };
 
+    const handleVideoUrlChange = (index: number, value: string) => {
+        setFormData(prev => {
+            const newVideoUrls = [...(prev.videoUrls || [])];
+            newVideoUrls[index] = value;
+            return { ...prev, videoUrls: newVideoUrls };
+        });
+    };
+
+    const addVideoUrlField = () => {
+        setFormData(prev => ({
+            ...prev,
+            videoUrls: [...(prev.videoUrls || []), '']
+        }));
+    };
+
+    const removeVideoUrlField = (index: number) => {
+        setFormData(prev => ({
+            ...prev,
+            videoUrls: (prev.videoUrls || []).filter((_, i) => i !== index)
+        }));
+    };
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setIsSubmitting(true);
@@ -161,32 +176,29 @@ export default function EditPromotionPage() {
             setIsSubmitting(false);
             return;
         }
-        if (!promotionId || !formData.id) {
-            setError('홍보 자료 ID가 유효하지 않습니다. 페이지를 새로고침해주세요.');
+        if (!promotionId || !formData.id || !promotionData) {
+            setError('홍보 자료 ID 또는 원본 데이터가 유효하지 않습니다. 페이지를 새로고침해주세요.');
             setIsSubmitting(false);
             return;
         }
 
         const payload: PromotionItem = {
-            ...formData, // 기존 formData를 기본으로 사용
-            id: promotionId, // URL에서 가져온 ID를 사용 (formData.id와 동일해야 함)
+            id: promotionId,
             title: formData.title!,
             type: formData.type!,
             order: formData.order || 0,
             isVisible: formData.isVisible === undefined ? true : formData.isVisible,
             description: formData.description || '',
-            videoUrl: (formData.type === 'video' || formData.type === 'mainHeroVideo') ? formData.videoUrl : undefined,
-            thumbnailUrl: (formData.type === 'video' || formData.type === 'mainHeroVideo') ? formData.thumbnailUrl : undefined,
+            videoUrl: formData.type === 'video' ? formData.videoUrl : undefined,
+            thumbnailUrl: formData.type === 'video' ? formData.thumbnailUrl : undefined,
+            videoUrls: formData.type === 'mainTitleBoxMultiVideo' ? formData.videoUrls : undefined,
             imageUrl: formData.type === 'image' ? formData.imageUrl : undefined,
             documentUrl: formData.type === 'document' ? formData.documentUrl : undefined,
             fileName: formData.type === 'document' ? formData.fileName : undefined,
-            records: formData.type === 'deliveryRecordList' ? deliveryRecords : [],
-            // createdAt은 API에서 관리하므로 payload에서 제거하거나, 기존 값 그대로 전달
-            // createdAt: formData.createdAt, 
+            records: formData.type === 'deliveryRecordList' ? deliveryRecords : undefined,
+            createdAt: promotionData.createdAt,
             updatedAt: new Date().toISOString(),
         };
-        // API에 전달하지 않을 필드가 formData에 있다면 여기서 제거
-        delete payload.createdAt; // createdAt은 PUT 요청 시 보내지 않음 (API가 자동 관리)
 
         try {
             const response = await fetch(`${basePath}/api/promotions/${promotionId}`, {
@@ -200,9 +212,8 @@ export default function EditPromotionPage() {
                 throw new Error(errorData.message || '홍보 자료 수정에 실패했습니다.');
             }
 
-            alert('홍보 자료가 성공적으로 수정되었습니다.');
             router.push('/admin/promotions');
-            router.refresh(); // 목록 페이지 데이터 갱신
+            router.refresh();
         } catch (err: any) {
             setError(err.message || '수정 중 알 수 없는 오류가 발생했습니다.');
             console.error('Error updating promotion item:', err);
@@ -223,14 +234,20 @@ export default function EditPromotionPage() {
     if (initialError) {
         return (
             <div className="container mx-auto py-8 px-4 md:px-6 text-center">
-                <div className="max-w-md mx-auto bg-white dark:bg-slate-800 shadow-lg rounded-lg p-8">
-                    <AlertTriangle className="h-16 w-16 mx-auto text-red-500 mb-4" />
-                    <h2 className="text-2xl font-semibold text-red-700 dark:text-red-400 mb-3">오류 발생</h2>
-                    <p className="text-gray-600 dark:text-gray-300 mb-6">{initialError}</p>
-                    <Button onClick={() => router.push('/admin/promotions')} className="w-full bg-sky-600 hover:bg-sky-700 text-white">
-                        홍보 자료 목록으로 돌아가기
-                    </Button>
-                </div>
+                <Card className="max-w-md mx-auto p-6 md:p-8">
+                    <CardHeader className="items-center">
+                        <AlertTriangle className="h-16 w-16 mx-auto text-red-500 mb-4" />
+                        <CardTitle className="text-2xl font-semibold text-red-700 dark:text-red-400 mb-3">오류 발생</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-gray-600 dark:text-gray-300 mb-6">{initialError}</p>
+                    </CardContent>
+                    <CardFooter className="flex justify-center">
+                        <Button onClick={() => router.push('/admin/promotions')} className="w-full max-w-xs bg-sky-600 hover:bg-sky-700 text-white">
+                            홍보 자료 목록으로 돌아가기
+                        </Button>
+                    </CardFooter>
+                </Card>
             </div>
         );
     }
@@ -238,9 +255,19 @@ export default function EditPromotionPage() {
     return (
         <div className="container mx-auto py-8 px-4 md:px-6">
             <Card className="max-w-3xl mx-auto">
-                <CardHeader>
-                    <CardTitle className="text-2xl font-bold">홍보 자료 수정</CardTitle>
-                    <CardDescription>ID: {promotionId} - 기존 홍보 콘텐츠의 내용을 수정합니다.</CardDescription>
+                <CardHeader className="flex flex-row items-center justify-between">
+                    <div className="flex items-center">
+                        <Button variant="outline" size="icon" asChild className="mr-4">
+                            <Link href="/admin/promotions">
+                                <ArrowLeft className="h-5 w-5" />
+                                <span className="sr-only">뒤로 가기</span>
+                            </Link>
+                        </Button>
+                        <div>
+                            <CardTitle className="text-2xl font-bold">홍보 자료 수정</CardTitle>
+                            <CardDescription>ID: {promotionId}</CardDescription>
+                        </div>
+                    </div>
                 </CardHeader>
                 <form onSubmit={handleSubmit}>
                     <CardContent className="space-y-6 py-6">
@@ -250,143 +277,162 @@ export default function EditPromotionPage() {
                                 <span>{error}</span>
                             </div>
                         )}
-
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <Label htmlFor="id" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">고유 ID</Label>
-                                <Input id="id" name="id" type="text" value={formData.id || ''} readOnly className="bg-gray-100 dark:bg-gray-700 cursor-not-allowed" />
-                                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">이 ID는 변경할 수 없습니다.</p>
+                                <Label htmlFor="title" className="font-semibold">제목 <span className="text-red-500">*</span></Label>
+                                <Input id="title" name="title" value={formData.title || ''} onChange={handleChange} placeholder="홍보 자료 제목" required />
                             </div>
                             <div>
-                                <Label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">제목 <span className="text-red-500">*</span></Label>
-                                <Input id="title" name="title" type="text" value={formData.title || ''} onChange={handleChange} required placeholder="홍보 자료의 제목" />
+                                <Label htmlFor="type" className="font-semibold">타입 <span className="text-red-500">*</span></Label>
+                                <Select name="type" value={formData.type} onValueChange={handleTypeChange}>
+                                    <SelectTrigger id="type">
+                                        <SelectValue placeholder="타입 선택" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {Object.entries(promotionTypeLabels).map(([typeVal, label]) => (
+                                            <SelectItem key={typeVal} value={typeVal}>{label}</SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
                             </div>
                         </div>
 
                         <div>
-                            <Label htmlFor="type" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">타입 <span className="text-red-500">*</span></Label>
-                            <Select name="type" value={formData.type} onValueChange={handleTypeChange} required>
-                                <SelectTrigger>
-                                    <SelectValue placeholder="홍보 자료 유형 선택" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {Object.entries(promotionTypeLabels).map(([key, label]) => (
-                                        <SelectItem key={key} value={key}>{label}</SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
+                            <Label htmlFor="description" className="font-semibold">설명</Label>
+                            <Textarea id="description" name="description" value={formData.description || ''} onChange={handleChange} placeholder="홍보 자료 설명 (선택 사항)" rows={3} />
                         </div>
 
-                        <div>
-                            <Label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">설명</Label>
-                            <Textarea id="description" name="description" value={formData.description || ''} onChange={handleChange} placeholder="홍보 자료에 대한 간략한 설명" rows={3} />
-                        </div>
-
-                        {(formData.type === 'video' || formData.type === 'mainHeroVideo') && (
+                        {formData.type === 'video' && (
                             <>
-                                <div className="space-y-1">
-                                    <Label htmlFor="videoUrl">비디오 URL</Label>
-                                    <Input name="videoUrl" id="videoUrl" value={formData.videoUrl || ''} onChange={handleChange} placeholder="/videos/example.mp4 또는 https://..." />
+                                <div>
+                                    <Label htmlFor="videoUrl" className="font-semibold">비디오 URL</Label>
+                                    <Input id="videoUrl" name="videoUrl" value={formData.videoUrl || ''} onChange={handleChange} placeholder="예: /videos/promo.mp4 또는 YouTube URL" />
                                 </div>
-                                <div className="space-y-1">
-                                    <Label htmlFor="thumbnailUrl">썸네일 이미지 URL</Label>
-                                    <Input name="thumbnailUrl" id="thumbnailUrl" value={formData.thumbnailUrl || ''} onChange={handleChange} placeholder="/images/thumb.jpg 또는 https://..." />
+                                <div>
+                                    <Label htmlFor="thumbnailUrl" className="font-semibold">썸네일 URL (선택)</Label>
+                                    <Input id="thumbnailUrl" name="thumbnailUrl" value={formData.thumbnailUrl || ''} onChange={handleChange} placeholder="예: /images/promo_thumb.jpg" />
                                 </div>
                             </>
                         )}
-                        {formData.type === 'image' && (
-                            <div className="space-y-1">
-                                <Label htmlFor="imageUrl">이미지 URL</Label>
-                                <Input name="imageUrl" id="imageUrl" value={formData.imageUrl || ''} onChange={handleChange} placeholder="/images/example.jpg 또는 https://..." />
+
+                        {formData.type === 'mainTitleBoxMultiVideo' && (
+                            <div className="space-y-4">
+                                <Label className="font-semibold">메인 타이틀 다중 비디오 URL들</Label>
+                                {(formData.videoUrls || []).map((url, index) => (
+                                    <div key={index} className="flex items-center space-x-2">
+                                        <Input
+                                            name={`videoUrl-${index}`}
+                                            value={url}
+                                            onChange={(e) => handleVideoUrlChange(index, e.target.value)}
+                                            placeholder={`비디오 URL #${index + 1}`}
+                                            className="flex-grow"
+                                        />
+                                        <Button type="button" variant="ghost" size="icon" onClick={() => removeVideoUrlField(index)} disabled={(formData.videoUrls?.length ?? 0) <= 1 && index === 0}>
+                                            <Trash2 className="h-4 w-4 text-red-500" />
+                                        </Button>
+                                    </div>
+                                ))}
+                                <Button type="button" variant="outline" size="sm" onClick={addVideoUrlField} className="mt-2">
+                                    <PlusCircle className="mr-2 h-4 w-4" />
+                                    비디오 URL 추가
+                                </Button>
+                                {(formData.videoUrls || []).length === 0 && (
+                                    <p className="text-xs text-gray-500">첫번째 URL을 추가해주세요.</p>
+                                )}
                             </div>
                         )}
+
+                        {formData.type === 'image' && (
+                            <div>
+                                <Label htmlFor="imageUrl" className="font-semibold">이미지 URL</Label>
+                                <Input id="imageUrl" name="imageUrl" value={formData.imageUrl || ''} onChange={handleChange} placeholder="예: /images/promo_banner.jpg" />
+                            </div>
+                        )}
+
                         {formData.type === 'document' && (
                             <>
-                                <div className="space-y-1">
-                                    <Label htmlFor="documentUrl">문서 URL</Label>
-                                    <Input name="documentUrl" id="documentUrl" value={formData.documentUrl || ''} onChange={handleChange} placeholder="/docs/doc.pdf 또는 https://..." />
+                                <div>
+                                    <Label htmlFor="documentUrl" className="font-semibold">문서 URL</Label>
+                                    <Input id="documentUrl" name="documentUrl" value={formData.documentUrl || ''} onChange={handleChange} placeholder="예: /docs/introduction.pdf" />
                                 </div>
-                                <div className="space-y-1">
-                                    <Label htmlFor="fileName">파일 이름 (표시용)</Label>
-                                    <Input name="fileName" id="fileName" value={formData.fileName || ''} onChange={handleChange} placeholder="예: 회사소개서.pdf" />
+                                <div>
+                                    <Label htmlFor="fileName" className="font-semibold">파일 표시 이름 (선택)</Label>
+                                    <Input id="fileName" name="fileName" value={formData.fileName || ''} onChange={handleChange} placeholder="예: 회사소개서.pdf" />
                                 </div>
                             </>
                         )}
 
                         {formData.type === 'deliveryRecordList' && (
-                            <div className="space-y-4 pt-4 border-t mt-4">
-                                <h3 className="text-lg font-semibold text-gray-800 dark:text-white">납품 실적 목록 관리</h3>
-                                {deliveryRecords.length === 0 && (
-                                    <div className="text-center text-gray-500 dark:text-gray-400 py-4">
-                                        <Info className="w-8 h-8 mx-auto mb-2 text-gray-400" />
-                                        <p>아직 추가된 납품 실적이 없습니다.</p>
-                                        <p className="text-sm">아래 '납품 실적 추가' 버튼을 클릭하여 새 실적을 등록하세요.</p>
-                                    </div>
-                                )}
+                            <div className="space-y-4">
+                                <div className="flex justify-between items-center">
+                                    <h3 className="text-lg font-semibold">납품 실적 관리</h3>
+                                    <Button type="button" variant="outline" size="sm" onClick={addDeliveryRecord}>
+                                        <PlusCircle className="mr-2 h-4 w-4" />실적 추가
+                                    </Button>
+                                </div>
+                                {deliveryRecords.length === 0 && <p className="text-sm text-gray-500">납품 실적이 없습니다. 추가 버튼을 눌러 입력하세요.</p>}
                                 {deliveryRecords.map((record, index) => (
-                                    <Card key={record.id || index} className="bg-slate-50 dark:bg-slate-800 p-4 relative"> {/* key에 index 추가 */}
-                                        <Button
-                                            type="button"
-                                            variant="ghost"
-                                            size="icon"
-                                            className="absolute top-2 right-2 text-red-500 hover:text-red-700 hover:bg-red-100 dark:hover:bg-red-700/30 h-7 w-7"
-                                            onClick={() => removeDeliveryRecord(index)}
-                                        >
-                                            <Trash2 className="h-4 w-4" />
-                                        </Button>
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                            <div className="space-y-1">
-                                                <Label htmlFor={`record-company-${record.id || index}`}>회사명</Label>
-                                                <Input name="company" id={`record-company-${record.id || index}`} value={record.company} onChange={(e) => handleDeliveryRecordChange(index, e)} placeholder="예: 한국전력공사" />
+                                    <div key={record.id || index} className="p-4 border rounded-md space-y-3 bg-gray-50 dark:bg-slate-700/50">
+                                        <div className="flex justify-between items-center">
+                                            <p className="font-medium text-sm">항목 #{index + 1}</p>
+                                            <Button type="button" variant="ghost" size="icon" onClick={() => removeDeliveryRecord(index)}>
+                                                <Trash2 className="h-4 w-4 text-red-500" />
+                                            </Button>
+                                        </div>
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                            <div>
+                                                <Label htmlFor={`record-company-${index}`} className="text-xs">고객명</Label>
+                                                <Input id={`record-company-${index}`} name="company" value={record.company} onChange={(e) => handleDeliveryRecordChange(index, e)} placeholder="고객사명" />
                                             </div>
-                                            <div className="space-y-1">
-                                                <Label htmlFor={`record-project-${record.id || index}`}>프로젝트명</Label>
-                                                <Input name="project" id={`record-project-${record.id || index}`} value={record.project} onChange={(e) => handleDeliveryRecordChange(index, e)} placeholder="예: 차세대 전력 시스템" />
+                                            <div>
+                                                <Label htmlFor={`record-project-${index}`} className="text-xs">프로젝트명</Label>
+                                                <Input id={`record-project-${index}`} name="project" value={record.project} onChange={(e) => handleDeliveryRecordChange(index, e)} placeholder="프로젝트명" />
                                             </div>
-                                            <div className="space-y-1">
-                                                <Label htmlFor={`record-date-${record.id || index}`}>납품일 (YYYY-MM)</Label>
-                                                <Input name="date" id={`record-date-${record.id || index}`} value={record.date} onChange={(e) => handleDeliveryRecordChange(index, e)} placeholder="2024-07" />
-                                            </div>
-                                            <div className="flex items-center pt-6 space-x-2">
-                                                <Checkbox name="isApartment" id={`record-isApartment-${record.id || index}`} checked={record.isApartment} onCheckedChange={(checked) => handleDeliveryRecordChange(index, { target: { name: 'isApartment', value: String(checked), type: 'checkbox' } } as any)} />
-                                                <Label htmlFor={`record-isApartment-${record.id || index}`} className="text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer">아파트 건설</Label>
+                                            <div>
+                                                <Label htmlFor={`record-date-${index}`} className="text-xs">납품(완료)일</Label>
+                                                <Input id={`record-date-${index}`} name="date" type="text" value={record.date} onChange={(e) => handleDeliveryRecordChange(index, e)} placeholder="YYYY-MM-DD 또는 YYYY-MM" />
                                             </div>
                                         </div>
-                                    </Card>
+                                        <div className="flex items-center space-x-2">
+                                            <Checkbox
+                                                id={`record-isApartment-${index}`}
+                                                name="isApartment"
+                                                checked={record.isApartment}
+                                                onCheckedChange={(checked) => {
+                                                    const event = { target: { name: "isApartment", value: String(checked), type: "checkbox", checked: Boolean(checked) } } as unknown as React.ChangeEvent<HTMLInputElement>;
+                                                    handleDeliveryRecordChange(index, event);
+                                                }}
+                                            />
+                                            <Label htmlFor={`record-isApartment-${index}`} className="text-xs font-normal">아파트/건설사 프로젝트</Label>
+                                        </div>
+                                    </div>
                                 ))}
-                                <Button type="button" variant="outline" onClick={addDeliveryRecord} className="w-full border-dashed hover:border-solid hover:bg-slate-50 dark:hover:bg-slate-700">
-                                    <PlusCircle className="mr-2 h-4 w-4" /> 납품 실적 추가
-                                </Button>
                             </div>
                         )}
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t mt-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center pt-4">
                             <div>
-                                <Label htmlFor="order" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">표시 순서</Label>
-                                <Input id="order" name="order" type="number" value={formData.order || 0} onChange={handleChange} min={0} />
-                                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">숫자가 낮을수록 목록에서 먼저 표시됩니다.</p>
+                                <Label htmlFor="order" className="font-semibold">표시 순서</Label>
+                                <Input id="order" name="order" type="number" value={formData.order || 0} onChange={handleChange} />
                             </div>
-                            <div className="flex items-center pt-7 space-x-2">
-                                <Checkbox id="isVisible" name="isVisible" checked={!!formData.isVisible} onCheckedChange={(checked) => handleChange({ target: { name: 'isVisible', checked, type: 'checkbox' } } as any)} />
-                                <Label htmlFor="isVisible" className="text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer">사용자에게 공개</Label>
+                            <div className="flex items-center space-x-3 pt-5">
+                                <Checkbox id="isVisible" name="isVisible" checked={!!formData.isVisible} onCheckedChange={(checkedState) => setFormData(prev => ({ ...prev, isVisible: Boolean(checkedState) }))} />
+                                <Label htmlFor="isVisible" className="font-semibold text-sm">공개 여부 (체크 시 사용자에게 공개)</Label>
                             </div>
                         </div>
+
                     </CardContent>
-                    <CardFooter className="border-t px-6 py-4 bg-gray-50 dark:bg-gray-800">
-                        <div className="flex justify-end gap-2 w-full">
-                            <Button type="button" variant="outline" onClick={() => router.back()}>
-                                취소
-                            </Button>
-                            <Button type="submit" disabled={isSubmitting || isLoading} className="bg-sky-600 hover:bg-sky-700 text-white">
-                                {isSubmitting ? (
-                                    <>
-                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" /> 저장 중...
-                                    </>
-                                ) : (
-                                    '홍보 자료 저장'
-                                )}
-                            </Button>
-                        </div>
+                    <CardFooter className="flex justify-end space-x-3 border-t pt-6">
+                        <Button type="button" variant="outline" onClick={() => router.back()} disabled={isSubmitting}>
+                            취소
+                        </Button>
+                        <Button type="submit" disabled={isSubmitting || isLoading} className="bg-sky-600 hover:bg-sky-700 text-white">
+                            {isSubmitting ? (
+                                <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> 저장 중...</>
+                            ) : (
+                                <><Save className="mr-2 h-4 w-4" /> 변경사항 저장</>
+                            )}
+                        </Button>
                     </CardFooter>
                 </form>
             </Card>

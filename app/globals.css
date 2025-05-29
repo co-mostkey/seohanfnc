@@ -570,8 +570,8 @@ html {
 
 /* Custom scrollbar styles - 개선된 버전 */
 .custom-scrollbar::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
@@ -580,22 +580,17 @@ html {
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.3);
   border-radius: 10px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.5);
 }
 
-/* 스크롤 관련 중요 속성 */
 .custom-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.5) rgba(255, 255, 255, 0.1);
-  -webkit-overflow-scrolling: touch;
-  overflow-y: auto;
-  overflow-x: hidden;
-  display: block;
+  scrollbar-color: rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.1);
 }
 
 /* 스크롤바 숨김 및 자동 스크롤 관련 스타일 */

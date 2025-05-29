@@ -68,7 +68,10 @@
           "cautions": [
             "반드시 1회에 1인이 낙하해야 합니다.",
             "다음 탈출자는 전 탈출자가 착지한 후, 탈출하도록 합니다 (권고)."
-          ]
+          ],
+          "sortOrder": 1,
+          "isPublished": true,
+          "categoryId": "safety-equipment"
         },
         {
           "id": "Sloping-Rescue-Chute",
@@ -133,7 +136,10 @@
             "다음 탈출자는 전 탈출자가 착지한 후, 탈출하도록 합니다 (권고).",
             "탈출전 지상에 반드시 설치를 위한 요원이 배치되어야 합니다."
           ],
-          "showInProductList": true
+          "showInProductList": true,
+          "sortOrder": 2,
+          "isPublished": true,
+          "categoryId": "safety-equipment"
         },
         {
           "id": "Fire-Truck-Rescue-Equipment",
@@ -190,7 +196,10 @@
             "반드시 1회에 1인이 낙하해야 합니다.",
             "다음 탈출자는 전 탈출자가 착지한 후, 탈출하도록 합니다 (권고)."
           ],
-          "showInProductList": true
+          "showInProductList": true,
+          "sortOrder": 3,
+          "isPublished": true,
+          "categoryId": "safety-equipment"
         },
         {
           "id": "Air-Slide",
@@ -258,7 +267,10 @@
             "별도의 보조인원이 없어도, 1인이 설치 가능함.",
             "빠른 탈출시간으로 단시간에 많은 인원이 피난 가능함. (20명 / 1 min.)",
             "임산부, 노약자, 장애우도 제약없이 탈출 가능함."
-          ]
+          ],
+          "sortOrder": 4,
+          "isPublished": true,
+          "categoryId": "safety-equipment"
         },
         {
           "id": "Solid-Aerosol-Extinguisher",
@@ -366,7 +378,10 @@
               "content": "발전소/전기실 : 변전, 변압실, 케이블실, 배전함, 전산실, 교환실, 관제실, 방송실등\n\n자동차/선박/항공 : 기관실, 보일러실, 화물실, 엔진실, 펌프실\n\n생산설비 : 케미컬, 가스생산, 공급시설, 반도체, 석유화학시설등\n\n문화재/보관소 : 박물관, 미술관, 문화재, 도서관, 액세스 자료 보관소\n\n군용장비 : 전투기, 헬리콥터, 전차, 장갑차, 자주포, 군함정등 중요시설"
             }
           ],
-          "showInProductList": true
+          "showInProductList": true,
+          "sortOrder": 5,
+          "isPublished": true,
+          "categoryId": "safety-equipment"
         },
         {
           "id": "Outdoor-Human-Disinfector",
@@ -460,7 +475,10 @@
               "title": "적용현장",
               "content": "공장 출입구 : 대형 공장, 물류창고, 식품가공시설 등 다수 인원이 출입하는 산업시설\n\n상업시설 : 백화점, 대형마트, 쇼핑몰, 영화관 등 다중이용시설\n\n교육시설 : 학교, 유치원, 학원 등 교육관련 시설\n\n의료시설 : 병원, 요양원, 의원, 약국 등 보건의료시설\n\n공공시설 : 관공서, 도서관, 박물관 등 공공이용시설"
             }
-          ]
+          ],
+          "sortOrder": 6,
+          "isPublished": true,
+          "categoryId": "safety-equipment"
         },
         {
           "id": "Indoor-Human-Disinfector",
@@ -527,7 +545,10 @@
             "설치 후 정기적인 유지보수 점검이 필요합니다.",
             "직접적인 분사가 인체에 닿지 않도록 주의해야 합니다."
           ],
-          "showInProductList": true
+          "showInProductList": true,
+          "sortOrder": 7,
+          "isPublished": true,
+          "categoryId": "safety-equipment"
         },
         {
           "id": "Vehicle-Disinfector",
@@ -600,7 +621,10 @@
               "content": "차량 소독이 필요한 실외 환경\n\n물류센터 출입구 : 입출고 차량 소독\n\n농장/축산시설 : 출입 차량 방역\n\n공항/항만 시설 : 수출입 물류 방역\n\n대형 공장 : 생산 물품 운송 차량 소독\n\n긴급 방역 상황 : 바이러스 확산 방지를 위한 이동형 방역"
             }
           ],
-          "showInProductList": true
+          "showInProductList": true,
+          "sortOrder": 8,
+          "isPublished": true,
+          "categoryId": "safety-equipment"
         },
         {
           "id": "Portable-Water-Tank",
@@ -691,7 +715,10 @@
             "겨울철 영하의 온도에서는 얼음 형성으로 인한 손상이 발생할 수 있으니 주의하십시오.",
             "정기적으로 손상 여부를 점검하여 누수를 예방하십시오."
           ],
-          "showInProductList": true
+          "showInProductList": true,
+          "sortOrder": 9,
+          "isPublished": true,
+          "categoryId": "safety-equipment"
         }
       ]
     },
@@ -785,7 +812,10 @@
               "path": "/documents/인명구조매트_품질인증서.pdf",
               "type": "pdf"
             }
-          ]
+          ],
+          "sortOrder": 10,
+          "isPublished": true,
+          "categoryId": "descenders"
         },
         {
           "id": "Handy-Descending-Life-Line",
@@ -858,7 +888,10 @@
               "path": "/documents/products/Handy-Descending-Life-Line/manual.pdf",
               "type": "pdf"
             }
-          ]
+          ],
+          "sortOrder": 11,
+          "isPublished": true,
+          "categoryId": "descenders"
         },
         {
           "id": "descender-hanger-summary",
@@ -868,7 +901,10 @@
           "descriptionKo": "설치 환경과 필요에 맞는 다양한 완강기 지지대를 확인하세요.",
           "image": "/images/category/descender-supports-category.jpg",
           "isSummaryPage": true,
-          "showInProductList": true
+          "showInProductList": true,
+          "sortOrder": 12,
+          "isPublished": true,
+          "categoryId": "descenders"
         }
       ]
     },
@@ -1449,7 +1485,10 @@
               "path": "/documents/products/descender-footrest-and-case/overall_manual.pdf",
               "type": "pdf"
             }
-          ]
+          ],
+          "sortOrder": 13,
+          "isPublished": true,
+          "categoryId": "descender-accessories"
         }
       ]
     },

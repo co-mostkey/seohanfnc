@@ -38,7 +38,12 @@ export default function Home() {
   const [companyData, setCompanyData] = useState<CompanyInfo | null>(null);
   const [isLoadingCompanyData, setIsLoadingCompanyData] = useState(true);
   const [heroVideoUrl, setHeroVideoUrl] = useState<string | null>(null);
+  const [mainTitleBoxPlayerVideoUrls, setMainTitleBoxPlayerVideoUrls] = useState<string[] | null>(null);
   const [deliveryRecordsData, setDeliveryRecordsData] = useState<DeliveryRecord[] | null>(null);
+  const [deliveryBoxTitle, setDeliveryBoxTitle] = useState<string | undefined>(undefined);
+  const [showButton, setShowButton] = useState<boolean>(false);
+  const [buttonText, setButtonText] = useState<string>('제품 보러가기');
+  const [buttonLink, setButtonLink] = useState<string>('/products');
   const [isLoadingPromotions, setIsLoadingPromotions] = useState(true);
 
   useEffect(() => {
@@ -96,13 +101,35 @@ export default function Home() {
           throw new Error('Failed to fetch promotions data');
         }
         const promotions: PromotionItem[] = await response.json();
-        const mainVideo = promotions.find(p => p.type === 'mainHeroVideo' && p.isVisible);
-        if (mainVideo && mainVideo.videoUrl) {
-          setHeroVideoUrl(mainVideo.videoUrl);
+        // const mainVideo = promotions.find(p => p.type === 'mainHeroVideo' && p.isVisible); // 주석 처리 또는 삭제
+        // if (mainVideo && mainVideo.videoUrl) { // 주석 처리 또는 삭제
+        //   setHeroVideoUrl(mainVideo.videoUrl); // 주석 처리 또는 삭제
+        // } else { // 주석 처리 또는 삭제
+        //   setHeroVideoUrl(null); // 기본 비디오를 사용하도록 null 설정 (또는 특정 경로 하드코딩)
+        // } // 주석 처리 또는 삭제
+        // 항상 기본 히어로 비디오를 사용하도록 heroVideoUrl 상태를 null 또는 기본값으로 유지합니다.
+        // motion.video의 src에서 heroVideoUrl이 null이면 기본 비디오(`${basePath}/hero/hero_mv.mp4`)를 사용합니다.
+        // 따라서 여기서는 heroVideoUrl 상태를 명시적으로 변경할 필요가 없을 수도 있습니다. 
+        // 만약 다른 로직에 의해 heroVideoUrl이 설정될 가능성이 있다면, 여기서 null로 초기화하는 것이 안전합니다.
+        setHeroVideoUrl(null); // 메인 히어로 비디오는 promotions.json에서 가져오지 않음
+
+        const mainTitleBoxMultiVideo = promotions.find(p => p.type === 'mainTitleBoxMultiVideo' && p.isVisible);
+        if (mainTitleBoxMultiVideo && mainTitleBoxMultiVideo.videoUrls && mainTitleBoxMultiVideo.videoUrls.length > 0) {
+          setMainTitleBoxPlayerVideoUrls(mainTitleBoxMultiVideo.videoUrls);
+          // 버튼 관련 정보 설정
+          setShowButton(mainTitleBoxMultiVideo.showButton || false);
+          setButtonText(mainTitleBoxMultiVideo.buttonText || '제품 보러가기');
+          setButtonLink(mainTitleBoxMultiVideo.buttonLink || '/products');
+        } else {
+          setMainTitleBoxPlayerVideoUrls(null);
+          setShowButton(false);
+          setButtonText('제품 보러가기');
+          setButtonLink('/products');
         }
         const deliveryData = promotions.find(p => p.type === 'deliveryRecordList' && p.isVisible);
         if (deliveryData && deliveryData.records) {
           setDeliveryRecordsData(deliveryData.records);
+          setDeliveryBoxTitle(deliveryData.boxTitle);
         }
         console.log('Promotions data for main page loaded successfully');
       } catch (error) {
@@ -235,7 +262,17 @@ export default function Home() {
           }}
         >
           <div className="flex-grow flex items-center justify-center">
-            {activeSection === 'home' && <MainTitleBox companyData={companyData} isLoading={isLoadingCompanyData} />}
+            {activeSection === 'home' && <MainTitleBox
+              companyData={companyData}
+              isLoading={isLoadingCompanyData}
+              playerVideoUrls={mainTitleBoxPlayerVideoUrls}
+              deliveryRecords={deliveryRecordsData}
+              deliveryBoxTitle={deliveryBoxTitle}
+              isLoadingPromotions={isLoadingPromotions}
+              showButton={showButton}
+              buttonText={buttonText}
+              buttonLink={buttonLink}
+            />}
             {activeSection === 'products' && <ProductsBox />}
             {activeSection === 'company' && <CompanyIntro companyData={companyData} isLoading={isLoadingCompanyData} />}
             {activeSection === 'support' && (

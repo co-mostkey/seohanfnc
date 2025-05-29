@@ -1,5 +1,5 @@
 import type React from "react"
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Inter, Playfair_Display } from "next/font/google"
 import "./globals.css"
 import { Providers } from "./providers"
@@ -26,14 +26,6 @@ export const metadata: Metadata = {
   description: "1992년 설립 이래, 최고의 기술력과 품질로 고객의 안전을 책임지는 소방안전 전문기업입니다.",
   generator: 'v0.dev',
   keywords: '서한에프앤씨, 소방안전, 완강기, 인명구조, 안전장비',
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
-    viewportFit: 'cover'
-  },
-  themeColor: '#000000',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
@@ -50,6 +42,18 @@ export const metadata: Metadata = {
     'msapplication-tap-highlight': 'no',
     'apple-mobile-web-app-capable': 'yes',
     'apple-mobile-web-app-status-bar-style': 'black-translucent'
+  }
+}
+
+// generateViewport 함수 추가
+export function generateViewport(): Viewport {
+  return {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+    viewportFit: 'cover',
+    themeColor: '#000000',
   }
 }
 

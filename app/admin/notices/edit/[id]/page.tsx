@@ -13,8 +13,14 @@ import { Notice } from '@/app/api/notices/route'; // Notice 타입을 가져옵�
 const getNoticeData = async (id: string): Promise<Notice | null> => {
   console.log(`Fetching notice data for ID (server): ${id}`);
   try {
-    // 내부 API를 상대 경로로 호출 (서버 컴포넌트에서 동작)
-    const res = await fetch(`/api/admin/posts?boardId=notice&postId=${id}`, { cache: 'no-store' });
+    // 올바른 API 경로로 수정
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+    const res = await fetch(`${baseUrl}/api/notices/${id}`, {
+      cache: 'no-store',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
 
     if (!res.ok) {
       console.error(`Failed to fetch notice ${id}: ${res.status} ${res.statusText}`);
@@ -22,24 +28,23 @@ const getNoticeData = async (id: string): Promise<Notice | null> => {
       console.error(`Error body: ${errorBody}`);
       return null;
     }
-    const data = await res.json();
-    if (data && typeof data === 'object' && !Array.isArray(data)) {
-      // title, content가 다국어 객체일 경우 Notice 타입에 맞게 변환 필요
-      // 현재 Notice 타입은 title, content를 string으로 기대함.
-      // API 응답이 Post 타입과 유사하다면 title.ko, content.ko 등으로 접근해야 함.
-      // 임시로 API 응답이 Notice 타입과 일치한다고 가정. 일치하지 않으면 아래에서 오류 발생 가능성.
-      // 또는 Notice 타입을 Post 타입의 title/content와 유사하게 변경
 
+    const response = await res.json();
+
+    // API 응답 구조에 따라 데이터 추출
+    const data = response.data || response;
+
+    if (data && typeof data === 'object' && !Array.isArray(data)) {
       // Notice 타입에 맞게 데이터 변환
-      const noticeData = {
+      const noticeData: Notice = {
         id: data.id,
-        title: (typeof data.title === 'string') ? data.title : (data.title?.ko || data.title?.en || data.title?.cn || ''),
-        content: (typeof data.content === 'string') ? data.content : (data.content?.ko || data.content?.en || data.content?.cn || ''),
+        title: data.title || '',
+        content: data.content || '',
         createdAt: data.createdAt,
         updatedAt: data.updatedAt,
-        author: (typeof data.author === 'string') ? data.author : (data.author?.name || '관리자'),
-        isPinned: data.isPinned || data.isNotice || false, // 기본값 false 추가
-        category: data.category || (Array.isArray(data.tags) && data.tags.length > 0 ? data.tags[0] : '일반'),
+        author: data.author || '관리자',
+        isPinned: data.isPinned === true, // boolean 확실히 처리
+        category: data.category || '일반',
         viewCount: data.viewCount || 0
       };
       return noticeData;

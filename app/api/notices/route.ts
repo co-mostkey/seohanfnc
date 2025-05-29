@@ -122,9 +122,24 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        // 새 공지사항 객체 생성
+        // 기존 공지사항들을 불러와서 가장 큰 번호를 찾기
+        const notices = await readItems<Notice>(NOTICES_FILE);
+        let maxNumber = 0;
+
+        notices.forEach(notice => {
+            // ID에서 숫자 부분만 추출
+            const match = notice.id.match(/^notice_(\d+)$/);
+            if (match) {
+                const num = parseInt(match[1], 10);
+                if (num > maxNumber) {
+                    maxNumber = num;
+                }
+            }
+        });
+
+        // 새 공지사항 객체 생성 (순차적인 번호 사용)
         const newNotice: Notice = {
-            id: `notice_${Date.now()}`,
+            id: `notice_${maxNumber + 1}`,
             title: body.title,
             content: body.content,
             createdAt: new Date().toISOString(),

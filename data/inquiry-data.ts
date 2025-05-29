@@ -326,7 +326,6 @@ export const addResponseToInquiry = async (inquiryId: string, response: Omit<Inq
         };
 
         inquiry.responses.push(newResponse);
-        inquiry.status = 'in_progress';
         inquiry.updatedAt = new Date().toISOString();
 
         inquiries[index] = inquiry;
@@ -427,9 +426,11 @@ export const updateInquiry = async (inquiryId: string, updatedData: Partial<Inqu
 
         if (!inquiry) return null;
 
+        // adminNotes가 삭제되지 않도록 보호
         const updatedInquiry: Inquiry = {
             ...inquiry,
             ...updatedData,
+            adminNotes: updatedData.adminNotes !== undefined ? updatedData.adminNotes : inquiry.adminNotes,
             updatedAt: new Date().toISOString()
         };
 

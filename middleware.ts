@@ -64,6 +64,13 @@ export async function middleware(request: NextRequest) {
   if (pathname.startsWith('/api/admin/') && !pathname.startsWith('/api/auth/')) {
     const sessionId = request.cookies.get('sessionId')?.value;
 
+    // /api/admin/inquiries는 일부 기능(비밀번호 확인 등)을 위해 세션 없이도 접근 가능
+    if (pathname.startsWith('/api/admin/inquiries')) {
+      // API에서 자체적으로 권한을 확인하도록 함
+      console.log(`[Middleware] 문의 API 요청 허용: ${request.method} ${pathname}`);
+      return NextResponse.next();
+    }
+
     if (!sessionId) {
       return NextResponse.json(
         { success: false, error: '관리자 인증이 필요합니다.' },

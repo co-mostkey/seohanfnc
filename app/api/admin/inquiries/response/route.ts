@@ -45,9 +45,9 @@ export async function POST(request: NextRequest) {
             }, { status: 500 });
         }
 
-        // 응답이 공개이고 문의가 대기 중이면 자동으로 처리 중으로 변경
-        if (inquiry.status === 'pending' && body.isPublic === true) {
-            await updateInquiryStatus(body.inquiryId, 'in_progress');
+        // 응답이 공개이고 문의가 대기 중이면 자동으로 답변완료로 변경
+        if (body.isPublic === true) {
+            await updateInquiryStatus(body.inquiryId, 'answered');
         }
 
         // 업데이트된 문의 정보 가져오기

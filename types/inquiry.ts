@@ -29,6 +29,7 @@ export interface Inquiry {
     company?: string;
     productId?: string;
     productName?: string;
+    password?: string; // 비밀번호 (견적 요청 등에서 사용)
     status: InquiryStatus;
     priority: InquiryPriority;
     isRead: boolean;

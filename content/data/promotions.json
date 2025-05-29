@@ -1,88 +1,111 @@
 [
-    {
-        "id": "promo-main-hero-video",
-        "type": "mainHeroVideo",
-        "title": "메인 히어로 비디오",
-        "description": "웹사이트 메인 페이지에 사용되는 배경 비디오입니다.",
-        "videoUrl": "/hero/hero_mv.mp4",
-        "thumbnailUrl": "/hero/hero_mv_thumbnail.jpg",
-        "order": 1,
-        "isVisible": true,
-        "createdAt": "2024-01-01T00:00:00Z",
-        "updatedAt": "2024-01-01T00:00:00Z"
-    },
-    {
-        "id": "promo-main-delivery-records",
-        "type": "deliveryRecordList",
-        "title": "2024년 주요 납품 실적",
-        "description": "2024년도 주요 납품 실적 목록입니다.",
-        "records": [
-            {
-                "id": "delivery-1",
-                "company": "한국도로공사",
-                "project": "고속도로 VMS 시스템",
-                "date": "2024-07",
-                "isApartment": false
-            },
-            {
-                "id": "delivery-2",
-                "company": "롯데건설",
-                "project": "롯데캐슬 시그니처 중앙공원",
-                "date": "2024-06",
-                "isApartment": true
-            },
-            {
-                "id": "delivery-3",
-                "company": "현대건설",
-                "project": "힐스테이트 더 운정",
-                "date": "2024-05",
-                "isApartment": true
-            },
-            {
-                "id": "delivery-4",
-                "company": "포스코이앤씨",
-                "project": "더샵 아르테",
-                "date": "2024-04",
-                "isApartment": true
-            },
-            {
-                "id": "delivery-5",
-                "company": "반도건설",
-                "project": "운서역 반도유보라",
-                "date": "2024-03",
-                "isApartment": true
-            },
-            {
-                "id": "delivery-6",
-                "company": "대우건설",
-                "project": "푸르지오 스타셀라49",
-                "date": "2024-02",
-                "isApartment": true
-            },
-            {
-                "id": "delivery-7",
-                "company": "태영건설",
-                "project": "데시앙 아파트",
-                "date": "2024-01",
-                "isApartment": true
-            }
-        ],
-        "order": 2,
-        "isVisible": true,
-        "createdAt": "2024-01-01T00:00:00Z",
-        "updatedAt": "2024-01-01T00:00:00Z"
-    },
-    {
-        "id": "seohanfnc-videos-01",
-        "type": "video",
-        "title": "seohanfnc-videos-01",
-        "description": "",
-        "videoUrl": "/videos/hero00.mp4",
-        "thumbnailUrl": "",
-        "records": [],
-        "order": 3,
-        "isVisible": false,
-        "createdAt": "2024-07-02T00:00:00Z",
-        "updatedAt": "2024-07-02T00:00:00Z"
-    }
+  {
+    "id": "TEST01",
+    "title": "홍보자료 테스트",
+    "type": "image",
+    "description": "홍보자료 테스트",
+    "order": 0,
+    "isVisible": true,
+    "createdAt": "2025-05-29T06:21:31.790Z",
+    "updatedAt": "2025-05-29T06:32:50.085Z",
+    "imageUrl": "/uploads/images/1748500367314_t5u6z9_02.png"
+  },
+  {
+    "id": "promo-main-delivery-records",
+    "type": "deliveryRecordList",
+    "title": "2024년 주요 납품 실적",
+    "description": "2024년도 주요 납품 실적 목록입니다.",
+    "records": [
+      {
+        "id": "delivery-1",
+        "company": "한국도로공사",
+        "project": "고속도로 VMS 시스템",
+        "date": "2024-07",
+        "isApartment": false
+      },
+      {
+        "id": "delivery-2",
+        "company": "롯데건설",
+        "project": "롯데캐슬 시그니처 중앙공원",
+        "date": "2024-06",
+        "isApartment": true
+      },
+      {
+        "id": "delivery-3",
+        "company": "현대건설",
+        "project": "힐스테이트 더 운정",
+        "date": "2024-05",
+        "isApartment": true
+      },
+      {
+        "id": "delivery-4",
+        "company": "포스코이앤씨",
+        "project": "더샵 아르테",
+        "date": "2024-04",
+        "isApartment": true
+      },
+      {
+        "id": "delivery-5",
+        "company": "반도건설",
+        "project": "운서역 반도유보라",
+        "date": "2024-03",
+        "isApartment": true
+      },
+      {
+        "id": "delivery-6",
+        "company": "대우건설",
+        "project": "푸르지오 스타셀라49",
+        "date": "2024-02",
+        "isApartment": true
+      },
+      {
+        "id": "delivery-7",
+        "company": "태영건설",
+        "project": "데시앙 아파트",
+        "date": "2024-01",
+        "isApartment": true
+      },
+      {
+        "id": "fee74c7f-546a-4fa7-a295-4aed68abe216",
+        "company": "테스트",
+        "project": "테스트",
+        "date": ""
+      }
+    ],
+    "order": 2,
+    "isVisible": true,
+    "createdAt": "2024-01-01T00:00:00Z",
+    "updatedAt": "2025-05-29T06:47:30.301Z",
+    "boxTitle": "2024년 주요 납품 실적"
+  },
+  {
+    "id": "promo-main-box-videos",
+    "type": "mainTitleBoxMultiVideo",
+    "title": "메인 타이틀 박스 연속 비디오",
+    "description": "홈페이지 메인 타이틀 박스에 표시될 두 개의 연속 재생 비디오입니다.",
+    "videoUrls": [
+      "/videos/main_box_video_01.mp4",
+      "/videos/main_box_video_02.mp4"
+    ],
+    "order": 4,
+    "isVisible": true,
+    "createdAt": "2025-05-29T00:00:00Z",
+    "updatedAt": "2025-05-29T06:59:30.013Z",
+    "showButton": true,
+    "buttonText": "제품보러가기",
+    "buttonLink": "/products"
+  },
+  {
+    "id": "테스트홍보자료",
+    "title": "테스트홍보자료",
+    "type": "document",
+    "description": "테스트홍보자료",
+    "boxTitle": "",
+    "order": 0,
+    "isVisible": true,
+    "createdAt": "2025-05-29T07:23:53.707Z",
+    "updatedAt": "2025-05-29T07:23:53.707Z",
+    "documentUrl": "/uploads/documents/1748503429877_i1vg51_______________________.pdf",
+    "fileName": "서한에프앤씨 웹사이트 이미지 스펙 가이드.pdf"
+  }
 ]

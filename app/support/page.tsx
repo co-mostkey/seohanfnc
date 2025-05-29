@@ -34,7 +34,7 @@ interface Notice {
 }
 
 const supportItems = [
-  { id: 'notice', title: '공지사항', description: '서한에프앤씨의 새로운 소식과 정보를 확인하세요.', icon: ClipboardList, href: '/support/notices' },
+  { id: 'notice', title: '공지사항', description: '서한에프앤씨의 새로운 소식과 정보를 확인하세요.', icon: ClipboardList, href: '/support/notice' },
   { id: 'quote', title: '온라인 견적', description: '필요한 제품의 견적을 간편하게 요청하세요.', icon: Calculator, href: '/support/quotation' },
   { id: 'downloads', title: '자료실', description: '제품 카탈로그, 사용 설명서 등 자료를 다운로드하세요.', icon: Download, href: '/support/downloads' },
   { id: 'certificates', title: '승인서류/카탈로그', description: '제품 관련 인증서 및 승인 서류를 확인하세요.', icon: FileArchive, href: '/support/resources' },

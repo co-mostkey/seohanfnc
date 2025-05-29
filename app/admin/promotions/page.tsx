@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { PromotionItem, promotionTypeLabels } from '@/types/promotion';
+import { PromotionItem, PromotionType } from '@/types/promotion';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import {
@@ -18,6 +18,19 @@ import { PlusCircle, Edit, Trash2, AlertTriangle, Loader2, Eye, EyeOff } from 'l
 import Link from 'next/link';
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+
+// promotionTypeLabels 상수 정의
+const promotionTypeLabels: Record<PromotionType, string> = {
+    deliveryRecordList: '납품 실적 목록',
+    video: '일반 비디오',
+    image: '이미지',
+    document: '문서',
+    mainTitleBoxMultiVideo: '메인 다중 비디오',
+    customContent: '커스텀 콘텐츠',
+    gallery: '이미지 갤러리',
+    news: '뉴스/소식',
+    timeline: '연혁/타임라인',
+};
 
 export default function AdminPromotionsPage() {
     const router = useRouter();
@@ -157,12 +170,12 @@ export default function AdminPromotionsPage() {
                                             </TableCell>
                                             <TableCell className="text-right">
                                                 <div className="flex justify-end items-center space-x-2">
-                                                    <Link href={`${basePath}/admin/promotions/edit/${item.id}`} passHref legacyBehavior>
-                                                        <Button variant="outline" size="icon" className="h-8 w-8 hover:bg-blue-100 dark:hover:bg-blue-700/30 hover:border-blue-500 dark:hover:border-blue-600">
+                                                    <Button variant="outline" size="icon" className="h-8 w-8 hover:bg-blue-100 dark:hover:bg-blue-700/30 hover:border-blue-500 dark:hover:border-blue-600" asChild>
+                                                        <Link href={`${basePath}/admin/promotions/edit/${item.id}`}>
                                                             <Edit className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                                                             <span className="sr-only">수정</span>
-                                                        </Button>
-                                                    </Link>
+                                                        </Link>
+                                                    </Button>
                                                     <Button
                                                         variant="destructive"
                                                         size="icon"

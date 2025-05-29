@@ -13,10 +13,10 @@
   "logo3dSettings": {
     "enableRotation": true,
     "rotationSpeed": 0.0048,
-    "stylePreset": "metallic",
+    "stylePreset": "glass",
     "modelScale": 1,
     "glbFileUrl": "/images/3dlogo-3d.glb",
-    "viewerBackgroundType": "transparent",
+    "viewerBackgroundType": "hdri",
     "viewerBackgroundColor": "#FFFFFF",
     "viewerBackgroundHdriPath": "",
     "scale": [

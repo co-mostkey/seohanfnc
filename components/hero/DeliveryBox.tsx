@@ -9,9 +9,10 @@ interface DeliveryBoxProps {
   wrapperClassName?: string
   deliveryData: DeliveryRecord[] | null
   isLoading: boolean
+  boxTitle?: string
 }
 
-export default function DeliveryBox({ wrapperClassName, deliveryData, isLoading }: DeliveryBoxProps) {
+export default function DeliveryBox({ wrapperClassName, deliveryData, isLoading, boxTitle }: DeliveryBoxProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
   const [isPaused, setIsPaused] = useState(false)
 
@@ -57,7 +58,7 @@ export default function DeliveryBox({ wrapperClassName, deliveryData, isLoading 
       <div className="h-full w-full">
         <div className="pt-4 px-4 overflow-auto h-full w-full">
           <h3 className="text-sm md:text-base font-semibold mb-1 md:mb-2 flex items-center relative z-10 text-white">
-            2024년 주요 납품실적
+            {boxTitle || "2024년 주요 납품실적"}
             <span className="ml-2 text-xs px-1.5 py-0.5 bg-white/20 text-white rounded-full">Premium References</span>
           </h3>
 

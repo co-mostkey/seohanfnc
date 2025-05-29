@@ -73,7 +73,7 @@ export function NoticeDetailClient({ noticeId }: NoticeDetailClientProps) {
       // 클라이언트에서는 notFound() 직접 호출 대신 다른 처리 필요
       // 예: 에러 상태 설정 또는 목록 페이지로 리다이렉트
       console.error("Notice not found on client");
-      // router.push('/support/notices'); // 필요 시 useRouter 사용
+      // router.push('/support/notice'); // 필요 시 useRouter 사용
       return;
     }
 
@@ -133,8 +133,8 @@ export function NoticeDetailClient({ noticeId }: NoticeDetailClientProps) {
             items={[
               { href: '/', text: '홈' },
               { href: '/support', text: '고객지원' },
-              { href: '/support/notices', text: '공지사항' },
-              { href: `/support/notices/${notice.id}`, text: notice.title, active: true },
+              { href: '/support/notice', text: '공지사항' },
+              { href: `/support/notice/${notice.id}`, text: notice.title, active: true },
             ]}
             className="text-white"
           />
@@ -209,7 +209,7 @@ export function NoticeDetailClient({ noticeId }: NoticeDetailClientProps) {
           <div className="grid grid-cols-1 divide-y divide-gray-200 dark:divide-gray-700">
             {prevNotice && (
               <Link
-                href={`/support/notices/${prevNotice.id}`}
+                href={`/support/notice/${prevNotice.id}`}
                 className="p-4 flex items-center hover:bg-gray-100 dark:hover:bg-gray-750 transition-colors"
               >
                 <ArrowLeft className="mr-3 h-5 w-5 text-gray-400 dark:text-gray-500" />
@@ -222,7 +222,7 @@ export function NoticeDetailClient({ noticeId }: NoticeDetailClientProps) {
 
             {nextNotice && (
               <Link
-                href={`/support/notices/${nextNotice.id}`}
+                href={`/support/notice/${nextNotice.id}`}
                 className="p-4 flex items-center hover:bg-gray-100 dark:hover:bg-gray-750 transition-colors"
               >
                 <ArrowRight className="mr-3 h-5 w-5 text-gray-400 dark:text-gray-500" />
@@ -237,7 +237,7 @@ export function NoticeDetailClient({ noticeId }: NoticeDetailClientProps) {
 
         {/* 목록으로 버튼 */}
         <div className="flex justify-center mt-8">
-          <Link href="/support/notices" >
+          <Link href="/support/notice" >
             <Button variant="outline" className="bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700">
               <FiArrowLeft className="mr-2 h-4 w-4" />
               목록으로

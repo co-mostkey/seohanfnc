@@ -13,6 +13,10 @@ import { sendInquiryNotification } from '@/lib/email';
  */
 export async function GET(request: NextRequest) {
     try {
+        // 세션 확인 (옵션)
+        const sessionId = request.cookies.get('sessionId')?.value;
+        const isAdmin = !!sessionId; // 간단한 확인만 수행
+
         const { searchParams } = new URL(request.url);
         const id = searchParams?.get('id');
         const type = searchParams?.get('type');
@@ -41,6 +45,21 @@ export async function GET(request: NextRequest) {
                     success: false,
                     error: '문의를 찾을 수 없습니다.'
                 }, { status: 404 });
+            }
+
+            // 접근 키 확인 (견적 요청의 경우)
+            const accessKeyParam = searchParams?.get('password'); // 기존 parameter 이름 유지 (하위 호환성)
+            if (inquiry.type === 'quotation' && !isAdmin) {
+                // adminNotes에서 접근 키 추출
+                const accessKeyMatch = inquiry.adminNotes?.match(/접근키:\s*([A-Z0-9-]+)/);
+                const serverAccessKey = accessKeyMatch ? accessKeyMatch[1] : null;
+
+                if (serverAccessKey && (!accessKeyParam || accessKeyParam.toUpperCase() !== serverAccessKey)) {
+                    return NextResponse.json({
+                        success: false,
+                        error: '접근 키가 올바르지 않습니다.'
+                    }, { status: 401 });
+                }
             }
 
             // 조회 시 읽음 상태로 변경

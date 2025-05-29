@@ -1,5 +1,5 @@
 # 서한F&C 웹사이트 - NHN 클라우드 배포용 Dockerfile (최신 보안 강화)
-FROM node:22.11.0-alpine3.20 AS base
+FROM node:22-alpine AS base
 
 # 보안 업데이트 및 필수 시스템 패키지 설치
 RUN apk update && apk upgrade && \
@@ -14,11 +14,14 @@ RUN npm install -g pnpm@latest
 
 # 종속성 설치 단계
 FROM base AS deps
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
 COPY package.json pnpm-lock.yaml* ./
-RUN pnpm install --frozen-lockfile --prod=false
+RUN pnpm install --frozen-lockfile
 
 # 빌드 단계
 FROM base AS builder
+WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
@@ -26,7 +29,7 @@ COPY . .
 RUN pnpm build
 
 # 런타임 단계 (최신 보안 강화)
-FROM node:22.11.0-alpine3.20 AS runner
+FROM base AS runner
 
 # 보안 업데이트 및 필수 패키지
 RUN apk update && apk upgrade && \

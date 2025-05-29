@@ -21,7 +21,9 @@ import {
     ArrowLeft,
     Star,
     Tag,
-    Building
+    Building,
+    RefreshCw,
+    Package
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
@@ -281,122 +283,142 @@ export default function AdminInquiriesClient() {
     return (
         <div className="space-y-6">
             {/* Header */}
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
                 <div>
                     <div className="flex items-center gap-3 mb-2">
-                        <Button variant="outline" size="sm" asChild>
+                        <Button variant="ghost" size="sm" asChild className="hover:bg-gray-100 dark:hover:bg-gray-800">
                             <Link href="/admin" >
                                 <ArrowLeft className="h-4 w-4 mr-2" />
                                 관리자 메인
                             </Link>
                         </Button>
-                        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">통합 문의 관리</h1>
                     </div>
-                    <p className="text-gray-600 dark:text-gray-400">모든 종류의 문의사항을 통합 관리할 수 있습니다.</p>
+                    <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">통합 문의 관리</h1>
+                    <p className="text-gray-600 dark:text-gray-400 mt-1">모든 종류의 문의사항을 한 곳에서 관리할 수 있습니다.</p>
+                </div>
+                <Button onClick={fetchAllInquiries} variant="outline" className="flex items-center gap-2">
+                    <RefreshCw className="h-4 w-4" />
+                    새로고침
+                </Button>
+            </div>
+            {/* Stats Cards - Improved Design */}
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 mb-8">
+                <div className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 p-5 rounded-xl shadow-sm border border-blue-200 dark:border-blue-800">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <p className="text-xs font-medium text-blue-700 dark:text-blue-300">전체 문의</p>
+                            <p className="text-2xl font-bold text-blue-900 dark:text-blue-100 mt-1">{stats.total}</p>
+                        </div>
+                        <div className="bg-blue-200 dark:bg-blue-800 p-3 rounded-lg">
+                            <MessageCircle className="h-5 w-5 text-blue-700 dark:text-blue-300" />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20 p-5 rounded-xl shadow-sm border border-yellow-200 dark:border-yellow-800">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <p className="text-xs font-medium text-yellow-700 dark:text-yellow-300">답변대기</p>
+                            <p className="text-2xl font-bold text-yellow-900 dark:text-yellow-100 mt-1">{stats.pending}</p>
+                        </div>
+                        <div className="bg-yellow-200 dark:bg-yellow-800 p-3 rounded-lg">
+                            <Clock className="h-5 w-5 text-yellow-700 dark:text-yellow-300" />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 p-5 rounded-xl shadow-sm border border-green-200 dark:border-green-800">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <p className="text-xs font-medium text-green-700 dark:text-green-300">답변완료</p>
+                            <p className="text-2xl font-bold text-green-900 dark:text-green-100 mt-1">{stats.answered}</p>
+                        </div>
+                        <div className="bg-green-200 dark:bg-green-800 p-3 rounded-lg">
+                            <CheckCircle className="h-5 w-5 text-green-700 dark:text-green-300" />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 p-5 rounded-xl shadow-sm border border-red-200 dark:border-red-800">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <p className="text-xs font-medium text-red-700 dark:text-red-300">미읽음</p>
+                            <p className="text-2xl font-bold text-red-900 dark:text-red-100 mt-1">{stats.unread}</p>
+                        </div>
+                        <div className="bg-red-200 dark:bg-red-800 p-3 rounded-lg">
+                            <Eye className="h-5 w-5 text-red-700 dark:text-red-300" />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-800/20 p-5 rounded-xl shadow-sm border border-blue-200 dark:border-blue-800">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <p className="text-xs font-medium text-blue-700 dark:text-blue-300">일반문의</p>
+                            <p className="text-2xl font-bold text-blue-900 dark:text-blue-100 mt-1">{stats.contact}</p>
+                        </div>
+                        <div className="bg-blue-200 dark:bg-blue-800 p-3 rounded-lg">
+                            <MessageCircle className="h-5 w-5 text-blue-700 dark:text-blue-300" />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 p-5 rounded-xl shadow-sm border border-purple-200 dark:border-purple-800">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <p className="text-xs font-medium text-purple-700 dark:text-purple-300">견적요청</p>
+                            <p className="text-2xl font-bold text-purple-900 dark:text-purple-100 mt-1">{stats.quotation}</p>
+                        </div>
+                        <div className="bg-purple-200 dark:bg-purple-800 p-3 rounded-lg">
+                            <Tag className="h-5 w-5 text-purple-700 dark:text-purple-300" />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 p-5 rounded-xl shadow-sm border border-orange-200 dark:border-orange-800">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <p className="text-xs font-medium text-orange-700 dark:text-orange-300">AS문의</p>
+                            <p className="text-2xl font-bold text-orange-900 dark:text-orange-100 mt-1">{stats.as}</p>
+                        </div>
+                        <div className="bg-orange-200 dark:bg-orange-800 p-3 rounded-lg">
+                            <AlertCircle className="h-5 w-5 text-orange-700 dark:text-orange-300" />
+                        </div>
+                    </div>
                 </div>
             </div>
-            {/* Stats Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
-                <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-xs text-gray-600 dark:text-gray-400">전체</p>
-                            <p className="text-xl font-bold text-gray-900 dark:text-gray-100">{stats.total}</p>
-                        </div>
-                        <MessageCircle className="h-6 w-6 text-blue-500" />
-                    </div>
-                </div>
-
-                <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-xs text-gray-600 dark:text-gray-400">답변대기</p>
-                            <p className="text-xl font-bold text-yellow-600">{stats.pending}</p>
-                        </div>
-                        <Clock className="h-6 w-6 text-yellow-500" />
-                    </div>
-                </div>
-
-                <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-xs text-gray-600 dark:text-gray-400">답변완료</p>
-                            <p className="text-xl font-bold text-green-600">{stats.answered}</p>
-                        </div>
-                        <CheckCircle className="h-6 w-6 text-green-500" />
-                    </div>
-                </div>
-
-                <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-xs text-gray-600 dark:text-gray-400">미읽음</p>
-                            <p className="text-xl font-bold text-red-600">{stats.unread}</p>
-                        </div>
-                        <Star className="h-6 w-6 text-red-500" />
-                    </div>
-                </div>
-
-                <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-xs text-gray-600 dark:text-gray-400">일반문의</p>
-                            <p className="text-xl font-bold text-blue-600">{stats.contact}</p>
-                        </div>
-                        <MessageCircle className="h-6 w-6 text-blue-500" />
-                    </div>
-                </div>
-
-                <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-xs text-gray-600 dark:text-gray-400">견적요청</p>
-                            <p className="text-xl font-bold text-purple-600">{stats.quotation}</p>
-                        </div>
-                        <Tag className="h-6 w-6 text-purple-500" />
-                    </div>
-                </div>
-
-                <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-xs text-gray-600 dark:text-gray-400">AS문의</p>
-                            <p className="text-xl font-bold text-orange-600">{stats.as}</p>
-                        </div>
-                        <AlertCircle className="h-6 w-6 text-orange-500" />
-                    </div>
-                </div>
-            </div>
-            {/* Search and Filter */}
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-                <div className="flex flex-col md:flex-row gap-4">
+            {/* Search and Filter - Improved Design */}
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 mb-6">
+                <div className="flex flex-col lg:flex-row gap-4">
                     <div className="relative flex-1">
-                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                         <Input
                             type="text"
                             placeholder="제목, 작성자, 내용, 이메일로 검색..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="pl-10"
+                            className="pl-10 h-11 border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500"
                         />
                     </div>
-                    <div className="flex items-center gap-2">
-                        <Filter className="h-4 w-4 text-gray-400" />
+                    <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2 bg-gray-50 dark:bg-gray-700 px-3 py-2 rounded-lg">
+                            <Filter className="h-4 w-4 text-gray-500" />
+                            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">필터</span>
+                        </div>
                         <select
                             value={statusFilter}
                             onChange={(e) => setStatusFilter(e.target.value)}
-                            className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                            className="px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         >
                             <option value="all">전체 상태</option>
                             <option value="pending">답변대기</option>
                             <option value="answered">답변완료</option>
-                            <option value="completed">처리완료</option>
                             <option value="closed">종료</option>
                         </select>
                         <select
                             value={typeFilter}
                             onChange={(e) => setTypeFilter(e.target.value)}
-                            className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                            className="px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         >
                             <option value="all">전체 유형</option>
                             <option value="contact">일반문의</option>
@@ -407,9 +429,9 @@ export default function AdminInquiriesClient() {
                 </div>
             </div>
             {/* Inquiries List */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+            <div className="space-y-4">
                 {filteredInquiries.length === 0 ? (
-                    <div className="p-12 text-center">
+                    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-12 text-center">
                         <MessageCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                         <h3 className="text-lg font-medium text-gray-600 dark:text-gray-300 mb-2">
                             {searchTerm || statusFilter !== 'all' || typeFilter !== 'all' ? '검색 조건에 맞는 문의가 없습니다' : '등록된 문의가 없습니다'}
@@ -419,135 +441,124 @@ export default function AdminInquiriesClient() {
                         </p>
                     </div>
                 ) : (
-                    <div className="overflow-x-auto">
-                        <table className="w-full">
-                            <thead className="bg-gray-50 dark:bg-gray-700">
-                                <tr>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">문의 정보</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">작성자</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">유형</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">상태</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">작성일</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">작업</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                                {filteredInquiries.map((inquiry) => {
-                                    const statusInfo = getStatusInfo(inquiry.status);
-                                    const typeInfo = getTypeInfo(inquiry.type);
-                                    const displayName = inquiry.customerName || inquiry.author || '이름 없음';
-                                    const displayEmail = inquiry.customerEmail || inquiry.email || '';
-                                    const displayPhone = inquiry.customerPhone || inquiry.phone || '';
+                    <div className="grid grid-cols-1 gap-4">
+                        {filteredInquiries.map((inquiry) => {
+                            const statusInfo = getStatusInfo(inquiry.status);
+                            const typeInfo = getTypeInfo(inquiry.type);
+                            const displayName = inquiry.customerName || inquiry.author || '이름 없음';
+                            const displayEmail = inquiry.customerEmail || inquiry.email || '';
+                            const displayPhone = inquiry.customerPhone || inquiry.phone || '';
 
-                                    return (
-                                        <tr key={inquiry.id} className={cn(
-                                            "hover:bg-gray-50 dark:hover:bg-gray-700",
-                                            !inquiry.isRead && "bg-blue-50/50 dark:bg-blue-900/10"
-                                        )}>
-                                            <td className="px-6 py-4">
-                                                <div className="flex items-start gap-3">
-                                                    {inquiry.isFeatured && (
-                                                        <Star className="h-4 w-4 text-yellow-500 mt-1 flex-shrink-0" />
-                                                    )}
-                                                    {!inquiry.isRead && (
-                                                        <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
-                                                    )}
-                                                    <div className="flex-1 min-w-0">
-                                                        <Link
-                                                            href={`/admin/inquiries/${inquiry.id}`}
-                                                            className="text-sm font-medium text-gray-900 dark:text-gray-100 hover:text-primary dark:hover:text-primary-400 block truncate"
-                                                        >
-                                                            {inquiry.title}
-                                                        </Link>
-                                                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 line-clamp-2">
-                                                            {inquiry.content.substring(0, 120)}...
+                            return (
+                                <div
+                                    key={inquiry.id}
+                                    className={cn(
+                                        "bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 hover:shadow-md transition-shadow",
+                                        !inquiry.isRead && "border-l-4 border-l-blue-500",
+                                        inquiry.type === 'quotation' && "border-l-4 border-l-purple-500"
+                                    )}
+                                >
+                                    <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+                                        {/* 문의 정보 */}
+                                        <div className="flex-1 min-w-0">
+                                            <div className="flex items-start gap-3 mb-3">
+                                                {inquiry.isFeatured && (
+                                                    <Star className="h-5 w-5 text-yellow-500 mt-0.5 flex-shrink-0" />
+                                                )}
+                                                {!inquiry.isRead && (
+                                                    <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
+                                                )}
+                                                <div className="flex-1">
+                                                    <Link
+                                                        href={`/admin/inquiries/${inquiry.id}`}
+                                                        className="text-lg font-semibold text-gray-900 dark:text-gray-100 hover:text-primary dark:hover:text-primary-400 block"
+                                                    >
+                                                        {inquiry.title}
+                                                    </Link>
+                                                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">
+                                                        {inquiry.content}
+                                                    </p>
+                                                    {inquiry.productName && (
+                                                        <p className="text-sm text-blue-600 dark:text-blue-400 mt-2 flex items-center gap-1">
+                                                            <Package className="h-3 w-3" />
+                                                            제품: {inquiry.productName}
                                                         </p>
-                                                        {inquiry.productName && (
-                                                            <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">
-                                                                제품: {inquiry.productName}
-                                                            </p>
-                                                        )}
-                                                    </div>
+                                                    )}
                                                 </div>
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <div className="flex items-center gap-2">
+                                            </div>
+
+                                            {/* 고객 정보 */}
+                                            <div className="flex flex-wrap gap-4 text-sm">
+                                                <div className="flex items-center gap-1.5">
                                                     <User className="h-4 w-4 text-gray-400" />
-                                                    <div>
-                                                        <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{displayName}</p>
-                                                        {displayEmail && (
-                                                            <div className="flex items-center gap-1 mt-1">
-                                                                <Mail className="h-3 w-3 text-gray-400" />
-                                                                <p className="text-xs text-gray-500 dark:text-gray-400 truncate max-w-[150px]">{displayEmail}</p>
-                                                            </div>
-                                                        )}
-                                                        {displayPhone && (
-                                                            <div className="flex items-center gap-1 mt-1">
-                                                                <Phone className="h-3 w-3 text-gray-400" />
-                                                                <p className="text-xs text-gray-500 dark:text-gray-400">{displayPhone}</p>
-                                                            </div>
-                                                        )}
-                                                        {inquiry.company && (
-                                                            <div className="flex items-center gap-1 mt-1">
-                                                                <Building className="h-3 w-3 text-gray-400" />
-                                                                <p className="text-xs text-gray-500 dark:text-gray-400">{inquiry.company}</p>
-                                                            </div>
-                                                        )}
-                                                    </div>
+                                                    <span className="text-gray-700 dark:text-gray-300">{displayName}</span>
                                                 </div>
-                                            </td>
-                                            <td className="px-6 py-4">
+                                                {displayEmail && (
+                                                    <div className="flex items-center gap-1.5">
+                                                        <Mail className="h-4 w-4 text-gray-400" />
+                                                        <span className="text-gray-600 dark:text-gray-400">{displayEmail}</span>
+                                                    </div>
+                                                )}
+                                                {displayPhone && (
+                                                    <div className="flex items-center gap-1.5">
+                                                        <Phone className="h-4 w-4 text-gray-400" />
+                                                        <span className="text-gray-600 dark:text-gray-400">{displayPhone}</span>
+                                                    </div>
+                                                )}
+                                                {inquiry.company && (
+                                                    <div className="flex items-center gap-1.5">
+                                                        <Building className="h-4 w-4 text-gray-400" />
+                                                        <span className="text-gray-600 dark:text-gray-400">{inquiry.company}</span>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        {/* 상태 및 작업 */}
+                                        <div className="flex flex-col items-end gap-3">
+                                            <div className="flex items-center gap-2">
                                                 <span className={cn(
-                                                    "inline-flex items-center px-2 py-1 rounded-full text-xs font-medium",
+                                                    "inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium",
                                                     typeInfo.className
                                                 )}>
                                                     {typeInfo.text}
                                                 </span>
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <div className="flex items-center gap-2">
-                                                    <span className={cn(
-                                                        "inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium",
-                                                        statusInfo.className
-                                                    )}>
-                                                        {statusInfo.icon}
-                                                        <span>{statusInfo.text}</span>
-                                                    </span>
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <div className="flex items-center gap-2">
-                                                    <Calendar className="h-4 w-4 text-gray-400" />
-                                                    <span className="text-sm text-gray-900 dark:text-gray-100">
-                                                        {new Date(inquiry.createdAt).toLocaleDateString('ko-KR')}
-                                                    </span>
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <div className="flex items-center gap-2">
-                                                    <Button variant="outline" size="sm" asChild>
-                                                        <Link href={`/admin/inquiries/${inquiry.id}`} >
-                                                            <Eye className="h-4 w-4 mr-1" />
-                                                            상세
-                                                        </Link>
-                                                    </Button>
-                                                    <select
-                                                        value={inquiry.status || 'pending'}
-                                                        onChange={(e) => updateInquiryStatus(inquiry.id, e.target.value, inquiry.type)}
-                                                        className="text-xs px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700"
-                                                    >
-                                                        <option value="pending">답변대기</option>
-                                                        <option value="answered">답변완료</option>
-                                                        <option value="completed">처리완료</option>
-                                                        <option value="closed">종료</option>
-                                                    </select>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    );
-                                })}
-                            </tbody>
-                        </table>
+                                                <span className={cn(
+                                                    "inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium",
+                                                    statusInfo.className
+                                                )}>
+                                                    {statusInfo.icon}
+                                                    <span>{statusInfo.text}</span>
+                                                </span>
+                                            </div>
+
+                                            <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                                                <Calendar className="h-4 w-4" />
+                                                <span>{new Date(inquiry.createdAt).toLocaleDateString('ko-KR')}</span>
+                                            </div>
+
+                                            <div className="flex items-center gap-2">
+                                                <Button variant="outline" size="sm" asChild>
+                                                    <Link href={`/admin/inquiries/${inquiry.id}`}>
+                                                        <Eye className="h-4 w-4 mr-1" />
+                                                        상세보기
+                                                    </Link>
+                                                </Button>
+                                                <select
+                                                    value={inquiry.status || 'pending'}
+                                                    onChange={(e) => updateInquiryStatus(inquiry.id, e.target.value, inquiry.type)}
+                                                    className="text-sm px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500"
+                                                >
+                                                    <option value="pending">답변대기</option>
+                                                    <option value="answered">답변완료</option>
+                                                    <option value="closed">종료</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })}
                     </div>
                 )}
             </div>

@@ -30,12 +30,12 @@ export function validate(data: any): { success: boolean; message?: string } {
         };
     }
 
-    // 카테고리 검증 - 실제 사용되는 카테고리와 일치
-    const validCategories = ['일반', '뉴스', '업데이트', '이벤트', '점검', '테스트'];
+    // 카테고리(표기) 검증 - 실제 사용되는 카테고리와 일치
+    const validCategories = ['일반', '중요', '제품', '회사소식', '채용/협력'];
     if (data.category && !validCategories.includes(data.category)) {
         return {
             success: false,
-            message: '유효하지 않은 카테고리입니다.'
+            message: '유효하지 않은 표기입니다.'
         };
     }
 

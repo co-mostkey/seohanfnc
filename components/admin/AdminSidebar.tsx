@@ -51,10 +51,11 @@ const AdminSidebar = () => {
                 </ul>
             </nav>
             <div className="mt-auto pt-4 border-t dark:border-gray-700">
-                <Link href="/" passHref legacyBehavior>
-                    <a className="block text-center text-sm text-gray-500 hover:text-blue-600 dark:hover:text-blue-400">
-                        메인 페이지로 돌아가기
-                    </a>
+                <Link
+                    href="/"
+                    className="block text-center text-sm text-gray-500 hover:text-blue-600 dark:hover:text-blue-400"
+                >
+                    메인 페이지로 돌아가기
                 </Link>
             </div>
         </aside>

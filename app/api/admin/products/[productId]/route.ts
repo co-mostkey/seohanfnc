@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { readProductsData, writeProductsData } from '@/lib/file-utils';
-import { Product, ProductCategoryGroup } from '@/types/product';
+import { readProductsData, writeProductsData, ProductsDataStructure } from '@/lib/file-utils';
+import { Product } from '@/types/product';
 import { syncProductToSafetyEquipment } from "@/lib/safety-equipment-sync";
 
 interface RouteParams {
@@ -79,7 +79,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
         console.log('[API PUT] 제품 데이터 저장 완료');
 
         // safety-equipment 카테고리인 경우 TypeScript 파일도 업데이트
-        if (updatedProduct.categoryId === 'safety-equipment' || updatedProduct.category === 'safety-equipment') {
+        if (updatedProduct.categoryId === 'safety-equipment' || updatedProduct.categoryId === 'safety-equipment') {
             console.log('[API PUT] Safety-Equipment 동기화 시작');
             try {
                 await syncProductToSafetyEquipment(updatedProduct);
@@ -122,8 +122,8 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
 }
 
 // 헬퍼 함수들
-function findProductById(products: ProductCategoryGroup, productId: string): Product | undefined {
-    for (const category of products.categories || []) {
+function findProductById(data: ProductsDataStructure, productId: string): Product | undefined {
+    for (const category of data.categories || []) {
         const product = category.products.find(p => p.id === productId);
         if (product) {
             return {
@@ -135,8 +135,8 @@ function findProductById(products: ProductCategoryGroup, productId: string): Pro
     return undefined;
 }
 
-function removeProductById(products: ProductCategoryGroup, productId: string): void {
-    for (const category of products.categories || []) {
+function removeProductById(data: ProductsDataStructure, productId: string): void {
+    for (const category of data.categories || []) {
         const index = category.products.findIndex(p => p.id === productId);
         if (index !== -1) {
             category.products.splice(index, 1);
@@ -145,9 +145,9 @@ function removeProductById(products: ProductCategoryGroup, productId: string): v
     }
 }
 
-function addProductToCategory(products: ProductCategoryGroup, product: Product): void {
+function addProductToCategory(data: ProductsDataStructure, product: Product): void {
     const categoryId = product.categoryId || 'default';
-    let category = products.categories?.find(c => c.id === categoryId);
+    let category = data.categories?.find(c => c.id === categoryId);
 
     if (!category) {
         // 카테고리가 없으면 생성
@@ -158,13 +158,15 @@ function addProductToCategory(products: ProductCategoryGroup, product: Product):
             nameCn: getCategoryName(categoryId, 'cn'),
             products: []
         };
-        if (!products.categories) {
-            products.categories = [];
+        if (!data.categories) {
+            data.categories = [];
         }
-        products.categories.push(category);
+        data.categories.push(category);
     }
 
-    category.products.push(product);
+    // 제품 추가 시 productCategoryId 필드는 제거 (writeProductsData에서 이미 처리하지만, 명시적으로도 가능)
+    const { productCategoryId, ...productToAdd } = product;
+    category.products.push(productToAdd as Product);
 }
 
 function getCategoryName(categoryId: string, lang: 'ko' | 'en' | 'cn'): string {

@@ -20,23 +20,9 @@ export default function ProductsPage() {
     "Training-Air-Mattress-Fall-Prevention-Mat"
   ];
 
-  // 제품 카테고리 리스트 생성
+  // 제품 카테고리 리스트 생성 (전체 제품만 표시)
   const productCategories = [
-    { id: "all", nameKo: "전체 제품", descriptionKo: "서한에프앤씨의 모든 제품을 확인하세요." },
-    // 'safety-equipment' 카테고리를 '에어매트'로 변경
-    {
-      id: "air-mats", // ID 변경
-      nameKo: "에어매트", // 이름 변경
-      descriptionKo: "서한에프앤씨의 에어매트 제품들을 살펴보세요." // 설명 변경
-    },
-    // 기존 'safety-equipment'를 제외한 나머지 카테고리들
-    ...Array.from(new Set(allProducts.map(p => p.category)))
-      .filter(categoryId => categoryId && categoryId !== 'safety-equipment') // safety-equipment 제외
-      .map(categoryId => ({
-        id: categoryId,
-        nameKo: getCategoryName(categoryId, 'ko'),
-        descriptionKo: `서한에프앤씨의 ${getCategoryName(categoryId, 'ko')} 분야 제품들을 살펴보세요.`
-      }))
+    { id: "all", nameKo: "전체 제품", descriptionKo: "서한에프앤씨의 모든 제품을 확인하세요." }
   ];
 
   // 해시 기반의 필터링을 위한 클라이언트 사이드 스크립트

@@ -1,0 +1,57 @@
+[
+  {
+    "id": "post-b8058df5-753d-4417-9e16-b9a5c58440cd",
+    "title": "서한에프앤씨 테스트 공지사항입니다.",
+    "content": "123",
+    "createdAt": "2025-05-20T12:31:14.683Z",
+    "updatedAt": "2025-05-20T12:31:14.683Z",
+    "author": "관리자",
+    "isPinned": false,
+    "category": "테스트",
+    "viewCount": 0
+  },
+  {
+    "id": "post-f9ab995f-d265-45bc-89f0-d6bfcb5ddc10",
+    "title": "서한에프앤씨 테스트 공지사항입니다.",
+    "content": "123",
+    "createdAt": "2025-05-20T12:31:41.803Z",
+    "updatedAt": "2025-05-20T12:31:41.803Z",
+    "author": "관리자",
+    "isPinned": false,
+    "category": "테스트",
+    "viewCount": 0
+  },
+  {
+    "id": "post-33565d8c-ab64-4191-a12d-32cf4f04b393",
+    "title": "서한에프앤씨 테스트 공지사항입니다.2",
+    "content": "1233",
+    "author": "관리자",
+    "category": "일반",
+    "isPinned": false,
+    "createdAt": "2025-05-20T13:12:50.804Z",
+    "updatedAt": "2025-05-20T13:12:50.804Z",
+    "viewCount": 0
+  },
+  {
+    "id": "post-591dda1b-c56b-4718-99f2-0a7e0462aaa8",
+    "title": "서한에프앤씨 테스트 공지사항입니다.3",
+    "content": "123",
+    "author": "관리자",
+    "category": "일반",
+    "isPinned": false,
+    "createdAt": "2025-05-20T13:17:46.514Z",
+    "updatedAt": "2025-05-20T13:17:46.514Z",
+    "viewCount": 5
+  },
+  {
+    "id": "notice_1748459163886",
+    "title": "테스트공지사항",
+    "content": "*****<u>ㅇㅇ**ㄴㄴ**</u>***테스트**\n\n*테스트*\n\n<u>테스트</u>\n\n[테스트](page)테스트\n\n\n| 제목1 | 제목2 | 제목3 |\n|-------|-------|-------|\n| 내용1 | 내용2 | 내용3 |\n| 내용4 | 내용5 | 내용6 |",
+    "createdAt": "2025-05-28T19:06:03.886Z",
+    "updatedAt": "2025-05-28T19:06:03.886Z",
+    "author": "관리자",
+    "isPinned": false,
+    "category": "제품",
+    "viewCount": 8
+  }
+]

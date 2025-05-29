@@ -22,14 +22,13 @@ interface Notice {
 // 임시 공지사항 데이터
 const NOTICES_PER_PAGE = 10;
 
-// 카테고리 정보
+// 표기 정보
 const categoryInfo: { [key: string]: { name: string; color: string } } = {
   '일반': { name: '일반', color: 'bg-gray-500' },
-  '뉴스': { name: '뉴스', color: 'bg-blue-500' },
-  '업데이트': { name: '업데이트', color: 'bg-green-500' },
-  '이벤트': { name: '이벤트', color: 'bg-purple-500' },
-  '점검': { name: '점검', color: 'bg-yellow-500' },
-  '테스트': { name: '테스트', color: 'bg-red-500' }
+  '중요': { name: '중요', color: 'bg-red-500' },
+  '제품': { name: '제품', color: 'bg-blue-500' },
+  '회사소식': { name: '회사소식', color: 'bg-green-500' },
+  '채용/협력': { name: '채용/협력', color: 'bg-purple-500' }
 };
 
 export default function NoticesPage() {
@@ -98,7 +97,7 @@ export default function NoticesPage() {
     setCurrentPage(1);
   };
 
-  // 카테고리 필터
+  // 표기 필터
   const handleCategoryFilter = (category: string) => {
     setSelectedCategory(category);
     setCurrentPage(1);
@@ -141,8 +140,8 @@ export default function NoticesPage() {
       toast.success(`${idsToDelete.length}개 공지사항이 삭제되었습니다.`);
 
       // 목록 새로고침
-        setSelectedItems([]);
-        setSelectAll(false);
+      setSelectedItems([]);
+      setSelectAll(false);
 
       // 현재 페이지에 데이터가 없으면 이전 페이지로
       const remainingItems = totalNotices - idsToDelete.length;
@@ -150,8 +149,11 @@ export default function NoticesPage() {
       if (currentPage > maxPage && maxPage > 0) {
         setCurrentPage(maxPage);
       } else {
-        // 현재 페이지 새로고침을 위해 useEffect 트리거
-        setCurrentPage(prev => prev);
+        // 페이지 새로고침을 위해 searchTerm을 트리거로 사용
+        // 임시로 빈 문자열을 설정했다가 다시 원래 값으로 복원
+        const currentSearch = searchTerm;
+        setSearchTerm(currentSearch + ' ');
+        setTimeout(() => setSearchTerm(currentSearch), 0);
       }
     } catch (error: any) {
       console.error('삭제 실패:', error);
@@ -180,7 +182,7 @@ export default function NoticesPage() {
   };
 
   const formatDate = (dateString: string) => {
-      const date = new Date(dateString);
+    const date = new Date(dateString);
     const now = new Date();
     const diffTime = Math.abs(now.getTime() - date.getTime());
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
@@ -200,7 +202,7 @@ export default function NoticesPage() {
     if (sortField === field) {
       setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
     } else {
-    setSortField(field);
+      setSortField(field);
       setSortDirection('desc');
     }
   };
@@ -226,6 +228,12 @@ export default function NoticesPage() {
     }
   });
 
+  // ID에서 번호 추출하는 함수
+  const getNoticeNumber = (id: string): number => {
+    const match = id.match(/^notice_(\d+)$/);
+    return match ? parseInt(match[1], 10) : 0;
+  };
+
   if (loading) {
     return (
       <div className="p-6 bg-gray-900 min-h-screen text-gray-100">
@@ -243,12 +251,12 @@ export default function NoticesPage() {
           <AlertCircle className="h-16 w-16 text-red-500 mb-4" />
           <h2 className="text-xl font-semibold text-white mb-2">오류가 발생했습니다</h2>
           <p className="text-gray-400 mb-4">{error}</p>
-        <button
+          <button
             onClick={() => window.location.reload()}
             className="px-4 py-2 bg-orange-600 text-white rounded hover:bg-orange-700"
-        >
-          다시 시도
-        </button>
+          >
+            다시 시도
+          </button>
         </div>
       </div>
     );
@@ -261,15 +269,15 @@ export default function NoticesPage() {
         <div>
           <h1 className="text-3xl font-bold text-white">공지사항 관리</h1>
           <p className="text-gray-400 mt-1">총 {totalNotices}개의 공지사항</p>
-            </div>
-        <Link href="/admin/notices/create" >
+        </div>
+        <Link href="/admin/notices/new" >
           <button className="flex items-center px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors">
             <Plus className="h-5 w-5 mr-2" />
-                새 공지사항
+            새 공지사항
           </button>
-              </Link>
-            </div>
-        {/* 검색 및 필터 */}
+        </Link>
+      </div>
+      {/* 검색 및 필터 */}
       <div className="bg-gray-800 rounded-lg p-6 mb-6">
         <div className="flex flex-col md:flex-row gap-4">
           {/* 검색 */}
@@ -286,14 +294,14 @@ export default function NoticesPage() {
             </div>
           </form>
 
-          {/* 카테고리 필터 */}
+          {/* 표기 필터 */}
           <div className="relative">
             <button
               onClick={() => setShowFilterMenu(!showFilterMenu)}
               className="flex items-center px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white hover:bg-gray-600 transition-colors"
             >
               <Filter className="h-5 w-5 mr-2" />
-              {selectedCategory || '모든 카테고리'}
+              {selectedCategory || '모든 표기'}
               <ChevronDown className="h-4 w-4 ml-2" />
             </button>
 
@@ -306,7 +314,7 @@ export default function NoticesPage() {
                   }}
                   className="w-full text-left px-4 py-2 text-white hover:bg-gray-600 first:rounded-t-lg"
                 >
-                  모든 카테고리
+                  모든 표기
                 </button>
                 {Object.keys(categoryInfo).map(category => (
                   <button
@@ -366,7 +374,7 @@ export default function NoticesPage() {
                   )}
                 </button>
               </div>
-              <div className="col-span-2">카테고리</div>
+              <div className="col-span-2">표기</div>
               <div className="col-span-2">
                 <button
                   onClick={() => handleSort('createdAt')}
@@ -437,12 +445,12 @@ export default function NoticesPage() {
                     </div>
                     <div className="col-span-2">
                       <div className="flex items-center space-x-2">
-                        <Link href={`/support/notices/${notice.id}`} >
+                        <Link href={`/support/notice/${notice.id}`} >
                           <button className="p-2 text-gray-400 hover:text-blue-400 transition-colors">
                             <Eye className="h-4 w-4" />
                           </button>
                         </Link>
-                        <Link href={`/admin/notices/${notice.id}/edit`} >
+                        <Link href={`/admin/notices/edit/${notice.id}`} >
                           <button className="p-2 text-gray-400 hover:text-green-400 transition-colors">
                             <Edit className="h-4 w-4" />
                           </button>
@@ -462,16 +470,16 @@ export default function NoticesPage() {
           )}
         </div>
       </div>
-        {/* 페이지네이션 */}
-        {totalPages > 1 && (
+      {/* 페이지네이션 */}
+      {totalPages > 1 && (
         <div className="flex justify-center items-center mt-8 space-x-2">
-            <button
+          <button
             onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-              disabled={currentPage === 1}
+            disabled={currentPage === 1}
             className="px-3 py-2 bg-gray-700 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-600 transition-colors"
-            >
-              이전
-            </button>
+          >
+            이전
+          </button>
 
           {[...Array(Math.min(totalPages, 10))].map((_, index) => {
             const pageNum = index + 1;
@@ -489,15 +497,15 @@ export default function NoticesPage() {
             );
           })}
 
-            <button
+          <button
             onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-              disabled={currentPage === totalPages}
+            disabled={currentPage === totalPages}
             className="px-3 py-2 bg-gray-700 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-600 transition-colors"
-            >
-              다음
-            </button>
-          </div>
-        )}
+          >
+            다음
+          </button>
+        </div>
+      )}
     </div>
   );
 } 

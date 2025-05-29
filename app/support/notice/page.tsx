@@ -3,13 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-// Metadata 임포트 제거
-import { FiSearch, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
-// GlobalNav는 client-layout.tsx에서 전역적으로 제공되므로 중복 임포트 제거
+import { FiSearch, FiChevronLeft, FiChevronRight, FiCalendar, FiEye, FiTag } from 'react-icons/fi';
 import HeroOverlay from '@/components/hero/HeroOverlay';
 import { Skeleton } from '@/components/ui/skeleton';
-
-// metadata 내보내기 제거 (Layout 파일에서 처리하도록 함)
 
 // 공지사항 타입 정의
 interface Notice {
@@ -19,6 +15,7 @@ interface Notice {
   date: string;
   views?: number;
   important?: boolean;
+  content?: string;
 }
 
 // API 응답 타입 정의
@@ -43,6 +40,32 @@ export default function NoticePage() {
     totalPages: 1
   });
   const [searchTerm, setSearchTerm] = useState('');
+
+  // 마크다운 제거 함수
+  const stripMarkdown = (text: string): string => {
+    if (!text) return '';
+
+    return text
+      // 굵게
+      .replace(/\*\*([^*]+)\*\*/g, '$1')
+      // 기울임
+      .replace(/\*([^*]+)\*/g, '$1')
+      .replace(/_([^_]+)_/g, '$1')
+      // 밑줄
+      .replace(/<u>([^<]+)<\/u>/g, '$1')
+      // 링크
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+      // 이미지
+      .replace(/!\[([^\]]*)\]\([^)]+\)/g, '')
+      // 헤더
+      .replace(/#{1,6}\s+(.+)/g, '$1')
+      // 테이블 구분선
+      .replace(/\|/g, ' ')
+      .replace(/-{3,}/g, '')
+      // 여러 공백을 하나로
+      .replace(/\s+/g, ' ')
+      .trim();
+  };
 
   // 공지사항 데이터 가져오기
   useEffect(() => {
@@ -71,7 +94,8 @@ export default function NoticePage() {
             category: notice.category || '일반',
             date: new Date(notice.createdAt).toLocaleDateString('ko-KR'),
             views: notice.viewCount || 0,
-            important: notice.isPinned
+            important: notice.isPinned,
+            content: notice.content
           }));
 
           setNotices(formattedNotices);
@@ -91,6 +115,7 @@ export default function NoticePage() {
               date: '2023-09-20',
               views: 245,
               important: true,
+              content: '추석 연휴 기간 동안 고객센터 운영을 휴무합니다. 양해 부탁드립니다.'
             },
             {
               id: 2,
@@ -99,6 +124,7 @@ export default function NoticePage() {
               date: '2023-08-15',
               views: 312,
               important: true,
+              content: '새로운 제품 라인업이 출시되었습니다. 더 많은 정보를 확인하세요.'
             },
             {
               id: 3,
@@ -107,6 +133,7 @@ export default function NoticePage() {
               date: '2023-07-21',
               views: 178,
               important: false,
+              content: '환경경영 시스템 ISO 14001 인증을 획득했습니다. 더 나은 환경을 위한 노력을 이어가겠습니다.'
             },
             {
               id: 4,
@@ -115,6 +142,7 @@ export default function NoticePage() {
               date: '2023-06-05',
               views: 201,
               important: false,
+              content: '홈페이지가 새롭게 리뉴얼되었습니다. 더 나은 서비스를 제공하겠습니다.'
             },
             {
               id: 5,
@@ -123,6 +151,7 @@ export default function NoticePage() {
               date: '2023-05-30',
               views: 156,
               important: false,
+              content: '2023년 하계 휴가 기간을 안내합니다. 휴가 기간 중에는 고객센터 운영을 중단합니다.'
             },
             {
               id: 6,
@@ -131,6 +160,7 @@ export default function NoticePage() {
               date: '2023-05-15',
               views: 188,
               important: false,
+              content: '제품 적용 성공 사례를 안내합니다. 더 나은 제품을 제공하겠습니다.'
             },
             {
               id: 7,
@@ -139,6 +169,7 @@ export default function NoticePage() {
               date: '2023-04-28',
               views: 134,
               important: false,
+              content: '품질관리 시스템을 개선하여 더 나은 품질을 제공하겠습니다.'
             },
             {
               id: 8,
@@ -147,6 +178,7 @@ export default function NoticePage() {
               date: '2023-04-12',
               views: 220,
               important: false,
+              content: '신규 협력업체를 모집하는 공고입니다. 더 나은 협력을 찾겠습니다.'
             },
             {
               id: 9,
@@ -155,6 +187,7 @@ export default function NoticePage() {
               date: '2023-03-25',
               views: 195,
               important: false,
+              content: '상반기 신제품 설명회를 개최하는 안내입니다. 더 나은 제품을 소개하겠습니다.'
             },
             {
               id: 10,
@@ -163,6 +196,7 @@ export default function NoticePage() {
               date: '2023-03-10',
               views: 276,
               important: true,
+              content: '서한에프앤씨 창립 20주년을 기념하는 이벤트를 진행합니다. 더 나은 서비스를 제공하겠습니다.'
             },
           ];
 
@@ -198,6 +232,20 @@ export default function NoticePage() {
     setPagination(prev => ({ ...prev, page: 1 })); // 검색 시 첫 페이지로 이동
   };
 
+  // 카테고리별 색상 맵핑
+  const getCategoryColor = (category: string) => {
+    const colors: { [key: string]: string } = {
+      '일반': 'bg-gray-500',
+      '중요': 'bg-red-500',
+      '제품': 'bg-blue-500',
+      '회사소식': 'bg-green-500',
+      '채용/협력': 'bg-purple-500',
+      '고객센터': 'bg-orange-500',
+      '홈페이지': 'bg-indigo-500'
+    };
+    return colors[category] || 'bg-gray-500';
+  };
+
   return (
     <div className="relative min-h-screen">
       {/* 배경 이미지 */}
@@ -211,171 +259,163 @@ export default function NoticePage() {
       {/* 오버레이 */}
       <div className="absolute inset-0 bg-black/50 backdrop-blur-[1px]"></div>
       <HeroOverlay />
-      {/* 네비게이션 메뉴 */}
-      <header className="w-full relative z-30">
-        {/* GlobalNav는 client-layout.tsx에서 전역적으로 제공되므로 중복 사용 제거 */}
-      </header>
+
       {/* 컨텐츠 */}
       <div className="relative z-10 container mx-auto px-4 py-12">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-white mb-2">공지사항</h1>
-            <p className="text-gray-200">서한에프앤씨의 중요 소식과 업데이트를 확인하세요.</p>
-          </div>
-          <div className="w-full md:w-auto mt-4 md:mt-0">
-            <form onSubmit={handleSearch} className="relative w-full md:w-64">
-              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                <FiSearch className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-              </div>
-              <input
-                type="search"
-                className="block w-full p-3 pl-10 text-sm text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-400 dark:focus:border-primary-400 transition-colors"
-                placeholder="검색어를 입력하세요"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </form>
-          </div>
-        </div>
-
-        {/* 공지사항 목록 */}
-        <div className="bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden shadow-lg">
-          {loading ? (
-            // 로딩 상태
-            (<div className="p-6">
-              {[...Array(5)].map((_, index) => (
-                <div key={index} className="py-3 space-y-2">
-                  <Skeleton className="h-5 w-3/4 bg-gray-300/20" />
-                  <div className="flex gap-2">
-                    <Skeleton className="h-4 w-16 bg-gray-300/20" />
-                    <Skeleton className="h-4 w-24 bg-gray-300/20" />
-                  </div>
+        <div className="max-w-6xl mx-auto">
+          {/* 헤더 섹션 */}
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8">
+            <div>
+              <h1 className="text-4xl font-bold text-white mb-2">공지사항</h1>
+              <p className="text-gray-200">서한에프앤씨의 중요 소식과 업데이트를 확인하세요.</p>
+            </div>
+            <div className="w-full md:w-auto mt-4 md:mt-0">
+              <form onSubmit={handleSearch} className="relative w-full md:w-80">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                  <FiSearch className="w-5 h-5 text-gray-400" />
                 </div>
-              ))}
-            </div>)
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                <thead className="bg-gray-100 dark:bg-gray-800/90">
-                  <tr>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300 w-16">번호</th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">제목</th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300 w-24 hidden md:table-cell">분류</th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300 w-28 hidden sm:table-cell">작성일</th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300 w-20 hidden md:table-cell">조회수</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                  {notices.length === 0 ? (
-                    <tr>
-                      <td colSpan={5} className="px-6 py-10 text-center text-gray-500 dark:text-gray-400">
-                        공지사항이 없습니다.
-                      </td>
-                    </tr>
-                  ) : (
-                    notices.map((notice) => (
-                      <tr key={notice.id} className="hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                          {notice.important ? (
-                            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-800 dark:bg-red-800/30 dark:text-red-400">
-                              중요
-                            </span>
-                          ) : (
-                            notice.id
-                          )}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <Link
-                            href={`/support/notice/${notice.id}`}
-                            className="text-gray-900 dark:text-white text-sm font-medium hover:text-primary-600 dark:hover:text-primary-400"
-                          >
-                            {notice.title}
-                          </Link>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400 hidden md:table-cell">
+                <input
+                  type="search"
+                  className="block w-full p-4 pl-12 text-sm text-gray-900 dark:text-gray-100 border border-gray-600/50 rounded-lg bg-gray-800/50 backdrop-blur-sm focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                  placeholder="검색어를 입력하세요"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </form>
+            </div>
+          </div>
+
+          {/* 공지사항 목록 */}
+          <div className="space-y-4">
+            {loading ? (
+              // 로딩 상태
+              <div className="space-y-4">
+                {[...Array(5)].map((_, index) => (
+                  <div key={index} className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-6 border border-gray-700/50">
+                    <Skeleton className="h-6 w-3/4 bg-gray-700/50 mb-3" />
+                    <Skeleton className="h-4 w-full bg-gray-700/50 mb-2" />
+                    <div className="flex gap-4">
+                      <Skeleton className="h-4 w-20 bg-gray-700/50" />
+                      <Skeleton className="h-4 w-24 bg-gray-700/50" />
+                      <Skeleton className="h-4 w-16 bg-gray-700/50" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : notices.length === 0 ? (
+              <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-12 text-center border border-gray-700/50">
+                <p className="text-gray-400 text-lg">검색 결과가 없습니다.</p>
+              </div>
+            ) : (
+              notices.map((notice) => (
+                <Link
+                  key={notice.id}
+                  href={`/support/notice/${notice.id}`}
+                  className="block group"
+                >
+                  <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-6 border border-gray-700/50 hover:bg-gray-800/70 hover:border-orange-500/50 transition-all duration-300">
+                    {/* 중요 공지사항 표시 */}
+                    {notice.important && (
+                      <div className="mb-3">
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-red-500/20 text-red-400 border border-red-500/30">
+                          중요 공지
+                        </span>
+                      </div>
+                    )}
+
+                    {/* 제목 */}
+                    <h3 className="text-xl font-semibold text-white mb-2 group-hover:text-orange-400 transition-colors">
+                      {notice.title}
+                    </h3>
+
+                    {/* 내용 미리보기 */}
+                    {notice.content && (
+                      <p className="text-gray-300 mb-4 line-clamp-2">
+                        {stripMarkdown(notice.content).substring(0, 150)}...
+                      </p>
+                    )}
+
+                    {/* 메타 정보 */}
+                    <div className="flex flex-wrap items-center gap-4 text-sm text-gray-400">
+                      <div className="flex items-center gap-1.5">
+                        <FiTag className="w-4 h-4" />
+                        <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium text-white ${getCategoryColor(notice.category)}`}>
                           {notice.category}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400 hidden sm:table-cell">
-                          {notice.date}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400 hidden md:table-cell">
-                          {notice.views || 0}
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <FiCalendar className="w-4 h-4" />
+                        <span>{notice.date}</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <FiEye className="w-4 h-4" />
+                        <span>{notice.views || 0}회</span>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              ))
+            )}
+          </div>
+
+          {/* 페이지네이션 */}
+          {notices.length > 0 && pagination.totalPages > 1 && (
+            <div className="flex items-center justify-center mt-12">
+              <nav className="flex items-center gap-2" aria-label="Pagination">
+                <button
+                  onClick={() => handlePageChange(pagination.page - 1)}
+                  disabled={pagination.page === 1}
+                  className="p-2 rounded-lg border border-gray-600/50 bg-gray-800/50 backdrop-blur-sm text-gray-400 hover:bg-gray-700/50 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                >
+                  <FiChevronLeft className="h-5 w-5" />
+                </button>
+
+                <div className="flex gap-1">
+                  {[...Array(pagination.totalPages)].map((_, i) => {
+                    const pageNumber = i + 1;
+                    const isCurrentPage = pageNumber === pagination.page;
+                    const isNearCurrentPage = Math.abs(pageNumber - pagination.page) <= 2;
+                    const isFirstOrLast = pageNumber === 1 || pageNumber === pagination.totalPages;
+
+                    if (!isNearCurrentPage && !isFirstOrLast) {
+                      if (pageNumber === 2 || pageNumber === pagination.totalPages - 1) {
+                        return (
+                          <span key={pageNumber} className="px-3 py-2 text-gray-500">...</span>
+                        );
+                      }
+                      return null;
+                    }
+
+                    return (
+                      <button
+                        key={pageNumber}
+                        onClick={() => handlePageChange(pageNumber)}
+                        className={`px-4 py-2 rounded-lg font-medium transition-all ${isCurrentPage
+                          ? "bg-orange-500 text-white"
+                          : "border border-gray-600/50 bg-gray-800/50 backdrop-blur-sm text-gray-300 hover:bg-gray-700/50 hover:text-white"
+                          }`}
+                      >
+                        {pageNumber}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <button
+                  onClick={() => handlePageChange(pagination.page + 1)}
+                  disabled={pagination.page === pagination.totalPages}
+                  className="p-2 rounded-lg border border-gray-600/50 bg-gray-800/50 backdrop-blur-sm text-gray-400 hover:bg-gray-700/50 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                >
+                  <FiChevronRight className="h-5 w-5" />
+                </button>
+              </nav>
             </div>
           )}
         </div>
 
-        {/* 페이지네이션 */}
-        {notices.length > 0 && (
-          <div className="flex items-center justify-center mt-8">
-            <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-              <button
-                onClick={() => handlePageChange(pagination.page - 1)}
-                disabled={pagination.page === 1}
-                className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-gray-50 text-sm font-medium text-gray-500 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-750 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <span className="sr-only">이전</span>
-                <FiChevronLeft className="h-5 w-5" />
-              </button>
-
-              {[...Array(pagination.totalPages)].map((_, i) => {
-                // 현재 페이지 기준으로 앞뒤로 2페이지씩만 표시 (1, 2, ..., current-2, current-1, current, current+1, current+2, ..., last-1, last)
-                const pageNumber = i + 1;
-                const isCurrentPage = pageNumber === pagination.page;
-                const isFirstPage = pageNumber === 1;
-                const isLastPage = pageNumber === pagination.totalPages;
-                const isNearCurrentPage =
-                  Math.abs(pageNumber - pagination.page) <= 2 ||
-                  isFirstPage ||
-                  isLastPage;
-
-                if (!isNearCurrentPage) {
-                  // 현재 페이지에서 멀리 떨어진 페이지는 "..." 표시
-                  if (pageNumber === 2 || pageNumber === pagination.totalPages - 1) {
-                    return (
-                      <span key={pageNumber} className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-gray-50 text-sm font-medium text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400">
-                        ...
-                      </span>
-                    );
-                  }
-                  return null;
-                }
-
-                return (
-                  <button
-                    key={pageNumber}
-                    onClick={() => handlePageChange(pageNumber)}
-                    aria-current={isCurrentPage ? "page" : undefined}
-                    className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${isCurrentPage
-                      ? "z-10 bg-primary-50 border-primary-500 text-primary-600 dark:bg-primary-900/20 dark:border-primary-500 dark:text-primary-400"
-                      : "bg-gray-50 border-gray-300 text-gray-500 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-750"
-                      }`}
-                  >
-                    {pageNumber}
-                  </button>
-                );
-              })}
-
-              <button
-                onClick={() => handlePageChange(pagination.page + 1)}
-                disabled={pagination.page === pagination.totalPages}
-                className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-gray-50 text-sm font-medium text-gray-500 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-750 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <span className="sr-only">다음</span>
-                <FiChevronRight className="h-5 w-5" />
-              </button>
-            </nav>
-          </div>
-        )}
-
         {/* 푸터 */}
-        <footer className="w-full py-3 text-center mt-8">
-          <span className="text-sm text-white">© {new Date().getFullYear()} SEOHAN FNC All Rights Reserved.</span>
+        <footer className="w-full py-8 text-center mt-16">
+          <span className="text-sm text-gray-400">© {new Date().getFullYear()} SEOHAN FNC All Rights Reserved.</span>
         </footer>
       </div>
     </div>
