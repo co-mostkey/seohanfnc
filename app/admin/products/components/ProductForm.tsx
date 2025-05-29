@@ -241,19 +241,8 @@ export const ProductForm: React.FC<ProductFormProps> = ({
     };
 
     const onFormSubmit = (data: ProductFormData) => {
-        console.log('=== Form Submit Debug ===');
-        console.log('Form submitted with data:', data);
-        console.log('Form errors:', errors);
-        console.log('Product Style:', data.productStyle);
-        console.log('Is B Type?:', data.productStyle === 'B');
-
         // 유효성 검사 오류가 있는지 확인
         if (Object.keys(errors).length > 0) {
-            console.error('Form validation errors:', errors);
-            // 각 에러를 개별적으로 출력
-            Object.entries(errors).forEach(([field, error]) => {
-                console.error(`Field "${field}" error:`, error);
-            });
             toast.error('폼에 오류가 있습니다. 모든 필수 필드를 확인해주세요.');
             return;
         }
