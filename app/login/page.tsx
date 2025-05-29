@@ -40,6 +40,33 @@ function LoginForm() {
   const [selectedTerm, setSelectedTerm] = useState<Term | null>(null);
   const [showTermModal, setShowTermModal] = useState(false);
 
+  // 컴포넌트 마운트 시 입력 필드 강제 초기화
+  useEffect(() => {
+    // 브라우저 자동완성으로 인한 미리 입력된 값 제거
+    const clearInputs = () => {
+      const emailInput = document.getElementById('email') as HTMLInputElement;
+      const passwordInput = document.getElementById('password') as HTMLInputElement;
+
+      if (emailInput) {
+        emailInput.value = '';
+      }
+      if (passwordInput) {
+        passwordInput.value = '';
+      }
+
+      // state도 확실히 초기화
+      setFormData({
+        email: '',
+        password: ''
+      });
+    };
+
+    // 약간의 지연 후 실행 (브라우저 자동완성이 적용된 후)
+    const timer = setTimeout(clearInputs, 100);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   // 약관 데이터 로드
   useEffect(() => {
     const loadTerms = async () => {
@@ -179,6 +206,11 @@ function LoginForm() {
                 required
                 disabled={isLoading}
                 className="bg-gray-700/50 border-gray-600 text-white placeholder-gray-400 focus:border-orange-500 focus:ring-orange-500"
+                autoComplete="off"
+                autoCorrect="off"
+                autoCapitalize="off"
+                spellCheck="false"
+                data-form-type="other"
               />
             </div>
 
@@ -196,6 +228,11 @@ function LoginForm() {
                   required
                   disabled={isLoading}
                   className="bg-gray-700/50 border-gray-600 text-white placeholder-gray-400 focus:border-orange-500 focus:ring-orange-500 pr-12"
+                  autoComplete="off"
+                  autoCorrect="off"
+                  autoCapitalize="off"
+                  spellCheck="false"
+                  data-form-type="other"
                 />
                 <button
                   type="button"

@@ -120,6 +120,7 @@ export default function AdminLoginPage() {
                                     required
                                     disabled={isLoading}
                                     className="bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-orange-500"
+                                    autoComplete="off"
                                 />
                             </div>
 
@@ -137,6 +138,7 @@ export default function AdminLoginPage() {
                                         required
                                         disabled={isLoading}
                                         className="bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-orange-500 pr-12"
+                                        autoComplete="off"
                                     />
                                     <Button
                                         type="button"

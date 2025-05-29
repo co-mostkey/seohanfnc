@@ -7,21 +7,32 @@ export interface DeliveryRecord {
 }
 
 export type PromotionType =
-    | 'mainHeroVideo' // 메인 히어로 전용 비디오
     | 'deliveryRecordList' // 납품 실적 목록 (여러 DeliveryRecord를 포함)
     | 'video' // 일반 홍보 비디오
     | 'image' // 홍보 이미지
-    | 'document'; // 홍보 문서 (PDF 등 링크)
+    | 'document' // 홍보 문서 (PDF 등 링크)
+    | 'mainTitleBoxMultiVideo' // MainTitleBox 내부 플레이어용 다중 비디오
+    | 'customContent' // 커스텀 HTML 콘텐츠
+    | 'gallery' // 이미지 갤러리
+    | 'news' // 뉴스/소식
+    | 'timeline'; // 연혁/타임라인
 
 export interface PromotionItem {
     id: string; // 홍보 자료의 고유 ID
     type: PromotionType;
     title: string; // 홍보 자료 제목
     description?: string; // 상세 설명
+    boxTitle?: string; // 컨테이너 박스에 표시될 타이틀 (예: "2024년 주요 납품실적")
 
     // type 'mainHeroVideo' 또는 'video'일 때 사용
     videoUrl?: string; // 비디오 파일 경로 또는 외부 URL
+    videoUrls?: string[]; // 다중 비디오 파일 경로 또는 외부 URL (mainTitleBoxMultiVideo 타입용)
     thumbnailUrl?: string; // 비디오 썸네일 이미지 경로
+
+    // 버튼 관련 필드 (mainTitleBoxMultiVideo 타입에서 주로 사용)
+    showButton?: boolean; // 버튼 표시 여부
+    buttonText?: string; // 버튼 텍스트 (예: "제품 보러가기")
+    buttonLink?: string; // 버튼 클릭 시 이동할 링크
 
     // type 'image'일 때 사용
     imageUrl?: string; // 이미지 파일 경로 또는 외부 URL
@@ -32,6 +43,31 @@ export interface PromotionItem {
 
     // type 'deliveryRecordList'일 때 사용
     records?: DeliveryRecord[]; // 납품 실적 데이터 목록
+
+    // type 'customContent'일 때 사용 - 마크다운 및 HTML 지원
+    customHtml?: string; // 커스텀 HTML 콘텐츠
+    markdownContent?: string; // 마크다운 형식의 콘텐츠
+    contentType?: 'html' | 'markdown'; // 콘텐츠 타입 구분
+
+    // type 'gallery'일 때 사용 - 다중 이미지 업로드 지원
+    galleryImages?: {
+        id: string;
+        url: string;
+        caption?: string;
+        order?: number;
+    }[]; // 갤러리 이미지 목록
+
+    // type 'news'일 때 사용 - 외부 링크 지원 개선
+    newsLink?: string; // 뉴스 외부 링크
+    newsDescription?: string; // 뉴스 설명
+    newsDate?: string; // 뉴스 날짜
+    newsSource?: string; // 뉴스 출처
+
+    // 기존 newsItems는 deprecated로 유지 (호환성)
+    newsItems?: { title: string; date: string; content: string; link?: string }[]; // 뉴스 항목 목록
+
+    // type 'timeline'일 때 사용
+    timelineItems?: { year: string; title: string; description: string }[]; // 타임라인 항목 목록
 
     order: number; // 표시 순서
     isVisible: boolean; // 공개 여부 (메인 페이지 노출 여부 등)

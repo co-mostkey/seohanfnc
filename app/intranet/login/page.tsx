@@ -88,7 +88,7 @@ export default function IntranetLoginPage() {
                                     placeholder="사용자명을 입력하세요"
                                     required
                                     className="bg-gray-700 border-gray-600 text-white placeholder:text-gray-400"
-                                    autoComplete="username"
+                                    autoComplete="off"
                                 />
                             </div>
                             <div className="space-y-2">
@@ -102,7 +102,7 @@ export default function IntranetLoginPage() {
                                     placeholder="비밀번호를 입력하세요"
                                     required
                                     className="bg-gray-700 border-gray-600 text-white placeholder:text-gray-400"
-                                    autoComplete="current-password"
+                                    autoComplete="off"
                                 />
                             </div>
 
