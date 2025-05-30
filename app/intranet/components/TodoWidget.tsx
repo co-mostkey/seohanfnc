@@ -12,6 +12,13 @@ interface TodoWidgetProps {
     onOpenTaskDialog: (task?: Task | null) => void; // 선택적 task 파라미터
 }
 
+const statusColorMap: Record<string, string> = {
+    '진행중': 'bg-gray-700',
+    '완료': 'bg-gray-500',
+    '지연': 'bg-gray-800',
+    '대기': 'bg-gray-600',
+};
+
 export const TodoWidget: React.FC<TodoWidgetProps> = ({ tasks, onToggleTask, onOpenTaskDialog }) => {
     const incompleteTasksCount = tasks.filter(t => !t.completed).length;
 
@@ -19,13 +26,13 @@ export const TodoWidget: React.FC<TodoWidgetProps> = ({ tasks, onToggleTask, onO
         <div className="bg-black/30 backdrop-blur-md rounded-xl border border-white/10 overflow-hidden shadow-lg">
             <div className="flex items-center justify-between p-4 border-b border-white/10">
                 <h3 className="font-semibold text-white flex items-center">
-                    <CheckSquare className="h-5 w-5 mr-2 text-purple-400" />
+                    <CheckSquare className="h-5 w-5 mr-2 text-gray-300" />
                     <span>할 일</span>
                     <span className="ml-2 text-xs px-1.5 py-0.5 bg-black/50 text-white rounded-full border border-white/10">
                         {incompleteTasksCount}개 남음
                     </span>
                 </h3>
-                <Button variant="ghost" size="icon" className="h-8 w-8 text-blue-400 hover:text-blue-300 hover:bg-white/10" onClick={() => onOpenTaskDialog(null)}>
+                <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-300 hover:text-white hover:bg-white/10" onClick={() => onOpenTaskDialog(null)}>
                     <Plus className="h-5 w-5" />
                 </Button>
             </div>
@@ -60,7 +67,7 @@ export const TodoWidget: React.FC<TodoWidgetProps> = ({ tasks, onToggleTask, onO
                             <div className="ml-3 flex-1">
                                 <p className={`text-sm font-medium ${task.completed
                                     ? 'text-gray-400 line-through'
-                                    : 'text-white group-hover:text-blue-200'
+                                    : 'text-white group-hover:text-gray-200'
                                     } transition-colors`}>{task.title}</p>
                                 <div className="flex items-center justify-between mt-1">
                                     <div className="flex items-center">
@@ -79,17 +86,17 @@ export const TodoWidget: React.FC<TodoWidgetProps> = ({ tasks, onToggleTask, onO
                                                 </div>
                                             ))}
                                         </div>
-                                        <div className={`rounded-full h-1.5 w-1.5 ${task.priority === 'high' ? 'bg-red-500' :
-                                            task.priority === 'medium' ? 'bg-yellow-500' :
-                                                'bg-green-500'
+                                        <div className={`rounded-full h-1.5 w-1.5 ${task.priority === 'high' ? 'bg-gray-500' :
+                                            task.priority === 'medium' ? 'bg-gray-400' :
+                                                'bg-gray-300'
                                             }`}></div>
                                     </div>
                                     <div className="text-right">
                                         <span className={`text-xs ${getRemainingDays(task.dueDate) < 0 && !task.completed // 기한 만료 조건 수정
-                                            ? 'text-red-400'
+                                            ? 'text-gray-400'
                                             : getRemainingDays(task.dueDate) < 7 && !task.completed
-                                                ? 'text-yellow-400'
-                                                : task.completed ? 'text-green-400' : 'text-gray-400' // 완료 시 녹색, 그 외 기본 회색
+                                                ? 'text-gray-300'
+                                                : task.completed ? 'text-gray-300' : 'text-gray-400'
                                             }`}>
                                             {task.completed
                                                 ? '완료됨'

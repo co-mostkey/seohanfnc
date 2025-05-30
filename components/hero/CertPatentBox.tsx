@@ -14,44 +14,40 @@ interface CertificationItemProps extends AwardItem {
 }
 
 // 개별 인증/특허 아이템을 표시하는 내부 컴포넌트
-function CertificationDisplayItem({ id, title, description, year, imageUrl, link, issuingOrganization }: CertificationItemProps) {
-  const imagePath = imageUrl
-    ? (imageUrl.startsWith('/') || imageUrl.startsWith('http') ? imageUrl : `${basePath}/${imageUrl}`)
-    : `${basePath}/images/placeholder-a4.png` // A4 비율 placeholder
+function CertificationDisplayItem(props: CertificationItemProps & { imageSrc?: string; issuer?: string; isMobile?: boolean }) {
+  // imageUrl, imageSrc 모두 지원 (imageUrl 우선)
+  const rawImage = props.imageUrl || props.imageSrc;
+  const imagePath = rawImage
+    ? (rawImage.startsWith('/uploads/')
+      ? rawImage
+      : (rawImage.startsWith('/') || rawImage.startsWith('http')
+        ? rawImage
+        : `${basePath}/${rawImage}`))
+    : `${basePath}/images/placeholder-a4.png`;
 
-  const displayTitle = title || '제목 없음'
+  const displayTitle = props.title || '';
+  const isMobile = props.isMobile;
 
   return (
     <div
-      className="shrink-0 w-[100px] md:w-[120px] flex flex-col items-center bg-white/5 hover:bg-white/10 rounded-lg p-2 border border-primary-500/20 transition-all duration-200 group shadow-md hover:shadow-primary-500/30"
+      className={isMobile
+        ? "shrink-0 w-24 h-full max-h-full bg-transparent hover:bg-gray-800/20 border border-gray-700/10 hover:border-gray-600/30 rounded-lg overflow-hidden flex flex-col transition-all duration-300"
+        : "shrink-0 w-14 sm:w-16 md:w-20 lg:w-24 h-full max-h-full bg-transparent hover:bg-gray-800/20 border border-gray-700/10 hover:border-gray-600/30 rounded-lg overflow-hidden flex flex-col transition-all duration-300"
+      }
       title={displayTitle}
+      style={{ aspectRatio: '210/297' }}
     >
-      <div className="relative w-full aspect-[210/297] bg-gray-700/50 rounded-md mb-1.5 shadow-inner overflow-hidden">
+      <div className={isMobile ? "relative w-full h-0 pb-[135%] bg-gray-800/10" : "relative w-full h-0 pb-[110%] bg-gray-800/10"}>
         <Image
-          src={imagePath.startsWith('http') ? imagePath : (imagePath.startsWith('/') ? imagePath : `${basePath}${imagePath}`)}
+          src={imagePath}
           alt={displayTitle}
           fill
-          className="object-contain p-1 group-hover:scale-105 transition-transform duration-300 ease-in-out"
-          unoptimized={imagePath.startsWith('http')} // 외부 URL은 unoptimized
-          onError={(e) => { e.currentTarget.src = `${basePath}/images/placeholder-image.png`; }} // 이미지 로드 실패 시 플레이스홀더 변경
+          className={isMobile ? "object-contain p-3" : "object-contain p-1 sm:p-1.5"}
+          unoptimized={imagePath.startsWith('http')}
+          onError={(e) => { e.currentTarget.src = `${basePath}/images/placeholder-image.png`; }}
         />
       </div>
-      <div className="text-center w-full">
-        <p className="text-[11px] font-semibold text-primary-300 dark:text-primary-300 truncate w-full leading-snug" title={displayTitle}>{displayTitle}</p>
-        {year && <p className="text-[9px] text-gray-300 dark:text-gray-400 mt-0.5 leading-tight" title={year}>{year}</p>}
-        {issuingOrganization && <p className="text-[9px] text-gray-400 dark:text-gray-500 truncate w-full leading-tight" title={issuingOrganization}>{issuingOrganization}</p>}
-        {link && (
-          <a
-            href={link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[9px] text-blue-400 hover:text-blue-300 hover:underline mt-0.5 inline-flex items-center transition-colors leading-tight"
-            onClick={(e) => e.stopPropagation()}
-          >
-            자세히 보기 <ExternalLink className="w-2 h-2 ml-0.5" />
-          </a>
-        )}
-      </div>
+      <div className={isMobile ? "w-full text-center text-[15px] truncate px-1 py-1 text-gray-300" : "w-full text-center text-[8px] sm:text-[9px] md:text-[10px] truncate px-0.5 py-1 text-gray-300"}>{displayTitle}</div>
     </div>
   )
 }
@@ -62,77 +58,59 @@ interface CertPatentBoxProps {
   isLoading?: boolean
 }
 
+function isMobileDevice() {
+  if (typeof window === 'undefined') return false;
+  return /iPhone|iPad|iPod|Android|Mobile/i.test(window.navigator.userAgent);
+}
+
 export default function CertPatentBox({ wrapperClassName, awardsData, isLoading: isLoadingProp }: CertPatentBoxProps) {
-  // isLoadingProp이 undefined이면 true로, 아니면 해당 값으로 isLoading 상태 결정
   const isLoading = isLoadingProp === undefined ? true : isLoadingProp;
-  // console.log('[CertPatentBox] Received isLoadingProp:', isLoadingProp, 'Processed isLoading:', isLoading);
-  // console.log('[CertPatentBox] Received awardsData:', awardsData);
   const certScrollRef = useRef<HTMLDivElement>(null)
   const [isCertPaused, setIsCertPaused] = useState(false)
   const [mounted, setMounted] = useState(false)
-
-  useEffect(() => setMounted(true), [])
+  const [translateX, setTranslateX] = useState(0)
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
-    if (!certScrollRef.current || !mounted || isLoading || !awardsData || !Array.isArray(awardsData) || awardsData.length === 0) return
+    setMounted(true);
+    if (typeof window !== 'undefined') {
+      setIsMobile(isMobileDevice());
+    }
+  }, [])
 
-    const scrollContainer = certScrollRef.current; // 스크롤 될 아이템들을 직접 감싸는 div
-    if (!scrollContainer.firstChild) return; // 자식 노드가 없으면 중단
-
-    const itemsWrapper = scrollContainer.firstChild as HTMLDivElement; // 실제 아이템들을 담고 있는 div
-
-    let animationId: number;
-    const scrollSpeed = 15; // px per second
-    let lastTimestamp = 0;
-    let currentTranslateX = 0;
-
-    const animate = (timestamp: number) => {
-      const 나오늘DeltaTime = (timestamp - lastTimestamp) / 1000; // seconds
-      lastTimestamp = timestamp; // isCertPaused 여부와 관계없이 항상 lastTimestamp를 업데이트합니다.
-
-      if (isCertPaused) {
-        animationId = requestAnimationFrame(animate);
-        return;
+  // 무한 슬라이드 애니메이션
+  useEffect(() => {
+    if (!mounted || isLoading || !awardsData || !Array.isArray(awardsData) || awardsData.length === 0) return;
+    let frame: number;
+    const speed = isMobile ? 0.2 : 0.2; // 모바일에서 더 느리게
+    const getTotalWidth = () => certScrollRef.current?.scrollWidth || 1;
+    const animate = () => {
+      if (!isCertPaused) {
+        setTranslateX(prev => {
+          const totalWidth = getTotalWidth();
+          return prev <= -totalWidth / 2 ? 0 : prev - speed;
+        });
       }
-
-      // isCertPaused가 false인 경우에만 애니메이션 로직 실행
-      const totalContentWidth = itemsWrapper.scrollWidth / 2; // 원본 콘텐츠의 전체 너비 (복제본 제외)
-      const visibleWidth = scrollContainer.clientWidth;
-
-      if (totalContentWidth > visibleWidth) {
-        currentTranslateX -= scrollSpeed * 나오늘DeltaTime; // 여기서 deltaTime 대신 새로 계산한 deltaTime 사용
-
-        if (Math.abs(currentTranslateX) >= totalContentWidth) {
-          currentTranslateX = 0; // 루프
-        }
-        itemsWrapper.style.transform = `translateX(${currentTranslateX}px)`;
-      }
-      animationId = requestAnimationFrame(animate);
+      frame = requestAnimationFrame(animate);
     };
-
-    // 초기화 시 lastTimestamp를 현재 시간으로 설정
-    lastTimestamp = performance.now();
-    animationId = requestAnimationFrame(animate);
-
-    return () => {
-      cancelAnimationFrame(animationId);
-      lastTimestamp = 0;
-      currentTranslateX = 0; // 컴포넌트 언마운트 시 리셋
-      if (itemsWrapper) {
-        itemsWrapper.style.transform = `translateX(0px)`; // 스타일 초기화
-      }
-    };
-  }, [isCertPaused, mounted, awardsData, isLoading]);
+    frame = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(frame);
+  }, [isCertPaused, mounted, isLoading, awardsData, isMobile]);
 
   // 이미지 URL과 제목이 있는 항목만 필터링 (제한 없음)
   const displayItems = awardsData?.filter(item => item.imageUrl && item.title) || []
-  // console.log('[CertPatentBox] Generated displayItems:', displayItems);
+  console.log('[CertPatentBox] displayItems:', displayItems);
 
   if (!mounted) return null
 
   if (isLoading) {
     return (
-      <div className={cn("bg-black/40 backdrop-blur-md rounded-xl border border-white/10 p-4 md:p-5 text-white shadow-lg relative overflow-hidden flex items-center justify-center min-h-[220px]", wrapperClassName)}>
+      <div className={cn(
+        isMobile
+          ? "w-full h-full min-h-[120px] max-h-[180px] flex items-center justify-center bg-black/40 backdrop-blur-md rounded-xl border border-white/10 text-white shadow-xl p-2 sm:p-4 sm:shadow-md sm:rounded-lg"
+          : "w-full h-full flex items-center justify-center bg-black/40 backdrop-blur-md rounded-xl border border-white/10 text-white shadow-xl p-2 md:p-4 sm:shadow-md sm:rounded-lg",
+        wrapperClassName
+      )}>
         <p className="text-gray-400 text-sm">인증/특허 정보 로딩 중...</p>
       </div>
     )
@@ -140,7 +118,12 @@ export default function CertPatentBox({ wrapperClassName, awardsData, isLoading:
 
   if (!displayItems || displayItems.length === 0) {
     return (
-      <div className={cn("bg-black/40 backdrop-blur-md rounded-xl border border-white/10 p-4 md:p-5 text-white shadow-lg relative overflow-hidden flex items-center justify-center min-h-[220px]", wrapperClassName)}>
+      <div className={cn(
+        isMobile
+          ? "w-full h-full min-h-[120px] max-h-[180px] flex items-center justify-center bg-black/40 backdrop-blur-md rounded-xl border border-white/10 text-white shadow-xl p-2 sm:p-4 sm:shadow-md sm:rounded-lg"
+          : "w-full h-full flex items-center justify-center bg-black/40 backdrop-blur-md rounded-xl border border-white/10 text-white shadow-xl p-2 md:p-4 sm:shadow-md sm:rounded-lg",
+        wrapperClassName
+      )}>
         <p className="text-gray-400 text-sm">표시할 인증/특허 정보가 없습니다.</p>
       </div>
     )
@@ -148,32 +131,36 @@ export default function CertPatentBox({ wrapperClassName, awardsData, isLoading:
 
   return (
     <div
-      className={cn("bg-black/40 backdrop-blur-md rounded-xl border border-white/10 p-4 md:p-5 text-white shadow-xl relative overflow-hidden", wrapperClassName)}
-      onMouseEnter={() => setIsCertPaused(true)}
-      onMouseLeave={() => setIsCertPaused(false)}
-      style={{ minHeight: '220px' }} // 최소 높이 보장
+      className={cn(
+        isMobile
+          ? "w-full min-h-[140px] max-h-[220px] sm:min-h-[160px] sm:max-h-[260px] sm:p-4 flex flex-col justify-center bg-black/40 backdrop-blur-md rounded-xl border border-white/10 text-white shadow-xl p-3 sm:shadow-md sm:rounded-lg"
+          : "w-full min-h-[120px] md:min-h-[140px] h-full max-h-[220px] md:max-h-[220px] flex flex-col justify-center bg-black/40 backdrop-blur-md rounded-xl border border-white/10 text-white shadow-xl p-2 md:p-4 sm:shadow-md sm:rounded-lg",
+        wrapperClassName
+      )}
     >
-      <div className="h-full w-full">
-        <div className="overflow-hidden h-full w-full">
-          <div className="flex items-center justify-between mb-2 md:mb-3 relative z-10 px-1">
-            <h3 className="text-sm md:text-base font-semibold text-white">
-              주요 인증 및 특허
-            </h3>
-            <span className="text-xs px-2 py-1 bg-primary-500/20 text-primary-300 rounded-full font-medium">{displayItems.length} 건</span>
-          </div>
+      <div className="flex flex-col h-full w-full flex-1 overflow-hidden">
+        <div className="flex items-center justify-between px-1 mb-1">
+          <h3 className={isMobile ? "text-lg font-semibold text-white" : "text-sm md:text-base font-semibold text-white"}>
+            주요 인증 및 특허
+          </h3>
+          <span className={isMobile ? "text-base px-3 py-1 bg-gray-800/50 text-gray-300 rounded-full font-medium border border-gray-700/30" : "text-xs px-1 py-1 bg-gray-800/50 text-gray-300 rounded-full font-medium border border-gray-700/30"}>{displayItems.length} 건</span>
+        </div>
+        <div className="relative flex-1 overflow-hidden flex items-end">
           <div
             ref={certScrollRef}
-            className="overflow-hidden hide-scrollbar relative z-10 select-none cursor-grab active:cursor-grabbing flex-grow" // overflow-x-auto 제거, overflow-hidden으로 변경
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            className={isMobile ? "flex flex-row gap-3 items-end px-2 py-2 h-full" : "flex flex-row gap-1 sm:gap-1 items-end px-1 py-1 h-full"}
+            style={{
+              willChange: 'transform',
+              transform: `translateX(${translateX}px)`
+            }}
+            onMouseEnter={() => setIsCertPaused(true)}
+            onMouseLeave={() => setIsCertPaused(false)}
+            onTouchStart={() => setIsCertPaused(true)}
+            onTouchEnd={() => setIsCertPaused(false)}
           >
-            <div className="flex gap-3 py-2 min-w-max h-full items-stretch"> {/* 이 div가 translateX로 움직임 */}
-              {displayItems.map((item) => (
-                <CertificationDisplayItem key={item.id} {...item} />
-              ))}
-              {displayItems.length > 0 && displayItems.map((item) => (
-                <CertificationDisplayItem key={`clone-${item.id}`} {...item} />
-              ))}
-            </div>
+            {[...displayItems, ...displayItems].map((item, idx) => (
+              <CertificationDisplayItem key={item.id + '-' + idx} {...item} isMobile={isMobile} />
+            ))}
           </div>
         </div>
       </div>

@@ -106,13 +106,42 @@ export interface Product {
   }[];
   specifications?: Record<string, string>;
   specTable?: SpecTableItem[];
-  detailedSpecTable?: string[][];
-  impactAbsorptionData?: string[][];
-  technicalData?: Array<{
-    label: string;
-    value: string;
-    unit?: string;
-  }>;
+  detailedSpecTable?: { title: string;[key: string]: string }[];
+  impactAbsorptionData?: {
+    title?: string;
+    subtitle?: string;
+    testInfo?: {
+      standard?: string;
+      testDate?: string;
+      testSubject?: string;
+      testDummy?: string;
+      testHeight?: string;
+      note?: string;
+      reference?: string;
+      conversion?: string;
+    };
+    testResults?: Array<{
+      name?: string;
+      voltage?: string;
+      gForce?: string;
+      percentage?: number;
+      chartImage?: string;
+    }>;
+    comparisonChart?: {
+      title?: string;
+      data?: Array<{
+        name?: string;
+        percentage?: number;
+        color?: string;
+      }>;
+      comparisonImages?: {
+        groundImpact?: string;
+        airMatImpact?: string;
+      };
+    };
+    analysis?: string[];
+  };
+  technicalData?: Array<{ key: string; value: string; unit?: string }>;
   certificationsAndFeatures?: Array<{
     title: string;
     description: string;

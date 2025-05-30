@@ -40,13 +40,18 @@ const ContentContainer: React.FC<ContentContainerProps> = ({ children, isHero = 
 };
 
 const ClientLayout = ({ children }: { children: React.ReactNode }) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isLoginPage = pathname === '/login';
 
   useEffect(() => {
     setIsMenuOpen(false);
   }, [pathname]);
+
+  if (pathname === '/gate') {
+    // 게이트(쿠키 동의) 페이지에서는 글로벌 UI(네비, 푸터, 모바일 네비 등) 렌더링 X
+    return <div className="min-h-screen w-full bg-black flex flex-col items-center justify-center">{children}</div>;
+  }
 
   const isAdminPath = pathname?.startsWith('/admin');
   const isIntranetPath = pathname?.startsWith('/intranet');
@@ -75,7 +80,7 @@ const ClientLayout = ({ children }: { children: React.ReactNode }) => {
         <div className="flex-grow flex flex-col">
           {children}
         </div>
-        <Footer variant="transparent" />
+        <Footer variant="transparent" className="hidden md:block" />
         <div className={cn("fixed bottom-0 left-0 right-0 z-50 lg:hidden", MOBILE_NAV_HEIGHT_CLASS, "bg-background border-t border-border")}>
           <MobileBottomNav />
         </div>
@@ -107,7 +112,7 @@ const ClientLayout = ({ children }: { children: React.ReactNode }) => {
             {children}
           </ContentContainer>
         </main>
-        <Footer variant="transparent" />
+        <Footer variant="transparent" className="hidden md:block" />
         <div className={cn("fixed bottom-0 left-0 right-0 z-50 lg:hidden", MOBILE_NAV_HEIGHT_CLASS, "bg-background border-t border-border")}>
           <MobileBottomNav />
         </div>
@@ -117,7 +122,7 @@ const ClientLayout = ({ children }: { children: React.ReactNode }) => {
 
   // 일반 페이지들 - 푸터가 페이지 끝에 위치
   const mainClassName = cn(
-    "min-h-[calc(100vh-theme(spacing.16))]",
+    "min-h-[calc(100vh-56px)]",
     MAIN_CONTENT_PT_CLASS,
     `${MAIN_CONTENT_PB_MOBILE_CLASS} ${MAIN_CONTENT_PB_DESKTOP_CLASS}`
   );
@@ -130,7 +135,7 @@ const ClientLayout = ({ children }: { children: React.ReactNode }) => {
           {children}
         </ContentContainer>
       </main>
-      <Footer variant="transparent" />
+      <Footer variant="transparent" className="hidden md:block" />
       <div className={cn("fixed bottom-0 left-0 right-0 z-50 lg:hidden", MOBILE_NAV_HEIGHT_CLASS, "bg-background border-t border-border")}>
         <MobileBottomNav />
       </div>

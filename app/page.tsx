@@ -26,7 +26,19 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 // 프로젝트 참조 컴포넌트는 DeliveryBox 내부로 옮기거나, DeliveryBox가 ProjectReference를 직접 사용하도록 유지합니다.
 // 여기서는 DeliveryBox가 ProjectReference를 내부적으로 사용한다고 가정하고 ProjectReference 정의는 DeliveryBox.tsx에 있다고 간주합니다.
 
+import { useRouter } from 'next/navigation';
+
 export default function Home() {
+  // [TRISID] 게이트(쿠키 동의) 체크: 동의 기록 없으면 게이트 안내
+  const router = useRouter();
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const consent = localStorage.getItem("cookie_consent");
+      if (consent !== "agree") {
+        router.replace("/gate");
+      }
+    }
+  }, [router]);
   const [mounted, setMounted] = useState(false);
   const [activeSection, setActiveSection] = useState<'home' | 'products' | 'company' | 'support' | 'promo' | 'cert'>('home');
   const heroRef = useRef<HTMLDivElement>(null);
@@ -45,6 +57,16 @@ export default function Home() {
   const [buttonText, setButtonText] = useState<string>('제품 보러가기');
   const [buttonLink, setButtonLink] = useState<string>('/products');
   const [isLoadingPromotions, setIsLoadingPromotions] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const ua = window.navigator.userAgent;
+      if (/iPhone|iPad|iPod|Android|Mobile/i.test(ua)) {
+        setIsMobile(true);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     setMounted(true);
@@ -195,10 +217,10 @@ export default function Home() {
     >
       <GlobalNav variant="mainSticky" />
       <section ref={heroRef} className={cn(
-        "relative flex-grow flex flex-col items-center justify-center isolate ios-scroll-fix",
+        "relative flex-grow flex flex-col items-center justify-start md:justify-center isolate ios-scroll-fix",
         "-mt-[4rem]",
-        "pt-[calc(4rem + var(--safe-area-inset-top))]",
-        "pb-[var(--safe-area-inset-bottom)]"
+        "pt-[calc(8rem+var(--safe-area-inset-top))] md:pt-[calc(4rem+var(--safe-area-inset-top))]",
+        "pb-[calc(60rem+env(safe-area-inset-bottom))] md:pb-0"
       )}>
         <motion.div
           key="bg-image-crossfade"
@@ -231,6 +253,20 @@ export default function Home() {
           animate={{ opacity: isVideoBg ? 1 : 0 }}
           transition={{ duration: 5.0, ease: "linear" }}
           style={{ objectPosition: 'center center', transform: 'translateZ(0)' }}
+        />
+
+        {/* 우측 블랙, 좌측 투명 그라데이션 (z-[-1.5], 전역 fixed) */}
+        <div
+          className="pointer-events-none fixed top-0 left-0 w-screen h-full z-[-1.5]"
+          aria-hidden="true"
+          style={{
+            background: 'linear-gradient(to left, rgb(0, 0, 0) 2%, rgba(0, 0, 0, 0.6) 10%, rgba(0, 0, 0, 0.23) 20%, rgba(0, 0, 0, 0) 100%)',
+            // 95%까지 완전 투명, 95.01~100%에서만 완전 불투명 블랙이 급격히 적용
+            width: '100vw',
+            height: '100%',
+            pointerEvents: 'none',
+            zIndex: -1.5
+          }}
         />
 
         <div className="absolute inset-0 bg-gradient-to-br from-black/40 via-black/25 to-black/50 z-[10]" />
@@ -308,26 +344,28 @@ export default function Home() {
 
         <HeroOverlay />
 
-        <div className="absolute bottom-0 left-0 w-full z-50" style={{ height: 'var(--footer-height, 60px)' }}>
-          <footer className="w-full h-full bg-black/30 backdrop-blur-sm border-t border-white/10 py-3 z-50 flex items-center">
-            <div className="container mx-auto flex flex-col md:flex-row items-center justify-between px-4">
-              <div className="flex justify-center md:justify-start items-center space-x-4 text-xs text-gray-300 mb-2 md:mb-0 order-2 md:order-1">
-                <Link href="/intranet" className="flex items-center hover:text-white transition-colors">
-                  <Layers className="h-3 w-3 mr-1" />
-                  <span>인트라넷</span>
-                </Link>
-                <span className="text-gray-500">|</span>
-                <Link href="/login" className="flex items-center hover:text-white transition-colors">
-                  <LogIn className="h-3 w-3 mr-1" />
-                  <span>회원 로그인</span>
-                </Link>
+        {!isMobile && (
+          <div className="absolute bottom-0 left-0 w-full z-50" style={{ height: 'var(--footer-height, 60px)' }}>
+            <footer className="w-full h-full bg-black/30 backdrop-blur-sm border-t border-white/10 py-3 z-50 flex items-center">
+              <div className="container mx-auto flex flex-col md:flex-row items-center justify-between px-4">
+                <div className="flex justify-center md:justify-start items-center space-x-4 text-xs text-gray-300 mb-2 md:mb-0 order-2 md:order-1">
+                  <Link href="/intranet" className="flex items-center hover:text-white transition-colors">
+                    <Layers className="h-3 w-3 mr-1" />
+                    <span>인트라넷</span>
+                  </Link>
+                  <span className="text-gray-500">|</span>
+                  <Link href="/login" className="flex items-center hover:text-white transition-colors">
+                    <LogIn className="h-3 w-3 mr-1" />
+                    <span>회원 로그인</span>
+                  </Link>
+                </div>
+                <div className="text-center text-xs text-gray-300 order-1 md:order-2">
+                  &copy; {new Date().getFullYear()} 서한에프앤씨
+                </div>
               </div>
-              <div className="text-center text-xs text-gray-300 order-1 md:order-2">
-                &copy; {new Date().getFullYear()} 서한에프앤씨
-              </div>
-            </div>
-          </footer>
-        </div>
+            </footer>
+          </div>
+        )}
       </section>
       <MobileBottomNav />
     </main>

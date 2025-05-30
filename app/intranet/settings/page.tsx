@@ -1,13 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
-import { 
-  Bell, 
-  Moon, 
-  Sun, 
-  Lock, 
-  Mail, 
-  MessageSquare, 
+import {
+  Bell,
+  Moon,
+  Sun,
+  Lock,
+  Mail,
+  MessageSquare,
   Calendar,
   Phone,
   Smartphone,
@@ -39,16 +39,16 @@ export default function SettingsPage() {
 
       <Tabs defaultValue="notifications" value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-3 md:grid-cols-4 mb-8 bg-gray-800">
-          <TabsTrigger value="notifications" className="data-[state=active]:bg-blue-600">
+          <TabsTrigger value="notifications" className="data-[state=active]:bg-gray-700">
             알림 설정
           </TabsTrigger>
-          <TabsTrigger value="security" className="data-[state=active]:bg-blue-600">
+          <TabsTrigger value="security" className="data-[state=active]:bg-gray-700">
             보안 설정
           </TabsTrigger>
-          <TabsTrigger value="appearance" className="data-[state=active]:bg-blue-600">
+          <TabsTrigger value="appearance" className="data-[state=active]:bg-gray-700">
             화면 설정
           </TabsTrigger>
-          <TabsTrigger value="sync" className="hidden md:block data-[state=active]:bg-blue-600">
+          <TabsTrigger value="sync" className="hidden md:block data-[state=active]:bg-gray-700">
             동기화 설정
           </TabsTrigger>
         </TabsList>
@@ -67,7 +67,7 @@ export default function SettingsPage() {
               <Switch defaultChecked={true} />
             </div>
             <Separator className="bg-gray-700" />
-            
+
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <div className="flex items-center">
@@ -79,7 +79,7 @@ export default function SettingsPage() {
               <Switch defaultChecked={true} />
             </div>
             <Separator className="bg-gray-700" />
-            
+
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <div className="flex items-center">
@@ -91,7 +91,7 @@ export default function SettingsPage() {
               <Switch defaultChecked={true} />
             </div>
             <Separator className="bg-gray-700" />
-            
+
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <div className="flex items-center">
@@ -126,29 +126,24 @@ export default function SettingsPage() {
           <div className="space-y-6">
             <div className="space-y-4">
               <h3 className="text-lg font-medium text-white">테마</h3>
-              <RadioGroup 
-                value={theme} 
+              <RadioGroup
+                value={theme}
                 onValueChange={setTheme}
                 className="grid grid-cols-1 md:grid-cols-3 gap-4"
               >
-                <div className={`flex items-center space-x-2 border rounded-lg p-4 cursor-pointer transition-colors ${theme === 'light' ? 'border-blue-500 bg-blue-500/10' : 'border-gray-700'}`}>
-                  <RadioGroupItem value="light" id="theme-light" className="text-blue-500" />
-                  <Label htmlFor="theme-light" className="flex items-center cursor-pointer">
-                    <Sun className="h-5 w-5 mr-2 text-yellow-500" />
-                    <span className="text-white">라이트 모드</span>
-                  </Label>
-                </div>
-                
-                <div className={`flex items-center space-x-2 border rounded-lg p-4 cursor-pointer transition-colors ${theme === 'dark' ? 'border-blue-500 bg-blue-500/10' : 'border-gray-700'}`}>
-                  <RadioGroupItem value="dark" id="theme-dark" className="text-blue-500" />
+                {/* 라이트 모드 선택 비활성화 (다크 전용) */}
+                <div className="hidden" />
+
+                <div className={`flex items-center space-x-2 border rounded-lg p-4 cursor-pointer transition-colors border-gray-700 bg-gray-800`}>
+                  <RadioGroupItem value="dark" id="theme-dark" className="text-gray-300" />
                   <Label htmlFor="theme-dark" className="flex items-center cursor-pointer">
-                    <Moon className="h-5 w-5 mr-2 text-blue-300" />
+                    <Moon className="h-5 w-5 mr-2 text-gray-300" />
                     <span className="text-white">다크 모드</span>
                   </Label>
                 </div>
-                
-                <div className={`flex items-center space-x-2 border rounded-lg p-4 cursor-pointer transition-colors ${theme === 'system' ? 'border-blue-500 bg-blue-500/10' : 'border-gray-700'}`}>
-                  <RadioGroupItem value="system" id="theme-system" className="text-blue-500" />
+
+                <div className={`flex items-center space-x-2 border rounded-lg p-4 cursor-pointer transition-colors border-gray-700 bg-gray-800`}>
+                  <RadioGroupItem value="system" id="theme-system" className="text-gray-400" />
                   <Label htmlFor="theme-system" className="flex items-center cursor-pointer">
                     <Smartphone className="h-5 w-5 mr-2 text-gray-400" />
                     <span className="text-white">시스템 설정 사용</span>
@@ -156,22 +151,22 @@ export default function SettingsPage() {
                 </div>
               </RadioGroup>
             </div>
-            
+
             <Separator className="bg-gray-700" />
-            
+
             <div className="space-y-4">
               <h3 className="text-lg font-medium text-white">언어 설정</h3>
               <RadioGroup value={language} onValueChange={setLanguage}>
                 <div className="flex items-center space-x-2 mb-2">
-                  <RadioGroupItem value="ko" id="lang-ko" className="text-blue-500" />
+                  <RadioGroupItem value="ko" id="lang-ko" className="text-gray-300" />
                   <Label htmlFor="lang-ko" className="text-white cursor-pointer">한국어</Label>
                 </div>
                 <div className="flex items-center space-x-2 mb-2">
-                  <RadioGroupItem value="en" id="lang-en" className="text-blue-500" />
+                  <RadioGroupItem value="en" id="lang-en" className="text-gray-300" />
                   <Label htmlFor="lang-en" className="text-white cursor-pointer">English</Label>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="jp" id="lang-jp" className="text-blue-500" />
+                  <RadioGroupItem value="jp" id="lang-jp" className="text-gray-300" />
                   <Label htmlFor="lang-jp" className="text-white cursor-pointer">日本語</Label>
                 </div>
               </RadioGroup>
@@ -196,10 +191,10 @@ export default function SettingsPage() {
           </div>
         </TabsContent>
       </Tabs>
-      
+
       <div className="mt-8 flex justify-end">
-        <Button 
-          className="bg-blue-600 hover:bg-blue-700"
+        <Button
+          className="bg-gray-700 hover:bg-gray-600"
           onClick={handleSaveSettings}
         >
           <Save className="h-4 w-4 mr-2" />

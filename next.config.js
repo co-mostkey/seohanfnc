@@ -8,9 +8,9 @@ const nextConfig = {
   },
   // Railway 배포 최적화
   output: 'standalone',
-  experimental: {
-    outputFileTracingRoot: undefined,
-  },
+  // experimental: {
+  //   outputFileTracingRoot: undefined,
+  // },
   async rewrites() {
     return [
       {

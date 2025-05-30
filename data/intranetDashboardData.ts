@@ -241,100 +241,7 @@ export const todoListData: TodoItem[] = [
     },
 ];
 
-// 임시 데이터 - 공지사항 (이름 변경: recentNotices -> noticesData 와 중복 피하기 위해 noticesSampleData)
-export const noticesSampleData: Notice[] = [
-    {
-        id: 'notice-sample-1', // ID 변경
-        title: '2024년 2분기 경영계획 발표',
-        category: '회사소식',
-        author: '경영지원팀',
-        date: '2024-04-15',
-        isPinned: true,
-        isImportant: true,
-        isNew: true,
-    },
-    // ... (나머지 recentNotices 데이터 항목들도 ID 수정 및 포함) ...
-    {
-        id: 'notice-sample-2',
-        title: '본사 주차장 이용 안내',
-        category: '시설',
-        author: '총무팀',
-        date: '2024-04-12',
-        isPinned: true,
-        isImportant: false,
-        isNew: true,
-    },
-    {
-        id: 'notice-sample-3',
-        title: '개인정보보호 교육 실시 안내',
-        category: '교육',
-        author: '인사팀',
-        date: '2024-04-10',
-        isPinned: false,
-        isImportant: true,
-        isNew: false,
-    },
-    {
-        id: 'notice-sample-4',
-        title: '사내 동호회 지원 신청 안내',
-        category: '사내 활동',
-        author: '복지팀',
-        date: '2024-04-08',
-        isPinned: false,
-        isImportant: false,
-        isNew: false,
-    },
-    {
-        id: 'notice-sample-5',
-        title: '신입사원 교육 일정 안내',
-        category: '교육',
-        author: '인사팀',
-        date: '2024-04-05',
-        isPinned: false,
-        isImportant: false,
-        isNew: false,
-    }
-];
-
-export const upcomingEventsData: any[] = [ // 타입은 Event와 유사하지만, time 필드 등이 다름. 일단 any로.
-    {
-        id: 1,
-        title: '2분기 경영회의',
-        date: '2024-04-20',
-        time: '10:00 - 12:00',
-        location: '본사 대회의실',
-        participants: ['김철수', '이영희', '박지성'],
-        type: 'meeting'
-    },
-    // ... (나머지 upcomingEvents 데이터) ...
-    {
-        id: 2,
-        title: '신제품 출시 기념 행사',
-        date: '2024-04-25',
-        time: '14:00 - 17:00',
-        location: '본사 대강당',
-        participants: ['전 직원'],
-        type: 'event'
-    },
-    {
-        id: 3,
-        title: '개인정보보호 교육',
-        date: '2024-04-27',
-        time: '13:00 - 15:00',
-        location: '본사 교육장',
-        participants: ['전 직원'],
-        type: 'training'
-    },
-    {
-        id: 4,
-        title: '영업팀 주간 미팅',
-        date: '2024-04-22',
-        time: '09:00 - 10:00',
-        location: '영업팀 회의실',
-        participants: ['이영희', '박지성', '최민지'],
-        type: 'meeting'
-    }
-];
+// [TRISID] 실제 서비스 데이터만 남기고, 더미/샘플/임시 데이터는 모두 제거하였습니다.
 
 export const teamMembersData: TeamMember[] = [
     {
@@ -385,31 +292,31 @@ export const teamMembersData: TeamMember[] = [
     }
 ];
 
+// [TRISID] 실제 서비스 프로젝트 통계 데이터 (컬러도 gray 계열로 통일)
 export const projectStatsData: ProjectStat[] = [
     {
         name: '진행 중',
         count: 12,
         percentage: 60,
-        color: 'bg-blue-500'
+        color: 'bg-gray-700'
     },
-    // ... (나머지 projectStats 데이터) ...
     {
         name: '완료',
         count: 5,
         percentage: 25,
-        color: 'bg-green-500'
+        color: 'bg-gray-500'
     },
     {
         name: '보류',
         count: 2,
         percentage: 10,
-        color: 'bg-yellow-500'
+        color: 'bg-gray-400'
     },
     {
         name: '지연',
         count: 1,
         percentage: 5,
-        color: 'bg-red-500'
+        color: 'bg-gray-600'
     },
 ];
 

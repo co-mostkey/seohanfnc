@@ -447,10 +447,10 @@ export function getProductById(id: string): Product | undefined {
   return finalProduct;
 }
 
-// ID로 제품 검색 (getProductById 호출) - 이 함수는 더 이상 export 하지 않음
-// export function findProductById(id: string): Product | undefined {
-//   return getProductById(id);
-// }
+// ID로 제품 검색 (getProductById 호출) - 빌드 오류 해결을 위해 복원
+export function findProductById(id: string): Product | undefined {
+  return getProductById(id);
+}
 
 // 카테고리별 제품 검색 (showInProductList 필터링 적용)
 export function findProductsByCategory(categoryId: string): Product[] {

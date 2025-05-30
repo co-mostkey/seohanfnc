@@ -19,13 +19,13 @@ import { ProductFormSettings } from './form-sections/ProductFormSettings';
 
 interface ProductFormProps {
     initialData?: Product | null;
-    onSubmit: (data: Product) => void;
+    onSubmitAction: (data: Product) => void;
     isSubmitting?: boolean;
 }
 
 export const ProductForm: React.FC<ProductFormProps> = ({
     initialData,
-    onSubmit,
+    onSubmitAction,
     isSubmitting = false
 }) => {
     // Product 데이터를 ProductFormData 형식으로 변환하는 함수
@@ -325,15 +325,15 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 
             console.log('Converted product data:', productData);
             console.log('=== Calling onSubmit ===');
-            console.log('onSubmit function:', onSubmit);
+            console.log('onSubmit function:', onSubmitAction);
 
-            if (typeof onSubmit !== 'function') {
-                console.error('onSubmit is not a function!', typeof onSubmit);
+            if (typeof onSubmitAction !== 'function') {
+                console.error('onSubmit is not a function!', typeof onSubmitAction);
                 toast.error('제출 함수가 올바르게 설정되지 않았습니다.');
                 return;
             }
 
-            onSubmit(productData);
+            onSubmitAction(productData);
         } catch (error) {
             console.error('Error converting form data:', error);
             toast.error('데이터 변환 중 오류가 발생했습니다.');

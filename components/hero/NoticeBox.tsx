@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { ArrowRight, AlertCircle } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 // 공지사항 타입 정의
 interface Notice {
@@ -25,15 +26,23 @@ interface NoticeResponse {
   }
 }
 
+function isMobileDevice() {
+  if (typeof window === 'undefined') return false;
+  return /iPhone|iPad|iPod|Android|Mobile/i.test(window.navigator.userAgent);
+}
+
 export default function NoticeBox({ wrapperClassName }: { wrapperClassName?: string }) {
   const [notices, setNotices] = useState<Notice[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
-  // 컴포넌트 마운트 상태 설정
   useEffect(() => {
     setMounted(true);
+    if (typeof window !== 'undefined') {
+      setIsMobile(isMobileDevice());
+    }
   }, []);
 
   // 공지사항 데이터 가져오기 (마운트된 후에만 실행)
@@ -195,22 +204,22 @@ export default function NoticeBox({ wrapperClassName }: { wrapperClassName?: str
 
   return (
     <div
-      className={`${wrapperClassName ?? "bg-black/40 backdrop-blur-md rounded-xl shadow-lg p-3 md:p-4 border border-white/10 flex flex-col h-full overflow-hidden"} relative z-40`}
+      className={cn(
+        wrapperClassName ?? (
+          isMobile
+            ? "bg-black/40 backdrop-blur-md rounded-xl shadow-lg p-3 min-h-[140px] max-h-[220px] sm:min-h-[160px] sm:max-h-[260px] sm:p-4 flex flex-col h-full overflow-hidden"
+            : "bg-black/40 backdrop-blur-md rounded-xl shadow-lg p-3 md:p-4 border border-white/10 flex flex-col h-full overflow-hidden"
+        ),
+        "relative z-40 h-full overflow-y-auto"
+      )}
     >
-      <div className="flex justify-between items-center mb-2 p-3 md:p-4">
-        <h3 className="text-sm md:text-base font-semibold text-white">최근 공지사항</h3>
-        <Link
-          href="/support/notice"
-          className="text-xs md:text-sm text-white/70 hover:text-white hover:bg-white/10 flex items-center py-1 px-2 rounded-md relative z-10 transition-colors duration-150 ease-in-out"
-        >
-          더보기
-          <ArrowRight className="ml-1 h-3 w-3 md:h-3.5 md:w-3.5" />
-        </Link>
-      </div>
-      <div className="flex-1 rounded-lg p-2 relative z-5 overflow-y-auto hide-scrollbar ios-scroll-fix">
+      <div className="flex-1 divide-y divide-white/20 flex flex-col gap-0.5">
         {!mounted || loading ? (
-          <div className="flex items-center justify-center h-full">
-            <div className="animate-spin h-5 w-5 border-2 border-white rounded-full border-t-transparent" />
+          <div className="flex items-center justify-center h-full min-h-[100px]">
+            <div className="flex items-center gap-2">
+              <div className="animate-spin h-5 w-5 border-2 border-white rounded-full border-t-transparent" />
+              <span className={isMobile ? "text-base text-gray-300" : "text-sm text-gray-300"}>공지사항 로딩 중...</span>
+            </div>
           </div>
         ) : error ? (
           <div className="flex items-center justify-center h-full text-xs text-red-300">
@@ -222,28 +231,26 @@ export default function NoticeBox({ wrapperClassName }: { wrapperClassName?: str
             공지사항이 없습니다
           </div>
         ) : (
-          <div className="divide-y divide-white/20">
-            {notices.map((notice, index) => (
-              <Link
-                key={notice.id}
-                href={`/support/notice/${notice.id}`}
-                className="block py-1.5 md:py-2 hover:bg-white/10 rounded-lg px-2 transition-colors touch-manipulation"
-              >
-                <p className="text-xs md:text-sm font-medium text-white line-clamp-2">{notice.title}</p>
-                <div className="flex items-center mt-1 gap-1.5">
-                  <span className={`inline-flex items-center rounded-full px-1.5 py-0.5 text-[10px] md:text-xs font-medium ${getCategoryBgColor(notice.category)}`}>
-                    {notice.category}
+          notices.map((notice, index) => (
+            <Link
+              key={notice.id}
+              href={`/support/notice/${notice.id}`}
+              className={isMobile ? "block py-2 px-3 transition-colors text-base" : "block py-1.5 md:py-2 px-2 transition-colors touch-manipulation"}
+            >
+              <p className={isMobile ? "text-[15px] font-medium text-white line-clamp-2" : "text-xs md:text-sm font-medium text-white line-clamp-2"}>{notice.title}</p>
+              <div className={isMobile ? "flex items-center mt-2 gap-2" : "flex items-center mt-1 gap-1.5"}>
+                <span className={isMobile ? "inline-flex items-center rounded-full px-2 py-1 text-[13px] font-medium" : "inline-flex items-center rounded-full px-1.5 py-0.5 text-[10px] md:text-xs font-medium"}>
+                  {notice.category}
+                </span>
+                <p className={isMobile ? "text-[13px] text-gray-300" : "text-[10px] md:text-xs text-gray-300"}>{notice.date}</p>
+                {notice.important && (
+                  <span className={isMobile ? "inline-flex items-center rounded-full bg-red-500/30 px-2 py-1 text-[13px] font-medium text-red-300" : "inline-flex items-center rounded-full bg-red-500/30 px-1.5 py-0.5 text-[10px] md:text-xs font-medium text-red-300"}>
+                    중요
                   </span>
-                  <p className="text-[10px] md:text-xs text-gray-300">{notice.date}</p>
-                  {notice.important && (
-                    <span className="inline-flex items-center rounded-full bg-red-500/30 px-1.5 py-0.5 text-[10px] md:text-xs font-medium text-red-300">
-                      중요
-                    </span>
-                  )}
-                </div>
-              </Link>
-            ))}
-          </div>
+                )}
+              </div>
+            </Link>
+          ))
         )}
       </div>
     </div>

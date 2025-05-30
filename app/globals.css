@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+/* VSCode Tailwind CSS 확장 미설치 시 @tailwind, @apply 경고 무시 */
+
 /* iOS 최적화 및 Safe Area 대응 */
 :root {
   /* iOS Safe Area 변수 */

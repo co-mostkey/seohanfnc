@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { ProductForm } from '../components/ProductForm';
 import { Product } from '@/types/product';
-import { useRouter } from 'next/navigation'; // Next.js 13+ App Router
+import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
 export default function CreateProductPage() {

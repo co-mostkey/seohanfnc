@@ -17,9 +17,10 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
+import { FormProvider } from 'react-hook-form';
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
@@ -49,7 +50,7 @@ const formSchema = z.object({
   productName: z.string().min(2, { message: "제품명을 2자 이상 입력해주세요." }),
   quantity: z.coerce.number().min(1, { message: "수량을 1 이상 입력해주세요." }),
   message: z.string().optional(),
-  privacy: z.boolean().refine(val => val === true, { message: "개인정보 처리방침에 동의해야 합니다." })
+  privacy: z.boolean().refine((val: boolean) => val === true, { message: "개인정보 처리방침에 동의해야 합니다." })
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -200,7 +201,7 @@ export default function QuotationPage() {
     return `${timestamp}-${random}`.toUpperCase();
   }, []);
 
-  const onSubmit: SubmitHandler<FormValues> = async (values) => {
+  const onSubmit: SubmitHandler<FormValues> = async (values: FormValues) => {
     try {
       // 파일 업로드 처리
       const formData = new FormData();
@@ -609,17 +610,17 @@ export default function QuotationPage() {
                     <div>
                       <Label htmlFor="product-category">제품 카테고리 <span className={LABEL_REQUIRED_STYLES}>*</span></Label>
                       <Select
+                        onValueChange={(value) => form.setValue("productCategory", value, { shouldValidate: true })}
                         value={form.watch("productCategory")}
-                        onValueChange={(value) => {
-                          form.setValue("productCategory", value, { shouldValidate: true });
-                        }}
                       >
                         <SelectTrigger id="product-category" className="mt-1">
-                          <SelectValue placeholder="카테고리 선택" />
+                          <SelectValue placeholder="제품 카테고리 선택" />
                         </SelectTrigger>
                         <SelectContent>
-                          {productCategories.map(category => (
-                            <SelectItem key={category} value={category}>{category}</SelectItem>
+                          {productCategories.map((category) => (
+                            <SelectItem key={category} value={category}>
+                              {category}
+                            </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
@@ -687,11 +688,7 @@ export default function QuotationPage() {
                   <Checkbox
                     id="privacy"
                     checked={form.watch("privacy")}
-                    onCheckedChange={(checked) => {
-                      form.setValue("privacy", checked === true, {
-                        shouldValidate: true
-                      });
-                    }}
+                    onCheckedChange={(checked: boolean) => form.setValue("privacy", checked, { shouldValidate: true })}
                     aria-labelledby="privacy-label"
                   />
                   <div className="grid gap-1.5 leading-none">

@@ -30,18 +30,7 @@
     "isPinned": false,
     "createdAt": "2025-05-20T13:12:50.804Z",
     "updatedAt": "2025-05-20T13:12:50.804Z",
-    "viewCount": 0
-  },
-  {
-    "id": "post-591dda1b-c56b-4718-99f2-0a7e0462aaa8",
-    "title": "서한에프앤씨 테스트 공지사항입니다.3",
-    "content": "123",
-    "author": "관리자",
-    "category": "일반",
-    "isPinned": false,
-    "createdAt": "2025-05-20T13:17:46.514Z",
-    "updatedAt": "2025-05-20T13:17:46.514Z",
-    "viewCount": 4
+    "viewCount": 2
   },
   {
     "id": "notice_1748459163886",
@@ -52,6 +41,6 @@
     "author": "관리자",
     "isPinned": false,
     "category": "제품",
-    "viewCount": 3
+    "viewCount": 21
   }
 ]

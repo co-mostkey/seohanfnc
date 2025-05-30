@@ -98,7 +98,7 @@ export default function QuotationDetailPage() {
                     try {
                         const categoryMatch = data.inquiry.content.match(/제품 카테고리:\s*(.+?)(?:\n|$)/);
                         const quantityMatch = data.inquiry.content.match(/수량:\s*(\d+)개/);
-                        const messageMatch = data.inquiry.content.match(/추가 요청사항:\s*\n(.+?)(?:\n\n|$)/s);
+                        const messageMatch = data.inquiry.content.match(/추가 요청사항:\s*\n(.+?)(?:\n\n|$)/);
 
                         if (categoryMatch) quoteData.productCategory = categoryMatch[1].trim();
                         if (quantityMatch) quoteData.quantity = parseInt(quantityMatch[1], 10);
@@ -121,7 +121,7 @@ export default function QuotationDetailPage() {
                     const localQuote = quotes.find((q: any) => q.id === quoteId);
 
                     // 로컬 견적의 경우 접근 키로 확인
-                    if (localQuote && localQuote.accessKey && localQuote.accessKey === password.toUpperCase()) {
+                    if (localQuote && localQuote.accessKey && localQuote.accessKey === password?.toUpperCase()) {
                         setQuote({
                             ...localQuote,
                             responses: localQuote.responses || [],

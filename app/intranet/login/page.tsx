@@ -25,7 +25,7 @@ export default function IntranetLoginPage() {
         setError('');
 
         try {
-            const response = await fetch('/api/auth/intranet-login', {
+            const response = await fetch('/api/intranet/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -35,7 +35,7 @@ export default function IntranetLoginPage() {
 
             const data = await response.json();
 
-            if (!response.ok || !data.success) {
+            if (!response.ok || !data.ok) {
                 throw new Error(data.error || '로그인에 실패했습니다.');
             }
 

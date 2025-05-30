@@ -11,6 +11,7 @@ import DeliveryBox from './DeliveryBox'
 import Image from 'next/image'
 import { type CompanyInfo } from '@/types/company';
 import { type DeliveryRecord } from '@/types/promotion';
+import { cn } from '@/lib/utils'
 
 // Re-introduce basePath for explicit path construction
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
@@ -94,59 +95,70 @@ export default function MainTitleBox({
 
   return (
     <div
-      className={wrapperClassName ?? "flex flex-col w-full relative z-10"}
+      className={cn(
+        wrapperClassName ?? "flex flex-col w-full relative z-10",
+        "pb-0 md:pb-0"
+      )}
       style={{
         // boxShadow: '0 40px 80px -20px rgba(0,0,0,0.6)', // 제거됨
       }}
     >
       <div className="w-full">
         <div className="py-2 h-auto w-full flex flex-col gap-3">
-          <div className="flex flex-col md:flex-row w-full gap-3 relative z-[2] flex-grow px-4">
-            <div className="flex flex-col w-full md:w-1/3 md:pl-0 gap-2 relative z-20">
+          <div className="flex flex-col md:flex-row w-full gap-3 md:gap-8 relative z-[2] flex-grow px-4 md:items-center md:min-h-[500px] md:py-12">
+            <div className="flex flex-col w-full md:w-1/2 min-w-0 md:pl-0 gap-3 relative z-20 md:justify-start md:items-start md:pt-8 md:pb-8 h-full min-h-0 flex-1 max-h-full max-w-full md:self-start md:mt-0 md:mb-auto">
               <DeliveryBox
-                wrapperClassName="w-full h-40 md:h-60 bg-black/30 backdrop-blur-md rounded-xl shadow-lg overflow-hidden border border-white/10"
+                wrapperClassName="w-full min-h-[100px] h-[24vw] max-h-[160px] md:h-52 bg-black/30 backdrop-blur-md rounded-xl shadow-lg overflow-hidden border border-white/10 md:max-h-52 md:min-h-[140px] md:max-w-[90%]"
                 deliveryData={deliveryRecords ?? null}
                 boxTitle={deliveryBoxTitle}
                 isLoading={isLoadingPromotions ?? true}
               />
-              <div className="flex w-full h-40 md:h-60 gap-2">
-                <div className="relative w-1/2 bg-black/30 backdrop-blur-md rounded-xl shadow-lg overflow-hidden border border-white/10 aspect-video flex items-center justify-center">
-                  {isLoadingPromotions && (!playerVideoUrls || playerVideoUrls.length === 0) && (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <p className="text-xs text-gray-400">비디오 로딩 중...</p>
-                    </div>
-                  )}
-                  {(!isLoadingPromotions || (playerVideoUrls && playerVideoUrls.length > 0)) && currentVideoSrc && (
-                    <video
-                      ref={videoRef}
-                      key={currentVideoSrc}
-                      src={currentVideoSrc}
-                      autoPlay
-                      muted
-                      playsInline
-                      onEnded={handleVideoEnd}
-                      className={`w-full h-full object-contain transition-opacity duration-500 ${showProductLink ? 'opacity-70' : 'opacity-100'}`}
-                    />
-                  )}
-                  {showProductLink && (
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.5 }}
-                      className="absolute inset-0 flex items-center justify-center p-2 z-10"
-                    >
-                      <Button asChild className="bg-gradient-to-r from-red-500 to-orange-500 text-white px-4 py-2 rounded-lg text-sm shadow-lg">
-                        <Link href={buttonLink || `/products`} >
-                          {buttonText || '제품 보러가기'}
-                          <ArrowRight className="ml-1 h-4 w-4" />
-                        </Link>
-                      </Button>
-                    </motion.div>
-                  )}
+              <div className="w-full min-h-[100px] h-[24vw] max-h-[160px] md:h-52 flex md:flex-row gap-2 md:max-h-52 md:min-h-[140px] min-w-0 md:max-w-[90%]">
+                {/* 모바일: 공지사항만 전체, 데스크탑: 기존 구조 */}
+                <div className="block md:hidden w-full h-full min-h-0 flex-1">
+                  <NoticeBox wrapperClassName="w-full h-full min-h-0 flex-1 bg-black/30 backdrop-blur-md rounded-xl shadow-lg overflow-hidden border border-white/10" />
                 </div>
-                <NoticeBox wrapperClassName="w-1/2 h-full bg-black/30 backdrop-blur-md rounded-xl shadow-lg overflow-hidden border border-white/10" />
+                <>
+                  <div className="hidden md:flex relative w-1/2 bg-black/30 backdrop-blur-md rounded-xl shadow-lg overflow-hidden border border-white/10 aspect-video items-center justify-center">
+                    {isLoadingPromotions && (!playerVideoUrls || playerVideoUrls.length === 0) && (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <p className="text-xs text-gray-400">비디오 로딩 중...</p>
+                      </div>
+                    )}
+                    {(!isLoadingPromotions || (playerVideoUrls && playerVideoUrls.length > 0)) && currentVideoSrc && (
+                      <video
+                        ref={videoRef}
+                        key={currentVideoSrc}
+                        src={currentVideoSrc}
+                        autoPlay
+                        muted
+                        playsInline
+                        onEnded={handleVideoEnd}
+                        className={`w-full h-full object-contain transition-opacity duration-500 ${showProductLink ? 'opacity-70' : 'opacity-100'}`}
+                      />
+                    )}
+                    {showProductLink && (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.5 }}
+                        className="absolute inset-0 flex items-center justify-center p-2 z-10"
+                      >
+                        <Button asChild className="bg-gradient-to-r from-red-500 to-orange-500 text-white px-4 py-2 rounded-lg text-sm shadow-lg">
+                          <Link href={buttonLink || `/products`} >
+                            {buttonText || '제품 보러가기'}
+                            <ArrowRight className="ml-1 h-4 w-4" />
+                          </Link>
+                        </Button>
+                      </motion.div>
+                    )}
+                  </div>
+                  <div className="hidden md:block w-1/2 h-full">
+                    <NoticeBox wrapperClassName="h-full bg-black/30 backdrop-blur-md rounded-xl shadow-lg overflow-hidden border border-white/10" />
+                  </div>
+                </>
               </div>
-              <div className="w-full h-40 md:h-60 relative">
+              <div className="w-full md:h-52 md:min-h-[140px] md:max-h-52 relative min-w-0 md:max-w-[90%]">
                 <AnimatePresence mode="wait">
                   {isLoading ? (
                     <motion.div
@@ -156,7 +168,6 @@ export default function MainTitleBox({
                       initial="initial"
                       animate="animate"
                       exit="exit"
-                      style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
                     >
                       <p className="text-gray-400 text-sm">인증/특허 정보 로딩 중...</p>
                     </motion.div>
@@ -167,11 +178,10 @@ export default function MainTitleBox({
                       initial="initial"
                       animate="animate"
                       exit="exit"
-                      style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
                     >
                       <CertPatentBox
                         awardsData={companyData.awardsAndCertifications}
-                        isLoading={false}
+                        isLoading={isLoading}
                         wrapperClassName="w-full h-full"
                       />
                     </motion.div>
@@ -183,7 +193,6 @@ export default function MainTitleBox({
                       initial="initial"
                       animate="animate"
                       exit="exit"
-                      style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
                     >
                       <p className="text-gray-400 text-sm">표시할 인증/특허 정보가 없습니다.</p>
                     </motion.div>
@@ -191,7 +200,7 @@ export default function MainTitleBox({
                 </AnimatePresence>
               </div>
             </div>
-            <div className="order-first md:order-none flex-1 flex flex-col justify-center md:justify-end items-center md:items-end space-y-1 md:space-y-2 md:pb-12 pb-4 relative z-[2]">
+            <div className="order-first md:order-none flex-1 flex flex-col justify-start items-center md:items-end space-y-1 md:space-y-2 pb-4 md:pb-12 md:pt-0 md:self-end md:mt-auto relative z-[2] w-full md:w-1/2 min-w-0">
               <div
                 className="absolute inset-0 z-[0] pointer-events-none"
                 style={{ background: 'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.03), transparent 70%)' }}

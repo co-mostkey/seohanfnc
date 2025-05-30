@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { Layers, LogIn } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useEffect, useState } from 'react';
 
 interface FooterProps {
   variant?: 'transparent' | 'default' | 'sticky';
@@ -10,6 +11,17 @@ interface FooterProps {
 }
 
 export default function Footer({ variant = 'transparent', className }: FooterProps) {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const ua = window.navigator.userAgent;
+      if (/iPhone|iPad|iPod|Android|Mobile/i.test(ua)) {
+        setIsMobile(true);
+      }
+    }
+  }, []);
+  if (isMobile) return null;
+
   const footerClasses = cn(
     "w-full text-white py-4 md:py-6 z-50 border-t border-white/10",
     {

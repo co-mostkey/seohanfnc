@@ -72,6 +72,7 @@ const model3DSchema = z.object({
 const technicalDataSchema = z.object({
     key: z.string().min(1, "기술 사양 항목명은 필수입니다."),
     value: z.string().min(1, "기술 사양 값은 필수입니다."),
+    unit: z.string().optional(),
 });
 
 // Certification 스키마 (B타입 전용)

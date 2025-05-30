@@ -15,7 +15,7 @@ const navItems = [
 export default function MobileBottomNav() {
   return (
     <nav
-      className="fixed bottom-0 left-0 w-full backdrop-blur-xl bg-black/30 border-t border-white/20 shadow-xl z-50 grid grid-cols-6 md:hidden ios-safe-bottom"
+      className="fixed bottom-0 left-0 w-full backdrop-blur-xl bg-transparent border-t border-white/20 shadow-xl z-50 grid grid-cols-6 md:hidden ios-safe-bottom"
       style={{
         paddingBottom: 'max(1rem, var(--safe-area-inset-bottom))',
         paddingLeft: 'var(--safe-area-inset-left)',
