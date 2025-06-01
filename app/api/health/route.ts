@@ -2,8 +2,62 @@ import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
 
-// 헬스체크 API - NHN 클라우드 로드밸런서용
+// Railway 헬스체크를 위한 API 엔드포인트
 export async function GET() {
+    try {
+        // 기본적인 시스템 상태 확인
+        const healthData = {
+            status: 'healthy',
+            timestamp: new Date().toISOString(),
+            service: 'seohanfnc-website',
+            version: '1.0.0',
+            uptime: process.uptime(),
+            environment: process.env.NODE_ENV || 'development',
+            memory: {
+                used: Math.round(process.memoryUsage().heapUsed / 1024 / 1024) + 'MB',
+                total: Math.round(process.memoryUsage().heapTotal / 1024 / 1024) + 'MB'
+            }
+        };
+
+        return NextResponse.json(healthData, {
+            status: 200,
+            headers: {
+                'Cache-Control': 'no-cache, no-store, must-revalidate',
+                'Pragma': 'no-cache',
+                'Expires': '0'
+            }
+        });
+
+    } catch (error) {
+        console.error('Health check error:', error);
+
+        return NextResponse.json(
+            {
+                status: 'unhealthy',
+                error: 'Internal server error',
+                timestamp: new Date().toISOString()
+            },
+            { status: 500 }
+        );
+    }
+}
+
+// POST 요청도 지원 (일부 헬스체크 시스템에서 사용)
+export async function POST() {
+    return GET();
+}
+
+// HEAD 요청 지원 (가벼운 헬스체크)
+export async function HEAD() {
+    try {
+        return new NextResponse(null, { status: 200 });
+    } catch (error) {
+        return new NextResponse(null, { status: 500 });
+    }
+}
+
+// 헬스체크 API - NHN 클라우드 로드밸런서용
+export async function GET_NHN() {
     try {
         const startTime = Date.now();
 
@@ -88,6 +142,6 @@ export async function GET() {
 }
 
 // 간단한 텍스트 응답용 (로드밸런서 간단 체크)
-export async function HEAD() {
+export async function HEAD_NHN() {
     return new Response('OK', { status: 200 });
 } 

@@ -1,4 +1,8 @@
 ignoredBuiltDependencies:
   - bcrypt
+  - cpu-features
+  - sharp
+  - ssh2
+  - unrs-resolver
 onlyBuiltDependencies:
   - bcrypt

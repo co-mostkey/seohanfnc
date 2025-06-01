@@ -1,0 +1,139 @@
+{
+    "members": [
+        {
+            "id": "member-001",
+            "email": "test1@example.com",
+            "name": "김철수",
+            "phone": "010-1234-5678",
+            "company": "테스트 회사",
+            "position": "대리",
+            "address": "서울시 강남구",
+            "interests": [
+                "제품 문의",
+                "기술 지원"
+            ],
+            "status": "pending",
+            "emailVerified": false,
+            "createdAt": "2024-01-20T09:00:00.000Z",
+            "lastLoginAt": null,
+            "source": "website",
+            "marketingConsent": true,
+            "privacyConsent": true,
+            "notes": "웹사이트를 통해 가입한 신규 회원"
+        },
+        {
+            "id": "member-002",
+            "email": "test2@example.com",
+            "name": "이영희",
+            "phone": "010-9876-5432",
+            "company": "ABC 기업",
+            "position": "과장",
+            "address": "부산시 해운대구",
+            "interests": [
+                "제품 구매",
+                "파트너십"
+            ],
+            "status": "active",
+            "emailVerified": true,
+            "createdAt": "2024-01-15T14:30:00.000Z",
+            "lastLoginAt": "2024-01-19T16:45:00.000Z",
+            "source": "inquiry",
+            "marketingConsent": false,
+            "privacyConsent": true,
+            "notes": "문의를 통해 가입한 활성 회원"
+        },
+        {
+            "id": "member-003",
+            "email": "test3@example.com",
+            "name": "박민수",
+            "phone": "010-5555-7777",
+            "company": "XYZ 솔루션",
+            "position": "팀장",
+            "address": "대구시 중구",
+            "interests": [
+                "기술 지원"
+            ],
+            "status": "pending",
+            "emailVerified": false,
+            "createdAt": "2024-01-21T11:15:00.000Z",
+            "lastLoginAt": null,
+            "source": "website",
+            "marketingConsent": true,
+            "privacyConsent": true,
+            "notes": "승인 대기 중인 신규 회원"
+        },
+        {
+            "id": "member-004",
+            "email": "test4@example.com",
+            "name": "정수진",
+            "phone": "010-3333-4444",
+            "company": "디지털 코리아",
+            "position": "차장",
+            "address": "인천시 남동구",
+            "interests": [
+                "제품 문의",
+                "제품 구매"
+            ],
+            "status": "inactive",
+            "emailVerified": true,
+            "createdAt": "2024-01-10T08:20:00.000Z",
+            "lastLoginAt": "2024-01-12T10:30:00.000Z",
+            "source": "manual",
+            "marketingConsent": false,
+            "privacyConsent": true,
+            "notes": "관리자가 수동으로 등록한 회원"
+        },
+        {
+            "id": "cadf4af7-b09d-4ed2-a2e5-f127bd93d179",
+            "email": "test02@test.com",
+            "name": "테스트",
+            "phone": "012-1234-1234",
+            "interests": [],
+            "status": "active",
+            "emailVerified": true,
+            "createdAt": "2025-05-25T17:59:21.378Z",
+            "source": "website",
+            "marketingConsent": true,
+            "privacyConsent": true,
+            "notes": "password_hash:$2b$10$BeFdYPgO4TpbtKTgAPoyru24uHtYJCxzB5sd7hCs.uNuli0taY7UW"
+        },
+        {
+            "id": "0e7c8dd6-95b7-457f-b42f-2abaa1bca500",
+            "email": "test04@test.com",
+            "name": "테스트",
+            "phone": "012-1234-1234",
+            "interests": [],
+            "status": "active",
+            "emailVerified": true,
+            "createdAt": "2025-05-25T18:01:14.927Z",
+            "source": "website",
+            "marketingConsent": true,
+            "privacyConsent": true,
+            "notes": "password_hash:$2b$10$kMsxdo7u4Nu2Mf21GwAQRuQ6QADeKBla1FK99MFDa9gZXCgR3/f.C"
+        },
+        {
+            "id": "04958be2-7f5a-4147-85d1-01ffde0e4015",
+            "email": "test1234@tset.com",
+            "name": "테스트",
+            "phone": "12341234",
+            "company": "테스트/테스트",
+            "position": "테스터",
+            "address": "테스트",
+            "interests": [],
+            "status": "active",
+            "emailVerified": true,
+            "createdAt": "2025-05-25T18:18:47.012Z",
+            "source": "website",
+            "marketingConsent": true,
+            "privacyConsent": true,
+            "notes": "password_hash:$2b$10$hgzZzDBmuPyQrpPB69sjRuANhNtzXus5kJYbuw6yU9YB8ti1UREvm",
+            "lastLoginAt": "2025-05-25T18:19:52.565Z"
+        }
+    ],
+    "metadata": {
+        "lastUpdated": "2025-05-25T18:19:52.565Z",
+        "totalMembers": 7,
+        "activeMembers": 4,
+        "pendingMembers": 2
+    }
+}

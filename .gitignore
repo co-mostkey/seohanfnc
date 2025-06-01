@@ -148,3 +148,8 @@ public
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# 마이그레이션 백업
+backup_*
+migration-log.json
+static-paths-analysis.json

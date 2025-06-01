@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ProductDetailClientProps } from '@/types/component-props';
-import { cn } from '@/lib/utils';
+import { cn, getImagePath } from '@/lib/utils';
 import { Product } from '@/types/product'; // Product 타입 import
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger, SheetFooter, SheetClose } from '@/components/ui/sheet';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'; // ScrollArea 추가
@@ -455,7 +455,7 @@ const ProductDetail: React.FC<DescenderHangerSummaryProps> = ({
                                 <div className="w-24 h-1 mx-auto bg-white/50 rounded-full mb-6 animate-pulse" style={{ animationDuration: '3s' }}></div>
                                 <div className="max-w-3xl mx-auto mb-10">
                                     <Image
-                                        src="/images/products/Descending-Life-line-Hanger/thumbnail.jpg"
+                                        src={getImagePath('/images/products/Descending-Life-line-Hanger/thumbnail.jpg')}
                                         alt="완강기 지지대 대표 이미지"
                                         width={800}
                                         height={450}

@@ -1,4 +1,5 @@
 import React from 'react';
+import { getImagePath } from '@/lib/utils';
 import Link from 'next/link';
 import Image from 'next/image';
 import { SimpleBreadcrumb } from '@/components/ui/breadcrumb';
@@ -26,7 +27,7 @@ export default function GreetingPage() {
       {/* Background Pattern */}
       <div className="absolute inset-0 z-0 opacity-30 dark:opacity-20">
         <Image
-          src="/images/patterns/grid-pattern.svg"
+          src={getImagePath('/images/patterns/grid-pattern.svg')}
           alt="Background Pattern"
           fill
           className="object-cover w-full h-full"
@@ -58,7 +59,7 @@ export default function GreetingPage() {
               <div className="lg:col-span-1 relative flex justify-center lg:justify-start">
                 <div className="relative w-full max-w-xs lg:max-w-none aspect-[3/4] rounded-lg overflow-hidden shadow-xl border-4 border-white dark:border-gray-800">
                   <Image
-                    src="/images/about/ceo-placeholder.jpg"
+                    src={getImagePath('/images/about/ceo-placeholder.jpg')}
                     alt="서한에프앤씨 대표이사 김대표"
                     fill
                     className="object-cover object-top"

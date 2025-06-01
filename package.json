@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "postbuild": "echo 'Postbuild skipped'",
     "start": "next start",
     "lint": "next lint",
     "migrate": "node scripts/migrate-content.js",

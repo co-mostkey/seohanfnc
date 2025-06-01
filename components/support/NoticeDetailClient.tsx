@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
+import { getImagePath } from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ChevronLeft, Calendar, Eye, Tag, AlertCircle, ArrowLeft, ArrowRight } from 'lucide-react';
@@ -112,7 +113,7 @@ export function NoticeDetailClient({ noticeId }: NoticeDetailClientProps) {
     <div className="relative min-h-screen pb-16">
       {/* 배경 이미지 */}
       <Image
-        src="/hero/hero_01.png"
+        src={getImagePath('/hero/hero_01.png')}
         alt="Background"
         fill
         className="absolute inset-0 object-cover"

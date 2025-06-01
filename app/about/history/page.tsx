@@ -1,4 +1,5 @@
 import React from 'react';
+import { getImagePath } from '@/lib/utils';
 import Link from 'next/link';
 import Image from 'next/image';
 import { SimpleBreadcrumb } from '@/components/ui/breadcrumb';
@@ -145,7 +146,7 @@ export default function HistoryPage() {
       {/* Background Pattern */}
       <div className="absolute inset-0 z-0 opacity-30 dark:opacity-20">
         <Image
-          src="/images/patterns/grid-pattern.svg"
+          src={getImagePath('/images/patterns/grid-pattern.svg')}
           alt="Background Pattern"
           fill
           className="object-cover w-full h-full"

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { getImagePath } from '@/lib/utils';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
@@ -277,7 +278,7 @@ export default function AdminDashboardPage() {
                     <div className="flex items-center">
                       <div className="mr-4">
                         <Image
-                          src="/images/logos/google-calendar.svg"
+                          src={getImagePath('/images/logos/google-calendar.svg')}
                           alt="Google Calendar"
                           width={40}
                           height={40}
@@ -379,7 +380,7 @@ export default function AdminDashboardPage() {
                     <div className="flex items-center">
                       <div className="mr-4">
                         <Image
-                          src="/images/logos/microsoft-365.svg"
+                          src={getImagePath('/images/logos/microsoft-365.svg')}
                           alt="Microsoft 365"
                           width={40}
                           height={40}
@@ -405,7 +406,7 @@ export default function AdminDashboardPage() {
                     <div className="flex items-center">
                       <div className="mr-4">
                         <Image
-                          src="/images/logos/slack.svg"
+                          src={getImagePath('/images/logos/slack.svg')}
                           alt="Slack"
                           width={40}
                           height={40}
@@ -569,7 +570,7 @@ export default function AdminDashboardPage() {
                           <div className="flex items-center">
                             <div className="relative h-8 w-8 rounded-full overflow-hidden mr-3">
                               <Image
-                                src="/images/avatars/avatar-1.jpg"
+                                src={getImagePath('/images/avatars/avatar-1.jpg')}
                                 alt="김철수"
                                 fill
                                 className="object-cover"
@@ -602,7 +603,7 @@ export default function AdminDashboardPage() {
                           <div className="flex items-center">
                             <div className="relative h-8 w-8 rounded-full overflow-hidden mr-3">
                               <Image
-                                src="/images/avatars/avatar-2.jpg"
+                                src={getImagePath('/images/avatars/avatar-2.jpg')}
                                 alt="이영희"
                                 fill
                                 className="object-cover"
@@ -635,7 +636,7 @@ export default function AdminDashboardPage() {
                           <div className="flex items-center">
                             <div className="relative h-8 w-8 rounded-full overflow-hidden mr-3">
                               <Image
-                                src="/images/avatars/avatar-3.jpg"
+                                src={getImagePath('/images/avatars/avatar-3.jpg')}
                                 alt="박지성"
                                 fill
                                 className="object-cover"

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
+import { getImagePath } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -203,7 +204,7 @@ export default function CreateNoticePage() {
             <div className="flex items-center">
               <Link href="/admin" className="mr-6" >
                 <Image
-                  src="/logo.png"
+                  src={getImagePath('/logo.png')}
                   alt="서한에프앤씨"
                   width={100}
                   height={30}

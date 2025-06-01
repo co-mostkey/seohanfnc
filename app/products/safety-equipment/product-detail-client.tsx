@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Product, Document, MediaGalleryItem } from '@/types/product'; // ProductFeature, SpecTableItem 등 필요한 타입 추가
-import { cn } from '@/lib/utils'; // cn 함수 임포트 추가
+import { cn, getImagePath } from '@/lib/utils'; // cn 함수 임포트 추가
 
 // 컴포넌트 임포트
 import DynamicModelViewer from '@/components/products/DynamicModelViewer';
@@ -162,7 +162,7 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
                       <h5 className="text-sm font-medium text-white mb-2">지면 충돌시</h5>
                       <div className="relative h-64 flex-grow bg-gray-900/50 rounded overflow-hidden">
                         <Image
-                          src="/images/products/Cylinder-Type-SafetyAirMat/data/Cylinder-Type-SafetyAirMat-test1.jpg"
+                          src={getImagePath('/images/products/Cylinder-Type-SafetyAirMat/data/Cylinder-Type-SafetyAirMat-test1.jpg')}
                           alt="지면 충돌시 충격흡수력 그래프"
                           fill
                           className="object-contain p-2"
@@ -174,7 +174,7 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
                       <h5 className="text-sm font-medium text-white mb-2">공기안전매트</h5>
                       <div className="relative h-64 flex-grow bg-gray-900/50 rounded overflow-hidden">
                         <Image
-                          src="/images/products/Cylinder-Type-SafetyAirMat/data/Cylinder-Type-SafetyAirMat-test2.jpg"
+                          src={getImagePath('/images/products/Cylinder-Type-SafetyAirMat/data/Cylinder-Type-SafetyAirMat-test2.jpg')}
                           alt="공기안전매트 충격흡수력 그래프"
                           fill
                           className="object-contain p-2"

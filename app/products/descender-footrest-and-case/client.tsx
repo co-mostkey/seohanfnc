@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ProductDetailClientProps } from '@/types/component-props';
-import { cn } from '@/lib/utils';
+import { cn, getImagePath } from '@/lib/utils';
 import ProductFeaturesComponent from '@/components/products/safety-equipment/ProductFeatures';
 import { ModelSpecTable } from '@/components/products/ModelSpecTable';
 import ProductImageGallery from '@/components/products/safety-equipment/ProductImageGallery';
@@ -189,7 +189,7 @@ const ProductDetail: React.FC<ProductDetailClientProps> = ({
             {/* 히어로 이미지를 페이지 전체 배경으로 설정 - 오버레이 밝기 조정 */}
             <div className="fixed inset-0 z-0">
                 <Image
-                    src="/images/products/descender-footrest-and-case/main/visual.jpg"
+                    src={getImagePath('/images/products/descender-footrest-and-case/main/visual.jpg')}
                     alt={`${currentProductName} 비주얼`}
                     fill
                     className="object-cover object-center"
@@ -424,7 +424,7 @@ const ProductDetail: React.FC<ProductDetailClientProps> = ({
                                             <div className="md:col-span-1">
                                                 <div className="relative aspect-square w-full overflow-hidden rounded-lg border border-white/10">
                                                     <Image
-                                                        src="/images/products/descender-footrest-and-case/main00.jpg"
+                                                        src={getImagePath('/images/products/descender-footrest-and-case/main00.jpg')}
                                                         alt="설치형 발판: 단독벽부형"
                                                         fill
                                                         className="object-cover"
@@ -467,7 +467,7 @@ const ProductDetail: React.FC<ProductDetailClientProps> = ({
                                             <div className="md:col-span-1">
                                                 <div className="relative aspect-square w-full overflow-hidden rounded-lg border border-white/10">
                                                     <Image
-                                                        src="/images/products/descender-footrest-and-case/hero_placeholder-2.jpg"
+                                                        src={getImagePath('/images/products/descender-footrest-and-case/hero_placeholder-2.jpg')}
                                                         alt="설치형 발판: 탈착식 발판, 완강기 케이스 결합형"
                                                         fill
                                                         className="object-cover"
@@ -514,7 +514,7 @@ const ProductDetail: React.FC<ProductDetailClientProps> = ({
                                     <div className="flex justify-center mb-8">
                                         <div className="relative w-full h-auto overflow-hidden rounded-lg border border-white/10 bg-black/30">
                                             <Image
-                                                src="/images/products/descender-footrest-and-case/main.jpg"
+                                                src={getImagePath('/images/products/descender-footrest-and-case/main.jpg')}
                                                 alt="완강기 발판 및 케이스 인증서"
                                                 width={800}
                                                 height={1100}

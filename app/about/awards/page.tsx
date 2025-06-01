@@ -18,10 +18,6 @@ const allData = awardsAndCertsData; // Assign to a variable first
 const awards = allData.filter(item => item.type === 'award' || item.type === 'selection');
 const certsAndPatents = allData.filter(item => item.type === 'certification' || item.type === 'patent');
 
-// Log the filtered data (keep for debugging if needed)
-console.log('[AwardsPage] awards:', awards);
-console.log('[AwardsPage] certsAndPatents:', certsAndPatents);
-
 // Transform certsAndPatents data for AwardsGallery component, adding basePath
 const galleryItems = certsAndPatents.map((item, index) => {
   const relativeSrc = item.imageSrc || '/images/certs/placeholder.png';
@@ -34,9 +30,6 @@ const galleryItems = certsAndPatents.map((item, index) => {
   }
 });
 
-// Log the transformed gallery items (keep for debugging if needed)
-console.log('[AwardsPage] galleryItems:', galleryItems);
-
 export default function AwardsPage() {
   // Breadcrumb items
   const breadcrumbItems = [
@@ -44,9 +37,6 @@ export default function AwardsPage() {
     { text: '회사소개', href: `${basePath}/about` },
     { text: '인증 및 특허', href: `${basePath}/about/awards`, active: true }
   ];
-
-  // Log inside the component (keep for debugging if needed)
-  // console.log('[AwardsPage] Rendering...');
 
   return (
     <main className="relative min-h-screen flex flex-col bg-gray-50 dark:bg-black">

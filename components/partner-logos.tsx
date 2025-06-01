@@ -1,3 +1,5 @@
+import { getAssetPath } from '@/lib/utils';
+
 import Image from "next/image"
 
 export default function PartnerLogos() {
@@ -9,7 +11,7 @@ export default function PartnerLogos() {
         {Array.from({ length: 6 }).map((_, index) => (
           <div key={index} className="flex items-center justify-center">
             <Image
-              src="/placeholder.svg?height=60&width=120"
+              src={getAssetPath('/placeholder.svg?height=60&width=120')}
               alt={`파트너사 로고 ${index + 1}`}
               width={120}
               height={60}

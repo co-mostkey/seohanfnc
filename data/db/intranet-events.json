@@ -1,0 +1,57 @@
+{
+    "events": [
+        {
+            "id": "1",
+            "title": "경영 전략 회의",
+            "date": "2025-01-10",
+            "month": "1월",
+            "day": "10",
+            "time": "14:00 - 16:00",
+            "location": "대회의실",
+            "type": "meeting",
+            "description": "2025년 경영 전략 논의 및 목표 설정",
+            "createdAt": "2024-12-30T10:00:00.000Z",
+            "updatedAt": "2024-12-30T10:00:00.000Z"
+        },
+        {
+            "id": "2",
+            "title": "2분기 성과 보고 마감",
+            "date": "2025-01-15",
+            "month": "1월",
+            "day": "15",
+            "time": "18:00",
+            "location": "",
+            "type": "deadline",
+            "description": "2분기 각 부서별 성과 보고서 제출 마감",
+            "createdAt": "2024-12-30T10:00:00.000Z",
+            "updatedAt": "2024-12-30T10:00:00.000Z"
+        },
+        {
+            "id": "3",
+            "title": "신제품 개발팀 미팅",
+            "date": "2025-01-17",
+            "month": "1월",
+            "day": "17",
+            "time": "10:30 - 12:00",
+            "location": "소회의실 2",
+            "type": "meeting",
+            "description": "신제품 개발 현황 점검 및 일정 조율",
+            "createdAt": "2024-12-30T10:00:00.000Z",
+            "updatedAt": "2024-12-30T10:00:00.000Z"
+        },
+        {
+            "id": "4",
+            "title": "고객사 방문 - 현대기업",
+            "date": "2025-01-22",
+            "month": "1월",
+            "day": "22",
+            "time": "15:00 - 17:00",
+            "location": "외부",
+            "type": "meeting",
+            "description": "현대기업 신규 프로젝트 논의",
+            "createdAt": "2024-12-30T10:00:00.000Z",
+            "updatedAt": "2024-12-30T10:00:00.000Z"
+        }
+    ],
+    "lastId": 4
+} 

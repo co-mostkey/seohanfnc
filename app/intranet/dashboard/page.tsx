@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { getImagePath } from '@/lib/utils';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
@@ -142,7 +143,7 @@ export default function DashboardPage() {
                   <div className="flex -space-x-2">
                     <div className="relative w-6 h-6 rounded-full overflow-hidden border-2 border-gray-750">
                       <Image
-                        src="/images/avatars/avatar-1.jpg"
+                        src={getImagePath('/images/avatars/avatar-1.jpg')}
                         alt="User Avatar"
                         fill
                         className="object-cover"
@@ -150,7 +151,7 @@ export default function DashboardPage() {
                     </div>
                     <div className="relative w-6 h-6 rounded-full overflow-hidden border-2 border-gray-750">
                       <Image
-                        src="/images/avatars/avatar-2.jpg"
+                        src={getImagePath('/images/avatars/avatar-2.jpg')}
                         alt="User Avatar"
                         fill
                         className="object-cover"
@@ -158,7 +159,7 @@ export default function DashboardPage() {
                     </div>
                     <div className="relative w-6 h-6 rounded-full overflow-hidden border-2 border-gray-750">
                       <Image
-                        src="/images/avatars/avatar-3.jpg"
+                        src={getImagePath('/images/avatars/avatar-3.jpg')}
                         alt="User Avatar"
                         fill
                         className="object-cover"
@@ -185,7 +186,7 @@ export default function DashboardPage() {
                   <div className="flex -space-x-2">
                     <div className="relative w-6 h-6 rounded-full overflow-hidden border-2 border-gray-750">
                       <Image
-                        src="/images/avatars/avatar-5.jpg"
+                        src={getImagePath('/images/avatars/avatar-5.jpg')}
                         alt="User Avatar"
                         fill
                         className="object-cover"
@@ -193,7 +194,7 @@ export default function DashboardPage() {
                     </div>
                     <div className="relative w-6 h-6 rounded-full overflow-hidden border-2 border-gray-750">
                       <Image
-                        src="/images/avatars/avatar-8.jpg"
+                        src={getImagePath('/images/avatars/avatar-8.jpg')}
                         alt="User Avatar"
                         fill
                         className="object-cover"
@@ -201,7 +202,7 @@ export default function DashboardPage() {
                     </div>
                     <div className="relative w-6 h-6 rounded-full overflow-hidden border-2 border-gray-750">
                       <Image
-                        src="/images/avatars/avatar-9.jpg"
+                        src={getImagePath('/images/avatars/avatar-9.jpg')}
                         alt="User Avatar"
                         fill
                         className="object-cover"
@@ -271,7 +272,7 @@ export default function DashboardPage() {
                   <div className="flex -space-x-2">
                     <div className="relative w-6 h-6 rounded-full overflow-hidden border-2 border-gray-750">
                       <Image
-                        src="/images/avatars/avatar-8.jpg"
+                        src={getImagePath('/images/avatars/avatar-8.jpg')}
                         alt="User Avatar"
                         fill
                         className="object-cover"
@@ -279,7 +280,7 @@ export default function DashboardPage() {
                     </div>
                     <div className="relative w-6 h-6 rounded-full overflow-hidden border-2 border-gray-750">
                       <Image
-                        src="/images/avatars/avatar-9.jpg"
+                        src={getImagePath('/images/avatars/avatar-9.jpg')}
                         alt="User Avatar"
                         fill
                         className="object-cover"
@@ -287,7 +288,7 @@ export default function DashboardPage() {
                     </div>
                     <div className="relative w-6 h-6 rounded-full overflow-hidden border-2 border-gray-750">
                       <Image
-                        src="/images/avatars/avatar-10.jpg"
+                        src={getImagePath('/images/avatars/avatar-10.jpg')}
                         alt="User Avatar"
                         fill
                         className="object-cover"
@@ -336,7 +337,7 @@ export default function DashboardPage() {
                   <div className="flex -space-x-2">
                     <div className="relative w-6 h-6 rounded-full overflow-hidden border-2 border-gray-750">
                       <Image
-                        src="/images/avatars/avatar-1.jpg"
+                        src={getImagePath('/images/avatars/avatar-1.jpg')}
                         alt="User Avatar"
                         fill
                         className="object-cover"
@@ -344,7 +345,7 @@ export default function DashboardPage() {
                     </div>
                     <div className="relative w-6 h-6 rounded-full overflow-hidden border-2 border-gray-750">
                       <Image
-                        src="/images/avatars/avatar-2.jpg"
+                        src={getImagePath('/images/avatars/avatar-2.jpg')}
                         alt="User Avatar"
                         fill
                         className="object-cover"
@@ -352,7 +353,7 @@ export default function DashboardPage() {
                     </div>
                     <div className="relative w-6 h-6 rounded-full overflow-hidden border-2 border-gray-750">
                       <Image
-                        src="/images/avatars/avatar-18.jpg"
+                        src={getImagePath('/images/avatars/avatar-18.jpg')}
                         alt="User Avatar"
                         fill
                         className="object-cover"
@@ -510,7 +511,7 @@ export default function DashboardPage() {
               <div className="flex items-start">
                 <div className="relative w-10 h-10 rounded-full overflow-hidden mr-3 flex-shrink-0">
                   <Image
-                    src="/images/avatars/avatar-3.jpg"
+                    src={getImagePath('/images/avatars/avatar-3.jpg')}
                     alt="User Avatar"
                     fill
                     className="object-cover"
@@ -527,7 +528,7 @@ export default function DashboardPage() {
               <div className="flex items-start">
                 <div className="relative w-10 h-10 rounded-full overflow-hidden mr-3 flex-shrink-0">
                   <Image
-                    src="/images/avatars/avatar-11.jpg"
+                    src={getImagePath('/images/avatars/avatar-11.jpg')}
                     alt="User Avatar"
                     fill
                     className="object-cover"
@@ -544,7 +545,7 @@ export default function DashboardPage() {
               <div className="flex items-start">
                 <div className="relative w-10 h-10 rounded-full overflow-hidden mr-3 flex-shrink-0">
                   <Image
-                    src="/images/avatars/avatar-5.jpg"
+                    src={getImagePath('/images/avatars/avatar-5.jpg')}
                     alt="User Avatar"
                     fill
                     className="object-cover"

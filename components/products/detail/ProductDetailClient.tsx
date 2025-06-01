@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { getImagePath } from '@/lib/utils';
 import { Product } from '@/types/product';
 import { findProductById, getCategoryName, getRelatedProducts } from '@/data/products';
 import Image from 'next/image';
@@ -162,7 +163,7 @@ export function ProductDetailClient({ productId }: ProductDetailClientProps) {
               priority
               onError={(e) => {
                 console.error('비주얼 이미지 로드 오류', productId);
-                (e.target as HTMLImageElement).src = '/images/products/default-visual.jpg';
+                (e.target as HTMLImageElement).src={getImagePath('/images/products/default-visual.jpg')};
               }}
             />
           </div>

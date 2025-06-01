@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
+import { getImagePath } from '@/lib/utils';
 import Link from 'next/link';
 import Image from 'next/image';
 import { FiSearch, FiChevronLeft, FiChevronRight, FiCalendar, FiEye, FiTag } from 'react-icons/fi';
@@ -250,7 +251,7 @@ export default function NoticePage() {
     <div className="relative min-h-screen">
       {/* 배경 이미지 */}
       <Image
-        src="/hero/hero_01.png"
+        src={getImagePath('/hero/hero_01.png')}
         alt="Background"
         fill
         className="absolute inset-0 object-cover"

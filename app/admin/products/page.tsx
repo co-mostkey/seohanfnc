@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback, useMemo, Suspense, Fragment } from 'react';
+import { getImagePath } from '@/lib/utils';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -118,7 +119,7 @@ function SortableTableRow({
           src={product.image || "/images/placeholder-product.png"}
           width="64"
           onError={(e) => {
-            (e.target as HTMLImageElement).src = "/images/placeholder-product.png";
+            (e.target as HTMLImageElement).src = getImagePath('/images/placeholder-product.png');
           }}
         />
       </TableCell>

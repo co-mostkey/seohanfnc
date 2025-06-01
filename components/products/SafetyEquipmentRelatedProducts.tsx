@@ -4,7 +4,7 @@ import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { SafetyEquipment } from '@/types/safety-equipment'
-import { cn } from '@/lib/utils'
+import { cn, getImagePath } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge'
 
 interface SafetyEquipmentRelatedProductsProps {
@@ -41,7 +41,7 @@ export function SafetyEquipmentRelatedProducts({ products, className }: SafetyEq
                   className="object-cover transition-transform group-hover:scale-105 p-4"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                   onError={(e) => {
-                    (e.target as HTMLImageElement).src = '/images/fallback-image.jpg';
+                    (e.target as HTMLImageElement).src = getImagePath('/images/fallback-image.jpg');
                   }}
                 />
               ) : (

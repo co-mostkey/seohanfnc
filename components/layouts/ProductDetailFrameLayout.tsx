@@ -6,7 +6,7 @@ import {
   MAIN_CONTENT_PB_DESKTOP_CLASS,
   MAIN_CONTENT_PB_MOBILE_CLASS
 } from '@/lib/layoutConstants';
-import { cn } from '@/lib/utils'; // cn import 추가 (main className에 사용)
+import { cn, getImagePath } from '@/lib/utils'; // cn import 추가 (main className에 사용)
 
 interface ProductDetailFrameLayoutProps {
   children: React.ReactNode;
@@ -20,7 +20,7 @@ export default function ProductDetailFrameLayout({ children }: ProductDetailFram
         {/* 안전구염 이미지를 오버레이로 표시 */}
         <div className="absolute right-0 bottom-0 w-[60vw] h-[70vh] z-0 opacity-20 hidden lg:block">
           <Image
-            src="/images/products/safety-mat-bg.jpg"
+            src={getImagePath('/images/products/safety-mat-bg.jpg')}
             alt="안전구염 배경"
             fill
             className="object-contain object-right-bottom"
@@ -31,7 +31,7 @@ export default function ProductDetailFrameLayout({ children }: ProductDetailFram
         {/* 비주얼 이미지 왼쪽 위치 */}
         <div className="absolute left-0 bottom-[20vh] w-[40vw] h-[50vh] z-0 opacity-30 hidden xl:block">
           <Image
-            src="/images/products/visuals/safety-air-cushion.png"
+            src={getImagePath('/images/products/visuals/safety-air-cushion.png')}
             alt="안전 에어 쿠션"
             fill
             className="object-contain object-left-bottom"
