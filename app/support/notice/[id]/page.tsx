@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
+import { getImagePath } from '@/lib/utils';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -176,7 +177,7 @@ export default function NoticeDetailPage() {
         return (
             <div className="relative min-h-screen">
                 <Image
-                    src="/hero/hero_01.png"
+                    src={getImagePath('/hero/hero_01.png')}
                     alt="Background"
                     fill
                     className="absolute inset-0 object-cover"
@@ -198,7 +199,7 @@ export default function NoticeDetailPage() {
         return (
             <div className="relative min-h-screen">
                 <Image
-                    src="/hero/hero_01.png"
+                    src={getImagePath('/hero/hero_01.png')}
                     alt="Background"
                     fill
                     className="absolute inset-0 object-cover"
@@ -226,7 +227,7 @@ export default function NoticeDetailPage() {
         <div className="relative min-h-screen">
             {/* 배경 이미지 */}
             <Image
-                src="/hero/hero_01.png"
+                src={getImagePath('/hero/hero_01.png')}
                 alt="Background"
                 fill
                 className="absolute inset-0 object-cover"

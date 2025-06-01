@@ -8,7 +8,7 @@ import Image from "next/image"
 import { SimpleBreadcrumb } from '@/components/ui/breadcrumb'
 import { PageHeading } from '@/components/ui/PageHeading'
 import { MapPin, Phone, Printer, Mail } from 'lucide-react'
-import { cn } from "@/lib/utils"
+import { cn, getImagePath } from '@/lib/utils';
 import { Button } from "@/components/ui/button"
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
@@ -149,7 +149,7 @@ export default function LocationPage() {
         {/* Background Pattern */}
         <div className="absolute inset-0 z-0 opacity-30 dark:opacity-20">
           <Image
-            src="/images/patterns/grid-pattern.svg"
+            src={getImagePath('/images/patterns/grid-pattern.svg')}
             alt="Background Pattern"
             fill
             className="object-cover w-full h-full"

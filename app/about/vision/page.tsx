@@ -5,7 +5,7 @@ import { PageHeading } from '@/components/ui/PageHeading';
 import { SimpleBreadcrumb } from '@/components/ui/breadcrumb';
 // GlobalNav는 client-layout.tsx에서 전역적으로 제공되므로 중복 임포트 제거
 import { Lightbulb, CheckCheck, Recycle, Handshake, Scale, Target, Globe, Zap } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn, getImagePath } from '@/lib/utils';
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
@@ -88,7 +88,7 @@ export default function VisionPage() {
     <main className="relative min-h-screen flex flex-col bg-gray-50 dark:bg-black">
       <div className="absolute inset-0 z-0 opacity-30 dark:opacity-20">
         <Image
-          src="/images/patterns/grid-pattern.svg"
+          src={getImagePath('/images/patterns/grid-pattern.svg')}
           alt="Background Pattern"
           fill
           className="object-cover w-full h-full"

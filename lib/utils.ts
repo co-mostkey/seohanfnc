@@ -7,6 +7,67 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 /**
+ * 정적 자산(이미지, 비디오 등)의 경로를 basePath와 assetPrefix를 적용하여 반환합니다.
+ * @param path - 원본 경로 (예: "/images/logo.png")
+ * @returns 환경에 맞게 조정된 경로
+ */
+export function getAssetPath(path: string): string {
+  if (!path) return '';
+
+  // 이미 절대 URL인 경우 그대로 반환
+  if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('//')) {
+    return path;
+  }
+
+  // 환경변수에서 값 가져오기
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+  const assetPrefix = process.env.NEXT_PUBLIC_ASSET_PREFIX || '';
+
+  // assetPrefix가 있으면 우선 사용 (CDN 경로)
+  if (assetPrefix) {
+    // assetPrefix 끝에 / 제거
+    const prefix = assetPrefix.endsWith('/') ? assetPrefix.slice(0, -1) : assetPrefix;
+    // path 시작의 / 확인
+    const pathWithSlash = path.startsWith('/') ? path : `/${path}`;
+    return `${prefix}${pathWithSlash}`;
+  }
+
+  // basePath만 있는 경우
+  if (basePath) {
+    // basePath 끝에 / 제거
+    const base = basePath.endsWith('/') ? basePath.slice(0, -1) : basePath;
+    // path 시작의 / 확인
+    const pathWithSlash = path.startsWith('/') ? path : `/${path}`;
+    return `${base}${pathWithSlash}`;
+  }
+
+  // 둘 다 없으면 원본 경로 반환
+  return path;
+}
+
+/**
+ * 이미지 경로에 대한 특별한 처리
+ * Next.js Image 컴포넌트와 함께 사용하기 위한 함수
+ */
+export function getImagePath(path: string): string {
+  return getAssetPath(path);
+}
+
+/**
+ * 비디오 경로에 대한 특별한 처리
+ */
+export function getVideoPath(path: string): string {
+  return getAssetPath(path);
+}
+
+/**
+ * public 폴더의 정적 파일 경로 처리
+ */
+export function getPublicPath(path: string): string {
+  return getAssetPath(path);
+}
+
+/**
  * LocalizedString 또는 string을 string으로 변환하는 헬퍼 함수
  * @param text - 변환할 텍스트 (string | LocalizedString | undefined)
  * @param locale - 사용할 언어 (기본값: 'ko')

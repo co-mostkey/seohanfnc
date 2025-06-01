@@ -1,5 +1,7 @@
 'use client';
 
+
+import { getImagePath } from '@/lib/utils';
 import Image from 'next/image';
 
 interface ProductTestDataProps {
@@ -43,7 +45,7 @@ const ProductTestData = ({ productId }: ProductTestDataProps) => {
             <h5 className="text-sm font-medium text-white mb-2">지면 충돌시</h5>
             <div className="relative h-64 flex-grow bg-gray-900/50 rounded overflow-hidden">
               <Image 
-                src="/images/products/Cylinder-Type-SafetyAirMat/data/Cylinder-Type-SafetyAirMat-test1.jpg"
+                src={getImagePath('/images/products/Cylinder-Type-SafetyAirMat/data/Cylinder-Type-SafetyAirMat-test1.jpg')}
                 alt="지면 충돌시 충격흡수력 그래프"
                 fill
                 className="object-contain p-2"
@@ -57,7 +59,7 @@ const ProductTestData = ({ productId }: ProductTestDataProps) => {
             <h5 className="text-sm font-medium text-white mb-2">공기안전매트</h5>
             <div className="relative h-64 flex-grow bg-gray-900/50 rounded overflow-hidden">
               <Image 
-                src="/images/products/Cylinder-Type-SafetyAirMat/data/Cylinder-Type-SafetyAirMat-test2.jpg" 
+                src={getImagePath('/images/products/Cylinder-Type-SafetyAirMat/data/Cylinder-Type-SafetyAirMat-test2.jpg')} 
                 alt="공기안전매트 충격흡수력 그래프"
                 fill
                 className="object-contain p-2"

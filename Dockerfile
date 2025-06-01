@@ -45,9 +45,10 @@ WORKDIR /app
 
 # 필요한 파일들 복사
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/content ./content
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/node_modules ./node_modules
 
 # 로그 디렉토리 생성 및 권한 설정
 RUN mkdir -p ./logs && chown nextjs:nodejs ./logs
@@ -69,4 +70,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
 
 # dumb-init을 사용한 안전한 프로세스 시작
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
-CMD ["node", "server.js"] 
+CMD ["pnpm", "start"] 

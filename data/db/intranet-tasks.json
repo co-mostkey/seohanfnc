@@ -1,0 +1,58 @@
+{
+    "tasks": [
+        {
+            "id": "1",
+            "title": "2분기 제품 판매 계획 작성",
+            "dueDate": "2025-05-15",
+            "priority": "high",
+            "assignees": [
+                {
+                    "name": "김직원",
+                    "avatar": null
+                },
+                {
+                    "name": "이과장",
+                    "avatar": null
+                }
+            ],
+            "completed": false,
+            "createdAt": "2024-12-30T10:00:00.000Z",
+            "updatedAt": "2024-12-30T10:00:00.000Z"
+        },
+        {
+            "id": "2",
+            "title": "클라이언트 미팅 자료 준비",
+            "dueDate": "2025-05-09",
+            "priority": "medium",
+            "assignees": [
+                {
+                    "name": "김직원",
+                    "avatar": null
+                }
+            ],
+            "completed": true,
+            "createdAt": "2024-12-30T10:00:00.000Z",
+            "updatedAt": "2024-12-30T10:00:00.000Z"
+        },
+        {
+            "id": "3",
+            "title": "신규 프로젝트 일정 수립",
+            "dueDate": "2025-05-12",
+            "priority": "medium",
+            "assignees": [
+                {
+                    "name": "박부장",
+                    "avatar": null
+                },
+                {
+                    "name": "김직원",
+                    "avatar": null
+                }
+            ],
+            "completed": false,
+            "createdAt": "2024-12-30T10:00:00.000Z",
+            "updatedAt": "2024-12-30T10:00:00.000Z"
+        }
+    ],
+    "lastId": 3
+}

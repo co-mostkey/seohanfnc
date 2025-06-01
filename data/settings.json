@@ -1,0 +1,31 @@
+{
+    "general": {
+        "siteName": "서한F&C",
+        "siteDescription": "서한F&C 웹사이트 관리 시스템",
+        "siteUrl": "https://seohanfc.com",
+        "adminEmail": "admin@seohanfc.com",
+        "timezone": "Asia/Seoul",
+        "maintenanceMode": false,
+        "debugMode": false
+    },
+    "notifications": {
+        "emailNotifications": true,
+        "inquiryNotifications": true,
+        "systemAlerts": true,
+        "notificationEmail": "admin@seohanfc.com",
+        "slackWebhook": ""
+    },
+    "backup": {
+        "autoBackup": true,
+        "backupInterval": 24,
+        "maxBackups": 7,
+        "lastBackup": ""
+    },
+    "performance": {
+        "cacheEnabled": true,
+        "compressionEnabled": true,
+        "imageOptimization": true,
+        "lazyLoading": true,
+        "cdnEnabled": false
+    }
+}

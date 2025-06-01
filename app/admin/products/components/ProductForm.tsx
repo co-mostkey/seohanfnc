@@ -235,25 +235,15 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 toast.error(`서버 파일 삭제 실패: ${result.message || result.error || '알 수 없는 오류'}`);
             }
         } catch (err: any) {
-            toast.error(`파일 삭제 중 클라이언트 오류 발생: ${err.message}`);
+            const errorMessage = err instanceof Error ? err.message : String(err);
+            toast.error(`파일 삭제 중 클라이언트 오류 발생: ${errorMessage}`);
             console.error("File delete error:", err);
         }
     };
 
     const onFormSubmit = (data: ProductFormData) => {
-        console.log('=== Form Submit Debug ===');
-        console.log('Form submitted with data:', data);
-        console.log('Form errors:', errors);
-        console.log('Product Style:', data.productStyle);
-        console.log('Is B Type?:', data.productStyle === 'B');
-
         // 유효성 검사 오류가 있는지 확인
         if (Object.keys(errors).length > 0) {
-            console.error('Form validation errors:', errors);
-            // 각 에러를 개별적으로 출력
-            Object.entries(errors).forEach(([field, error]) => {
-                console.error(`Field "${field}" error:`, error);
-            });
             toast.error('폼에 오류가 있습니다. 모든 필수 필드를 확인해주세요.');
             return;
         }
@@ -267,13 +257,13 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 // gallery_images_data의 id 필드 보장
                 gallery_images_data: data.gallery_images_data?.map(item => ({
                     ...item,
-                    id: item.id || `gallery-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+                    id: item.id || `gallery-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`
                 })) || [],
 
                 // videos의 id 필드 보장
                 videos: data.videos?.map(item => ({
                     ...item,
-                    id: item.id || `video-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+                    id: item.id || `video-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`
                 })) || [],
 
                 // documents의 id 필드 보장
@@ -286,7 +276,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 
                     return {
                         ...item,
-                        id: item.id || `doc-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                        id: item.id || `doc-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`,
                         name: item.name || 'Untitled Document',
                         nameKo: item.nameKo || item.name || '제목 없는 문서',
                         url: item.url || item.path || '',
@@ -296,9 +286,10 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 }) || [],
 
                 // specifications 배열을 객체로 변환
-                specifications: data.specifications?.reduce((acc, spec) => {
+                specifications: data.specifications?.reduce((acc: Record<string, string>, spec: any) => {
                     if (spec.key && spec.value) {
-                        acc[spec.key] = spec.value;
+                        // spec.key를 명시적으로 string으로 변환하여 symbol 오류 방지
+                        acc[String(spec.key)] = String(spec.value);
                     }
                     return acc;
                 }, {} as Record<string, string>) || {},
@@ -344,7 +335,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         <form
             onSubmit={handleSubmit(
                 onFormSubmit,
-                (validationErrors) => {
+                (validationErrors: any) => {
                     console.error('=== Form Validation Failed ===');
                     console.error('Validation errors:', validationErrors);
                     console.error('Error details:', JSON.stringify(validationErrors, null, 2));

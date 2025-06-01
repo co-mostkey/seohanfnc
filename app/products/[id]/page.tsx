@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import { ProductDetailClient } from './page-client';
 import ProductDetailFrameLayout from '@/components/layouts/ProductDetailFrameLayout';
-import { findProductById, getAllProducts, getCategoryName, findProductsByCategory } from '@/data/products';
+import { getProductById, getAllProducts, getCategoryName, findProductsByCategory } from '@/data/products';
 import { Product } from '@/types/product';
 import { ProductVisualExceptions } from '@/types/config'; // 추가
 import visualExceptionsData from '@/config/product-visual-exceptions.json'; // JSON 파일 직접 import
@@ -11,7 +11,7 @@ import visualExceptionsData from '@/config/product-visual-exceptions.json'; // J
 async function getProductData(productId: string): Promise<Product | null> {
   try {
     // 제품 ID를 사용하여 제품 데이터 조회
-    const product = findProductById(productId);
+    const product = getProductById(productId);
 
     // 제품이 존재하지 않거나 공개되지 않은 경우 null 반환
     if (!product || product.isPublished === false) {
@@ -59,7 +59,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     description = '다양한 완강기 지지대 제품을 확인하세요.';
     // imageUrl = "/images/category/descender-supports-category.jpg"; // 필요시 설정
   } else {
-    const product = findProductById(id);
+    const product = getProductById(id);
     if (product) { // product가 유효한 객체일 때만 내부 속성에 접근
       // title 설정
       if (typeof product.name === 'string') {
@@ -101,7 +101,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   if (productId === "descender-hanger-summary") {
     const hangerList = findProductsByCategory("descender-hangers");
     const categoryName = getCategoryName("descenders", 'ko'); // 또는 "descender-hangers" 카테고리 이름
-    const summaryProductData = findProductById("descender-hanger-summary"); // 요약 페이지용 기본 정보
+    const summaryProductData = getProductById("descender-hanger-summary"); // 요약 페이지용 기본 정보
 
     return (
       <ProductDetailFrameLayout>
@@ -120,7 +120,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
       notFound();
     }
     const initialRelatedProducts: Product[] = product.relatedProducts
-      ? product.relatedProducts.map((id: string) => findProductById(id)).filter(Boolean) as Product[]
+      ? product.relatedProducts.map((id: string) => getProductById(id)).filter(Boolean) as Product[]
       : [];
     const categoryName = product.category ? getCategoryName(product.category, 'ko') : '기타';
 

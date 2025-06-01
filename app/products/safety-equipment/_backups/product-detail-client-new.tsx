@@ -12,7 +12,7 @@ import { Badge } from '@/components/ui/badge';
 import { SimpleBreadcrumb } from '@/components/ui/breadcrumb';
 import { ProductDetailImage } from '@/components/products/ProductDetailImage';
 import { ModelSpecTable } from '@/components/products/ModelSpecTable';
-import { cn } from '@/lib/utils';
+import { cn, getImagePath } from '@/lib/utils';
 import { getCategoryName } from '@/data/products';
 
 /**
@@ -155,7 +155,7 @@ export function SafetyEquipmentProductDetail({
               priority
               onError={(e) => {
                 console.error('비주얼 이미지 로드 오류', productId);
-                (e.target as HTMLImageElement).src = '/images/products/default-visual.jpg';
+                (e.target as HTMLImageElement).src={getImagePath('/images/products/default-visual.jpg')};
               }}
             />
           </div>

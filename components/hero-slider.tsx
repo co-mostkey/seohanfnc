@@ -1,12 +1,13 @@
 "use client"
 
-import React, { useState, useEffect, useRef } from "react"
+import React, { useState, useEffect, useRef, useMemo } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { motion, useAnimation, AnimatePresence, useTransform, useSpring, useMotionValue } from "framer-motion"
 import { Menu, Bell, ArrowRight, X, Newspaper, Calendar, Shield, AlertTriangle, FileText, BadgeCheck, Flame, Phone } from "lucide-react"
 import CountUp from 'react-countup'
 import { useTheme } from 'next-themes'
+import { cn, getImagePath } from "@/lib/utils"
 
 const stats = [
   {
@@ -615,7 +616,7 @@ export default function HeroSlider() {
           }}
         >
           <Image
-            src="/hero/hero_01.png"
+            src={getImagePath("/hero/hero_01.png")}
             alt="Hero Background"
             fill
             className="object-contain md:object-cover object-center opacity-70 dark:opacity-90 scale-110"
@@ -901,7 +902,7 @@ export default function HeroSlider() {
                                       <div key={`set1-${index}`} className="group relative flex-shrink-0 w-[130px] md:w-[150px] lg:w-[170px] aspect-[3/4] bg-white dark:bg-gray-800 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 shadow-sm transition-all hover:shadow-md mx-2">
                                         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-gray-100 dark:to-gray-800 opacity-5"></div>
                                         <Image
-                                          src={index < 10 ? `/imgsign/m_3_4_img${index}.jpg` : `/imgsign/m_3_4_img${index}.jpg`}
+                                          src={getImagePath(index < 10 ? `/imgsign/m_3_4_img${index}.jpg` : `/imgsign/m_3_4_img${index}.jpg`)}
                                           alt={`인증서 ${index + 1}`}
                                           fill
                                           className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -919,7 +920,7 @@ export default function HeroSlider() {
                                       <div key={`set2-${index}`} className="group relative flex-shrink-0 w-[130px] md:w-[150px] lg:w-[170px] aspect-[3/4] bg-white dark:bg-gray-800 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 shadow-sm transition-all hover:shadow-md mx-2">
                                         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-gray-100 dark:to-gray-800 opacity-5"></div>
                                         <Image
-                                          src={index < 10 ? `/imgsign/m_3_4_img${index}.jpg` : `/imgsign/m_3_4_img${index}.jpg`}
+                                          src={getImagePath(index < 10 ? `/imgsign/m_3_4_img${index}.jpg` : `/imgsign/m_3_4_img${index}.jpg`)}
                                           alt={`인증서 ${index + 1}`}
                                           fill
                                           className="object-cover group-hover:scale-105 transition-transform duration-300"
