@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Member, MemberData, MemberStats } from '@/types/member';
 import { safeReadJSON, safeWriteJSON, restoreFromBackup } from '@/lib/file-lock';
 import { dataRecovery } from '@/lib/data-integrity';
+import { backupDataFile, validateMemberData, ensureDirExists } from '@/lib/apiUtils';
 
 const dataDir = path.join(process.cwd(), 'data', 'db');
 const membersFilePath = path.join(dataDir, 'members.json');
@@ -189,6 +190,19 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
+        // [TRISID] 2025-06-01: 폴더 자동 생성 및 데이터 검증, 자동 백업 적용
+        ensureDirExists('data/db');
+        ensureDirExists('data/db/backups');
+
+        // 데이터 검증 (동기 함수이므로 await 제거)
+        if (!validateMemberData(body)) {
+            return NextResponse.json(
+                { success: false, error: '유효하지 않은 회원 데이터입니다.' },
+                { status: 400 }
+            );
+        }
+
+        await backupDataFile('data/db/members.json');
         const {
             email,
             name,
@@ -278,32 +292,24 @@ export async function POST(request: NextRequest) {
  */
 export async function PUT(request: NextRequest) {
     try {
-        const body = await request.json();
-        const {
-            id,
-            email,
-            name,
-            phone,
-            company,
-            position,
-            address,
-            interests,
-            status,
-            emailVerified,
-            marketingConsent,
-            privacyConsent,
-            notes
-        } = body;
+        console.log('[PUT] 회원 수정 요청 시작');
 
-        if (!id) {
+        const body = await request.json();
+        console.log('[PUT] 요청 본문:', JSON.stringify(body, null, 2));
+
+        if (!body || !body.id) {
             return NextResponse.json(
                 { success: false, error: '회원 ID가 필요합니다.' },
                 { status: 400 }
             );
         }
 
-        const memberData = await loadMembers();
-        const memberIndex = memberData.members.findIndex(m => m.id === id);
+        // 파일 직접 처리
+        const membersFile = path.join(process.cwd(), 'data', 'db', 'members.json');
+        const fileContent = await fs.readFile(membersFile, 'utf8');
+        const memberData = JSON.parse(fileContent);
+
+        const memberIndex = memberData.members.findIndex((m: any) => m.id === body.id);
 
         if (memberIndex === -1) {
             return NextResponse.json(
@@ -314,37 +320,35 @@ export async function PUT(request: NextRequest) {
 
         const existingMember = memberData.members[memberIndex];
 
-        // 이메일 중복 확인 (자신 제외)
-        if (email && email !== existingMember.email) {
-            const duplicateMember = memberData.members.find(m =>
-                m.id !== id && m.email === email.toLowerCase()
-            );
-            if (duplicateMember) {
-                return NextResponse.json(
-                    { success: false, error: '이미 존재하는 이메일입니다.' },
-                    { status: 409 }
-                );
-            }
-        }
-
-        // 회원 정보 업데이트
+        // 업데이트할 필드들 처리
         const updatedMember = { ...existingMember };
 
-        if (email !== undefined) updatedMember.email = email.trim().toLowerCase();
-        if (name !== undefined) updatedMember.name = name.trim();
-        if (phone !== undefined) updatedMember.phone = phone?.trim();
-        if (company !== undefined) updatedMember.company = company?.trim();
-        if (position !== undefined) updatedMember.position = position?.trim();
-        if (address !== undefined) updatedMember.address = address?.trim();
-        if (interests !== undefined) updatedMember.interests = interests;
-        if (status !== undefined) updatedMember.status = status;
-        if (emailVerified !== undefined) updatedMember.emailVerified = emailVerified;
-        if (marketingConsent !== undefined) updatedMember.marketingConsent = marketingConsent;
-        if (privacyConsent !== undefined) updatedMember.privacyConsent = privacyConsent;
-        if (notes !== undefined) updatedMember.notes = notes?.trim();
+        if (body.status !== undefined) updatedMember.status = body.status;
+        if (body.name !== undefined) updatedMember.name = body.name.trim();
+        if (body.email !== undefined) updatedMember.email = body.email.trim().toLowerCase();
+        if (body.phone !== undefined) updatedMember.phone = body.phone?.trim();
+        if (body.company !== undefined) updatedMember.company = body.company?.trim();
+        if (body.position !== undefined) updatedMember.position = body.position?.trim();
+        if (body.address !== undefined) updatedMember.address = body.address?.trim();
+        if (body.interests !== undefined) updatedMember.interests = body.interests;
+        if (body.emailVerified !== undefined) updatedMember.emailVerified = body.emailVerified;
+        if (body.marketingConsent !== undefined) updatedMember.marketingConsent = body.marketingConsent;
+        if (body.privacyConsent !== undefined) updatedMember.privacyConsent = body.privacyConsent;
+        if (body.notes !== undefined) updatedMember.notes = body.notes?.trim();
 
         memberData.members[memberIndex] = updatedMember;
-        await saveMembers(memberData);
+
+        // 메타데이터 업데이트
+        memberData.metadata = {
+            lastUpdated: new Date().toISOString(),
+            totalMembers: memberData.members.length,
+            activeMembers: memberData.members.filter((m: any) => m.status === 'active').length,
+            pendingMembers: memberData.members.filter((m: any) => m.status === 'pending').length
+        };
+
+        await fs.writeFile(membersFile, JSON.stringify(memberData, null, 2));
+
+        console.log('[PUT] 회원 정보 수정 완료:', updatedMember.name, updatedMember.status);
 
         return NextResponse.json({
             success: true,
@@ -352,7 +356,7 @@ export async function PUT(request: NextRequest) {
             message: '회원 정보가 성공적으로 수정되었습니다.'
         });
     } catch (error) {
-        console.error('회원 수정 오류:', error);
+        console.error('[PUT] 회원 수정 오류:', error);
         return NextResponse.json(
             {
                 success: false,
@@ -369,6 +373,8 @@ export async function PUT(request: NextRequest) {
  */
 export async function DELETE(request: NextRequest) {
     try {
+        console.log('[DELETE] 회원 삭제 요청 시작');
+
         const { searchParams } = new URL(request.url);
         const id = searchParams?.get('id');
 
@@ -379,8 +385,14 @@ export async function DELETE(request: NextRequest) {
             );
         }
 
-        const memberData = await loadMembers();
-        const memberIndex = memberData.members.findIndex(m => m.id === id);
+        console.log('[DELETE] 삭제할 회원 ID:', id);
+
+        // 파일 직접 처리
+        const membersFile = path.join(process.cwd(), 'data', 'db', 'members.json');
+        const fileContent = await fs.readFile(membersFile, 'utf8');
+        const memberData = JSON.parse(fileContent);
+
+        const memberIndex = memberData.members.findIndex((m: any) => m.id === id);
 
         if (memberIndex === -1) {
             return NextResponse.json(
@@ -391,14 +403,25 @@ export async function DELETE(request: NextRequest) {
 
         const deletedMember = memberData.members[memberIndex];
         memberData.members.splice(memberIndex, 1);
-        await saveMembers(memberData);
+
+        // 메타데이터 업데이트
+        memberData.metadata = {
+            lastUpdated: new Date().toISOString(),
+            totalMembers: memberData.members.length,
+            activeMembers: memberData.members.filter((m: any) => m.status === 'active').length,
+            pendingMembers: memberData.members.filter((m: any) => m.status === 'pending').length
+        };
+
+        await fs.writeFile(membersFile, JSON.stringify(memberData, null, 2));
+
+        console.log('[DELETE] 회원 삭제 완료:', deletedMember.name);
 
         return NextResponse.json({
             success: true,
             message: `${deletedMember.name} 회원이 삭제되었습니다.`
         });
     } catch (error) {
-        console.error('회원 삭제 오류:', error);
+        console.error('[DELETE] 회원 삭제 오류:', error);
         return NextResponse.json(
             {
                 success: false,

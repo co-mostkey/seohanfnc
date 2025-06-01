@@ -1,0 +1,52 @@
+# [TRISID] 서한F&C 웹사이트 - DigitalOcean App Platform 설정
+name: seohanfnc-website
+services:
+- name: web
+  source_dir: /
+  github:
+    repo: your-username/main_seohan-website
+    branch: main
+  run_command: pnpm start
+  build_command: pnpm build
+  environment_slug: node-js
+  instance_count: 1
+  instance_size_slug: basic-xxs
+  envs:
+  - key: NODE_ENV
+    value: production
+  - key: PORT
+    value: "3000"
+  - key: NEXT_TELEMETRY_DISABLED
+    value: "1"
+  - key: JWT_SECRET
+    value: your-jwt-secret-key-here
+    type: SECRET
+  - key: ADMIN_DEFAULT_PASSWORD
+    value: your-admin-password-here
+    type: SECRET
+  - key: SMTP_HOST
+    value: smtp.gmail.com
+  - key: SMTP_PORT
+    value: "587"
+  - key: SMTP_USER
+    value: your-email@gmail.com
+    type: SECRET
+  - key: SMTP_PASS
+    value: your-email-password
+    type: SECRET
+  - key: EMAIL_FROM
+    value: noreply@seohanfnc.com
+  - key: KAKAO_MAP_API_KEY
+    value: your-kakao-api-key
+    type: SECRET
+  http_port: 3000
+  health_check:
+    http_path: /api/health
+    initial_delay_seconds: 10
+    period_seconds: 10
+    timeout_seconds: 5
+    failure_threshold: 3
+    success_threshold: 2
+  routes:
+  - path: /
+static_sites: [] 

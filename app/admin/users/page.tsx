@@ -183,46 +183,83 @@ export default function AdminUsersPage() {
     };
 
     const saveMember = async () => {
+        console.log('[saveMember] 회원 저장 시작:', editMember);
+
         try {
+            // 필수 필드 검증
+            if (!editMember.name || !editMember.email) {
+                toast.error('이름과 이메일은 필수 입력 항목입니다.');
+                return;
+            }
+
             const method = editMember.id ? 'PUT' : 'POST';
+            console.log('[saveMember] 사용할 HTTP 메서드:', method);
+
             const response = await fetch('/api/admin/members', {
                 method,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(editMember),
             });
 
+            console.log('[saveMember] 응답 상태:', response.status);
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('[saveMember] 응답 오류:', errorText);
+                throw new Error(`HTTP ${response.status}: ${errorText}`);
+            }
+
             const data = await response.json();
+            console.log('[saveMember] 응답 데이터:', data);
+
             if (data.success) {
-                toast.success(data.message);
+                toast.success(data.message || '회원 정보가 저장되었습니다.');
                 setMemberModalOpen(false);
                 loadMembers();
             } else {
-                toast.error(data.error);
+                throw new Error(data.error || '저장에 실패했습니다.');
             }
-        } catch {
-            toast.error('저장에 실패했습니다.');
+        } catch (error) {
+            console.error('[saveMember] 회원 저장 오류:', error);
+            toast.error(`저장에 실패했습니다: ${error instanceof Error ? error.message : String(error)}`);
         }
     };
 
     const deleteMember = async (id: string) => {
         if (!confirm('회원을 삭제하시겠습니까?')) return;
+
+        console.log('[deleteMember] 회원 삭제 시작:', id);
+
         try {
             const response = await fetch(`/api/admin/members?id=${id}`, { method: 'DELETE' });
+
+            console.log('[deleteMember] 응답 상태:', response.status);
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('[deleteMember] 응답 오류:', errorText);
+                throw new Error(`HTTP ${response.status}: ${errorText}`);
+            }
+
             const data = await response.json();
+            console.log('[deleteMember] 응답 데이터:', data);
 
             if (data.success) {
-                toast.success(data.message);
+                toast.success(data.message || '회원이 삭제되었습니다.');
                 loadMembers();
             } else {
-                toast.error(data.error);
+                throw new Error(data.error || '삭제에 실패했습니다.');
             }
-        } catch {
-            toast.error('삭제 실패');
+        } catch (error) {
+            console.error('[deleteMember] 회원 삭제 오류:', error);
+            toast.error(`삭제 실패: ${error instanceof Error ? error.message : String(error)}`);
         }
     };
 
     // 회원 승인/거부 기능
     const approveMember = async (id: string) => {
+        console.log('[approveMember] 회원 승인 시작:', id);
+
         try {
             const response = await fetch('/api/admin/members', {
                 method: 'PUT',
@@ -234,21 +271,34 @@ export default function AdminUsersPage() {
                 }),
             });
 
+            console.log('[approveMember] 응답 상태:', response.status);
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('[approveMember] 응답 오류:', errorText);
+                throw new Error(`HTTP ${response.status}: ${errorText}`);
+            }
+
             const data = await response.json();
+            console.log('[approveMember] 응답 데이터:', data);
+
             if (data.success) {
                 toast.success('회원이 승인되었습니다.');
                 loadMembers();
             } else {
-                toast.error(data.error);
+                throw new Error(data.error || '승인 처리에 실패했습니다.');
             }
         } catch (error) {
-            console.error('회원 승인 오류:', error);
-            toast.error('승인 처리에 실패했습니다.');
+            console.error('[approveMember] 회원 승인 오류:', error);
+            toast.error(`승인 처리에 실패했습니다: ${error instanceof Error ? error.message : String(error)}`);
         }
     };
 
     const rejectMember = async (id: string) => {
         if (!confirm('회원 가입을 거부하시겠습니까?')) return;
+
+        console.log('[rejectMember] 회원 거부 시작:', id);
+
         try {
             const response = await fetch('/api/admin/members', {
                 method: 'PUT',
@@ -259,41 +309,72 @@ export default function AdminUsersPage() {
                 }),
             });
 
+            console.log('[rejectMember] 응답 상태:', response.status);
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('[rejectMember] 응답 오류:', errorText);
+                throw new Error(`HTTP ${response.status}: ${errorText}`);
+            }
+
             const data = await response.json();
+            console.log('[rejectMember] 응답 데이터:', data);
+
             if (data.success) {
                 toast.success('회원 가입이 거부되었습니다.');
                 loadMembers();
             } else {
-                toast.error(data.error);
+                throw new Error(data.error || '거부 처리에 실패했습니다.');
             }
         } catch (error) {
-            console.error('회원 거부 오류:', error);
-            toast.error('거부 처리에 실패했습니다.');
+            console.error('[rejectMember] 회원 거부 오류:', error);
+            toast.error(`거부 처리에 실패했습니다: ${error instanceof Error ? error.message : String(error)}`);
         }
     };
 
     // 회원 상태 변경
     const changeMemberStatus = async (id: string, newStatus: string) => {
+        console.log('[changeMemberStatus] 상태 변경 시작:', id, newStatus);
+
         try {
             const response = await fetch('/api/admin/members', {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                },
                 body: JSON.stringify({
                     id,
                     status: newStatus
                 }),
             });
 
+            console.log('[changeMemberStatus] 응답 상태:', response.status);
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('[changeMemberStatus] 응답 오류:', errorText);
+                throw new Error(`HTTP ${response.status}: ${errorText}`);
+            }
+
             const data = await response.json();
+            console.log('[changeMemberStatus] 응답 데이터:', data);
+
             if (data.success) {
-                toast.success(`회원 상태가 ${newStatus === 'active' ? '활성' : newStatus === 'inactive' ? '비활성' : newStatus === 'suspended' ? '정지' : '대기'}로 변경되었습니다.`);
+                const statusNames = {
+                    'active': '활성',
+                    'inactive': '비활성',
+                    'pending': '대기',
+                    'suspended': '정지'
+                };
+
+                toast.success(`회원 상태가 ${statusNames[newStatus as keyof typeof statusNames] || newStatus}로 변경되었습니다.`);
                 loadMembers();
             } else {
-                toast.error(data.error);
+                throw new Error(data.error || '상태 변경에 실패했습니다.');
             }
         } catch (error) {
-            console.error('상태 변경 오류:', error);
-            toast.error('상태 변경에 실패했습니다.');
+            console.error('[changeMemberStatus] 상태 변경 오류:', error);
+            toast.error(`상태 변경에 실패했습니다: ${error instanceof Error ? error.message : String(error)}`);
         }
     };
 
@@ -542,20 +623,45 @@ export default function AdminUsersPage() {
                                                     </>
                                                 )}
 
-                                                <Select
-                                                    value={member.status}
-                                                    onValueChange={(newStatus) => changeMemberStatus(member.id, newStatus)}
-                                                >
-                                                    <SelectTrigger className="w-20 h-8 text-xs">
-                                                        <SelectValue />
-                                                    </SelectTrigger>
-                                                    <SelectContent>
-                                                        <SelectItem value="active">활성</SelectItem>
-                                                        <SelectItem value="inactive">비활성</SelectItem>
-                                                        <SelectItem value="pending">대기</SelectItem>
-                                                        <SelectItem value="suspended">정지</SelectItem>
-                                                    </SelectContent>
-                                                </Select>
+                                                {/* 상태 변경 버튼 그룹 */}
+                                                <div className="flex space-x-1">
+                                                    <Button
+                                                        size="sm"
+                                                        variant={member.status === 'active' ? 'default' : 'outline'}
+                                                        className={`h-7 text-xs ${member.status === 'active'
+                                                            ? 'bg-green-600 hover:bg-green-700 text-white'
+                                                            : 'border-green-300 text-green-600 hover:bg-green-50'
+                                                            }`}
+                                                        onClick={() => changeMemberStatus(member.id, 'active')}
+                                                        disabled={member.status === 'active'}
+                                                    >
+                                                        활성
+                                                    </Button>
+                                                    <Button
+                                                        size="sm"
+                                                        variant={member.status === 'inactive' ? 'default' : 'outline'}
+                                                        className={`h-7 text-xs ${member.status === 'inactive'
+                                                            ? 'bg-gray-600 hover:bg-gray-700 text-white'
+                                                            : 'border-gray-300 text-gray-600 hover:bg-gray-50'
+                                                            }`}
+                                                        onClick={() => changeMemberStatus(member.id, 'inactive')}
+                                                        disabled={member.status === 'inactive'}
+                                                    >
+                                                        비활성
+                                                    </Button>
+                                                    <Button
+                                                        size="sm"
+                                                        variant={member.status === 'suspended' ? 'default' : 'outline'}
+                                                        className={`h-7 text-xs ${member.status === 'suspended'
+                                                            ? 'bg-red-600 hover:bg-red-700 text-white'
+                                                            : 'border-red-300 text-red-600 hover:bg-red-50'
+                                                            }`}
+                                                        onClick={() => changeMemberStatus(member.id, 'suspended')}
+                                                        disabled={member.status === 'suspended'}
+                                                    >
+                                                        정지
+                                                    </Button>
+                                                </div>
 
                                                 <Button
                                                     size="icon"
@@ -857,37 +963,95 @@ export default function AdminUsersPage() {
                         <div className="space-y-3">
                             <div>
                                 <Label className="block mb-1 text-sm">상태</Label>
-                                <Select
-                                    value={editMember.status || 'active'}
-                                    onValueChange={value => setEditMember({ ...editMember, status: value as any })}
-                                >
-                                    <SelectTrigger className={`${ADMIN_UI.BG_INPUT} ${ADMIN_UI.BORDER_MEDIUM}`}>
-                                        <SelectValue placeholder="상태 선택" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="active">활성</SelectItem>
-                                        <SelectItem value="inactive">비활성</SelectItem>
-                                        <SelectItem value="pending">대기</SelectItem>
-                                        <SelectItem value="suspended">정지</SelectItem>
-                                    </SelectContent>
-                                </Select>
+                                <div className="flex flex-wrap gap-2">
+                                    <Button
+                                        type="button"
+                                        size="sm"
+                                        variant={editMember.status === 'active' ? 'default' : 'outline'}
+                                        className={`h-8 text-xs ${editMember.status === 'active'
+                                            ? 'bg-green-600 hover:bg-green-700 text-white'
+                                            : 'border-green-300 text-green-600 hover:bg-green-50'
+                                            }`}
+                                        onClick={() => setEditMember({ ...editMember, status: 'active' })}
+                                    >
+                                        활성
+                                    </Button>
+                                    <Button
+                                        type="button"
+                                        size="sm"
+                                        variant={editMember.status === 'inactive' ? 'default' : 'outline'}
+                                        className={`h-8 text-xs ${editMember.status === 'inactive'
+                                            ? 'bg-gray-600 hover:bg-gray-700 text-white'
+                                            : 'border-gray-300 text-gray-600 hover:bg-gray-50'
+                                            }`}
+                                        onClick={() => setEditMember({ ...editMember, status: 'inactive' })}
+                                    >
+                                        비활성
+                                    </Button>
+                                    <Button
+                                        type="button"
+                                        size="sm"
+                                        variant={editMember.status === 'pending' ? 'default' : 'outline'}
+                                        className={`h-8 text-xs ${editMember.status === 'pending'
+                                            ? 'bg-yellow-600 hover:bg-yellow-700 text-white'
+                                            : 'border-yellow-300 text-yellow-600 hover:bg-yellow-50'
+                                            }`}
+                                        onClick={() => setEditMember({ ...editMember, status: 'pending' })}
+                                    >
+                                        대기
+                                    </Button>
+                                    <Button
+                                        type="button"
+                                        size="sm"
+                                        variant={editMember.status === 'suspended' ? 'default' : 'outline'}
+                                        className={`h-8 text-xs ${editMember.status === 'suspended'
+                                            ? 'bg-red-600 hover:bg-red-700 text-white'
+                                            : 'border-red-300 text-red-600 hover:bg-red-50'
+                                            }`}
+                                        onClick={() => setEditMember({ ...editMember, status: 'suspended' })}
+                                    >
+                                        정지
+                                    </Button>
+                                </div>
                             </div>
                             <div>
                                 <Label className="block mb-1 text-sm">가입 경로</Label>
-                                <Select
-                                    value={editMember.source || 'manual'}
-                                    onValueChange={value => setEditMember({ ...editMember, source: value as any })}
-                                >
-                                    <SelectTrigger className={`${ADMIN_UI.BG_INPUT} ${ADMIN_UI.BORDER_MEDIUM}`}>
-                                        <SelectValue placeholder="가입 경로" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="website">웹사이트</SelectItem>
-                                        <SelectItem value="inquiry">문의</SelectItem>
-                                        <SelectItem value="manual">수동 등록</SelectItem>
-                                        <SelectItem value="import">일괄 등록</SelectItem>
-                                    </SelectContent>
-                                </Select>
+                                <div className="space-y-2">
+                                    <div className="flex gap-2">
+                                        <Button
+                                            type="button"
+                                            size="sm"
+                                            variant={editMember.source === 'website' ? 'default' : 'outline'}
+                                            className={`h-8 text-xs ${editMember.source === 'website'
+                                                ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                                                : 'border-blue-300 text-blue-600 hover:bg-blue-50'
+                                                }`}
+                                            onClick={() => setEditMember({ ...editMember, source: 'website' })}
+                                        >
+                                            웹사이트
+                                        </Button>
+                                        <Button
+                                            type="button"
+                                            size="sm"
+                                            variant={editMember.source !== 'website' ? 'default' : 'outline'}
+                                            className={`h-8 text-xs ${editMember.source !== 'website'
+                                                ? 'bg-orange-600 hover:bg-orange-700 text-white'
+                                                : 'border-orange-300 text-orange-600 hover:bg-orange-50'
+                                                }`}
+                                            onClick={() => setEditMember({ ...editMember, source: (editMember.source === 'website' ? 'inquiry' : 'inquiry') as 'inquiry' | 'website' | 'manual' | 'import' })}
+                                        >
+                                            기타
+                                        </Button>
+                                    </div>
+                                    {editMember.source !== 'website' && (
+                                        <Input
+                                            placeholder="가입 경로를 직접 입력하세요 (예: 문의, 수동등록, 일괄등록, 전화문의 등)"
+                                            value={(editMember.source as string) !== 'website' ? (editMember.source || '') : ''}
+                                            onChange={e => setEditMember({ ...editMember, source: (e.target.value || 'inquiry') as 'inquiry' | 'website' | 'manual' | 'import' })}
+                                            className={`${ADMIN_UI.BG_INPUT} ${ADMIN_UI.BORDER_MEDIUM} text-sm`}
+                                        />
+                                    )}
+                                </div>
                             </div>
                             <div className="flex items-center space-x-2">
                                 <Switch
@@ -915,6 +1079,13 @@ export default function AdminUsersPage() {
                         </div>
                     </div>
                     <DialogFooter className="mt-4">
+                        <Button
+                            variant="outline"
+                            onClick={() => setMemberModalOpen(false)}
+                            className="mr-2"
+                        >
+                            취소
+                        </Button>
                         <Button onClick={saveMember} className={`${ADMIN_UI.BUTTON_PRIMARY}`} style={ADMIN_FONT_STYLES.BUTTON}>
                             저장
                         </Button>

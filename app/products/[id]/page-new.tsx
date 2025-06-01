@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
-import { ProductDetailClient } from './page-client';
+import ProductDetailClient from './page-client';
 import ProductDetailFrameLayout from '@/components/layouts/ProductDetailFrameLayout';
 import { findProductById } from '@/data/products';
 import { Product } from '@/types/product';
@@ -68,7 +68,7 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
   // 제품이 있으면 클라이언트 컴포넌트로 렌더링
   return (
     <ProductDetailFrameLayout>
-      <ProductDetailClient product={product} />
+      <ProductDetailClient productId={productId} />
     </ProductDetailFrameLayout>
   );
 }

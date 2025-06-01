@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ChevronLeft, Save, X, Check, Image as ImageIcon, FileUp, Plus, Trash2 } from 'lucide-react';
-import dynamic from 'next/dynamic';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import { PageHeading } from '@/components/ui/PageHeading';
 import { Input } from '@/components/ui/input';
@@ -13,10 +12,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { toast } from '@/hooks/use-toast';
-
-// Dynamic import for ReactQuill (client-side only)
-const ReactQuill = dynamic(() => import('react-quill-new'), { ssr: false });
-import 'react-quill-new/dist/quill.snow.css'; // Import Quill styles
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 // 카테고리 목록
 const categories = [
@@ -71,28 +69,6 @@ export default function CreateNoticePage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
-  // 에디터 옵션
-  const modules = {
-    toolbar: [
-      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-      [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-      [{ 'color': [] }, { 'background': [] }],
-      [{ 'align': [] }],
-      ['link', 'image'],
-      ['clean']
-    ],
-  };
-
-  const formats = [
-    'header',
-    'bold', 'italic', 'underline', 'strike', 'blockquote',
-    'list', 'bullet',
-    'color', 'background',
-    'align',
-    'link', 'image'
-  ];
-
   // 입력 변경 핸들러
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -115,7 +91,8 @@ export default function CreateNoticePage() {
   };
 
   // 에디터 내용 변경 핸들러
-  const handleEditorChange = (content: string) => {
+  const handleEditorChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const content = e.target.value;
     setNotice(prev => ({ ...prev, content }));
 
     // 입력 시 content 필드의 에러 메시지 제거
@@ -367,17 +344,14 @@ export default function CreateNoticePage() {
                     내용 <span className="text-red-500">*</span>
                   </label>
                   <div className={`${errors.content ? 'border border-red-500 rounded-md' : ''}`}>
-                    {typeof window !== 'undefined' && (
-                      <ReactQuill
-                        theme="snow"
-                        value={notice.content}
-                        onChange={handleEditorChange}
-                        modules={modules}
-                        formats={formats}
-                        placeholder="내용을 입력하세요"
-                        className="bg-gray-800 text-white rounded-md border border-gray-700 min-h-[300px]"
-                      />
-                    )}
+                    <Textarea
+                      id="content"
+                      name="content"
+                      value={notice.content}
+                      onChange={handleEditorChange}
+                      className={`w-full px-4 py-2 bg-gray-800 border ${errors.content ? 'border-red-500' : 'border-gray-700'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent`}
+                      placeholder="내용을 입력하세요"
+                    />
                     {errors.content && (
                       <p className="mt-1 text-sm text-red-500">{errors.content}</p>
                     )}

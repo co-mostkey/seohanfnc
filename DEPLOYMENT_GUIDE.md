@@ -1,295 +1,193 @@
-# 🚀 서한F&C 웹사이트 배포 가이드
+# [TRISID] 서한F&C 웹사이트 배포 가이드
 
-## 📋 배포 전 체크리스트
+## 📋 프로젝트 현황 (2024년 최신)
 
-### ✅ **필수 확인사항**
-- [x] TypeScript 컴파일 오류: **0개** ✨
-- [x] 프로덕션 빌드 성공: **완료** ✨
-- [x] 모든 제품 데이터 로딩: **50+ 제품** ✨
-- [x] 파일 시스템 기반 안정성: **확보** ✨
-- [x] 헬스체크 API: **구현완료** ✨
+### 🔧 기술 스택
+- **프레임워크**: Next.js 15.3.3 (App Router)
+- **런타임**: Node.js 20.x LTS
+- **패키지 매니저**: pnpm 10.x
+- **언어**: TypeScript 5.8.3, JavaScript (혼용)
+- **스타일링**: Tailwind CSS 3.4.17
+- **UI 컴포넌트**: Shadcn UI, Lucide React 0.454.0
+- **애니메이션**: Framer Motion 12.15.0
+- **상태관리**: React Hooks, Context API
+- **데이터 저장**: 파일시스템 기반 (JSON)
 
----
+### 🏗️ 아키텍처
+- **홈페이지**: 일반 사용자용 공개 웹사이트
+- **관리자페이지**: 콘텐츠 관리 시스템 (CMS)
+- **인트라넷**: 내부 직원용 시스템
+- **API**: RESTful API (Next.js API Routes)
+- **배포**: DigitalOcean Cloud (Linux 서버)
 
-## 🏗️ **NHN 클라우드 배포 단계**
+## 🚀 배포 전 체크리스트
 
-### **1단계: 환경 준비**
+### ✅ 필수 검증 항목
 
-#### **서버 요구사항 (고급 보안 강화)**- **OS**: Ubuntu 22.04 LTS 이상 (보안 업데이트 적용)- **Node.js**: 22.x LTS 이상 (최신 보안 패치 적용)- **메모리**: 최소 2GB, 권장 4GB- **디스크**: 최소 10GB, 권장 20GB- **포트**: 3000 (또는 환경에 맞게 조정)- **Docker**: 최신 버전 (컨테이너 배포 시)
+1. **환경 설정**
+   - [ ] Node.js 20.x 설치 확인
+   - [ ] pnpm 최신 버전 설치
+   - [ ] 환경변수 설정 (.env.production)
 
-#### **필수 패키지 설치**
+2. **코드 품질**
+   - [x] TypeScript 컴파일 (경고 허용)
+   - [x] 보안 취약점 검사 (pnpm audit)
+   - [x] 빌드 성공 확인
+   - [x] 린트 검사 (eslint)
+
+3. **설정 파일**
+   - [x] next.config.js (standalone 모드)
+   - [x] middleware.ts (experimental-edge runtime)
+   - [x] tsconfig.json
+   - [x] tailwind.config.js
+
+4. **데이터 무결성**
+   - [x] data/ 폴더 구조 확인
+   - [x] JSON 파일 유효성 검증
+   - [x] 이미지 파일 경로 확인
+
+## 🔧 배포 명령어
+
+### 로컬 테스트
 ```bash
-# Node.js 22 LTS 설치curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -sudo apt-get install -y nodejs
-
-# pnpm 설치
-npm install -g pnpm
-
-# PM2 설치 (프로세스 관리)
-npm install -g pm2
-```
-
-### **2단계: 소스코드 배포**
-
-#### **방법 1: Git 클론 (권장)**
-```bash
-# 프로젝트 클론
-git clone <repository-url> /var/www/seohanfnc
-cd /var/www/seohanfnc
-
 # 의존성 설치
-pnpm install --frozen-lockfile
+pnpm install
+
+# 개발 서버 실행
+pnpm dev
 
 # 프로덕션 빌드
 pnpm build
+
+# 프로덕션 서버 실행
+pnpm start
+
+# 배포 전 검증
+node scripts/pre-deploy-check.js
 ```
 
-#### **방법 2: 파일 업로드**
+### 프로덕션 배포
 ```bash
-# 압축 해제 후
-cd /var/www/seohanfnc
-pnpm install --production
-pnpm build
-```
-
-### **3단계: 환경 설정**
-
-#### **환경 변수 파일 생성**
-```bash
-# .env.production 파일 생성
-cat > .env.production << EOF
-NODE_ENV=production
-PORT=3000
-NEXT_PUBLIC_DOMAIN=https://your-domain.com
-DATA_DIR=./content/data
-LOG_LEVEL=info
-BACKUP_ENABLED=true
-EOF
-```
-
-#### **디렉토리 권한 설정**
-```bash
-# 소유권 설정
-sudo chown -R www-data:www-data /var/www/seohanfnc
-
-# 권한 설정
-sudo chmod -R 755 /var/www/seohanfnc
-sudo chmod -R 766 /var/www/seohanfnc/content/data
-sudo chmod -R 766 /var/www/seohanfnc/public/uploads
-sudo chmod -R 766 /var/www/seohanfnc/logs
-```
-
-### **4단계: PM2로 프로세스 관리**
-
-#### **PM2 설정 파일 생성**
-```javascript
-// ecosystem.config.js
-module.exports = {
-  apps: [{
-    name: 'seohanfnc-website',
-    script: 'server.js',
-    cwd: '/var/www/seohanfnc',
-    instances: 'max',
-    exec_mode: 'cluster',
-    env: {
-      NODE_ENV: 'production',
-      PORT: 3000
-    },
-    log_file: './logs/combined.log',
-    out_file: './logs/out.log',
-    error_file: './logs/error.log',
-    log_date_format: 'YYYY-MM-DD HH:mm:ss Z',
-    restart_delay: 5000,
-    max_restarts: 10,
-    min_uptime: '10s'
-  }]
-}
-```
-
-#### **PM2 시작**
-```bash
-# PM2로 애플리케이션 시작
-pm2 start ecosystem.config.js
-
-# 부팅 시 자동 시작 설정
-pm2 startup
-pm2 save
-
-# 상태 확인
-pm2 status
-pm2 logs seohanfnc-website
-```
-
-### **5단계: Nginx 리버스 프록시 설정**
-
-#### **Nginx 설치 및 설정**
-```bash
-# Nginx 설치
-sudo apt update
-sudo apt install nginx
-
-# 설정 파일 생성
-sudo nano /etc/nginx/sites-available/seohanfnc
-```
-
-#### **Nginx 설정 예시**
-```nginx
-server {
-    listen 80;
-    server_name your-domain.com www.your-domain.com;
-
-    # SSL 리디렉션 (HTTPS 설정 시)
-    return 301 https://$server_name$request_uri;
-}
-
-server {
-    listen 443 ssl http2;
-    server_name your-domain.com www.your-domain.com;
-
-    # SSL 인증서 설정 (실제 경로로 변경)
-    ssl_certificate /path/to/certificate.crt;
-    ssl_certificate_key /path/to/private.key;
-
-    # 보안 헤더
-    add_header X-Frame-Options "SAMEORIGIN" always;
-    add_header X-XSS-Protection "1; mode=block" always;
-    add_header X-Content-Type-Options "nosniff" always;
-
-    # 정적 파일 캐싱
-    location /_next/static/ {
-        alias /var/www/seohanfnc/.next/static/;
-        expires 1y;
-        access_log off;
-    }
-
-    location /images/ {
-        alias /var/www/seohanfnc/public/images/;
-        expires 30d;
-        access_log off;
-    }
-
-    # Next.js 프록시
-    location / {
-        proxy_pass http://localhost:3000;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_cache_bypass $http_upgrade;
-    }
-
-    # 헬스체크
-    location /api/health {
-        proxy_pass http://localhost:3000/api/health;
-        access_log off;
-    }
-}
-```
-
-#### **Nginx 활성화**
-```bash
-# 사이트 활성화
-sudo ln -s /etc/nginx/sites-available/seohanfnc /etc/nginx/sites-enabled/
-
-# 설정 테스트
-sudo nginx -t
-
-# Nginx 재시작
-sudo systemctl restart nginx
-sudo systemctl enable nginx
-```
-
----
-
-## 🔧 **운영 관리**
-
-### **모니터링**
-```bash
-# 애플리케이션 상태 확인
-pm2 status
-pm2 monit
-
-# 로그 확인
-pm2 logs seohanfnc-website --lines 100
-
-# 헬스체크
-curl -f http://localhost:3000/api/health
-```
-
-### **백업**
-```bash
-# 데이터 백업 스크립트
-#!/bin/bash
-DATE=$(date +%Y%m%d_%H%M%S)
-tar -czf "/backup/seohanfnc_${DATE}.tar.gz" /var/www/seohanfnc/content/data
-```
-
-### **업데이트**
-```bash
-# 코드 업데이트
-cd /var/www/seohanfnc
-git pull origin main
-
-# 빌드 및 재시작
-pnpm install
-pnpm build
-pm2 restart seohanfnc-website
-```
-
----
-
-## 🚨 **트러블슈팅**
-
-### **일반적인 문제**
-
-#### **1. 빌드 실패**
-```bash
-# 캐시 정리 후 재빌드
+# 1. 코드 정리
 pnpm clean
-pnpm install
-pnpm build
+
+# 2. 의존성 재설치
+pnpm install --frozen-lockfile
+
+# 3. 프로덕션 빌드
+NODE_ENV=production pnpm build
+
+# 4. 서버 시작
+NODE_ENV=production pnpm start
 ```
 
-#### **2. 파일 권한 오류**
+## 🛡️ 보안 설정
+
+### 환경변수 (.env.production)
 ```bash
-# 권한 재설정
-sudo chown -R www-data:www-data /var/www/seohanfnc
-sudo chmod -R 755 /var/www/seohanfnc
+NODE_ENV=production
+NEXT_PUBLIC_BASE_URL=https://your-domain.com
+NEXT_PUBLIC_API_URL=https://your-domain.com/api
+
+# 관리자 인증
+ADMIN_SECRET_KEY=your-secret-key
+JWT_SECRET=your-jwt-secret
+
+# 파일 업로드
+MAX_FILE_SIZE=10485760
+UPLOAD_DIR=/var/www/uploads
+
+# 이메일 설정
+SMTP_HOST=smtp.your-provider.com
+SMTP_PORT=587
+SMTP_USER=your-email@domain.com
+SMTP_PASS=your-password
 ```
 
-#### **3. 메모리 부족**
-```bash
-# PM2 인스턴스 수 조정
-pm2 scale seohanfnc-website 2
+### 서버 설정
+- **포트**: 3000 (기본값)
+- **프로세스 관리**: PM2 권장
+- **리버스 프록시**: Nginx
+- **SSL**: Let's Encrypt 또는 CloudFlare
+
+## 📁 파일 구조
+
+```
+/
+├── app/                 # Next.js App Router
+│   ├── admin/          # 관리자페이지
+│   ├── intranet/       # 인트라넷
+│   ├── api/            # API 라우트
+│   └── ...             # 홈페이지 페이지
+├── components/         # 재사용 컴포넌트
+├── data/              # 파일시스템 데이터
+│   ├── db/            # 실제 데이터
+│   └── backups/       # 백업 파일
+├── lib/               # 유틸리티 함수
+├── types/             # TypeScript 타입 정의
+├── public/            # 정적 파일
+└── scripts/           # 배포/관리 스크립트
 ```
 
-### **로그 위치**
-- **애플리케이션 로그**: `/var/www/seohanfnc/logs/`
-- **PM2 로그**: `~/.pm2/logs/`
-- **Nginx 로그**: `/var/log/nginx/`
+## 🔍 문제 해결
+
+### 흰 화면 오류 방지
+1. **Middleware 설정**: experimental-edge runtime 사용
+2. **빌드 설정**: standalone 모드 활성화
+3. **환경변수**: 프로덕션 환경에서 올바른 값 설정
+4. **파일 권한**: 업로드 디렉토리 쓰기 권한 확인
+
+### 일반적인 오류
+- **Module not found**: pnpm install 재실행
+- **Build failed**: .next 폴더 삭제 후 재빌드
+- **Port in use**: 다른 포트 사용 또는 프로세스 종료
+- **Permission denied**: 파일 권한 확인
+
+## 📊 성능 최적화
+
+### 빌드 최적화
+- [x] 이미지 최적화 비활성화 (호환성)
+- [x] Standalone 모드 (Docker 친화적)
+- [x] Tree shaking 활성화
+- [x] 코드 분할 자동화
+
+### 런타임 최적화
+- [x] Static Generation (SSG) 활용
+- [x] API 라우트 최적화
+- [x] 이미지 lazy loading
+- [x] 번들 크기 최소화
+
+## 🔄 CI/CD (향후 계획)
+
+### GitHub Actions
+```yaml
+name: Deploy to Production
+on:
+  push:
+    branches: [main]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+      - run: npm install -g pnpm
+      - run: pnpm install
+      - run: pnpm build
+      - run: pnpm test
+      - name: Deploy to DigitalOcean
+        # 배포 스크립트 실행
+```
+
+## 📞 지원 및 문의
+
+- **개발팀**: TRISID
+- **프로젝트**: 서한F&C 웹사이트
+- **버전**: 0.1.0
+- **최종 업데이트**: 2024년
 
 ---
 
-## 📞 **지원 연락처**
-
-배포 중 문제가 발생하면 다음 정보를 포함하여 문의하세요:
-- 오류 메시지
-- 로그 파일 내용
-- 시스템 환경 정보
-- 수행한 단계
-
----
-
-## 🎯 **배포 완료 확인**
-
-✅ **최종 확인사항:**
-1. 웹사이트 접속 확인: `https://your-domain.com`
-2. 헬스체크 응답: `https://your-domain.com/api/health`
-3. 제품 페이지 로딩: `https://your-domain.com/products`
-4. 관리자 페이지 접근: `https://your-domain.com/admin`
-5. SSL 인증서 적용 확인
-6. 모든 주요 기능 테스트
-
-**🎉 배포 완료! 서한F&C 웹사이트가 성공적으로 운영 중입니다.** 
+**⚠️ 중요**: 배포 전 반드시 `node scripts/pre-deploy-check.js`를 실행하여 모든 검증을 통과했는지 확인하세요. 
