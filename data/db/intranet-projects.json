@@ -1,0 +1,37 @@
+{
+    "projects": [],
+    "statuses": [
+        {
+            "id": "planning",
+            "name": "계획 중",
+            "color": "gray"
+        },
+        {
+            "id": "in-progress",
+            "name": "진행 중",
+            "color": "blue"
+        },
+        {
+            "id": "on-hold",
+            "name": "보류",
+            "color": "yellow"
+        },
+        {
+            "id": "completed",
+            "name": "완료",
+            "color": "green"
+        },
+        {
+            "id": "cancelled",
+            "name": "취소",
+            "color": "red"
+        }
+    ],
+    "metadata": {
+        "lastUpdated": "2025-01-01T00:00:00.000Z",
+        "totalProjects": 0,
+        "activeProjects": 0,
+        "completedProjects": 0,
+        "lastId": 0
+    }
+}

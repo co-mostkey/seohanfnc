@@ -166,6 +166,18 @@ const ErrorBoundaryGLTF = (url: string) => {
   }
 };
 
+// [TRISID] glb/gltf 우선순위 경로 생성 함수
+function resolveModelPath(modelPath: string): { path: string | null, isGLTF: boolean } {
+  if (!modelPath) return { path: null, isGLTF: false };
+  if (modelPath.endsWith('.glb')) return { path: modelPath, isGLTF: false };
+  if (modelPath.endsWith('.gltf')) return { path: modelPath, isGLTF: true };
+  // 폴더/제품ID일 경우 glb 우선, 없으면 gltf (실제 파일 존재 여부는 서버/데이터에서 체크 필요)
+  const glbPath = modelPath + '/model.glb';
+  const gltfPath = modelPath + '/model.gltf';
+  // 실제 파일 존재 여부를 동적으로 체크하려면 fetch 등 필요, 여기선 glb 우선 반환
+  return { path: glbPath, isGLTF: false };
+}
+
 /**
  * 3D 모델 뷰어 컴포넌트
  * 제품의 3D 모델을 인터랙티브하게 표시합니다.
@@ -176,8 +188,11 @@ export default function ModelViewer({ modelPath, productName, showHotspots = tru
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [modelLoadError, setModelLoadError] = useState(false);
 
+  // [TRISID] glb 우선, gltf 부가 지원 경로 처리
+  const { path: resolvedPath, isGLTF } = resolveModelPath(modelPath);
+
   // Create the actual GLB file path ("/models/products/{productID}/model.glb")
-  const glbPath = modelPath || `/models/products/Cylinder-Type-SafetyAirMat/model.glb`;
+  const glbPath = resolvedPath || `/models/products/Cylinder-Type-SafetyAirMat/model.glb`;
   console.log('Using model path:', glbPath);
 
   // Fallback image path (used if model loading fails)
@@ -206,8 +221,12 @@ export default function ModelViewer({ modelPath, productName, showHotspots = tru
 
   return (
     <div className="relative w-full h-full flex items-center justify-center">
+      {/* gltf 안내 메시지 */}
+      {isGLTF && (
+        <div className="absolute top-2 left-2 z-20 bg-yellow-500/80 text-black px-3 py-1 rounded text-xs font-bold shadow">[TRISID] glb 파일 사용을 권장합니다 (gltf는 부가 지원)</div>
+      )}
       {/* Three.js 캔버스 */}
-      <div className="w-full h-full bg-gradient-to-b from-gray-800 to-gray-900 rounded-xl overflow-hidden">
+      <div className="w-full h-full rounded-xl overflow-hidden bg-transparent">
         <Canvas
           ref={canvasRef}
           camera={{ fov: 45 }}

@@ -55,7 +55,8 @@ const ClientLayout = ({ children }: { children: React.ReactNode }) => {
 
   const isAdminPath = pathname?.startsWith('/admin');
   const isIntranetPath = pathname?.startsWith('/intranet');
-  const hideGlobalUI = isIntranetPath || (isAdminPath && !(pathname === '/admin/login' || isLoginPage));
+  const isAdminLoginPage = pathname === '/admin/login';
+  const hideGlobalUI = isIntranetPath || (isAdminPath && !isAdminLoginPage);
 
   const legacyLayoutExactPaths = [
     '/', '/home', '/products', '/company', '/support', '/resources', '/research'
@@ -63,6 +64,11 @@ const ClientLayout = ({ children }: { children: React.ReactNode }) => {
   const isLegacyLayoutPage = pathname && legacyLayoutExactPaths.includes(pathname);
 
   if (isIntranetPath) {
+    return <>{children}</>;
+  }
+
+  // 관리자 로그인 페이지 특별 처리
+  if (isAdminLoginPage) {
     return <>{children}</>;
   }
 
@@ -75,13 +81,13 @@ const ClientLayout = ({ children }: { children: React.ReactNode }) => {
   // 로그인 페이지 특별 처리 (여기만 flex-grow 유지)
   if (isLoginPage) {
     return (
-      <div className="flex flex-col min-h-screen bg-background text-foreground">
+      <div className="flex flex-col min-h-screen bg-transparent text-foreground">
         <GlobalNav variant="fixedDefault" />
         <div className="flex-grow flex flex-col">
           {children}
         </div>
         <Footer variant="transparent" className="hidden md:block" />
-        <div className={cn("fixed bottom-0 left-0 right-0 z-50 lg:hidden", MOBILE_NAV_HEIGHT_CLASS, "bg-background border-t border-border")}>
+        <div className={cn("fixed bottom-0 left-0 right-0 z-50 lg:hidden", MOBILE_NAV_HEIGHT_CLASS, "bg-transparent border-t border-border")}>
           <MobileBottomNav />
         </div>
       </div>
@@ -98,37 +104,41 @@ const ClientLayout = ({ children }: { children: React.ReactNode }) => {
             {React.Children.map(React.Children.toArray(children).slice(1), child => child)}
           </ContentContainer>
           {/* 메인페이지는 children에 이미 푸터가 포함되어 있으므로 제거 */}
-          <div className={cn("fixed bottom-0 left-0 right-0 z-50 lg:hidden", MOBILE_NAV_HEIGHT_CLASS, "bg-background border-t border-border")}>
+          <div className={cn("fixed bottom-0 left-0 right-0 z-50 lg:hidden", MOBILE_NAV_HEIGHT_CLASS, "bg-transparent border-t border-border")}>
             <MobileBottomNav />
           </div>
         </div>
       );
     }
     return (
-      <div className="min-h-screen bg-background text-foreground">
-        <GlobalNav variant="legacyStatic" />
+      <div className="min-h-screen text-foreground">
+        <GlobalNav variant="mainSticky" />
         <main className="min-h-[calc(100vh-theme(spacing.16))]">
           <ContentContainer>
             {children}
           </ContentContainer>
         </main>
         <Footer variant="transparent" className="hidden md:block" />
-        <div className={cn("fixed bottom-0 left-0 right-0 z-50 lg:hidden", MOBILE_NAV_HEIGHT_CLASS, "bg-background border-t border-border")}>
+        <div className={cn("fixed bottom-0 left-0 right-0 z-50 lg:hidden", MOBILE_NAV_HEIGHT_CLASS, "bg-transparent border-t border-border")}>
           <MobileBottomNav />
         </div>
       </div>
     );
   }
 
-  // 일반 페이지들 - 푸터가 페이지 끝에 위치
-  const mainClassName = cn(
-    "min-h-[calc(100vh-56px)]",
-    MAIN_CONTENT_PT_CLASS,
-    `${MAIN_CONTENT_PB_MOBILE_CLASS} ${MAIN_CONTENT_PB_DESKTOP_CLASS}`
-  );
+  // [TRISID] 에어매트 4종 상세페이지에서만 투명 배경 및 패딩 제거 적용
+  const isAirMatDetailPage = pathname?.startsWith('/products/Cylinder-Type-SafetyAirMat') || pathname?.startsWith('/products/에어매트제품ID'); // 필요시 4종 모두 추가
+
+  const mainClassName = isAirMatDetailPage
+    ? 'min-h-[calc(100vh-56px)]' // 패딩 없이 Hero가 네비게이션까지 채워지도록
+    : cn(
+      "min-h-[calc(100vh-56px)]",
+      MAIN_CONTENT_PT_CLASS,
+      `${MAIN_CONTENT_PB_MOBILE_CLASS} ${MAIN_CONTENT_PB_DESKTOP_CLASS}`
+    );
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className={isAirMatDetailPage ? "min-h-screen bg-transparent text-foreground" : "min-h-screen bg-transparent text-foreground"}>
       <GlobalNav variant="fixedDefault" />
       <main className={mainClassName}>
         <ContentContainer>
@@ -136,7 +146,7 @@ const ClientLayout = ({ children }: { children: React.ReactNode }) => {
         </ContentContainer>
       </main>
       <Footer variant="transparent" className="hidden md:block" />
-      <div className={cn("fixed bottom-0 left-0 right-0 z-50 lg:hidden", MOBILE_NAV_HEIGHT_CLASS, "bg-background border-t border-border")}>
+      <div className={cn("fixed bottom-0 left-0 right-0 z-50 lg:hidden", MOBILE_NAV_HEIGHT_CLASS, "bg-transparent border-t border-border")}>
         <MobileBottomNav />
       </div>
     </div>

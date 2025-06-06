@@ -16,13 +16,13 @@ try {
         'Descending-Life-Line': 1,
         'Handy-Descending-Life-Line': 2,
 
-        // 구조대 관련 (safety-equipment 카테고리)
+        // 구조대 관련 (b-type 카테고리)
         'Vertical-Rescue-Equipment': 3,
         'Sloping-Rescue-Chute': 4,
         'Fire-Truck-Rescue-Equipment': 5,
         'Air-Slide': 6,
 
-        // 안전매트 관련 (safety-equipment 카테고리)
+        // 안전매트 관련 (b-type 카테고리)
         'Cylinder-Type-SafetyAirMat': 7,
         'Training-Air-Mattress-Fall-Prevention-Mat': 8,
         'Lifesaving-Mat': 9,

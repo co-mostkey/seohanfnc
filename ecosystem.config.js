@@ -1,8 +1,9 @@
 module.exports = {
     apps: [{
-        name: 'seohanfnc-website',
-        script: 'server.js',
-        cwd: '/var/www/seohanfnc',
+        name: 'seohan-website',
+        script: 'npm',
+        args: 'start',
+        cwd: '/var/www/seohan-website',
         instances: 'max', // CPU 코어 수만큼 인스턴스 생성
         exec_mode: 'cluster',
         env: {
@@ -10,11 +11,15 @@ module.exports = {
             PORT: 3000,
             NEXT_PUBLIC_DOMAIN: 'https://seohanfnc.co.kr',
             DATA_DIR: './content/data',
-            LOG_LEVEL: 'info'
+            LOG_LEVEL: 'info',
+            JWT_SECRET: 'seohan-fnc-jwt-secret-2024-production',
+            ADMIN_DEFAULT_PASSWORD: 'seohanfnc2024!@#'
         },
         env_production: {
             NODE_ENV: 'production',
-            PORT: 3000
+            PORT: 3000,
+            JWT_SECRET: 'seohan-fnc-jwt-secret-2024-production',
+            ADMIN_DEFAULT_PASSWORD: 'seohanfnc2024!@#'
         },
         // 로그 설정
         log_file: './logs/combined.log',
@@ -69,11 +74,11 @@ module.exports = {
     // 배포 설정 (옵션)
     deploy: {
         production: {
-            user: 'ubuntu',
-            host: ['your-server-ip'],
+            user: 'root',
+            host: ['157.230.38.118'],
             ref: 'origin/main',
-            repo: 'https://github.com/your-username/seohanfnc-website.git',
-            path: '/var/www/seohanfnc',
+            repo: 'https://github.com/your-username/seohan-website.git',
+            path: '/var/www/seohan-website',
             'post-deploy': 'pnpm install && pnpm build && pm2 reload ecosystem.config.js --env production',
             'pre-setup': 'apt update && apt install git -y'
         }

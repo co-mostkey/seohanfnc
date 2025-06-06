@@ -12,7 +12,7 @@ try {
     console.log('=== 개별 페이지 확인 ===');
 
     // 안전장비 카테고리의 모든 제품 확인
-    const safetyCategory = data.categories.find(cat => cat.id === 'safety-equipment');
+    const safetyCategory = data.categories.find(cat => cat.id === 'b-type');
     if (safetyCategory && safetyCategory.products) {
         safetyCategory.products.forEach(product => {
             const productPagePath = path.join(productsDir, product.id, 'page.tsx');
@@ -24,7 +24,7 @@ try {
 
     // 다른 카테고리들도 확인
     data.categories.forEach(category => {
-        if (category.id !== 'safety-equipment' && category.products) {
+        if (category.id !== 'b-type' && category.products) {
             console.log(`\n=== ${category.nameKo} 카테고리 ===`);
             category.products.forEach(product => {
                 const productPagePath = path.join(productsDir, product.id, 'page.tsx');

@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { getSafetyEquipmentById } from '@/content/data/safety-equipment';
+import { getSafetyEquipmentById } from '@/content/data/b-type';
 import SafetyEquipmentLayout from '@/components/layouts/SafetyEquipmentLayout';
 import { Metadata } from 'next';
 import SafetyEquipmentDetailClient from './client';

@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 /**
  * 차량소독기 실외형 상세 페이지
- * products/safety-equipment/Vehicle-Disinfector
+ * products/b-type/Vehicle-Disinfector
  */
 export default function VehicleDisinfectorPage() {
     // 제품 데이터 가져오기

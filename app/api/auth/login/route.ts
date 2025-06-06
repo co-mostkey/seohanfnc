@@ -152,14 +152,24 @@ async function saveUsers(data: AdminUsersData): Promise<void> {
 }
 
 // 간단한 비밀번호 검증 (실제 환경에서는 bcrypt 사용 권장)
-function verifyPassword(inputPassword: string, storedPassword: string): boolean {
-    // 현재는 하드코딩된 비밀번호와 비교
+function verifyPassword(inputPassword: string, storedPassword: string, username: string): boolean {
+    // 환경변수에서 기본 비밀번호 가져오기
+    const defaultPassword = process.env.ADMIN_DEFAULT_PASSWORD || 'seohanfnc2024!@#';
+
+    // admin 계정의 경우 환경변수 비밀번호 사용
+    if (username === 'admin' && inputPassword === defaultPassword) {
+        return true;
+    }
+
+    // 기존 하드코딩된 비밀번호도 호환성을 위해 유지
     if (inputPassword === 'admin123' && storedPassword.includes('$2b$10$')) {
         return true;
     }
     if (inputPassword === 'editor123' && storedPassword.includes('$2b$10$')) {
         return true;
     }
+
+    // 저장된 비밀번호와 직접 비교
     return inputPassword === storedPassword;
 }
 
@@ -253,7 +263,7 @@ export async function POST(request: NextRequest) {
         console.log('[LoginAPI] 사용자 찾음:', { id: user.id, role: user.role });
 
         // 비밀번호 검증
-        if (!verifyPassword(password, user.password)) {
+        if (!user.password || !verifyPassword(password, user.password, username)) {
             console.log('[LoginAPI] 비밀번호 불일치');
             return NextResponse.json(
                 { success: false, error: '아이디 또는 비밀번호가 잘못되었습니다.' },
@@ -308,7 +318,7 @@ export async function POST(request: NextRequest) {
         // 쿠키 설정
         response.cookies.set('sessionId', newSession.id, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
+            secure: false,
             sameSite: 'lax',
             maxAge: 7 * 24 * 60 * 60, // 7일
             path: '/'
@@ -316,15 +326,15 @@ export async function POST(request: NextRequest) {
 
         response.cookies.set('isAuthenticated', 'true', {
             httpOnly: false,
-            secure: process.env.NODE_ENV === 'production',
+            secure: false,
             sameSite: 'lax',
             maxAge: 7 * 24 * 60 * 60, // 7일
             path: '/'
         });
 
-        response.cookies.set('userRole', user.role, {
+        response.cookies.set('userRole', user.role || '관리자', {
             httpOnly: false,
-            secure: process.env.NODE_ENV === 'production',
+            secure: false,
             sameSite: 'lax',
             maxAge: 7 * 24 * 60 * 60, // 7일
             path: '/'

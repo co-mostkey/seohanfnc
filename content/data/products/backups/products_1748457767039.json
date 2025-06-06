@@ -1,21 +1,21 @@
 {
   "categories": [
     {
-      "id": "safety-equipment",
+      "id": "b-type",
       "nameKo": "안전장비",
       "nameEn": "Safety Equipment",
       "nameCn": "安全设备",
       "descriptionKo": "품질 좋은 안전장비로 작업 현장의 안전을 확보하고 사고를 예방합니다.",
       "descriptionEn": "Quality safety equipment to secure workplace safety and prevent accidents.",
       "descriptionCn": "优质安全设备，确保工作场所安全，预防事故。",
-      "image": "/images/products/safety-equipment.jpg",
+      "image": "/images/products/b-type.jpg",
       "products": [
         {
           "id": "Portable-Water-Tank",
           "nameKo": "이동식 수조",
           "nameEn": "Portable Water Tank",
           "nameCn": "便携式水箱",
-          "category": "safety-equipment",
+          "category": "b-type",
           "descriptionKo": "긴급 용수, 산불 화재 진압, 재난 대비용 저장 장비로 사용되는 이동식 수조입니다. 세 가지 모델(3,000/5,000/10,000 리터)로 제공되며, 빠른 설치와 이동이 가능합니다.",
           "descriptionEn": "Portable water tank used for emergency water supply, forest fire fighting, and disaster preparedness. Available in three models (3,000/5,000/10,000 liters) with quick installation and mobility.",
           "descriptionCn": "用于紧急供水、森林火灾扑灭和灾害应急的便携式水箱。提供三种型号（3,000/5,000/10,000升），可快速安装和移动。",
@@ -106,7 +106,7 @@
           "id": "Vertical-Rescue-Equipment",
           "nameKo": "수직강하식 구조대",
           "nameEn": "Vertical Rescue Equipment",
-          "category": "safety-equipment",
+          "category": "b-type",
           "descriptionKo": "화재시 또는 재난상황 발생시는 이동설치가 가능한 구조로 가볍고 신속한 설치가 가능한 구조의 인명구조 장비입니다.",
           "image": "/images/products/Vertical-Rescue-Equipment/thumbnail.jpg",
           "features": [
@@ -163,13 +163,13 @@
           ],
           "sortOrder": 1,
           "isPublished": true,
-          "categoryId": "safety-equipment"
+          "categoryId": "b-type"
         },
         {
           "id": "Sloping-Rescue-Chute",
           "nameKo": "경사강하식 구조대",
           "nameEn": "Sloping Rescue Chute",
-          "category": "safety-equipment",
+          "category": "b-type",
           "descriptionKo": "화재시 또는 재난상황 발생시 자루 형태의 포지를 이용하여 45도 각도의 경사면을 만들어 미끄럼 타듯 내려가는 구조로, 짧은 시간에 많은 인원이 탈출 할 수 있는 구조 장비입니다.",
           "image": "/images/products/Sloping-Rescue-Chute/thumbnail.jpg",
           "approvalNumber": "구 04-2-1",
@@ -231,13 +231,13 @@
           "showInProductList": true,
           "sortOrder": 2,
           "isPublished": true,
-          "categoryId": "safety-equipment"
+          "categoryId": "b-type"
         },
         {
           "id": "Fire-Truck-Rescue-Equipment",
           "nameKo": "소방차용 구조대",
           "nameEn": "Fire Truck Rescue Equipment",
-          "category": "safety-equipment",
+          "category": "b-type",
           "descriptionKo": "화재시 또는 재난상황 발생시 출동 소방차의 사다리 바스켓에 설치하여 사용하는 구조대로 수직으로 펼쳐지는 자루형태의 포지 내에 나선형의 활강포가 구성되어 짧은 시간에 많은 인원이 탈출 할 수 있는 구조 장비입니다.",
           "image": "/images/products/Fire-Truck-Rescue-Equipment/thumbnail.jpg",
           "features": [
@@ -291,13 +291,13 @@
           "showInProductList": true,
           "sortOrder": 3,
           "isPublished": true,
-          "categoryId": "safety-equipment"
+          "categoryId": "b-type"
         },
         {
           "id": "Air-Slide",
           "nameKo": "에어슬라이드",
           "nameEn": "Air Slide",
-          "category": "safety-equipment",
+          "category": "b-type",
           "descriptionKo": "고압으로 압축된 에어를 사용하여, 순간적으로 에어가 주입되어 피난층에서 지상까지 이르는 미끄럼틀이 형성되는 '에어슬라이드'로 외부 전원 또는 동력원이 없어도 독립적으로 작동이 가능하며, 복잡한 사용방법의 숙지가 필요없이 미끄럼을 타듯 하강하여 탈출할 수 있는 장비입니다.",
           "image": "/images/products/Air-Slide/thumbnail.jpg",
           "additionalGalleryImages": [],
@@ -362,13 +362,13 @@
           ],
           "sortOrder": 4,
           "isPublished": true,
-          "categoryId": "safety-equipment"
+          "categoryId": "b-type"
         },
         {
           "id": "Solid-Aerosol-Extinguisher",
           "nameKo": "고체 에어로졸 소화기",
           "nameEn": "Solid Aerosol Extinguisher",
-          "category": "safety-equipment",
+          "category": "b-type",
           "descriptionKo": "SAFE-g는 세계 최초의 기계식 무화약 점화 장치를 이용한 고체 에어로졸 소화기로 무인 상태에서도 화재를 자동으로 감지하여 소화 시킴으로써, 화재의 확산을 막고, 화학반응을 통한 소화 원리로 화재 진압으로 인한 중요설비, 기록물, 문화재 등의 2차 훼손없는 보존을 위한 제품입니다.",
           "image": "/images/products/Solid-Aerosol-Extinguisher/thumbnail.jpg",
           "approvalNumber": "소공 13-1",
@@ -473,7 +473,7 @@
           "showInProductList": true,
           "sortOrder": 5,
           "isPublished": true,
-          "categoryId": "safety-equipment"
+          "categoryId": "b-type"
         },
         {
           "id": "Outdoor-Human-Disinfector",
@@ -570,14 +570,14 @@
           ],
           "sortOrder": 6,
           "isPublished": true,
-          "categoryId": "safety-equipment"
+          "categoryId": "b-type"
         },
         {
           "id": "Indoor-Human-Disinfector",
           "nameKo": "대인소독기 실내형",
           "nameEn": "Indoor Human Disinfector",
           "nameCn": "室内型人体消毒器",
-          "category": "safety-equipment",
+          "category": "b-type",
           "descriptionKo": "실내간 이동시 고정 설치하여 사용하는 대인 소독 장비입니다. 출입구에 설치하여 인체와 물품의 소독을 효과적으로 수행합니다.",
           "descriptionEn": "Indoor disinfection equipment used for fixed installation between indoor spaces. Installed at entrances to effectively disinfect people and items.",
           "descriptionCn": "室内移动时固定安装使用的人体消毒设备。安装在入口处，有效消毒人体和物品。",
@@ -640,14 +640,14 @@
           "showInProductList": true,
           "sortOrder": 7,
           "isPublished": true,
-          "categoryId": "safety-equipment"
+          "categoryId": "b-type"
         },
         {
           "id": "Vehicle-Disinfector",
           "nameKo": "차량소독기 실외형",
           "nameEn": "Vehicle Disinfector",
           "nameCn": "车辆消毒器室外型",
-          "category": "safety-equipment",
+          "category": "b-type",
           "descriptionKo": "인체에 심각한 위협을 가하는 바이러스로 인해 부지불식간에 전염될 수 있는 환경에서 안전하게 이동 차량들을 소독하기 위하여, 상황에 맞는 소독액을 분사할 수 있는 차량소독소 장비입니다. 고압 미스트 방식으로 광범위하게 분사하여, 차량 전체를 효율적으로 소독을 할 수 있습니다.",
           "descriptionEn": "Vehicle disinfection equipment that sprays appropriate disinfectant in environments where viruses threatening human health can be unknowingly transmitted. Using high-pressure mist method, it effectively disinfects the entire vehicle by spraying widely.",
           "descriptionCn": "在病毒可能对人体造成严重威胁的环境中，为安全消毒移动车辆而设计的车辆消毒设备。采用高压雾化方式广泛喷洒，能够有效消毒整个车辆。",
@@ -716,7 +716,7 @@
           "showInProductList": true,
           "sortOrder": 8,
           "isPublished": true,
-          "categoryId": "safety-equipment"
+          "categoryId": "b-type"
         }
       ]
     },

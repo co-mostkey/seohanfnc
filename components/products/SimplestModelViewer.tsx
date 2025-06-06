@@ -52,12 +52,24 @@ interface SimplestModelViewerProps {
   onError?: () => void;
 }
 
+// [TRISID] glb/gltf 우선순위 경로 생성 함수
+function resolveModelPath(modelPath: string): { path: string | null, isGLTF: boolean } {
+  if (!modelPath) return { path: null, isGLTF: false };
+  if (modelPath.endsWith('.glb')) return { path: modelPath, isGLTF: false };
+  if (modelPath.endsWith('.gltf')) return { path: modelPath, isGLTF: true };
+  // 폴더/제품ID일 경우 glb 우선, 없으면 gltf (실제 파일 존재 여부는 서버/데이터에서 체크 필요)
+  const glbPath = modelPath + '/model.glb';
+  const gltfPath = modelPath + '/model.gltf';
+  // 실제 파일 존재 여부를 동적으로 체크하려면 fetch 등 필요, 여기선 glb 우선 반환
+  return { path: glbPath, isGLTF: false };
+}
+
 export default function SimplestModelViewer({ modelPath, productName, onLoad, onError }: SimplestModelViewerProps) {
   const [isRotating, setIsRotating] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
 
-  // 모델 경로 설정
-  const modelUrl = modelPath || `/models/products/Cylinder-Type-SafetyAirMat/model.glb`;
+  // [TRISID] glb 우선, gltf 부가 지원 경로 처리
+  const { path: resolvedPath, isGLTF } = resolveModelPath(modelPath);
 
   // 토글 핸들러
   const toggleRotation = () => setIsRotating(!isRotating);
@@ -65,8 +77,12 @@ export default function SimplestModelViewer({ modelPath, productName, onLoad, on
 
   return (
     <div className="w-full h-full relative">
+      {/* gltf 안내 메시지 */}
+      {isGLTF && (
+        <div className="absolute top-2 left-2 z-20 bg-yellow-500/80 text-black px-3 py-1 rounded text-xs font-bold shadow">[TRISID] glb 파일 사용을 권장합니다 (gltf는 부가 지원)</div>
+      )}
       {/* Canvas 컨테이너 */}
-      <div className="w-full h-full bg-gradient-to-b from-slate-800 to-slate-900 rounded-xl overflow-hidden">
+      <div className="w-full h-full rounded-xl overflow-hidden bg-transparent">
         <Canvas
           camera={{ position: [3, 1.5, 5], fov: 45 }}
           gl={{ antialias: true }}
@@ -79,7 +95,7 @@ export default function SimplestModelViewer({ modelPath, productName, onLoad, on
 
           {/* 모델 */}
           <Suspense fallback={<Loader />}>
-            <Model url={modelUrl} />
+            <Model url={resolvedPath || ''} />
           </Suspense>
 
           {/* 환경 */}

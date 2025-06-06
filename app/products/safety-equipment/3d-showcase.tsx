@@ -23,7 +23,7 @@ type SafetyProduct = ImportedProduct & {
   category?: string; // 선택적으로 만들어서 타입 호환성 확보
 };
 
-import './safety-equipment-3d.css';
+import './b-type-3d.css';
 
 /**
  * 안전장비 카테고리 3D 쇼케이스 페이지
@@ -221,7 +221,7 @@ export function SafetyEquipment3DShowcase({ products }: { products: SafetyProduc
 
                     {/* 자세히 보기 버튼 */}
                     <div className="flex flex-col sm:flex-row gap-3">
-                      <Link href={`/products/safety-equipment/${currentProduct.id}`}>
+                      <Link href={`/products/b-type/${currentProduct.id}`}>
                         <Button className="w-full bg-primary-600 hover:bg-primary-700">
                           제품 자세히 보기
                         </Button>

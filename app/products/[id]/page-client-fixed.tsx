@@ -4,7 +4,6 @@ import React, { useEffect, useState, useRef } from 'react';
 import { initHeroEffect } from './hero-effect';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ProductDetailImage } from '@/components/products/ProductDetailImage';
 import { FeatureCard } from '@/components/products/FeatureCard';
 import { SpecTable } from '@/components/products/SpecTable';
 import { ModelSpecTable } from '@/components/products/ModelSpecTable';
@@ -28,7 +27,7 @@ const getProductVisualImage = (productId: string): string => {
 };
 
 type ProductDetailClientProps = {
-  productId: string;
+    productId: string;
 };
 
 // 제품 상세 페이지 클라이언트 컴포넌트 (B타입 수정 버전)
@@ -41,38 +40,38 @@ export function ProductDetailClientFixed({ productId }: ProductDetailClientProps
     const [productVideos, setProductVideos] = useState<Array<{ src: string, alt: string, type: 'video' }>>([]);
     const [productImages, setProductImages] = useState<Array<{ src: string, alt: string, type: 'image' }>>([]);
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const heroEffectCleanup = useRef<(() => void) | null>(null);
+    const heroEffectCleanup = useRef<(() => void) | null>(null);
 
-  // 마우스 효과 초기화
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (heroEffectCleanup.current) {
-        heroEffectCleanup.current();
-      }
-      heroEffectCleanup.current = initHeroEffect();
-    }, 500);
+    // 마우스 효과 초기화
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (heroEffectCleanup.current) {
+                heroEffectCleanup.current();
+            }
+            heroEffectCleanup.current = initHeroEffect();
+        }, 500);
 
-    return () => {
-      clearTimeout(timer);
-      if (heroEffectCleanup.current) {
-        heroEffectCleanup.current();
-      }
-    };
+        return () => {
+            clearTimeout(timer);
+            if (heroEffectCleanup.current) {
+                heroEffectCleanup.current();
+            }
+        };
     }, [product]);
 
-  // 문자열 값을 안전하게 가져오는 헬퍼 함수
-  const getSafeString = (value: any, fallback: string = ''): string => {
-    if (!value) return fallback;
-    if (typeof value === 'string') return value;
-    if (typeof value === 'object' && value.ko) return value.ko;
-    return String(value) || fallback;
-  };
+    // 문자열 값을 안전하게 가져오는 헬퍼 함수
+    const getSafeString = (value: any, fallback: string = ''): string => {
+        if (!value) return fallback;
+        if (typeof value === 'string') return value;
+        if (typeof value === 'object' && value.ko) return value.ko;
+        return String(value) || fallback;
+    };
 
     // 개별 이미지 갤러리를 위한 상태
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
     // 제품 데이터 로드
-  useEffect(() => {
+    useEffect(() => {
         async function loadProductData() {
             try {
                 const response = await fetch(`/api/products/${productId}`);
@@ -132,29 +131,6 @@ export function ProductDetailClientFixed({ productId }: ProductDetailClientProps
                             }
                         });
                     }
-
-                    if (productId === 'Cylinder-Type-SafetyAirMat') {
-                        const additionalFiles = [
-                            `/images/products/${productId}/${productId}.mp4`,
-                            `/images/products/${productId}/${productId}.jpg`,
-                            `/images/products/${productId}/${productId}-front.jpg`,
-                            `/images/products/${productId}/${productId}-perspective.jpg`,
-                            `/images/products/${productId}/${productId}-test.jpg`,
-                            `/images/products/${productId}/${productId}02.jpg`
-                        ];
-
-                        const existingSrcs = mediaFiles.map(file => file.src);
-                        additionalFiles.forEach(fileSrc => {
-                            if (fileSrc && typeof fileSrc === 'string' && !existingSrcs.includes(fileSrc)) {
-                                mediaFiles.push({
-                                    src: fileSrc,
-                                    alt: getSafeString(productData.name, '제품'),
-                                    type: isVideoFile(fileSrc) ? 'video' as const : 'image' as const
-                                });
-                                existingSrcs.push(fileSrc);
-                            }
-                        });
-                    }
                 } catch (error) {
                     console.error('미디어 파일 처리 오류:', error);
                 }
@@ -184,32 +160,32 @@ export function ProductDetailClientFixed({ productId }: ProductDetailClientProps
         loadProductData();
     }, [productId]);
 
-  if (loading) {
-    return (
+    if (loading) {
+        return (
             <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
+                <div className="text-center">
                     <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
                     <p className="mt-4 text-gray-600">제품 정보를 불러오는 중...</p>
-        </div>
-      </div>
-    );
-  }
+                </div>
+            </div>
+        );
+    }
 
-  if (!product) {
-    return (
+    if (!product) {
+        return (
             <div className="min-h-screen flex items-center justify-center">
                 <div className="text-center">
                     <h1 className="text-2xl font-bold text-gray-900 mb-4">제품을 찾을 수 없습니다</h1>
                     <p className="text-gray-600 mb-8">요청하신 제품이 존재하지 않거나 삭제되었습니다.</p>
                     <Link href="/products" className="text-blue-600 hover:text-blue-800 underline">
-            제품 목록으로 돌아가기
-          </Link>
-        </div>
-      </div>
-    );
-  }
+                        제품 목록으로 돌아가기
+                    </Link>
+                </div>
+            </div>
+        );
+    }
 
-  const productStyle = product.productStyle || 'A';
+    const productStyle = product.productStyle || 'A';
 
     return (
         <ProductDetailFrameLayout>
@@ -242,21 +218,21 @@ export function ProductDetailClientFixed({ productId }: ProductDetailClientProps
                                                     {subtitle.text}
                                                 </p>
                                             ))}
-                  </div>
-                )}
-                    </>
-                  )}
+                                        </div>
+                                    )}
+                                </>
+                            )}
 
                             <SimpleBreadcrumb
                                 items={[
-                                    { label: '홈', href: '/' },
-                                    { label: '제품', href: '/products' },
-                                    { label: categoryName, href: `/products/category/${product.category}` },
-                                    { label: getSafeString(product.name), href: '#' }
+                                    { text: '홈', href: '/' },
+                                    { text: '제품', href: '/products' },
+                                    { text: categoryName, href: `/products/category/${product.category}` },
+                                    { text: getSafeString(product.name), href: '#', active: true }
                                 ]}
                                 className="justify-center text-blue-200"
-                        />
-                      </div>
+                            />
+                        </div>
                     </div>
                 </section>
 
@@ -272,16 +248,18 @@ export function ProductDetailClientFixed({ productId }: ProductDetailClientProps
                                 {productImages.length > 0 && (
                                     <section className="bg-white rounded-2xl shadow-lg p-8">
                                         <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">제품 이미지</h2>
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                                             {/* 메인 이미지 */}
                                             <div className="space-y-4">
                                                 <div className="aspect-square bg-gray-100 rounded-xl overflow-hidden">
-                                                    <ProductDetailImage
+                                                    <Image
                                                         src={productImages[selectedImageIndex]?.src || productImages[0]?.src}
                                                         alt={productImages[selectedImageIndex]?.alt || getSafeString(product.name)}
+                                                        fill
                                                         className="w-full h-full object-cover"
-                      />
-                    </div>
+                                                        sizes="(max-width: 768px) 100vw, 50vw"
+                                                    />
+                                                </div>
 
                                                 {/* 썸네일 이미지들 */}
                                                 {productImages.length > 1 && (
@@ -297,16 +275,18 @@ export function ProductDetailClientFixed({ productId }: ProductDetailClientProps
                                                                         : "border-gray-200 hover:border-gray-300"
                                                                 )}
                                                             >
-                                                                <ProductDetailImage
+                                                                <Image
                                                                     src={img.src}
                                                                     alt={img.alt}
+                                                                    fill
                                                                     className="w-full h-full object-cover"
+                                                                    sizes="(max-width: 768px) 100vw, 50vw"
                                                                 />
                                                             </button>
                                                         ))}
                                                     </div>
-                          )}
-                        </div>
+                                                )}
+                                            </div>
 
                                             {/* 제품 정보 */}
                                             <div className="space-y-6">
@@ -317,7 +297,7 @@ export function ProductDetailClientFixed({ productId }: ProductDetailClientProps
                                                     <p className="text-lg text-gray-600 leading-relaxed">
                                                         {getSafeString(product.description)}
                                                     </p>
-                  </div>
+                                                </div>
 
                                                 {/* 제품 특징 */}
                                                 {product.features && product.features.length > 0 && (
@@ -328,11 +308,11 @@ export function ProductDetailClientFixed({ productId }: ProductDetailClientProps
                                                                 <div key={index} className="flex items-start gap-3">
                                                                     <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
                                                                     <span className="text-gray-700">{getSafeString(feature)}</span>
-                      </div>
+                                                                </div>
                                                             ))}
-                  </div>
-                </div>
-              )}
+                                                        </div>
+                                                    </div>
+                                                )}
 
                                                 {/* 승인번호 */}
                                                 {product.approvalNumber && (
@@ -340,17 +320,17 @@ export function ProductDetailClientFixed({ productId }: ProductDetailClientProps
                                                         <div className="flex items-center gap-2">
                                                             <Award className="w-5 h-5 text-blue-600" />
                                                             <span className="font-semibold text-blue-900">형식승인번호</span>
-                    </div>
+                                                        </div>
                                                         <p className="text-blue-800 mt-1">{product.approvalNumber}</p>
-                </div>
-              )}
-              </div>
-            </div>
-          </section>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </section>
                                 )}
 
                                 {/* 비디오 섹션 */}
-          {productVideos.length > 0 && (
+                                {productVideos.length > 0 && (
                                     <ProductVideoSection videos={productVideos} />
                                 )}
 
@@ -358,30 +338,33 @@ export function ProductDetailClientFixed({ productId }: ProductDetailClientProps
                                 {product.detailedSpecTable && product.detailedSpecTable.length > 0 && (
                                     <section className="bg-white rounded-2xl shadow-lg p-8">
                                         <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">규격별 상세 사양</h2>
-                    <div className="overflow-x-auto">
+                                        <div className="overflow-x-auto">
                                             <table className="w-full border-collapse border border-gray-300">
-                        <thead>
+                                                <thead>
                                                     <tr className="bg-blue-50">
                                                         {product.detailedSpecTable[0]?.map((header: string, index: number) => (
                                                             <th key={index} className="border border-gray-300 px-4 py-3 text-left font-semibold text-gray-900">
                                                                 {header}
                                                             </th>
                                                         ))}
-                          </tr>
-                        </thead>
-                        <tbody>
-                                                    {product.detailedSpecTable.slice(1).map((row: string[], rowIndex: number) => (
-                                                        <tr key={rowIndex} className={rowIndex % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
-                                                            {row.map((cell: string, cellIndex: number) => (
-                                                                <td key={cellIndex} className="border border-gray-300 px-4 py-3 text-gray-700">
-                                                                    {cell}
-                              </td>
-                                                            ))}
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {product.detailedSpecTable.slice(1).map((row: any, rowIndex: number) => {
+                                                        const rowArray = Array.isArray(row) ? row : Object.values(row);
+                                                        return (
+                                                            <tr key={rowIndex} className={rowIndex % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
+                                                                {rowArray.map((cell: any, cellIndex: number) => (
+                                                                    <td key={cellIndex} className="border border-gray-300 px-4 py-3 text-gray-700">
+                                                                        {String(cell)}
+                                                                    </td>
+                                                                ))}
+                                                            </tr>
+                                                        );
+                                                    })}
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </section>
                                 )}
 
@@ -401,18 +384,21 @@ export function ProductDetailClientFixed({ productId }: ProductDetailClientProps
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {product.impactAbsorptionData.slice(1).map((row: string[], rowIndex: number) => (
-                                                        <tr key={rowIndex} className={rowIndex % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
-                                                            {row.map((cell: string, cellIndex: number) => (
-                                                                <td key={cellIndex} className="border border-gray-300 px-4 py-3 text-gray-700">
-                                                                    {cell}
-                                                                </td>
-                                                            ))}
-                                                        </tr>
-                                                    ))}
+                                                    {product.impactAbsorptionData.slice(1).map((row: any, rowIndex: number) => {
+                                                        const rowArray = Array.isArray(row) ? row : Object.values(row);
+                                                        return (
+                                                            <tr key={rowIndex} className={rowIndex % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
+                                                                {rowArray.map((cell: any, cellIndex: number) => (
+                                                                    <td key={cellIndex} className="border border-gray-300 px-4 py-3 text-gray-700">
+                                                                        {String(cell)}
+                                                                    </td>
+                                                                ))}
+                                                            </tr>
+                                                        );
+                                                    })}
                                                 </tbody>
                                             </table>
-              </div>
+                                        </div>
                                     </section>
                                 )}
 
@@ -426,9 +412,9 @@ export function ProductDetailClientFixed({ productId }: ProductDetailClientProps
                                                     <h3 className="font-semibold text-gray-900 mb-2">{data.label}</h3>
                                                     <p className="text-gray-700">{data.value}</p>
                                                     {data.unit && <span className="text-sm text-gray-500 ml-1">{data.unit}</span>}
-                    </div>
-                  ))}
-                </div>
+                                                </div>
+                                            ))}
+                                        </div>
                                     </section>
                                 )}
 
@@ -444,8 +430,8 @@ export function ProductDetailClientFixed({ productId }: ProductDetailClientProps
                                                     title={item.title}
                                                     description={item.description}
                                                 />
-                      ))}
-                    </div>
+                                            ))}
+                                        </div>
                                     </section>
                                 )}
 
@@ -453,7 +439,7 @@ export function ProductDetailClientFixed({ productId }: ProductDetailClientProps
                                 {product.specTable && product.specTable.length > 0 && (
                                     <section className="bg-white rounded-2xl shadow-lg p-8">
                                         <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">제품 사양</h2>
-                                        <SpecTable data={product.specTable} />
+                                        <SpecTable specifications={product.specifications || {}} />
                                     </section>
                                 )}
 
@@ -466,13 +452,12 @@ export function ProductDetailClientFixed({ productId }: ProductDetailClientProps
                                                 <DownloadCard
                                                     key={index}
                                                     title={doc.title}
-                                                    description={doc.description}
-                                                    fileUrl={doc.url}
+                                                    url={doc.url}
                                                     fileSize={doc.size}
                                                     fileType={doc.type}
                                                 />
-                      ))}
-                    </div>
+                                            ))}
+                                        </div>
                                     </section>
                                 )}
 
@@ -482,8 +467,20 @@ export function ProductDetailClientFixed({ productId }: ProductDetailClientProps
                                         <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">관련 제품</h2>
                                         <RelatedProducts products={relatedProducts} />
                                     </section>
-                )}
-              </div>
+                                )}
+
+                                {/* 모델별 상세 사양 테이블 */}
+                                {product.modelSpecs && (
+                                    <section className="mb-16 bg-white rounded-2xl shadow-lg p-8">
+                                        <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">모델별 상세 사양</h2>
+                                        {Array.isArray(product.modelSpecs) && product.modelSpecs.length > 0 ? (
+                                            <ModelSpecTable title="" subtitle="" modelSpecs={product.modelSpecs} />
+                                        ) : (
+                                            <p className="text-center text-gray-500">모델별 사양 정보가 없습니다.</p>
+                                        )}
+                                    </section>
+                                )}
+                            </div>
                         )}
 
                         {/* A타입 레이아웃 (기존 가로형) */}
@@ -493,13 +490,15 @@ export function ProductDetailClientFixed({ productId }: ProductDetailClientProps
                                 <div className="space-y-6">
                                     {productImages.length > 0 && (
                                         <div className="aspect-square bg-white rounded-2xl shadow-lg overflow-hidden">
-                                            <ProductDetailImage
+                                            <Image
                                                 src={productImages[selectedImageIndex]?.src || productImages[0]?.src}
                                                 alt={productImages[selectedImageIndex]?.alt || getSafeString(product.name)}
+                                                fill
                                                 className="w-full h-full object-cover"
+                                                sizes="(max-width: 768px) 100vw, 50vw"
                                             />
-            </div>
-          )}
+                                        </div>
+                                    )}
 
                                     {productImages.length > 1 && (
                                         <div className="flex gap-2 overflow-x-auto">
@@ -514,16 +513,18 @@ export function ProductDetailClientFixed({ productId }: ProductDetailClientProps
                                                             : "border-gray-200 hover:border-gray-300"
                                                     )}
                                                 >
-                                                    <ProductDetailImage
+                                                    <Image
                                                         src={img.src}
                                                         alt={img.alt}
+                                                        fill
                                                         className="w-full h-full object-cover"
+                                                        sizes="(max-width: 768px) 100vw, 50vw"
                                                     />
                                                 </button>
                                             ))}
-                          </div>
-                        )}
-                      </div>
+                                        </div>
+                                    )}
+                                </div>
 
                                 {/* 오른쪽: 제품 정보 */}
                                 <div className="space-y-8">
@@ -534,7 +535,7 @@ export function ProductDetailClientFixed({ productId }: ProductDetailClientProps
                                         <p className="text-xl text-gray-600 leading-relaxed">
                                             {getSafeString(product.description)}
                                         </p>
-                    </div>
+                                    </div>
 
                                     {/* 제품 특징 */}
                                     {product.features && product.features.length > 0 && (
@@ -545,11 +546,11 @@ export function ProductDetailClientFixed({ productId }: ProductDetailClientProps
                                                     <div key={index} className="flex items-start gap-3">
                                                         <CheckCircle className="w-6 h-6 text-green-500 mt-0.5 flex-shrink-0" />
                                                         <span className="text-lg text-gray-700">{getSafeString(feature)}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
 
                                     {/* 승인번호 */}
                                     {product.approvalNumber && (
@@ -557,12 +558,12 @@ export function ProductDetailClientFixed({ productId }: ProductDetailClientProps
                                             <div className="flex items-center gap-3">
                                                 <Award className="w-6 h-6 text-blue-600" />
                                                 <span className="text-lg font-semibold text-blue-900">형식승인번호</span>
-                </div>
+                                            </div>
                                             <p className="text-blue-800 mt-2 text-lg">{product.approvalNumber}</p>
-            </div>
-          )}
-        </div>
-      </div>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
                         )}
                     </div>
                 </div>

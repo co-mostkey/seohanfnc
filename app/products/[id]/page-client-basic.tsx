@@ -66,14 +66,6 @@ export function ProductDetailClient({ productId }: ProductDetailClientProps) {
         });
       }
 
-      // 테스트용 비디오 추가
-      if (productId === 'Cylinder-Type-SafetyAirMat') {
-        const videoSrc = `/images/products/${productId}/${productId}.mp4`;
-        if (!videos.some(v => v.src === videoSrc)) {
-          videos.push({ src: videoSrc, alt: "제품 비디오", type: "video" });
-        }
-      }
-
       setProductImages(images);
       setProductVideos(videos);
       setLoading(false);

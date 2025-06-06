@@ -15,7 +15,7 @@ export function SafetyEquipmentCategoryPage({ products }: { products: Product[] 
   // products 배열에 category 필드를 추가하여 3D Showcase와 호환되도록 변환
   const productsWithCategory = products.map(product => ({
     ...product,
-    category: product.categoryId || 'safety-equipment' // categoryId를 category로 매핑
+    category: product.categoryId || 'b-type' // categoryId를 category로 매핑
   }));
 
   return <SafetyEquipment3DShowcase products={productsWithCategory} />;

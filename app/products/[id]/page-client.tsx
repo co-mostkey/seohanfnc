@@ -32,14 +32,22 @@ const getProductVisualImage = (productId: string): string => {
 
 type ProductDetailClientProps = {
   productId: string;
+  product: Product;
+  initialRelatedProducts: Product[];
+  categoryName: string;
+  visualExceptions: any;
 };
 
 // 제품 상세 페이지 클라이언트 컴포넌트
-export function ProductDetailClient({ productId }: ProductDetailClientProps) {
-  const [product, setProduct] = useState<Product | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [categoryName, setCategoryName] = useState('');
-  const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
+export function ProductDetailClient({
+  productId,
+  product,
+  initialRelatedProducts,
+  categoryName,
+  visualExceptions
+}: ProductDetailClientProps) {
+  const [relatedProducts, setRelatedProducts] = useState<Product[]>(initialRelatedProducts);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [transformedImages, setTransformedImages] = useState<Array<{ src: string, alt: string, type: 'image' | 'video' }>>([]);
   const [productVideos, setProductVideos] = useState<Array<{ src: string, alt: string, type: 'video' }>>([]);
   const [productImages, setProductImages] = useState<Array<{ src: string, alt: string, type: 'image' }>>([]);
@@ -76,181 +84,103 @@ export function ProductDetailClient({ productId }: ProductDetailClientProps) {
     return String(value) || fallback;
   };
 
-  // 개별 이미지 갤러리를 위한 상태
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-
-  // 제품 데이터 로드
+  // 제품 데이터 변환 및 미디어 처리
   useEffect(() => {
-    async function loadProductData() {
-      try {
-        // API를 통해 제품 데이터 가져오기
-        const response = await fetch(`/api/products/${productId}`);
-        if (!response.ok) {
-          setLoading(false);
-          return;
-        }
+    // 미디어 파일(이미지와 비디오) 변환
+    const mediaFiles = [];
 
-        const productData = await response.json();
-        if (!productData) {
-          setLoading(false);
-          return;
-        }
+    // 파일 형식 확인 함수
+    const isVideoFile = (src: string): boolean => {
+      const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov', '.avi', 'mp4', 'webm', 'ogg', 'mov', 'avi'];
+      const lowerSrc = src.toLowerCase();
+      const isVideo = videoExtensions.some(ext => lowerSrc.endsWith(ext));
+      console.log(`파일 경로: ${src}, 비디오 파일 여부: ${isVideo}`);
+      return isVideo;
+    };
 
-        setProduct(productData);
-
-        // 카테고리명 설정
-        const catName = productData.category || '기타';
-        setCategoryName(catName);
-
-        // 관련 제품 로드 (API를 통해)
-        if (productData.relatedProducts && productData.relatedProducts.length > 0) {
-          const relatedPromises = productData.relatedProducts.map(async (id: string) => {
-            const relatedResponse = await fetch(`/api/products/${id}`);
-            return relatedResponse.ok ? await relatedResponse.json() : null;
-          });
-          const related = (await Promise.all(relatedPromises)).filter(Boolean) as Product[];
-          setRelatedProducts(related);
-        }
-
-        // 미디어 파일(이미지와 비디오) 변환
-        const mediaFiles = [];
-
-        // 파일 형식 확인 함수
-        const isVideoFile = (src: string): boolean => {
-          const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov', '.avi', 'mp4', 'webm', 'ogg', 'mov', 'avi'];
-          const lowerSrc = src.toLowerCase();
-          const isVideo = videoExtensions.some(ext => lowerSrc.endsWith(ext));
-          console.log(`파일 경로: ${src}, 비디오 파일 여부: ${isVideo}`);
-          return isVideo;
-        };
-
-        // 비디오/이미지 파일 형식 타입 리터럴 정의
-        type MediaType = 'image' | 'video';
-
-        try {
-          // 기본 미디어가 있으면 추가
-          if (productData.image) {
-            mediaFiles.push({
-              src: productData.image,
-              alt: getSafeString(productData.name, '제품'),
-              type: isVideoFile(productData.image) ? 'video' as const : 'image' as const
-            });
-          }
-
-          // 추가 미디어 처리
-          if (productData.images && Array.isArray(productData.images) && productData.images.length > 0) {
-            productData.images.forEach((media: any) => {
-              const mediaSrc = typeof media === 'string' ? media : (media?.path || media?.url || '');
-              if (mediaSrc) {
-                mediaFiles.push({
-                  src: mediaSrc,
-                  alt: getSafeString(productData.name, '제품'),
-                  type: isVideoFile(mediaSrc) ? 'video' as const : 'image' as const
-                });
-              }
-            });
-          }
-
-          // 추가 샘플 미디어 (테스트용)
-          if (productId === 'Cylinder-Type-SafetyAirMat') {
-            // 비디오 파일을 먼저 추가하여 확실히 목록에 포함되도록 함
-            const additionalFiles = [
-              // 맨 먼저 비디오 파일 추가
-              `/images/products/${productId}/${productId}.mp4`,
-              // 그 다음 이미지 파일들 추가
-              `/images/products/${productId}/${productId}.jpg`,
-              `/images/products/${productId}/${productId}-front.jpg`,
-              `/images/products/${productId}/${productId}-perspective.jpg`,
-              `/images/products/${productId}/${productId}-test.jpg`,
-              `/images/products/${productId}/${productId}02.jpg`
-            ];
-
-            // 비디오 파일 경로를 로그로 출력하여 확인
-            console.log('비디오 파일 경로:', `/images/products/${productId}/${productId}.mp4`);
-
-            // 중복 미디어 제거 및 유효성 검사
-            const existingSrcs = mediaFiles.map(file => file.src);
-            additionalFiles.forEach(fileSrc => {
-              if (fileSrc && typeof fileSrc === 'string' && !existingSrcs.includes(fileSrc)) {
-                mediaFiles.push({
-                  src: fileSrc,
-                  alt: getSafeString(productData.name, '제품'),
-                  type: isVideoFile(fileSrc) ? 'video' as const : 'image' as const
-                });
-                existingSrcs.push(fileSrc);
-              }
-            });
-          }
-        } catch (error) {
-          console.error('미디어 파일 처리 오류:', error);
-        }
-
-        // 미디어 파일을 비디오와 이미지로 분리
-        const videoFiles = mediaFiles.filter(media => media.type === 'video');
-        const imageFiles = mediaFiles.filter(media => media.type === 'image');
-
-        // 이미지가 없는 경우 기본 이미지 추가
-        if (imageFiles.length === 0) {
-          imageFiles.push({
-            src: `/images/products/Cylinder-Type-SafetyAirMat.jpg`,
-            alt: getSafeString(productData.name, '제품'),
-            type: 'image' as const
-          });
-        }
-
-        console.log('변환된 이미지 파일:', imageFiles);
-        console.log('변환된 비디오 파일:', videoFiles);
-
-        // 상태 업데이트 - 이미지를 화면에 먼저 표시하고 비디오는 따로 저장
-        setTransformedImages([...imageFiles, ...videoFiles]); // 기존 배열은 유지하면서 타입이 같음
-        setProductImages(imageFiles as any);
-        setProductVideos(videoFiles as any);
-        setLoading(false);
-      } catch (error) {
-        console.error('제품 데이터 로드 오류:', error);
-        setLoading(false);
+    try {
+      // 기본 미디어가 있으면 추가
+      if (product.image) {
+        mediaFiles.push({
+          src: product.image,
+          alt: getSafeString(product.name, '제품'),
+          type: isVideoFile(product.image) ? 'video' as const : 'image' as const
+        });
       }
+
+      // 추가 미디어 처리
+      if (product.images && Array.isArray(product.images) && product.images.length > 0) {
+        product.images.forEach((media: any) => {
+          const mediaSrc = typeof media === 'string' ? media : (media?.path || media?.url || '');
+          if (mediaSrc) {
+            mediaFiles.push({
+              src: mediaSrc,
+              alt: getSafeString(product.name, '제품'),
+              type: isVideoFile(mediaSrc) ? 'video' as const : 'image' as const
+            });
+          }
+        });
+      }
+
+      // 추가 샘플 미디어 (테스트용)
+      if (productId === 'Cylinder-Type-SafetyAirMat') {
+        // 비디오 파일을 먼저 추가하여 확실히 목록에 포함되도록 함
+        const additionalFiles = [
+          // 맨 먼저 비디오 파일 추가
+          `/images/products/${productId}/${productId}.mp4`,
+          // 그 다음 이미지 파일들 추가
+          `/images/products/${productId}/${productId}.jpg`,
+          `/images/products/${productId}/${productId}-front.jpg`,
+          `/images/products/${productId}/${productId}-perspective.jpg`,
+          `/images/products/${productId}/${productId}-test.jpg`,
+          `/images/products/${productId}/${productId}02.jpg`
+        ];
+
+        // 비디오 파일 경로를 로그로 출력하여 확인
+        console.log('비디오 파일 경로:', `/images/products/${productId}/${productId}.mp4`);
+
+        // 중복 미디어 제거 및 유효성 검사
+        const existingSrcs = mediaFiles.map(file => file.src);
+        additionalFiles.forEach(fileSrc => {
+          if (fileSrc && typeof fileSrc === 'string' && !existingSrcs.includes(fileSrc)) {
+            mediaFiles.push({
+              src: fileSrc,
+              alt: getSafeString(product.name, '제품'),
+              type: isVideoFile(fileSrc) ? 'video' as const : 'image' as const
+            });
+            existingSrcs.push(fileSrc);
+          }
+        });
+      }
+    } catch (error) {
+      console.error('미디어 파일 처리 오류:', error);
     }
 
-    loadProductData();
-  }, [productId]);
+    // 미디어 파일을 비디오와 이미지로 분리
+    const videoFiles = mediaFiles.filter(media => media.type === 'video');
+    const imageFiles = mediaFiles.filter(media => media.type === 'image');
 
-  // 로딩 중 상태 표시
-  if (loading) {
-    return (
-      <div className="w-full h-screen flex items-center justify-center bg-gray-900">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-red-500 border-t-red-300 rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-300">제품 정보를 불러오는 중...</p>
-        </div>
-      </div>
-    );
-  }
+    // 이미지가 없는 경우 기본 이미지 추가
+    if (imageFiles.length === 0) {
+      imageFiles.push({
+        src: `/images/products/Cylinder-Type-SafetyAirMat.jpg`,
+        alt: getSafeString(product.name, '제품'),
+        type: 'image' as const
+      });
+    }
 
-  // 제품이 없을 때 처리
-  if (!product) {
-    return (
-      <div className="w-full min-h-screen flex items-center justify-center bg-gray-900 p-4">
-        <div className="max-w-md w-full bg-gray-800 rounded-lg shadow-xl p-8 text-center">
-          <AlertTriangle className="w-16 h-16 text-amber-500 mx-auto mb-4" />
-          <h1 className="text-3xl font-bold text-white mb-4">제품을 찾을 수 없습니다</h1>
-          <p className="text-gray-300 mb-6">
-            요청하신 제품 정보가 존재하지 않거나 삭제되었습니다.
-          </p>
-          <Link
-            href="/products"
-            className="inline-block px-6 py-3 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition-colors"
-          >
-            제품 목록으로 돌아가기
-          </Link>
-        </div>
-      </div>
-    );
-  }
+    console.log('변환된 이미지 파일:', imageFiles);
+    console.log('변환된 비디오 파일:', videoFiles);
+
+    // 상태 업데이트 - 이미지를 화면에 먼저 표시하고 비디오는 따로 저장
+    setTransformedImages([...imageFiles, ...videoFiles]);
+    setProductImages(imageFiles as any);
+    setProductVideos(videoFiles as any);
+  }, [product, productId]);
 
   // 제품명 안전하게 가져오기 (국문 우선)
-  const productName = getSafeString(product.name, '제품명 없음');
-  const productDescription = getSafeString(product.description, '');
+  const productName = getSafeString(product.nameKo || product.name, '제품명 없음');
+  const productDescription = getSafeString(product.descriptionKo || product.description, '');
 
   // 유효한 미디어 인덱스 계산 (selectedImageIndex가 범위를 벗어나면 0으로 설정)
   const validIndex = productImages.length > selectedImageIndex ? selectedImageIndex : 0;
@@ -262,8 +192,6 @@ export function ProductDetailClient({ productId }: ProductDetailClientProps) {
     { text: categoryName, href: `/products/category/${product.category}` },
     { text: productName, href: `/products/${product.id}`, active: true }
   ];
-
-  // B타입 제품은 현재 비활성화되어 기본 레이아웃을 사용합니다.
 
   // 일반 제품 (A타입) 레이아웃
   return (
@@ -447,18 +375,16 @@ export function ProductDetailClient({ productId }: ProductDetailClientProps) {
         {/* 주의사항 섹션 */}
         {product.cautions && product.cautions.length > 0 && (
           <div className="mb-12 animate-fadeIn">
-            <h2 className="text-2xl font-bold text-white mb-4 flex items-center">
-              <AlertTriangle className="w-6 h-6 mr-2 text-amber-500" />
-              주의사항
-            </h2>
-            <div className="bg-amber-900/20 border border-amber-600/30 rounded-xl p-6 shadow-lg">
-              <ul className="space-y-4">
+            <div className="bg-gradient-to-br from-amber-800/20 to-orange-900/30 border border-amber-600/40 rounded-xl p-6 shadow-lg">
+              <h3 className="text-xl font-bold text-amber-300 mb-4 flex items-center">
+                <AlertTriangle className="w-6 h-6 mr-2 text-amber-400" />
+                주의사항 및 안전수칙
+              </h3>
+              <ul className="space-y-3 text-amber-100/90">
                 {product.cautions.map((caution: string, index: number) => (
                   <li key={index} className="flex items-start">
-                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-amber-600/20 flex items-center justify-center mr-3 mt-0.5">
-                      <span className="text-amber-400 font-semibold">{index + 1}</span>
-                    </div>
-                    <p className="text-gray-200">{caution}</p>
+                    <span className="inline-block w-2 h-2 bg-amber-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                    <span className="text-sm leading-relaxed">{caution}</span>
                   </li>
                 ))}
               </ul>
@@ -466,10 +392,34 @@ export function ProductDetailClient({ productId }: ProductDetailClientProps) {
           </div>
         )}
 
-        {/* 관련 제품 */}
+        {/* 다운로드 섹션 */}
+        {product.documents && product.documents.length > 0 && (
+          <div className="mb-12 animate-fadeIn">
+            <div className="bg-gradient-to-br from-gray-800/70 to-gray-900/70 border border-red-700/30 rounded-xl p-6 shadow-lg">
+              <h3 className="text-xl font-bold text-white mb-4 flex items-center">
+                <FileText className="w-6 h-6 mr-2 text-red-400" />
+                제품 문서 다운로드
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {product.documents.map((doc: any, index: number) => (
+                  <DownloadCard
+                    key={index}
+                    title={doc.name || '제품 문서'}
+                    url={doc.url}
+                    fileType={doc.fileType || 'PDF'}
+                    fileSize={doc.fileSize}
+                    className="bg-gray-900/50 border-gray-600/30 hover:border-red-500/40"
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* 관련 제품 섹션 */}
         {relatedProducts.length > 0 && (
           <div className="animate-fadeIn">
-            <h2 className="text-2xl font-bold text-white mb-4 flex items-center">
+            <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
               <ChevronRight className="w-6 h-6 mr-2 text-red-400" />
               관련 제품
             </h2>

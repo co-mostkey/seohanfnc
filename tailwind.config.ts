@@ -55,6 +55,10 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        'btype-neon-cyan': '#22eaff',
+        'btype-neon-fuchsia': '#ff3cf6',
+        'btype-glass-dark': 'rgba(24,31,42,0.7)',
+        'btype-glass-neon': 'rgba(34,234,255,0.12)',
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -102,6 +106,10 @@ const config: Config = {
           "0%": { backgroundPosition: "0% 0%" },
           "100%": { backgroundPosition: "100% 100%" },
         },
+        'btype-glow-pulse': {
+          '0%, 100%': { filter: 'drop-shadow(0 0 8px #22eaff) drop-shadow(0 0 16px #22eaff)' },
+          '50%': { filter: 'drop-shadow(0 0 16px #22eaff) drop-shadow(0 0 32px #22eaff)' },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -114,6 +122,22 @@ const config: Config = {
         "fadeInRight": "fadeInRight 0.7s ease-out forwards",
         "pulse": "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
         "float": "float 5s ease-in-out infinite",
+        'btype-glow-pulse': 'btype-glow-pulse 2s ease-in-out infinite',
+      },
+      dropShadow: {
+        'btype-neon-cyan': '0 0 8px #22eaff, 0 0 16px #22eaff',
+        'btype-neon-fuchsia': '0 0 8px #ff3cf6, 0 0 16px #ff3cf6',
+      },
+      boxShadow: {
+        'btype-neon-cyan': '0 0 12px 2px #22eaff44',
+        'btype-neon-fuchsia': '0 0 12px 2px #ff3cf644',
+      },
+      backdropBlur: {
+        'btype-lg': '16px',
+      },
+      borderColor: {
+        'btype-neon-cyan': '#22eaff',
+        'btype-neon-fuchsia': '#ff3cf6',
       },
     },
   },

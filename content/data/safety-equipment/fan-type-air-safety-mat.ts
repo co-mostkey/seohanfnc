@@ -4,7 +4,7 @@
  * 제품의 기본 정보, 기술 사양, 특징, 관련 문서 등의 정보를 포함합니다.
  */
 
-import { SafetyEquipment } from '../../../types/safety-equipment';
+import { SafetyEquipment } from '../../../types/b-type';
 
 const fanTypeAirSafetyMat: SafetyEquipment = {
   id: 'Fan-Type-Air-Safety-Mat',
@@ -12,18 +12,18 @@ const fanTypeAirSafetyMat: SafetyEquipment = {
   nameEn: 'Fan Type Air Safety Mat',
   slug: 'fan-type-air-safety-mat',
   description: '팬형 공기안전매트는 전기 모터로 구동되는 송풍기를 통해 에어매트에 공기를 주입하여 사용하는 추락 안전장비입니다. 고층 건물 화재 및 재난 현장에서 효과적으로 활용됩니다.',
-  
+
   // 제품 이미지 경로
-  thumbnail: '/images/products/safety-equipment/fan-type-air-safety-mat/thumbnail.jpg',
+  thumbnail: '/images/products/b-type/fan-type-air-safety-mat/thumbnail.jpg',
   images: [
-    '/images/products/safety-equipment/fan-type-air-safety-mat/image1.jpg',
-    '/images/products/safety-equipment/fan-type-air-safety-mat/image2.jpg',
-    '/images/products/safety-equipment/fan-type-air-safety-mat/image3.jpg',
+    '/images/products/b-type/fan-type-air-safety-mat/image1.jpg',
+    '/images/products/b-type/fan-type-air-safety-mat/image2.jpg',
+    '/images/products/b-type/fan-type-air-safety-mat/image3.jpg',
   ],
-  
+
   // 3D 모델 정보
-  modelPath: '/models/safety-equipment/fan-type-air-safety-mat.glb',
-  
+  modelPath: '/models/b-type/fan-type-air-safety-mat.glb',
+
   // 제품 사양
   specifications: {
     '모델': '5F 형, 10F 형, 15F 형, 20F 형',
@@ -38,7 +38,7 @@ const fanTypeAirSafetyMat: SafetyEquipment = {
     '무게': '35kg ~ 90kg (모델별 상이)',
     '사용 환경': '-20℃ ~ 70℃',
   },
-  
+
   // 주요 특징
   features: [
     {
@@ -67,7 +67,7 @@ const fanTypeAirSafetyMat: SafetyEquipment = {
       icon: 'AlertCircle'
     }
   ],
-  
+
   // 관련 문서
   documents: [
     {
@@ -75,33 +75,33 @@ const fanTypeAirSafetyMat: SafetyEquipment = {
       nameKo: '사용자 매뉴얼',
       nameEn: 'User Manual',
       type: 'manual',
-      filePath: '/documents/safety-equipment/fan-type-air-safety-mat-manual.pdf'
+      filePath: '/documents/b-type/fan-type-air-safety-mat-manual.pdf'
     },
     {
       id: 'fan-type-air-safety-mat-certification',
       nameKo: '제품 인증서',
       nameEn: 'Product Certification',
       type: 'certification',
-      filePath: '/documents/safety-equipment/fan-type-air-safety-mat-certification.pdf'
+      filePath: '/documents/b-type/fan-type-air-safety-mat-certification.pdf'
     },
     {
       id: 'fan-type-air-safety-mat-maintenance',
       nameKo: '유지보수 안내서',
       nameEn: 'Maintenance Guide',
       type: 'guide',
-      filePath: '/documents/safety-equipment/fan-type-air-safety-mat-maintenance.pdf'
+      filePath: '/documents/b-type/fan-type-air-safety-mat-maintenance.pdf'
     },
     {
       id: 'fan-type-air-safety-mat-datasheet',
       nameKo: '기술 사양서',
       nameEn: 'Technical Datasheet',
       type: 'datasheet',
-      filePath: '/documents/safety-equipment/fan-type-air-safety-mat-datasheet.pdf'
+      filePath: '/documents/b-type/fan-type-air-safety-mat-datasheet.pdf'
     }
   ],
-  
+
   // 카테고리 및 태그
-  category: 'safety-equipment',
+  category: 'b-type',
   tags: ['안전매트', '추락방지', '구조장비', '소방장비', '팬형'],
 
   // 추가 정보

@@ -1,11 +1,9 @@
 "use client"
 
 import React, { useRef, useState, useEffect, useMemo } from 'react'
-import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { type AwardItem } from '@/types/company'
 import { cn } from '@/lib/utils'
-import { ExternalLink } from 'lucide-react'
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
 
@@ -13,8 +11,14 @@ interface CertificationItemProps extends AwardItem {
   // AwardItem의 모든 필드를 포함
 }
 
+// iOS 디바이스 감지 함수
+function isIOSDevice() {
+  if (typeof window === 'undefined') return false;
+  return /iPhone|iPad|iPod/.test(window.navigator.userAgent) && !(window as any).MSStream;
+}
+
 // 개별 인증/특허 아이템을 표시하는 내부 컴포넌트
-function CertificationDisplayItem(props: CertificationItemProps & { imageSrc?: string; issuer?: string; isMobile?: boolean }) {
+function CertificationDisplayItem(props: CertificationItemProps & { imageSrc?: string; issuer?: string; isMobile?: boolean; isIOS?: boolean }) {
   // imageUrl, imageSrc 모두 지원 (imageUrl 우선)
   const rawImage = props.imageUrl || props.imageSrc;
   const imagePath = rawImage
@@ -27,17 +31,23 @@ function CertificationDisplayItem(props: CertificationItemProps & { imageSrc?: s
 
   const displayTitle = props.title || '';
   const isMobile = props.isMobile;
+  const isIOS = props.isIOS;
 
   return (
     <div
-      className={isMobile
-        ? "shrink-0 w-24 h-full max-h-full bg-transparent hover:bg-gray-800/20 border border-gray-700/10 hover:border-gray-600/30 rounded-lg overflow-hidden flex flex-col transition-all duration-300"
-        : "shrink-0 w-14 sm:w-16 md:w-20 lg:w-24 h-full max-h-full bg-transparent hover:bg-gray-800/20 border border-gray-700/10 hover:border-gray-600/30 rounded-lg overflow-hidden flex flex-col transition-all duration-300"
-      }
+      className={cn(
+        isMobile
+          ? "shrink-0 w-24 h-full max-h-full bg-transparent hover:bg-gray-800/20 border border-gray-700/10 hover:border-gray-600/30 rounded-lg overflow-hidden flex flex-col transition-all duration-300"
+          : "shrink-0 w-14 sm:w-16 md:w-20 lg:w-24 h-full max-h-full bg-transparent hover:bg-gray-800/20 border border-gray-700/10 hover:border-gray-600/30 rounded-lg overflow-hidden flex flex-col transition-all duration-300",
+        isIOS && "ios-cert-item"
+      )}
       title={displayTitle}
       style={{ aspectRatio: '210/297' }}
     >
-      <div className={isMobile ? "relative w-full h-0 pb-[135%] bg-gray-800/10" : "relative w-full h-0 pb-[110%] bg-gray-800/10"}>
+      <div className={cn(
+        isMobile ? "relative w-full h-0 pb-[135%] bg-gray-800/10" : "relative w-full h-0 pb-[110%] bg-gray-800/10",
+        isIOS && "ios-cert-image-wrapper"
+      )}>
         <Image
           src={imagePath}
           alt={displayTitle}
@@ -47,7 +57,10 @@ function CertificationDisplayItem(props: CertificationItemProps & { imageSrc?: s
           onError={(e) => { e.currentTarget.src = `${basePath}/images/placeholder-image.png`; }}
         />
       </div>
-      <div className={isMobile ? "w-full text-center text-[15px] truncate px-1 py-1 text-gray-300" : "w-full text-center text-[8px] sm:text-[9px] md:text-[10px] truncate px-0.5 py-1 text-gray-300"}>{displayTitle}</div>
+      <div className={cn(
+        isMobile ? "w-full text-center text-[15px] truncate px-1 py-1 text-gray-300" : "w-full text-center text-[8px] sm:text-[9px] md:text-[10px] truncate px-0.5 py-1 text-gray-300",
+        isIOS && "ios-cert-title"
+      )}>{displayTitle}</div>
     </div>
   )
 }
@@ -70,11 +83,13 @@ export default function CertPatentBox({ wrapperClassName, awardsData, isLoading:
   const [mounted, setMounted] = useState(false)
   const [translateX, setTranslateX] = useState(0)
   const [isMobile, setIsMobile] = useState(false)
+  const [isIOS, setIsIOS] = useState(false)
 
   useEffect(() => {
     setMounted(true);
     if (typeof window !== 'undefined') {
       setIsMobile(isMobileDevice());
+      setIsIOS(isIOSDevice());
     }
   }, [])
 
@@ -99,7 +114,6 @@ export default function CertPatentBox({ wrapperClassName, awardsData, isLoading:
 
   // 이미지 URL과 제목이 있는 항목만 필터링 (제한 없음)
   const displayItems = awardsData?.filter(item => item.imageUrl && item.title) || []
-  console.log('[CertPatentBox] displayItems:', displayItems);
 
   if (!mounted) return null
 
@@ -130,40 +144,47 @@ export default function CertPatentBox({ wrapperClassName, awardsData, isLoading:
   }
 
   return (
-    <div
-      className={cn(
-        isMobile
-          ? "w-full min-h-[140px] max-h-[220px] sm:min-h-[160px] sm:max-h-[260px] sm:p-4 flex flex-col justify-center bg-black/40 backdrop-blur-md rounded-xl border border-white/10 text-white shadow-xl p-3 sm:shadow-md sm:rounded-lg"
-          : "w-full min-h-[120px] md:min-h-[140px] h-full max-h-[220px] md:max-h-[220px] flex flex-col justify-center bg-black/40 backdrop-blur-md rounded-xl border border-white/10 text-white shadow-xl p-2 md:p-4 sm:shadow-md sm:rounded-lg",
-        wrapperClassName
-      )}
-    >
-      <div className="flex flex-col h-full w-full flex-1 overflow-hidden">
-        <div className="flex items-center justify-between px-1 mb-1">
-          <h3 className={isMobile ? "text-lg font-semibold text-white" : "text-sm md:text-base font-semibold text-white"}>
-            주요 인증 및 특허
-          </h3>
-          <span className={isMobile ? "text-base px-3 py-1 bg-gray-800/50 text-gray-300 rounded-full font-medium border border-gray-700/30" : "text-xs px-1 py-1 bg-gray-800/50 text-gray-300 rounded-full font-medium border border-gray-700/30"}>{displayItems.length} 건</span>
-        </div>
-        <div className="relative flex-1 overflow-hidden flex items-end">
-          <div
-            ref={certScrollRef}
-            className={isMobile ? "flex flex-row gap-3 items-end px-2 py-2 h-full" : "flex flex-row gap-1 sm:gap-1 items-end px-1 py-1 h-full"}
-            style={{
-              willChange: 'transform',
-              transform: `translateX(${translateX}px)`
-            }}
-            onMouseEnter={() => setIsCertPaused(true)}
-            onMouseLeave={() => setIsCertPaused(false)}
-            onTouchStart={() => setIsCertPaused(true)}
-            onTouchEnd={() => setIsCertPaused(false)}
-          >
-            {[...displayItems, ...displayItems].map((item, idx) => (
-              <CertificationDisplayItem key={item.id + '-' + idx} {...item} isMobile={isMobile} />
-            ))}
+    <>
+      <div
+        className={cn(
+          isMobile
+            ? "w-full min-h-[140px] max-h-[220px] sm:min-h-[160px] sm:max-h-[260px] sm:p-4 flex flex-col justify-center bg-black/40 backdrop-blur-md rounded-xl border border-white/10 text-white shadow-xl p-3 sm:shadow-md sm:rounded-lg"
+            : "w-full min-h-[120px] md:min-h-[140px] h-full max-h-[220px] md:max-h-[220px] flex flex-col justify-center bg-black/40 backdrop-blur-md rounded-xl border border-white/10 text-white shadow-xl p-2 md:p-4 sm:shadow-md sm:rounded-lg",
+          wrapperClassName,
+          isIOS && "ios-cert-wrapper"
+        )}
+      >
+        <div className={cn("flex flex-col h-full w-full flex-1 overflow-hidden", isIOS && "ios-cert-container")}>
+          <div className="flex items-center justify-between px-1 mb-1">
+            <h3 className={isMobile ? "text-lg font-semibold text-white" : "text-sm md:text-base font-semibold text-white"}>
+              주요 인증 및 특허
+            </h3>
+            <span className={isMobile ? "text-base px-3 py-1 bg-gray-800/50 text-gray-300 rounded-full font-medium border border-gray-700/30" : "text-xs px-1 py-1 bg-gray-800/50 text-gray-300 rounded-full font-medium border border-gray-700/30"}>{displayItems.length} 건</span>
+          </div>
+          <div className={cn("relative flex-1 overflow-hidden flex items-end", isIOS && "ios-cert-scroll-wrapper")}>
+            <div
+              ref={certScrollRef}
+              className={cn(
+                isMobile ? "flex flex-row gap-3 items-end px-2 py-2 h-full" : "flex flex-row gap-1 sm:gap-1 items-end px-1 py-1 h-full",
+                isIOS && "ios-cert-scroll"
+              )}
+              style={{
+                willChange: 'transform',
+                transform: `translateX(${translateX}px)`,
+                ...(isIOS && { WebkitTransform: `translateX(${translateX}px)` })
+              }}
+              onMouseEnter={() => setIsCertPaused(true)}
+              onMouseLeave={() => setIsCertPaused(false)}
+              onTouchStart={() => setIsCertPaused(true)}
+              onTouchEnd={() => setIsCertPaused(false)}
+            >
+              {[...displayItems, ...displayItems].map((item, idx) => (
+                <CertificationDisplayItem key={item.id + '-' + idx} {...item} isMobile={isMobile} isIOS={isIOS} />
+              ))}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   )
 } 

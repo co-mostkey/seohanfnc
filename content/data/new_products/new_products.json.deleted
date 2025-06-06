@@ -1,0 +1,43 @@
+{
+    "categories": [
+        {
+            "id": "test-equipment",
+            "nameKo": "테스트 장비",
+            "nameEn": "Test Equipment",
+            "nameCn": "测试设备",
+            "descriptionKo": "테스트용 장비 카테고리입니다.",
+            "descriptionEn": "Category for test equipment.",
+            "descriptionCn": "测试设备类别。",
+            "image": "/images/products/test-equipment.jpg",
+            "products": [
+                {
+                    "id": "test-product-1",
+                    "nameKo": "테스트 제품 1",
+                    "nameEn": "Test Product 1",
+                    "nameCn": "测试产品 1",
+                    "category": "test-equipment",
+                    "isPublished": true,
+                    "descriptionKo": "첫 번째 테스트 제품입니다.",
+                    "descriptionEn": "First test product.",
+                    "descriptionCn": "第一个测试产品。",
+                    "image": "/images/products/test-product-1.jpg",
+                    "features": [
+                        {
+                            "title": "테스트 기능",
+                            "description": "이 제품은 테스트용입니다."
+                        }
+                    ],
+                    "cautions": [
+                        "테스트용이므로 실제 사용하지 마세요."
+                    ],
+                    "showInProductList": true,
+                    "productStyle": "A",
+                    "createdAt": "2025-05-20T00:00:00Z",
+                    "updatedAt": "2025-05-20T00:00:00Z",
+                    "description": "첫 번째 테스트 제품입니다.",
+                    "approvalNumber": "테스트 승인 번호: TEST-001"
+                }
+            ]
+        }
+    ]
+}

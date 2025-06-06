@@ -1,16 +1,16 @@
 import fs from 'fs/promises';
 import path from 'path';
 import { Product } from '@/types/product';
-import { SafetyEquipment } from '@/types/safety-equipment';
+import { SafetyEquipment } from '@/types/b-type';
 
-const SAFETY_EQUIPMENT_DIR = path.join(process.cwd(), 'content', 'data', 'safety-equipment');
+const SAFETY_EQUIPMENT_DIR = path.join(process.cwd(), 'content', 'data', 'b-type');
 
 /**
  * Product 데이터를 SafetyEquipment TypeScript 파일로 변환하여 저장
  */
 export async function syncProductToSafetyEquipment(product: Product): Promise<void> {
-    // safety-equipment 카테고리가 아니면 무시
-    if (product.category !== 'safety-equipment' && product.categoryId !== 'safety-equipment') {
+    // b-type 카테고리가 아니면 무시
+    if (product.category !== 'b-type' && product.categoryId !== 'b-type') {
         return;
     }
 
@@ -22,8 +22,8 @@ export async function syncProductToSafetyEquipment(product: Product): Promise<vo
     try {
         await fs.access(filePath);
     } catch {
-        // 파일이 없으면 무시 (새로운 safety-equipment 파일은 생성하지 않음)
-        console.log(`[Safety-Equipment Sync] File not found: ${fileName}, skipping...`);
+        // 파일이 없으면 무시 (새로운 b-type 파일은 생성하지 않음)
+        console.log(`[b-type Sync] File not found: ${fileName}, skipping...`);
         return;
     }
 
@@ -32,7 +32,7 @@ export async function syncProductToSafetyEquipment(product: Product): Promise<vo
 
     // 파일 저장
     await fs.writeFile(filePath, tsContent, 'utf-8');
-    console.log(`[Safety-Equipment Sync] Updated: ${fileName}`);
+    console.log(`[b-type Sync] Updated: ${fileName}`);
 }
 
 /**
@@ -98,7 +98,7 @@ function generateSafetyEquipmentTS(product: Product): string {
  * 제품의 기본 정보, 기술 사양, 특징, 관련 문서 등의 정보를 포함합니다.
  */
 
-import { SafetyEquipment } from '../../../types/safety-equipment';
+import { SafetyEquipment } from '../../../types/b-type';
 
 const ${toCamelCase(product.id)}: SafetyEquipment = {
   id: '${product.id}',
@@ -124,7 +124,7 @@ const ${toCamelCase(product.id)}: SafetyEquipment = {
   documents: ${JSON.stringify(documents, null, 4).replace(/"/g, "'")},
 
   // 카테고리 및 태그
-  category: 'safety-equipment',
+  category: 'b-type',
   tags: ${JSON.stringify(product.tags || [], null, 4).replace(/"/g, "'")},
 
   // 추가 정보

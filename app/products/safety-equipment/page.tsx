@@ -17,13 +17,13 @@ export const metadata: Metadata = {
  */
 export default function SafetyEquipmentPage() {
   // 서버에서 데이터 가져오기
-  const allSafetyProducts = findProductsByCategory("safety-equipment");
+  const allSafetyProducts = findProductsByCategory("b-type");
   console.log('서버: 안전장비 전체 제품 개수:', allSafetyProducts.length);
   console.log('서버: 안전장비 제품 ID 목록:', allSafetyProducts.map(p => p.id));
 
   const safetyProducts = sortProductsByCategory(
     allSafetyProducts,
-    "safety-equipment"
+    "b-type"
   );
   console.log('서버: 정렬된 안전장비 제품 개수:', safetyProducts.length);
   console.log('서버: 정렬된 안전장비 제품 ID 목록:', safetyProducts.map(p => p.id));

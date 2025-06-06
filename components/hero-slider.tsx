@@ -419,7 +419,7 @@ export default function HeroSlider() {
       icon: <Shield className="w-10 h-10 md:w-12 md:h-12" />,
       title: "안전장비",
       description: "다양한 안전 보호 장비",
-      link: "/products/safety-equipment",
+      link: "/products/b-type",
       content: {
         title: "안전장비",
         subtitle: "생명을 보호하는 첨단 안전 솔루션",

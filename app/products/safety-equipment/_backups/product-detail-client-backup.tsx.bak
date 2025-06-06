@@ -7,13 +7,13 @@ import { cn } from '@/lib/utils';
 import { MessageSquare, FileText, Shield, Check, Download } from 'lucide-react';
 
 // 분리된 컴포넌트들 가져오기
-import ProductHeader from '@/components/products/safety-equipment/ProductHeader';
-import ProductModelViewer from '@/components/products/safety-equipment/ProductModelViewer';
-import ProductSpecifications from '@/components/products/safety-equipment/ProductSpecifications';
-import ProductTestData from '@/components/products/safety-equipment/ProductTestData';
-import ProductFeatures from '@/components/products/safety-equipment/ProductFeatures';
-import ProductCautions from '@/components/products/safety-equipment/ProductCautions';
-import ProductDocuments from '@/components/products/safety-equipment/ProductDocuments';
+import ProductHeader from '@/components/products/b-type/ProductHeader';
+import ProductModelViewer from '@/components/products/b-type/ProductModelViewer';
+import ProductSpecifications from '@/components/products/b-type/ProductSpecifications';
+import ProductTestData from '@/components/products/b-type/ProductTestData';
+import ProductFeatures from '@/components/products/b-type/ProductFeatures';
+import ProductCautions from '@/components/products/b-type/ProductCautions';
+import ProductDocuments from '@/components/products/b-type/ProductDocuments';
 
 /**
  * 안전장비 제품 상세 인터페이스
@@ -52,7 +52,7 @@ export default function SafetyEquipmentProductDetail({
   documents,
   specTable,
   cautions,
-  category = 'safety-equipment'
+  category = 'b-type'
 }: ProductDetailProps) {
   // 활성화된 탭 상태
   const [activeTab, setActiveTab] = useState<'overview' | 'features' | 'documents'>('overview');

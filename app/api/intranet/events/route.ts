@@ -1,72 +1,73 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { promises as fs } from 'fs';
 import path from 'path';
+import { safeReadJSON, safeWriteJSON } from '@/lib/file-lock';
 
 // [TRISID] 인트라넷 일정 관리 API
 
-export async function GET() {
-    try {
-        const dbPath = path.join(process.cwd(), 'data/db/intranet-events.json');
+const dbPath = path.join(process.cwd(), 'data/db/intranet-events.json');
 
-        let eventsData;
-        try {
-            const fileData = await fs.readFile(dbPath, 'utf8');
-            eventsData = JSON.parse(fileData);
-        } catch (error) {
-            // 파일이 없으면 기본 데이터로 초기화
-            eventsData = {
-                events: [],
-                lastId: 0
-            };
-            await fs.writeFile(dbPath, JSON.stringify(eventsData, null, 4), 'utf8');
+// GET: 일정 목록 조회
+export async function GET(request: NextRequest) {
+    try {
+        const { searchParams } = new URL(request.url);
+        const month = searchParams.get('month');
+        const year = searchParams.get('year');
+
+        const data = await safeReadJSON(dbPath);
+        let events = data.events || [];
+
+        // 월별 필터링
+        if (month && year) {
+            events = events.filter((event: any) => {
+                const eventDate = new Date(event.date);
+                return eventDate.getMonth() + 1 === parseInt(month) &&
+                    eventDate.getFullYear() === parseInt(year);
+            });
         }
+
+        // 날짜순 정렬
+        events.sort((a: any, b: any) =>
+            new Date(a.date).getTime() - new Date(b.date).getTime()
+        );
 
         return NextResponse.json({
             success: true,
-            events: eventsData.events
+            events
         });
-
     } catch (error) {
-        console.error('[TRISID] 일정 조회 오류:', error);
+        console.error('일정 목록 조회 오류:', error);
         return NextResponse.json(
-            { success: false, error: '일정 조회 중 오류가 발생했습니다.' },
+            { success: false, error: '일정 목록을 불러올 수 없습니다.' },
             { status: 500 }
         );
     }
 }
 
+// POST: 일정 추가
 export async function POST(request: NextRequest) {
     try {
-        const { title, date, time, location, type, description } = await request.json();
+        const body = await request.json();
+        const { title, date, time, location, type, description } = body;
 
         if (!title || !date) {
             return NextResponse.json(
-                { success: false, error: '제목과 날짜는 필수입니다.' },
+                { success: false, error: '필수 정보가 누락되었습니다.' },
                 { status: 400 }
             );
         }
 
-        const dbPath = path.join(process.cwd(), 'data/db/intranet-events.json');
-
-        let eventsData;
-        try {
-            const fileData = await fs.readFile(dbPath, 'utf8');
-            eventsData = JSON.parse(fileData);
-        } catch (error) {
-            eventsData = {
-                events: [],
-                lastId: 0
-            };
-        }
+        const data = await safeReadJSON(dbPath);
+        const newId = (data.lastId || 0) + 1;
 
         const eventDate = new Date(date);
         const newEvent = {
-            id: (++eventsData.lastId).toString(),
+            id: String(newId),
             title,
             date,
             month: `${eventDate.getMonth() + 1}월`,
-            day: eventDate.getDate().toString(),
-            time: time || '시간 미정',
+            day: String(eventDate.getDate()),
+            time: time || '',
             location: location || '',
             type: type || 'meeting',
             description: description || '',
@@ -74,28 +75,29 @@ export async function POST(request: NextRequest) {
             updatedAt: new Date().toISOString()
         };
 
-        eventsData.events.push(newEvent);
-        await fs.writeFile(dbPath, JSON.stringify(eventsData, null, 4), 'utf8');
+        data.events.push(newEvent);
+        data.lastId = newId;
 
-        console.log('[TRISID] 새 일정 추가:', newEvent.title);
+        await safeWriteJSON(dbPath, data);
 
         return NextResponse.json({
             success: true,
             event: newEvent
         });
-
     } catch (error) {
-        console.error('[TRISID] 일정 추가 오류:', error);
+        console.error('일정 추가 오류:', error);
         return NextResponse.json(
-            { success: false, error: '일정 추가 중 오류가 발생했습니다.' },
+            { success: false, error: '일정 추가에 실패했습니다.' },
             { status: 500 }
         );
     }
 }
 
+// PUT: 일정 수정
 export async function PUT(request: NextRequest) {
     try {
-        const { id, title, date, time, location, type, description } = await request.json();
+        const body = await request.json();
+        const { id, title, date, time, location, type, description } = body;
 
         if (!id) {
             return NextResponse.json(
@@ -104,11 +106,8 @@ export async function PUT(request: NextRequest) {
             );
         }
 
-        const dbPath = path.join(process.cwd(), 'data/db/intranet-events.json');
-        const fileData = await fs.readFile(dbPath, 'utf8');
-        const eventsData = JSON.parse(fileData);
-
-        const eventIndex = eventsData.events.findIndex((event: any) => event.id === id);
+        const data = await safeReadJSON(dbPath);
+        const eventIndex = data.events.findIndex((event: any) => event.id === id);
 
         if (eventIndex === -1) {
             return NextResponse.json(
@@ -117,67 +116,50 @@ export async function PUT(request: NextRequest) {
             );
         }
 
-        // 날짜가 변경된 경우 month, day 업데이트
-        let updateData: any = {
-            ...(title !== undefined && { title }),
-            ...(time !== undefined && { time }),
-            ...(location !== undefined && { location }),
-            ...(type !== undefined && { type }),
-            ...(description !== undefined && { description }),
+        const eventDate = new Date(date);
+        data.events[eventIndex] = {
+            ...data.events[eventIndex],
+            title: title || data.events[eventIndex].title,
+            date: date || data.events[eventIndex].date,
+            month: date ? `${eventDate.getMonth() + 1}월` : data.events[eventIndex].month,
+            day: date ? String(eventDate.getDate()) : data.events[eventIndex].day,
+            time: time !== undefined ? time : data.events[eventIndex].time,
+            location: location !== undefined ? location : data.events[eventIndex].location,
+            type: type || data.events[eventIndex].type,
+            description: description !== undefined ? description : data.events[eventIndex].description,
             updatedAt: new Date().toISOString()
         };
 
-        if (date !== undefined) {
-            const eventDate = new Date(date);
-            updateData = {
-                ...updateData,
-                date,
-                month: `${eventDate.getMonth() + 1}월`,
-                day: eventDate.getDate().toString()
-            };
-        }
-
-        const updatedEvent = {
-            ...eventsData.events[eventIndex],
-            ...updateData
-        };
-
-        eventsData.events[eventIndex] = updatedEvent;
-        await fs.writeFile(dbPath, JSON.stringify(eventsData, null, 4), 'utf8');
-
-        console.log('[TRISID] 일정 업데이트:', updatedEvent.title);
+        await safeWriteJSON(dbPath, data);
 
         return NextResponse.json({
             success: true,
-            event: updatedEvent
+            event: data.events[eventIndex]
         });
-
     } catch (error) {
-        console.error('[TRISID] 일정 업데이트 오류:', error);
+        console.error('일정 수정 오류:', error);
         return NextResponse.json(
-            { success: false, error: '일정 업데이트 중 오류가 발생했습니다.' },
+            { success: false, error: '일정 수정에 실패했습니다.' },
             { status: 500 }
         );
     }
 }
 
+// DELETE: 일정 삭제
 export async function DELETE(request: NextRequest) {
     try {
-        const url = new URL(request.url);
-        const id = url.searchParams.get('id');
+        const { searchParams } = new URL(request.url);
+        const eventId = searchParams.get('id');
 
-        if (!id) {
+        if (!eventId) {
             return NextResponse.json(
                 { success: false, error: '일정 ID가 필요합니다.' },
                 { status: 400 }
             );
         }
 
-        const dbPath = path.join(process.cwd(), 'data/db/intranet-events.json');
-        const fileData = await fs.readFile(dbPath, 'utf8');
-        const eventsData = JSON.parse(fileData);
-
-        const eventIndex = eventsData.events.findIndex((event: any) => event.id === id);
+        const data = await safeReadJSON(dbPath);
+        const eventIndex = data.events.findIndex((event: any) => event.id === eventId);
 
         if (eventIndex === -1) {
             return NextResponse.json(
@@ -186,20 +168,18 @@ export async function DELETE(request: NextRequest) {
             );
         }
 
-        const deletedEvent = eventsData.events.splice(eventIndex, 1)[0];
-        await fs.writeFile(dbPath, JSON.stringify(eventsData, null, 4), 'utf8');
+        data.events.splice(eventIndex, 1);
 
-        console.log('[TRISID] 일정 삭제:', deletedEvent.title);
+        await safeWriteJSON(dbPath, data);
 
         return NextResponse.json({
             success: true,
             message: '일정이 삭제되었습니다.'
         });
-
     } catch (error) {
-        console.error('[TRISID] 일정 삭제 오류:', error);
+        console.error('일정 삭제 오류:', error);
         return NextResponse.json(
-            { success: false, error: '일정 삭제 중 오류가 발생했습니다.' },
+            { success: false, error: '일정 삭제에 실패했습니다.' },
             { status: 500 }
         );
     }

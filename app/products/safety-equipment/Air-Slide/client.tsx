@@ -10,9 +10,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ProductDetailClientProps } from '@/types/component-props';
 import { cn, getImagePath } from '@/lib/utils';
-import ProductFeaturesComponent from '@/components/products/safety-equipment/ProductFeatures';
+import ProductFeaturesComponent from '@/components/products/b-type/ProductFeatures';
 import { ModelSpecTable } from '@/components/products/ModelSpecTable';
-import ProductImageGallery from '@/components/products/safety-equipment/ProductImageGallery';
+import ProductImageGallery from '@/components/products/b-type/ProductImageGallery';
 import { MediaGalleryItem } from '@/types/product';
 
 // 섹션 ID 정의

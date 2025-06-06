@@ -1,0 +1,194 @@
+"use client"
+
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, useScroll, AnimatePresence } from 'framer-motion';
+import { cn } from '@/lib/utils';
+import Link from 'next/link';
+import Image from 'next/image';
+import { Button } from "@/components/ui/button"
+import { ArrowRight, Shield, Award, Clock, ChevronUp, Users, Building, Briefcase, Calendar, TrendingUp, Map, Truck, Medal, FileText, Layers, LogIn } from "lucide-react"
+import MobileBottomNav from '@/components/ui/MobileBottomNav';
+import { GlobalNav } from '@/components/ui/GlobalNav';
+import MainTitleBox from "@/components/hero/MainTitleBox"
+import NoticeBox from "@/components/hero/NoticeBox"
+import CertPatentBox from "@/components/hero/CertPatentBox"
+import DeliveryBox from "@/components/hero/DeliveryBox"
+import ProductsBox from "@/components/hero/ProductsBox"
+import { type CompanyInfo } from '@/types/company';
+import { type PromotionItem } from '@/types/promotion';
+import { type DeliveryRecord } from '@/types/promotion';
+
+interface HomeClientProps {
+    initialCompanyData: CompanyInfo | null;
+    initialPromotionsData: PromotionItem[];
+    initialDeliveryData: DeliveryRecord[];
+}
+
+export default function HomeClient({
+    initialCompanyData,
+    initialPromotionsData,
+    initialDeliveryData
+}: HomeClientProps) {
+    const [companyData, setCompanyData] = useState<CompanyInfo | null>(initialCompanyData);
+    const [promotionsData, setPromotionsData] = useState<PromotionItem[]>(initialPromotionsData);
+    const [deliveryData, setDeliveryData] = useState<DeliveryRecord[]>(initialDeliveryData);
+    const [deliveryBoxTitle, setDeliveryBoxTitle] = useState<string>("2024년 주요 납품실적");
+    const [isScrolled, setIsScrolled] = useState(false);
+    const [showScrollTop, setShowScrollTop] = useState(false);
+    const [isMounted, setIsMounted] = useState(false);
+    const [isLoadingDelivery, setIsLoadingDelivery] = useState(true);
+    const { scrollY } = useScroll();
+
+    // 컴포넌트가 마운트되었는지 확인
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
+    // 스크롤 관련 효과
+    useEffect(() => {
+        const handleScroll = () => {
+            const scrolled = window.scrollY > 50;
+            setIsScrolled(scrolled);
+            setShowScrollTop(window.scrollY > 300);
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    // 데이터 페칭
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                // 회사 정보 가져오기
+                if (!companyData) {
+                    const companyResponse = await fetch('/api/admin/company');
+                    if (companyResponse.ok) {
+                        const company = await companyResponse.json();
+                        setCompanyData(company);
+                    }
+                }
+
+                // 프로모션 데이터 가져오기
+                if (promotionsData.length === 0) {
+                    const promotionsResponse = await fetch('/api/promotions');
+                    if (promotionsResponse.ok) {
+                        const promotions = await promotionsResponse.json();
+                        setPromotionsData(promotions);
+                    }
+                }
+
+                // 배송 데이터 가져오기
+                if (deliveryData.length === 0) {
+                    try {
+                        setIsLoadingDelivery(true);
+                        const deliveryResponse = await fetch('/api/promotions?type=deliveryRecordList');
+                        if (deliveryResponse.ok) {
+                            const deliveryPromotion = await deliveryResponse.json();
+                            if (deliveryPromotion.length > 0 && deliveryPromotion[0].content) {
+                                setDeliveryData(deliveryPromotion[0].content);
+                                // 프로모션 데이터에서 제목도 가져옴
+                                if (deliveryPromotion[0].title) {
+                                    setDeliveryBoxTitle(deliveryPromotion[0].title);
+                                }
+                            }
+                        }
+                    } catch (error) {
+                        console.error('배송 데이터 가져오기 실패:', error);
+                    } finally {
+                        setIsLoadingDelivery(false);
+                    }
+                } else {
+                    setIsLoadingDelivery(false);
+                }
+            } catch (error) {
+                console.error('데이터 가져오기 실패:', error);
+            }
+        };
+
+        if (isMounted) {
+            fetchData();
+        }
+    }, [isMounted, companyData, promotionsData, deliveryData]);
+
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    // 서버 사이드에서는 로딩 상태를 보여줌
+    if (!isMounted) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-gray-900">
+                <div className="h-10 w-10 animate-spin rounded-full border-4 border-red-500 border-t-transparent"></div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="min-h-screen">
+            <GlobalNav />
+
+            {/* 메인 컨텐츠 */}
+            <main className="relative">
+                {/* 메인 섹션 - MainTitleBox만 포함 */}
+                <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+                    {/* 배경 이미지/영상 레이어 */}
+                    <div className="absolute inset-0 z-0">
+                        {/* 배경 이미지 */}
+                        <div className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                            style={{ backgroundImage: "url('/images/main-bg.jpg')" }}>
+                        </div>
+                        {/* 배경 영상 (옵션) */}
+                        <video
+                            className="absolute inset-0 w-full h-full object-cover"
+                            autoPlay
+                            muted
+                            loop
+                            playsInline
+                        >
+                            <source src="/videos/main-bg.mp4" type="video/mp4" />
+                        </video>
+                        {/* 어두운 오버레이 */}
+                        <div className="absolute inset-0 bg-black/50"></div>
+                    </div>
+
+                    {/* MainTitleBox */}
+                    <div className="relative z-10 w-full">
+                        <MainTitleBox
+                            companyData={companyData}
+                            isLoading={!companyData}
+                            deliveryRecords={deliveryData}
+                            deliveryBoxTitle={deliveryBoxTitle}
+                            isLoadingPromotions={isLoadingDelivery}
+                            playerVideoUrls={promotionsData
+                                .filter(item => item.type === 'mainTitleBoxMultiVideo' && item.videoUrls)
+                                .flatMap(item => item.videoUrls || [])}
+                            showButton={true}
+                            buttonText="제품보러가기"
+                            buttonLink="/products"
+                            wrapperClassName="w-full"
+                        />
+                    </div>
+                </section>
+            </main>
+
+            {/* 스크롤 톱 버튼 */}
+            <AnimatePresence>
+                {showScrollTop && (
+                    <motion.button
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.8 }}
+                        onClick={scrollToTop}
+                        className="fixed bottom-6 right-6 z-50 bg-red-600 hover:bg-red-700 text-white p-3 rounded-full shadow-lg transition-colors"
+                    >
+                        <ChevronUp className="h-6 w-6" />
+                    </motion.button>
+                )}
+            </AnimatePresence>
+
+            {/* 모바일 하단 네비게이션 */}
+            <MobileBottomNav />
+        </div>
+    );
+} 

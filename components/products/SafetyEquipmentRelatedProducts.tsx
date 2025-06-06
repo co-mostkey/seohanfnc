@@ -3,7 +3,7 @@
 import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { SafetyEquipment } from '@/types/safety-equipment'
+import { SafetyEquipment } from '@/types/b-type'
 import { cn, getImagePath } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge'
 
@@ -29,7 +29,7 @@ export function SafetyEquipmentRelatedProducts({ products, className }: SafetyEq
         {products.map((product) => (
           <Link
             key={product.id}
-            href={`/products/safety-equipment/${product.id}`}
+            href={`/products/b-type/${product.id}`}
             className="group block"
           >
             <div className="aspect-square relative overflow-hidden rounded-lg bg-gray-800/50 border border-gray-700/50 mb-3">

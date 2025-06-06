@@ -144,35 +144,8 @@ export function ProductDetailClient({ productId }: ProductDetailClientProps) {
           }
 
           // 추가 샘플 미디어 (테스트용)
-          if (productId === 'Cylinder-Type-SafetyAirMat') {
-            // 비디오 파일을 먼저 추가하여 확실히 목록에 포함되도록 함
-            const additionalFiles = [
-              // 맨 먼저 비디오 파일 추가
-              `/images/products/${productId}/${productId}.mp4`,
-              // 그 다음 이미지 파일들 추가
-              `/images/products/${productId}/${productId}.jpg`,
-              `/images/products/${productId}/${productId}-front.jpg`,
-              `/images/products/${productId}/${productId}-perspective.jpg`,
-              `/images/products/${productId}/${productId}-test.jpg`,
-              `/images/products/${productId}/${productId}02.jpg`
-            ];
+          // [TRISID] Cylinder-Type-SafetyAirMat 예외 분기 전체 삭제
 
-            // 비디오 파일 경로를 로그로 출력하여 확인
-            console.log('비디오 파일 경로:', `/images/products/${productId}/${productId}.mp4`);
-
-            // 중복 미디어 제거 및 유효성 검사
-            const existingSrcs = mediaFiles.map(file => file.src);
-            additionalFiles.forEach(fileSrc => {
-              if (fileSrc && typeof fileSrc === 'string' && !existingSrcs.includes(fileSrc)) {
-                mediaFiles.push({
-                  src: fileSrc,
-                  alt: getSafeString(productData.name, '제품'),
-                  type: isVideoFile(fileSrc) ? 'video' as const : 'image' as const
-                });
-                existingSrcs.push(fileSrc);
-              }
-            });
-          }
         } catch (error) {
           console.error('미디어 파일 처리 오류:', error);
         }

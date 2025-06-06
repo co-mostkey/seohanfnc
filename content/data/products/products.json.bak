@@ -1,14 +1,14 @@
 {
   "categories": [
     {
-      "id": "safety-equipment",
+      "id": "b-type",
       "nameKo": "안전장비",
       "nameEn": "Safety Equipment",
       "nameCn": "安全设备",
       "descriptionKo": "품질 좋은 안전장비로 작업 현장의 안전을 확보하고 사고를 예방합니다.",
       "descriptionEn": "Quality safety equipment to secure workplace safety and prevent accidents.",
       "descriptionCn": "优质安全设备，确保工作场所安全，预防事故。",
-      "image": "/images/products/safety-equipment.jpg",
+      "image": "/images/products/b-type.jpg",
       "products": [
         {
           "id": "Cylinder-Type-SafetyAirMat",

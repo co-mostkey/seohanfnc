@@ -7,7 +7,8 @@ import HomeClient from '@/components/home/HomeClient';
 // 서버에서 데이터 가져오기
 async function getServerData() {
   try {
-    // 기본 데이터 구조 반환 (서버에서는 실제 API 호출 대신 기본값 사용)
+    // 서버사이드에서는 초기 데이터를 가져오지 않고 클라이언트에서 처리
+    // 이렇게 하면 activeSection과 동적 로딩이 더 안정적으로 작동
     return {
       companyData: null,
       promotionsData: [],

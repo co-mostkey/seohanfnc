@@ -18,7 +18,7 @@ try {
             console.log(`카테고리 이름(한국어): ${category.nameKo}`);
             console.log(`제품 수: ${category.products ? category.products.length : 0}`);
 
-            if (category.id === 'safety-equipment' && category.products) {
+            if (category.id === 'b-type' && category.products) {
                 console.log('\n=== Unusedfiles 안전장비 카테고리 제품들 ===');
                 category.products.forEach(product => {
                     console.log(`- ID: ${product.id}`);

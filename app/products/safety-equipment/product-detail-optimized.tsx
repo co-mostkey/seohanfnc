@@ -7,13 +7,13 @@ import { Shield, MessageSquare, Download, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 // 분리된 컴포넌트들 가져오기
-import ProductHeader from '@/components/products/safety-equipment/ProductHeader';
-import ProductModelViewer from '@/components/products/safety-equipment/ProductModelViewer';
-import ProductSpecifications from '@/components/products/safety-equipment/ProductSpecifications';
-import ProductTestData from '@/components/products/safety-equipment/ProductTestData';
-import ProductFeatures from '@/components/products/safety-equipment/ProductFeatures';
-import ProductCautions from '@/components/products/safety-equipment/ProductCautions';
-import ProductDocuments from '@/components/products/safety-equipment/ProductDocuments';
+import ProductHeader from '@/components/products/b-type/ProductHeader';
+import ProductModelViewer from '@/components/products/b-type/ProductModelViewer';
+import ProductSpecifications from '@/components/products/b-type/ProductSpecifications';
+import ProductTestData from '@/components/products/b-type/ProductTestData';
+import ProductFeatures from '@/components/products/b-type/ProductFeatures';
+import ProductCautions from '@/components/products/b-type/ProductCautions';
+import ProductDocuments from '@/components/products/b-type/ProductDocuments';
 
 /**
  * 안전장비 제품 상세 인터페이스
@@ -58,29 +58,29 @@ export default function SafetyEquipmentProductDetail({
   documents,
   specTable,
   cautions,
-  category = 'safety-equipment',
+  category = 'b-type',
   certifications = [
-    { 
-      title: '안전 인증', 
-      description: '품질 보증', 
-      icon: 'shield', 
-      color: 'red' 
+    {
+      title: '안전 인증',
+      description: '품질 보증',
+      icon: 'shield',
+      color: 'red'
     },
-    { 
-      title: '안전 인증', 
-      description: '안전기준 충족', 
-      icon: 'shield', 
-      color: 'blue' 
+    {
+      title: '안전 인증',
+      description: '안전기준 충족',
+      icon: 'shield',
+      color: 'blue'
     }
   ]
 }: ProductDetailProps) {
   // 활성화된 탭 상태
   const [activeTab, setActiveTab] = useState<'overview' | 'features' | 'documents'>('overview');
   const router = useRouter();
-  
+
   // 아이콘 매핑 함수
   const getIcon = (iconName: string) => {
-    switch(iconName) {
+    switch (iconName) {
       case 'shield':
         return <Shield className="h-5 w-5" />;
       case 'check':
@@ -89,32 +89,32 @@ export default function SafetyEquipmentProductDetail({
         return <Shield className="h-5 w-5" />;
     }
   };
-  
+
   // 색상 클래스 매핑 함수
   const getColorClass = (color: string) => {
     const colors: Record<string, { bg: string, border: string, textIcon: string }> = {
-      red: { 
-        bg: 'bg-red-900/20', 
+      red: {
+        bg: 'bg-red-900/20',
         border: 'border-red-900/30',
         textIcon: 'text-red-400'
       },
-      blue: { 
-        bg: 'bg-blue-900/20', 
+      blue: {
+        bg: 'bg-blue-900/20',
         border: 'border-blue-900/30',
         textIcon: 'text-blue-400'
       },
-      green: { 
-        bg: 'bg-green-900/20', 
+      green: {
+        bg: 'bg-green-900/20',
         border: 'border-green-900/30',
         textIcon: 'text-green-400'
       },
-      orange: { 
-        bg: 'bg-orange-900/20', 
+      orange: {
+        bg: 'bg-orange-900/20',
         border: 'border-orange-900/30',
         textIcon: 'text-orange-400'
       }
     };
-    
+
     return colors[color] || colors.red;
   };
 
@@ -127,17 +127,17 @@ export default function SafetyEquipmentProductDetail({
           <div className="absolute -top-80 -right-80 w-[600px] h-[600px] rounded-full bg-red-500/10 blur-3xl"></div>
           <div className="absolute -bottom-80 -left-80 w-[600px] h-[600px] rounded-full bg-orange-500/10 blur-3xl"></div>
           <div className="absolute top-40 left-1/2 w-[300px] h-[300px] rounded-full bg-blue-500/5 blur-3xl"></div>
-          
+
           {/* 상세 정보 탭 레이아웃 */}
           <div className="relative z-10 p-6 md:p-8 lg:p-10">
             {/* 탭 네비게이션 */}
             <div className="border-b border-red-900/20 mb-8">
               <div className="flex space-x-1 sm:space-x-4 overflow-x-auto pb-2 scrollbar-hide">
-                <div 
+                <div
                   className={cn(
                     "px-5 py-2 rounded-t-lg text-sm border-t border-l border-r transition-colors cursor-pointer",
-                    activeTab === 'overview' 
-                      ? "bg-gradient-to-br from-red-900/40 to-red-800/20 text-white font-medium border-red-500/20" 
+                    activeTab === 'overview'
+                      ? "bg-gradient-to-br from-red-900/40 to-red-800/20 text-white font-medium border-red-500/20"
                       : "bg-gray-800/30 text-gray-400 hover:text-white border-gray-700/30"
                   )}
                   onClick={() => setActiveTab('overview')}
@@ -147,7 +147,7 @@ export default function SafetyEquipmentProductDetail({
                     제품 상세
                   </span>
                 </div>
-                <div 
+                <div
                   className={cn(
                     "px-5 py-2 rounded-t-lg text-sm border-t border-l border-r transition-colors cursor-pointer",
                     "bg-gray-800/30 text-gray-400 hover:text-white border-gray-700/30 hover:bg-gradient-to-br hover:from-red-900/30 hover:to-red-800/10"
@@ -165,12 +165,12 @@ export default function SafetyEquipmentProductDetail({
                     제품 사양
                   </span>
                 </div>
-                
-                <div 
+
+                <div
                   className={cn(
                     "px-5 py-2 rounded-t-lg text-sm border-t border-l border-r transition-colors cursor-pointer",
-                    activeTab === 'features' 
-                      ? "bg-gradient-to-br from-red-900/40 to-red-800/20 text-white font-medium border-red-500/20" 
+                    activeTab === 'features'
+                      ? "bg-gradient-to-br from-red-900/40 to-red-800/20 text-white font-medium border-red-500/20"
                       : "bg-gray-800/30 text-gray-400 hover:text-white border-gray-700/30"
                   )}
                   onClick={() => setActiveTab('features')}
@@ -180,13 +180,13 @@ export default function SafetyEquipmentProductDetail({
                     제품 특징
                   </span>
                 </div>
-                
+
                 {documents && documents.length > 0 && (
-                  <div 
+                  <div
                     className={cn(
                       "px-5 py-2 rounded-t-lg text-sm border-t border-l border-r transition-colors cursor-pointer",
-                      activeTab === 'documents' 
-                        ? "bg-gradient-to-br from-red-900/40 to-red-800/20 text-white font-medium border-red-500/20" 
+                      activeTab === 'documents'
+                        ? "bg-gradient-to-br from-red-900/40 to-red-800/20 text-white font-medium border-red-500/20"
                         : "bg-gray-800/30 text-gray-400 hover:text-white border-gray-700/30"
                     )}
                     onClick={() => setActiveTab('documents')}
@@ -209,29 +209,29 @@ export default function SafetyEquipmentProductDetail({
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {/* 좌측 - 3D 모델/이미지 갤러리 */}
                     <div className="animate-fadeIn">
-                      <ProductModelViewer 
+                      <ProductModelViewer
                         productId={productId}
                         productName={productName}
                         fallbackImage={fallbackImage}
                       />
                     </div>
-                    
+
                     {/* 우측 - 제품 정보 */}
                     <div className="space-y-6">
                       {/* 제품 제목 및 설명 */}
-                      <ProductHeader 
+                      <ProductHeader
                         productName={productName}
                         description={description}
                       />
-                      
+
                       {/* 기능 아이콘 - 동적 렌더링 */}
                       {certifications && certifications.length > 0 && (
                         <div className="grid grid-cols-2 gap-4">
                           {certifications.map((cert, index) => {
                             const colorClasses = getColorClass(cert.color);
                             return (
-                              <div 
-                                key={index} 
+                              <div
+                                key={index}
                                 className={`flex items-center p-3.5 rounded-lg ${colorClasses.bg} border ${colorClasses.border} hover:bg-opacity-40 transition-colors`}
                               >
                                 <div className={`p-2 rounded-full ${colorClasses.bg} bg-opacity-150 mr-3`}>
@@ -248,7 +248,7 @@ export default function SafetyEquipmentProductDetail({
                           })}
                         </div>
                       )}
-                      
+
                       {/* 버튼 그룹 */}
                       <div className="space-y-3">
                         {/* 제품 사양 바로가기 버튼 */}
@@ -278,14 +278,14 @@ export default function SafetyEquipmentProductDetail({
                   </div>
 
                   {/* 제품 사양 섹션 */}
-                  <ProductSpecifications 
+                  <ProductSpecifications
                     specifications={specifications}
                     specTable={specTable}
                   />
-                  
+
                   {/* 충격흡수 비교 데이터 */}
                   <ProductTestData productId={productId} />
-                  
+
                   {/* 주의사항 섹션 */}
                   <ProductCautions cautions={cautions} />
                 </div>

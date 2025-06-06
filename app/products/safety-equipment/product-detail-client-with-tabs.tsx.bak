@@ -71,7 +71,7 @@ export function SafetyEquipmentProductDetail({
   documents,
   specTable,
   cautions,
-  category = 'safety-equipment'
+  category = 'b-type'
 }: ProductDetailProps) {
   const [isModelLoaded, setIsModelLoaded] = useState(false);
   const [showFallback, setShowFallback] = useState(true);
@@ -167,7 +167,7 @@ export function SafetyEquipmentProductDetail({
     { text: '홈', href: '/' },
     { text: '제품', href: '/products' },
     { text: categoryName, href: `/products/category/${category}` },
-    { text: productName, href: `/products/safety-equipment/${productId}`, active: true }
+    { text: productName, href: `/products/b-type/${productId}`, active: true }
   ];
 
   // 불필요한 외부 래핑 레이어를 제거하고 React Fragment로 대체

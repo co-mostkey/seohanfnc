@@ -51,6 +51,9 @@ body {
   overscroll-behavior: none;
   /* iOS 터치 지연 제거 */
   touch-action: manipulation;
+  /* [TRISID] 실린더형 에어매트 상세페이지 전체 배경 이미지 적용 */
+  background: url('/images/products/sample.jpg') no-repeat center center fixed;
+  background-size: cover;
 }
 
 /* iOS 스크롤 컨테이너 최적화 */
@@ -298,7 +301,7 @@ main+footer {
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-transparent text-foreground;
   }
 }
 
@@ -1272,5 +1275,36 @@ a:hover,
 
   abbr[title]::after {
     content: " (" attr(title) ")";
+  }
+}
+
+/* iOS-specific styles for bottom navigation */
+@supports (-webkit-touch-callout: none) {
+  @media (max-width: 768px) {
+
+    /* iOS 환경에서 하단 네비게이션과 콘텐츠가 겹치지 않도록 추가 패딩 */
+    body {
+      padding-bottom: calc(180px + env(safe-area-inset-bottom)) !important;
+    }
+
+    main {
+      margin-bottom: calc(100px + env(safe-area-inset-bottom)) !important;
+    }
+
+    /* 스크롤 가능한 콘텐츠 영역에 추가 패딩 */
+    .ios-main-content {
+      padding-bottom: calc(180px + env(safe-area-inset-bottom)) !important;
+    }
+
+    /* 히어로 섹션에도 충분한 하단 패딩 추가 */
+    section.ios-scroll-fix {
+      padding-bottom: calc(180px + env(safe-area-inset-bottom)) !important;
+    }
+
+    /* 하단 네비게이션 영역 확보를 위한 고정 스페이서 */
+    .ios-bottom-spacer {
+      min-height: calc(150px + env(safe-area-inset-bottom));
+      height: calc(150px + env(safe-area-inset-bottom));
+    }
   }
 }

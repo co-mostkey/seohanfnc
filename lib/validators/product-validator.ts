@@ -50,11 +50,6 @@ const specificationItemSchema = z.object({
     value: z.string().min(1, "값(Value)은 필수입니다."),
 });
 
-// 제품 스타일 타입 정의
-export const productStyleSchema = z.enum(['A', 'B'], {
-    errorMap: () => ({ message: "제품 스타일은 A타입 또는 B타입을 선택해야 합니다." })
-});
-
 // Model3D 스키마 (B타입 전용)
 const model3DSchema = z.object({
     modelName: z.string().optional(),
@@ -96,9 +91,6 @@ export const productSchema = z.object({
     descriptionKo: z.string().min(1, "한글 제품 설명은 필수입니다."),
     descriptionEn: z.string().optional(),
     descriptionCn: z.string().optional(),
-
-    // 제품 스타일 타입 추가
-    productStyle: productStyleSchema.default('A'),
 
     image: z.string().min(1, "대표 이미지는 필수입니다."), // 경로 검증 제거
 
@@ -201,4 +193,18 @@ export type AdditionalSectionFormData = z.infer<typeof additionalSectionSchema>;
 export type SpecificationItemFormData = z.infer<typeof specificationItemSchema>;
 export type Model3DFormData = z.infer<typeof model3DSchema>;
 export type TechnicalDataFormData = z.infer<typeof technicalDataSchema>;
-export type CertificationFormData = z.infer<typeof certificationSchema>; 
+export type CertificationFormData = z.infer<typeof certificationSchema>;
+
+export const productFormSchema = z.object({
+    id: z.string().min(1, 'ID를 입력해주세요.'),
+    nameKo: z.string().min(1, '한글 제품명을 입력해주세요.'),
+    nameEn: z.string().optional(),
+    nameCn: z.string().optional(),
+    categoryId: z.string().min(1, '카테고리를 선택해주세요.'),
+    productStyle: z.string(), // A타입, B타입 구분
+    descriptionKo: z.string().optional(),
+    descriptionEn: z.string().optional(),
+    descriptionCn: z.string().optional(),
+    mainImage: z.string().optional(),
+    // ... existing code ...
+}); 

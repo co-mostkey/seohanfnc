@@ -268,6 +268,7 @@ export function ProductsClient({
                 category={product.category}
                 inquiryOnly={product.inquiryOnly as boolean | undefined}
                 approvalNumber={getApprovalNumberDisplay(product)}
+                productStyle={product.productStyle}
               />
             ))}
           </div>
@@ -292,6 +293,7 @@ export function ProductsClient({
                 category={product.category}
                 inquiryOnly={product.inquiryOnly as boolean | undefined}
                 approvalNumber={getApprovalNumberDisplay(product)}
+                productStyle={product.productStyle}
               />
             ))}
           </div>
@@ -316,6 +318,7 @@ export function ProductsClient({
                 category={product.category}
                 inquiryOnly={product.inquiryOnly as boolean | undefined}
                 approvalNumber={getApprovalNumberDisplay(product)}
+                productStyle={product.productStyle}
               />
             ))}
           </div>

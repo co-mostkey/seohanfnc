@@ -131,3 +131,18 @@ export function formatDate(dateString: string, format: 'short' | 'medium' | 'lon
     return '날짜 오류';
   }
 }
+
+/**
+ * 파일 크기를 사람이 읽기 쉬운 형식으로 변환합니다.
+ * @param bytes 바이트 단위의 파일 크기
+ * @returns 포맷팅된 파일 크기 문자열
+ */
+export function formatFileSize(bytes: number | undefined): string {
+  if (!bytes || bytes === 0) return "0 Bytes";
+
+  const k = 1024;
+  const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+}

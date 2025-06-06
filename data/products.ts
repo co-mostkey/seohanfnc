@@ -18,65 +18,61 @@ interface ProductsData {
   }>;
 }
 
-// 제품 데이터 JSON을 매번 동적으로 읽어 최신 상태 유지
+// [TRISID] 제품 데이터 로드 함수 - 단일 products.json만 사용, 중복 id 자동 제거, 기본형 제품 보호
 function loadProductsData(): ProductsData {
   try {
-    // 실제 제품 데이터 파일 경로
-    const jsonPath = path.join(process.cwd(), 'content', 'data', 'products', 'products.json');
+    // 실제 서비스에서 사용하는 단일 경로만 참조
+    const mainJsonPath = path.join(process.cwd(), 'content', 'data', 'products', 'products.json');
+    let mainData: ProductsData = { categories: [] };
 
-    // 파일 존재 여부 확인
-    if (!fs.existsSync(jsonPath)) {
-      console.warn('[data/products.ts] products.json 파일이 존재하지 않습니다. 기본 데이터를 사용합니다.');
-      return {
-        categories: [
-          {
-            id: 'safety-equipment',
-            nameKo: '안전장비',
-            nameEn: 'Safety Equipment',
-            products: [
-              {
-                id: 'Cylinder-Type-SafetyAirMat',
-                nameKo: '실린더형 공기안전매트',
-                name: 'Cylinder Type Safety Air Mat',
-                category: 'safety-equipment',
-                productCategoryId: 'safety-equipment',
-                showInProductList: true,
-                description: '실린더형 공기안전매트입니다.',
-                image: '/images/products/Cylinder-Type-SafetyAirMat.jpg'
-              }
-            ]
-          }
-        ]
-      };
+    if (fs.existsSync(mainJsonPath)) {
+      const rawMain = fs.readFileSync(mainJsonPath, 'utf-8');
+      if (rawMain && rawMain.trim() !== '') {
+        mainData = JSON.parse(rawMain) as ProductsData;
+      } else {
+        console.warn('[data/products.ts] products.json 파일이 비어있습니다.');
+      }
+    } else {
+      console.warn('[data/products.ts] products.json 파일이 존재하지 않습니다.');
     }
 
-    const raw = fs.readFileSync(jsonPath, 'utf-8');
-
-    // 빈 파일 처리
-    if (!raw || raw.trim() === '') {
-      console.warn('[data/products.ts] products.json 파일이 비어있습니다.');
-      return { categories: [] };
+    // [TRISID] 중복 id 자동 제거 (최신 데이터 우선)
+    // 1. 모든 제품을 단일 배열로 추출 (카테고리 정보 포함)
+    const allProducts: Product[] = [];
+    const categoryMap = new Map<string, { id: string; nameKo?: string; nameEn?: string; nameCn?: string; products: Product[] }>();
+    for (const cat of mainData.categories) {
+      if (!cat || !Array.isArray(cat.products)) continue;
+      for (const p of cat.products) {
+        if (p && typeof p.id === 'string') {
+          allProducts.push({ ...p, productCategoryId: cat.id });
+        }
+      }
+      // 카테고리 정보 저장 (제품은 나중에 다시 할당)
+      categoryMap.set(cat.id, { ...cat, products: [] });
     }
-
-    const parsed = JSON.parse(raw) as ProductsData;
-
-    // 데이터 구조 검증
-    if (!parsed || !parsed.categories || !Array.isArray(parsed.categories)) {
-      console.warn('[data/products.ts] products.json 파일 구조가 올바르지 않습니다.');
-      return { categories: [] };
+    // 2. id 기준으로 최신 데이터만 남기기
+    const uniqueProductsMap = new Map<string, Product>();
+    for (const p of allProducts) {
+      uniqueProductsMap.set(p.id, p); // 뒤에 있는(최신) 데이터가 남음
     }
-
-    console.log(`[data/products.ts] 성공적으로 ${parsed.categories.length}개 카테고리의 제품 데이터를 로드했습니다.`);
-    return parsed;
-
+    // 3. 카테고리별로 다시 묶기
+    for (const product of uniqueProductsMap.values()) {
+      const cat = categoryMap.get(product.productCategoryId || product.category);
+      if (cat) {
+        cat.products.push(product);
+      }
+    }
+    // 4. 최종 카테고리 배열 생성 (기본형 제품 포함, 순서 보존)
+    const uniqueCategories = Array.from(categoryMap.values());
+    const mergedData = { categories: uniqueCategories };
+    return mergedData;
   } catch (err) {
     console.error('[data/products.ts] products.json 로드 실패:', err);
-
-    // 오류 발생 시 기본 데이터 반환
+    // 오류 발생 시 기본 데이터 반환 (기본형 제품만)
     return {
       categories: [
         {
-          id: 'safety-equipment',
+          id: 'b-type',
           nameKo: '안전장비',
           nameEn: 'Safety Equipment',
           products: [
@@ -84,8 +80,8 @@ function loadProductsData(): ProductsData {
               id: 'Cylinder-Type-SafetyAirMat',
               nameKo: '실린더형 공기안전매트',
               name: 'Cylinder Type Safety Air Mat',
-              category: 'safety-equipment',
-              productCategoryId: 'safety-equipment',
+              category: 'b-type',
+              productCategoryId: 'b-type',
               showInProductList: true,
               description: '실린더형 공기안전매트입니다.',
               image: '/images/products/Cylinder-Type-SafetyAirMat.jpg'
@@ -102,9 +98,20 @@ let productsDataSource: ProductsData = loadProductsData();
 
 // 개발 환경에서 파일 변동 시 자동으로 다시 읽도록 설정
 if (process.env.NODE_ENV !== 'production') {
-  const jsonPath = path.join(process.cwd(), 'content', 'data', 'products', 'products.json');
-  if (fs.existsSync(jsonPath)) {
-    fs.watchFile(jsonPath, { interval: 1000 }, () => {
+  const mainJsonPath = path.join(process.cwd(), 'content', 'data', 'products', 'products.json');
+  const newJsonPath = path.join(process.cwd(), 'content', 'data', 'new_products', 'products.json');
+  if (fs.existsSync(mainJsonPath)) {
+    fs.watchFile(mainJsonPath, { interval: 1000 }, () => {
+      try {
+        productsDataSource = loadProductsData();
+        console.log('[data/products.ts] products.json 변경 감지 → 데이터 자동 리로드');
+      } catch (err) {
+        console.error('[data/products.ts] 데이터 리로드 실패:', err);
+      }
+    });
+  }
+  if (fs.existsSync(newJsonPath)) {
+    fs.watchFile(newJsonPath, { interval: 1000 }, () => {
       try {
         productsDataSource = loadProductsData();
         console.log('[data/products.ts] products.json 변경 감지 → 데이터 자동 리로드');

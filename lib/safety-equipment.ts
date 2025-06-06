@@ -4,8 +4,8 @@
  * 안전장비 제품 데이터를 쉽게 조회하고 관리하기 위한 API 함수를 제공합니다.
  */
 
-import { SafetyEquipment } from '@/types/safety-equipment';
-import { safetyEquipmentProducts, getSafetyEquipmentById } from '@/content/data/safety-equipment';
+import { SafetyEquipment } from '@/types/b-type';
+import { safetyEquipmentProducts, getSafetyEquipmentById } from '@/content/data/b-type';
 
 /**
  * 특정 제품의 사양 정보를 객체로 반환
@@ -55,9 +55,9 @@ export function getProductsByCategory(category: string): SafetyEquipment[] {
 export function getRelatedProducts(id: string, limit: number = 3): SafetyEquipment[] {
   const currentProduct = getSafetyEquipmentById(id);
   if (!currentProduct) return [];
-  
+
   return safetyEquipmentProducts
-    .filter(product => 
+    .filter(product =>
       product.id !== id && product.category === currentProduct.category
     )
     .slice(0, limit);
@@ -69,7 +69,7 @@ export function getRelatedProducts(id: string, limit: number = 3): SafetyEquipme
  * @returns 해당 태그를 가진 제품 배열
  */
 export function getProductsByTag(tag: string): SafetyEquipment[] {
-  return safetyEquipmentProducts.filter(product => 
+  return safetyEquipmentProducts.filter(product =>
     product.tags.includes(tag)
   );
 }

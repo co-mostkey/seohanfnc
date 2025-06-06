@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { readProductsData, writeProductsData, ProductsDataStructure } from '@/lib/file-utils';
 import { Product } from '@/types/product';
-import { syncProductToSafetyEquipment } from "@/lib/safety-equipment-sync";
 
 interface RouteParams {
     params: Promise<{
@@ -77,18 +76,6 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
         console.log('[API PUT] 제품 데이터 저장 시작');
         await writeProductsData(products);
         console.log('[API PUT] 제품 데이터 저장 완료');
-
-        // safety-equipment 카테고리인 경우 TypeScript 파일도 업데이트
-        if (updatedProduct.categoryId === 'safety-equipment' || updatedProduct.categoryId === 'safety-equipment') {
-            console.log('[API PUT] Safety-Equipment 동기화 시작');
-            try {
-                await syncProductToSafetyEquipment(updatedProduct);
-                console.log('[API PUT] Safety-Equipment 동기화 완료');
-            } catch (syncError) {
-                console.error('[API PUT] Safety-Equipment 동기화 실패:', syncError);
-                // 동기화 실패해도 계속 진행 (관리자에게는 성공으로 표시)
-            }
-        }
 
         return NextResponse.json(updatedProduct);
     } catch (error) {
@@ -171,7 +158,7 @@ function addProductToCategory(data: ProductsDataStructure, product: Product): vo
 
 function getCategoryName(categoryId: string, lang: 'ko' | 'en' | 'cn'): string {
     const names: Record<string, Record<string, string>> = {
-        'safety-equipment': {
+        'b-type': {
             ko: '안전장비',
             en: 'Safety Equipment',
             cn: '安全设备'

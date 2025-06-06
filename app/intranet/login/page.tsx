@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2, Shield, AlertCircle } from 'lucide-react';
+import { Loader2, Shield, AlertCircle, InfoIcon } from 'lucide-react';
 import Link from 'next/link';
 
 export default function IntranetLoginPage() {
@@ -18,6 +18,7 @@ export default function IntranetLoginPage() {
     });
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
+    const [showHelp, setShowHelp] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -25,7 +26,7 @@ export default function IntranetLoginPage() {
         setError('');
 
         try {
-            const response = await fetch('/api/intranet/auth/login', {
+            const response = await fetch('/api/auth/intranet-login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -35,15 +36,24 @@ export default function IntranetLoginPage() {
 
             const data = await response.json();
 
-            if (!response.ok || !data.ok) {
-                throw new Error(data.error || '로그인에 실패했습니다.');
+            if (!response.ok || !data.success) {
+                // 더 친절한 에러 메시지 표시
+                if (response.status === 401) {
+                    setError('아이디 또는 비밀번호가 일치하지 않습니다. 다시 확인해주세요.');
+                    setShowHelp(true);
+                } else if (response.status === 403) {
+                    setError(data.error || '계정이 비활성화되었습니다. 관리자에게 문의하세요.');
+                } else {
+                    setError(data.error || '로그인에 실패했습니다.');
+                }
+                return;
             }
 
             // 로그인 성공
             router.push('/intranet');
         } catch (error) {
             console.error('로그인 오류:', error);
-            setError(error instanceof Error ? error.message : '로그인 중 오류가 발생했습니다.');
+            setError('서버 연결에 실패했습니다. 잠시 후 다시 시도해주세요.');
         } finally {
             setIsLoading(false);
         }
@@ -55,6 +65,11 @@ export default function IntranetLoginPage() {
             ...prev,
             [name]: value
         }));
+        // 입력 시 에러 초기화
+        if (error) {
+            setError('');
+            setShowHelp(false);
+        }
     };
 
     return (
@@ -113,6 +128,18 @@ export default function IntranetLoginPage() {
                                 </Alert>
                             )}
 
+                            {showHelp && (
+                                <Alert className="bg-blue-900/20 border-blue-600 mt-2">
+                                    <InfoIcon className="h-4 w-4 text-blue-400" />
+                                    <AlertDescription className="text-blue-200">
+                                        <p className="font-semibold mb-1">도움말</p>
+                                        <p className="text-sm">
+                                            로그인 정보를 잊으셨나요? IT팀(내선: 1234)으로 문의하세요.
+                                        </p>
+                                    </AlertDescription>
+                                </Alert>
+                            )}
+
                             <Button
                                 type="submit"
                                 className="w-full bg-blue-600 hover:bg-blue-700"
@@ -144,10 +171,19 @@ export default function IntranetLoginPage() {
                     </CardFooter>
                 </Card>
 
-                <div className="mt-6 text-center">
+                <div className="mt-6 text-center space-y-2">
                     <p className="text-sm text-gray-500">
                         보안을 위해 공용 컴퓨터에서는 사용 후 반드시 로그아웃하세요.
                     </p>
+                    {/* 개발/테스트 환경에서만 표시 */}
+                    {process.env.NODE_ENV === 'development' && (
+                        <div className="bg-gray-800/50 backdrop-blur rounded-lg p-4 mt-4">
+                            <p className="text-xs text-gray-400 mb-2">테스트 계정 정보</p>
+                            <p className="text-xs text-gray-300">
+                                관리자: intranet_admin / admin123!@#
+                            </p>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

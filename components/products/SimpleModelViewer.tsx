@@ -6,7 +6,6 @@
 import React, { useState, Suspense, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Environment, Html } from '@react-three/drei';
-import { Play, Pause } from 'lucide-react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
@@ -18,19 +17,54 @@ interface ProductSettings {
   autoRotateSpeed: number; autoRotate: boolean;
 }
 
-const getProductSettings = (url: string): ProductSettings => {
-  if (url.includes('Cylinder-Type-SafetyAirMat')) return { position: [0, -0.5, 0], scale: 0.15, rotation: [0, Math.PI * 0.05, 0], cameraPosition: [3, 2.2, 5], cameraFov: 35, minDistance: 3.5, maxDistance: 10, autoRotateSpeed: 1.2, autoRotate: true };
-  if (url.includes('Fan-Type-Air-Safety-Mat')) return { position: [0, -0.3, 0], scale: 12, rotation: [0, Math.PI * 0.25, 0], cameraPosition: [3.8, 2.2, 4.5], cameraFov: 29, minDistance: 3.5, maxDistance: 10, autoRotateSpeed: 0.5, autoRotate: true };
-  if (url.includes('Lifesaving-Mat')) return { position: [0, -0.2, 0], scale: 15, rotation: [0, Math.PI * 0.05, 0], cameraPosition: [3.2, 2.5, 4.0], cameraFov: 31, minDistance: 3.0, maxDistance: 9.0, autoRotateSpeed: 0.6, autoRotate: true };
-  if (url.includes('Training-Air-Mattress-Fall-Prevention-Mat')) return { position: [0, -0.2, 0], scale: 0.15, rotation: [0, Math.PI * 0.1, 0], cameraPosition: [3.5, 2.3, 4.2], cameraFov: 32, minDistance: 3.2, maxDistance: 9.5, autoRotateSpeed: 0.7, autoRotate: true };
-  return { position: [0, -0.5, 0], scale: 0.095, rotation: [0, 0, 0], cameraPosition: [3, 2, 5], cameraFov: 37, minDistance: 3, maxDistance: 10, autoRotateSpeed: 1, autoRotate: true };
+const getProductSettings = (productId: string): ProductSettings => {
+  // [TRISID] 제품 ID에 따라 다른 설정 반환
+  switch (productId) {
+    // [TRISID] 에어매트 4종에 대한 개별 스케일 및 위치 설정
+    case "Cylinder-Type-SafetyAirMat":
+      return {
+        position: [0, -0.5, 0], scale: 0.1, rotation: [0, 0, 0],
+        cameraPosition: [3, 2, 5], cameraFov: 37,
+        minDistance: 3, maxDistance: 10,
+        autoRotateSpeed: 0.8, autoRotate: true,
+      };
+    case "Fan-Type-Air-Safety-Mat":
+      return {
+        position: [0, -0.5, 0], scale: 12, rotation: [0, 0, 0],
+        cameraPosition: [3, 2, 5], cameraFov: 37,
+        minDistance: 3, maxDistance: 10,
+        autoRotateSpeed: 0.8, autoRotate: true,
+      };
+    case "Training-Air-Mattress-Fall-Prevention-Mat":
+      return {
+        position: [0, -0.5, 0], scale: 0.15, rotation: [0, 0, 0],
+        cameraPosition: [3, 2, 5], cameraFov: 37,
+        minDistance: 3, maxDistance: 10,
+        autoRotateSpeed: 0.8, autoRotate: true,
+      };
+    case "Lifesaving-Mat":
+      return {
+        position: [0, -0.5, 0], scale: 17, rotation: [0, 0, 0],
+        cameraPosition: [3, 2, 5], cameraFov: 37,
+        minDistance: 3, maxDistance: 10,
+        autoRotateSpeed: 0.8, autoRotate: true,
+      };
+    // [TRISID] 나머지 모든 제품 기본 설정
+    default:
+      return {
+        position: [0, -0.5, 0], scale: 0.095, rotation: [0, 0, 0],
+        cameraPosition: [3, 2, 5], cameraFov: 37,
+        minDistance: 3, maxDistance: 10,
+        autoRotateSpeed: 1, autoRotate: true,
+      };
+  }
 };
 
 function Model({ url, onLoad, onError, productId }: { url: string; onLoad?: () => void; onError?: () => void; productId?: string }) {
   const [model, setModel] = useState<THREE.Group | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
-  const { position, scale, rotation } = getProductSettings(url);
+  const { position, scale, rotation } = getProductSettings(productId || '');
 
   useEffect(() => {
     setIsLoading(true);
@@ -51,6 +85,13 @@ function Model({ url, onLoad, onError, productId }: { url: string; onLoad?: () =
       (gltf) => {
         console.log(`[SimpleModelViewer] ${productId} 모델 로딩 성공:`, gltf);
         const scene = gltf.scene;
+
+        // [TRISID] 모델을 지오메트리 중심으로 이동시켜 위치를 정규화합니다.
+        const box = new THREE.Box3().setFromObject(scene);
+        const center = new THREE.Vector3();
+        box.getCenter(center);
+        scene.position.sub(center);
+
         scene.traverse((child) => {
           if ((child as THREE.Mesh).isMesh) {
             child.castShadow = false;
@@ -59,16 +100,10 @@ function Model({ url, onLoad, onError, productId }: { url: string; onLoad?: () =
             if (mesh.material) {
               const setMaterialProperties = (material: THREE.Material) => {
                 if (material instanceof THREE.MeshStandardMaterial) {
-                  if (productId === 'Lifesaving-Mat') {
-                    material.roughness = 0.2;
-                    material.metalness = 0.7;
-                  } else {
-                    material.roughness = 0.3;
-                    material.metalness = 0.05;
-                  }
+                  material.roughness = 0.2;
+                  material.metalness = 0.1;
                 }
               };
-
               if (Array.isArray(mesh.material)) {
                 mesh.material.forEach(setMaterialProperties);
               } else {
@@ -132,25 +167,58 @@ function Model({ url, onLoad, onError, productId }: { url: string; onLoad?: () =
 function Loader() { return <Html center><div className="bg-black/50 text-white px-4 py-2 rounded-lg font-sans text-sm"><p>로딩 컴포넌트...</p></div></Html>; }
 
 interface SimpleModelViewerProps {
-  modelPath: string;
+  modelPath?: string;
+  src?: string;
   productName?: string;
   onLoad?: () => void;
   onError?: () => void;
   productId?: string;
+  transparent?: boolean;
+  interactive?: boolean;
 }
 
-export default function SimpleModelViewer({ modelPath, productName, onLoad, onError, productId }: SimpleModelViewerProps) {
+// [TRISID] 3D 모델 경로 자동 생성 함수 (공식 경로)
+function getDefaultModelPath(productId: string) {
+  return `/models/products/${productId}/${productId}.glb`;
+}
+
+// [TRISID] glb/gltf 우선순위 경로 생성 함수 (src/modelPath 우선, 없으면 공식 경로)
+function resolveModelPath(props: SimpleModelViewerProps): { path: string | null, isGLTF: boolean } {
+  let path = props.src || props.modelPath || '';
+  if (!path && props.productId) {
+    path = getDefaultModelPath(props.productId);
+  }
+  if (!path) return { path: null, isGLTF: false };
+  if (path.endsWith('.glb')) return { path, isGLTF: false };
+  if (path.endsWith('.gltf')) return { path, isGLTF: true };
+  // 폴더(제품ID)만 들어온 경우 자동 경로 생성
+  if (/^[\w-]+$/.test(path)) {
+    path = getDefaultModelPath(path);
+    return { path, isGLTF: false };
+  }
+  return { path, isGLTF: false };
+}
+
+export default function SimpleModelViewer(props: SimpleModelViewerProps) {
+  const { productName, onLoad, onError, productId, transparent = false, interactive = false } = props;
   const [isRotating, setIsRotating] = useState(true);
-  const settings = getProductSettings(modelPath);
+  const settings = getProductSettings(productId || '');
   const toggleRotation = () => setIsRotating(!isRotating);
+
+  // [TRISID] glb 우선, gltf 부가 지원 경로 처리
+  const { path: resolvedPath, isGLTF } = resolveModelPath(props);
 
   return (
     <div className="w-full h-full relative bg-transparent">
+      {/* gltf 안내 메시지 */}
+      {isGLTF && (
+        <div className="absolute top-2 left-2 z-20 bg-yellow-500/80 text-black px-3 py-1 rounded text-xs font-bold shadow">[TRISID] glb 파일 사용을 권장합니다 (gltf는 부가 지원)</div>
+      )}
       <div className="w-full h-full rounded-lg overflow-hidden">
         <Canvas
           gl={{ alpha: true, antialias: true, powerPreference: 'high-performance' }}
           camera={{ position: settings.cameraPosition, fov: settings.cameraFov }}
-          shadows
+          shadows={false}
           style={{ touchAction: 'none', background: 'transparent' }}
           className="w-full h-full"
           onCreated={({ gl: createdGl }) => {
@@ -158,34 +226,30 @@ export default function SimpleModelViewer({ modelPath, productName, onLoad, onEr
             createdGl.setClearColor(0x000000, 0);
           }}
         >
-          <ambientLight intensity={0.5} />
+          <ambientLight intensity={1.35} color="#fff" />
+          <directionalLight
+            position={[-8, 10, 5]}
+            intensity={3.2}
+            color="#fff"
+            castShadow={false}
+          />
           <spotLight
             position={[10, 15, 10]}
             angle={0.25}
             penumbra={0.5}
-            intensity={2.8}
-            castShadow
-            shadow-mapSize-width={1024}
-            shadow-mapSize-height={1024}
-            color="#FFFFFF"
-          />
-          <directionalLight
-            position={[-8, 10, 5]}
-            intensity={2.2}
-            color="#FFFFFB"
-            castShadow
-            shadow-mapSize-width={1024}
-            shadow-mapSize-height={1024}
+            intensity={3.5}
+            color="#fff"
+            castShadow={false}
           />
           <Suspense fallback={<Loader />}>
-            <Model url={modelPath} onLoad={onLoad} onError={onError} productId={productId} />
-            <Environment preset="apartment" />
+            <Model url={resolvedPath || ''} onLoad={onLoad} onError={onError} productId={productId} />
           </Suspense>
           <OrbitControls
             autoRotate={isRotating}
             autoRotateSpeed={settings.autoRotateSpeed}
-            enableZoom={true}
+            enableZoom={false}
             enablePan={false}
+            enableRotate={interactive}
             minDistance={settings.minDistance}
             maxDistance={settings.maxDistance}
           />
@@ -194,10 +258,10 @@ export default function SimpleModelViewer({ modelPath, productName, onLoad, onEr
       <div className="absolute bottom-3 left-3 z-10">
         <button
           onClick={toggleRotation}
-          className="p-2 bg-black/30 backdrop-blur-sm rounded-full hover:bg-black/50 transition-colors shadow-md"
+          className="p-2 bg-black/30 backdrop-blur-sm rounded-full hover:bg-black/50 transition-colors shadow-md w-8 h-8 flex items-center justify-center"
           aria-label={isRotating ? "회전 정지" : "자동 회전"}
         >
-          {isRotating ? <Pause size={16} className="text-white/90" /> : <Play size={16} className="text-white/90" />}
+          <span className="text-white text-xs">{isRotating ? '❚❚' : '▶'}</span>
         </button>
       </div>
     </div>

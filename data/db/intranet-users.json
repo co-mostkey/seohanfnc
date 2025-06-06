@@ -8,7 +8,7 @@
             "role": "인트라넷관리자",
             "name": "인트라넷 관리자",
             "department": "IT팀",
-            "position": "팀장",
+            "position": "인트라넷관리자",
             "employeeId": "EMP001",
             "isActive": true,
             "createdAt": "2024-01-01T00:00:00.000Z",
@@ -54,13 +54,23 @@
             "level": 30
         }
     },
-    "sessions": [],
+    "sessions": [
+        {
+            "id": "93c930da-f39d-43e3-8465-c6bbd58bc9bf",
+            "userId": "intranet-admin-001",
+            "username": "intranet_admin",
+            "role": "인트라넷관리자",
+            "createdAt": "2025-06-02T00:24:13.443Z",
+            "expiresAt": "2025-06-09T00:24:13.443Z",
+            "isActive": true
+        }
+    ],
     "pendingUsers": [],
     "metadata": {
-        "lastUpdated": "2024-01-01T00:00:00.000Z",
+        "lastUpdated": "2025-06-02T00:24:13.443Z",
         "totalUsers": 1,
         "activeUsers": 1,
-        "totalSessions": 0,
+        "totalSessions": 1,
         "pendingApprovals": 0
     }
 }

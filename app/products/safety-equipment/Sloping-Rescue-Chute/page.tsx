@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 /**
  * 경사강하식 구조대 상세 페이지
- * products/safety-equipment/Sloping-Rescue-Chute
+ * products/b-type/Sloping-Rescue-Chute
  */
 export default function SlopingRescueChutePage() {
     // 제품 데이터 가져오기

@@ -1,6 +1,6 @@
 // 제품 카테고리 표시 정보 (ID와 한글 이름 매핑)
 export const ProductCategoryDisplayInfo: Record<string, { name: string; color?: string }> = {
-    'safety-equipment': { name: '안전장비', color: 'bg-blue-500' },
+    'b-type': { name: '안전장비', color: 'bg-blue-500' },
     'fire-suppression': { name: '소방장비', color: 'bg-red-500' },
     'rescue-equipment': { name: '구조장비', color: 'bg-green-500' },
     'industrial-safety': { name: '산업안전', color: 'bg-purple-500' },

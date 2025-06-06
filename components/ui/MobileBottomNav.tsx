@@ -17,9 +17,10 @@ export default function MobileBottomNav() {
     <nav
       className="fixed bottom-0 left-0 w-full backdrop-blur-xl bg-transparent border-t border-white/20 shadow-xl z-50 grid grid-cols-6 md:hidden ios-safe-bottom"
       style={{
-        paddingBottom: 'max(1rem, var(--safe-area-inset-bottom))',
+        paddingBottom: 'max(2rem, calc(1.5rem + var(--safe-area-inset-bottom)))',
         paddingLeft: 'var(--safe-area-inset-left)',
-        paddingRight: 'var(--safe-area-inset-right)'
+        paddingRight: 'var(--safe-area-inset-right)',
+        minHeight: 'calc(90px + var(--safe-area-inset-bottom))'
       }}
     >
       {navItems.map(({ href, label, icon: Icon }) => (

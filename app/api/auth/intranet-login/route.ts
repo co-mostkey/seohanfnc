@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { promises as fs } from 'fs';
 import path from 'path';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
 
 // 인트라넷 사용자 데이터 타입
@@ -47,7 +47,7 @@ interface IntranetDatabase {
 
 // 테스트용 기본 비밀번호 (실제 운영에서는 환경변수로 관리)
 const DEFAULT_PASSWORDS: Record<string, string> = {
-    'intranet_admin': 'admin123!@#'
+    'intranet_admin': process.env.ADMIN_DEFAULT_PASSWORD || 'seohanfnc2024!@#'
 };
 
 export async function POST(request: NextRequest) {

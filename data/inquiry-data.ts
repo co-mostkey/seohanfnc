@@ -35,7 +35,7 @@ const sampleInquiries: Inquiry[] = [
         isFeatured: false,
         responses: [],
         attachments: [],
-        sourceUrl: '/products/safety-equipment/Cylinder-Type-SafetyAirMat',
+        sourceUrl: '/products/b-type/Cylinder-Type-SafetyAirMat',
         createdAt: '2025-05-15T09:30:00Z',
         updatedAt: '2025-05-15T09:30:00Z'
     },

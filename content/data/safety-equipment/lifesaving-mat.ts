@@ -4,7 +4,7 @@
  * 제품의 기본 정보, 기술 사양, 특징, 관련 문서 등의 정보를 포함합니다.
  */
 
-import { SafetyEquipment } from '../../../types/safety-equipment';
+import { SafetyEquipment } from '../../../types/b-type';
 
 const lifesavingMat: SafetyEquipment = {
   id: 'Lifesaving-Mat',
@@ -12,18 +12,18 @@ const lifesavingMat: SafetyEquipment = {
   nameEn: 'Lifesaving Mat',
   slug: 'lifesaving-mat',
   description: '인명구조 매트는 화재 및 재난 현장에서 신속한 인명 구조를 위한 필수 장비입니다. 고강도 내열성 소재를 사용하여 안전하고 효과적인 구조 작업을 지원합니다.',
-  
+
   // 제품 이미지 경로
-  thumbnail: '/images/products/safety-equipment/lifesaving-mat/thumbnail.jpg',
+  thumbnail: '/images/products/b-type/lifesaving-mat/thumbnail.jpg',
   images: [
-    '/images/products/safety-equipment/lifesaving-mat/image1.jpg',
-    '/images/products/safety-equipment/lifesaving-mat/image2.jpg',
-    '/images/products/safety-equipment/lifesaving-mat/image3.jpg',
+    '/images/products/b-type/lifesaving-mat/image1.jpg',
+    '/images/products/b-type/lifesaving-mat/image2.jpg',
+    '/images/products/b-type/lifesaving-mat/image3.jpg',
   ],
-  
+
   // 3D 모델 정보
-  modelPath: '/models/safety-equipment/lifesaving-mat.glb',
-  
+  modelPath: '/models/b-type/lifesaving-mat.glb',
+
   // 제품 사양
   specifications: {
     '모델': 'LSM-110, LSM-220, LSM-330',
@@ -37,7 +37,7 @@ const lifesavingMat: SafetyEquipment = {
     '사용 환경': '-30℃ ~ 200℃',
     '보관 시 크기': '60cm × 60cm × 20cm (접었을 때)',
   },
-  
+
   // 주요 특징
   features: [
     {
@@ -66,7 +66,7 @@ const lifesavingMat: SafetyEquipment = {
       icon: 'Layers'
     }
   ],
-  
+
   // 관련 문서
   documents: [
     {
@@ -74,26 +74,26 @@ const lifesavingMat: SafetyEquipment = {
       nameKo: '사용자 매뉴얼',
       nameEn: 'User Manual',
       type: 'manual',
-      filePath: '/documents/safety-equipment/lifesaving-mat-manual.pdf'
+      filePath: '/documents/b-type/lifesaving-mat-manual.pdf'
     },
     {
       id: 'lifesaving-mat-certification',
       nameKo: '제품 인증서',
       nameEn: 'Product Certification',
       type: 'certification',
-      filePath: '/documents/safety-equipment/lifesaving-mat-certification.pdf'
+      filePath: '/documents/b-type/lifesaving-mat-certification.pdf'
     },
     {
       id: 'lifesaving-mat-maintenance',
       nameKo: '유지보수 지침',
       nameEn: 'Maintenance Instructions',
       type: 'guide',
-      filePath: '/documents/safety-equipment/lifesaving-mat-maintenance.pdf'
+      filePath: '/documents/b-type/lifesaving-mat-maintenance.pdf'
     }
   ],
-  
+
   // 카테고리 및 태그
-  category: 'safety-equipment',
+  category: 'b-type',
   tags: ['인명구조', '안전매트', '화재대응', '내열성', '구조장비'],
 
   // 추가 정보

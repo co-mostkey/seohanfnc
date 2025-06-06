@@ -5,7 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Phone, ArrowRight } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 /**
@@ -65,6 +65,7 @@ interface ProductCardProps {
   category?: string
   inquiryOnly?: boolean
   approvalNumber?: string
+  productStyle?: string
 }
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
@@ -82,7 +83,8 @@ export default function ProductCard({
   image,
   category,
   inquiryOnly,
-  approvalNumber
+  approvalNumber,
+  productStyle
 }: ProductCardProps) {
 
   const CardContent = (

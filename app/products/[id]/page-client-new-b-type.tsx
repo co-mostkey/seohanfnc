@@ -136,29 +136,6 @@ export function ProductDetailClient({ productId }: ProductDetailClientProps) {
                             }
                         });
                     }
-
-                    if (productId === 'Cylinder-Type-SafetyAirMat') {
-                        const additionalFiles = [
-                            `/images/products/${productId}/${productId}.mp4`,
-                            `/images/products/${productId}/${productId}.jpg`,
-                            `/images/products/${productId}/${productId}-front.jpg`,
-                            `/images/products/${productId}/${productId}-perspective.jpg`,
-                            `/images/products/${productId}/${productId}-test.jpg`,
-                            `/images/products/${productId}/${productId}02.jpg`
-                        ];
-
-                        const existingSrcs = mediaFiles.map(file => file.src);
-                        additionalFiles.forEach(fileSrc => {
-                            if (fileSrc && typeof fileSrc === 'string' && !existingSrcs.includes(fileSrc)) {
-                                mediaFiles.push({
-                                    src: fileSrc,
-                                    alt: getSafeString(productData.name, '제품'),
-                                    type: isVideoFile(fileSrc) ? 'video' as const : 'image' as const
-                                });
-                                existingSrcs.push(fileSrc);
-                            }
-                        });
-                    }
                 } catch (error) {
                     console.error('미디어 파일 처리 오류:', error);
                 }

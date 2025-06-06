@@ -6,14 +6,14 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { getCategoryName } from '@/data/products';
-import FeatureCard, { ColorType, IconType } from '@/components/products/safety-equipment/FeatureCard';
-import ProductHeader from '@/components/products/safety-equipment/ProductHeader';
-import ProductModelViewer from '@/components/products/safety-equipment/ProductModelViewer';
-import ProductSpecifications from '@/components/products/safety-equipment/ProductSpecifications';
-import ProductTestData from '@/components/products/safety-equipment/ProductTestData';
-import ProductFeatures from '@/components/products/safety-equipment/ProductFeatures';
-import ProductCautions from '@/components/products/safety-equipment/ProductCautions';
-import ProductDocuments from '@/components/products/safety-equipment/ProductDocuments';
+import FeatureCard, { ColorType, IconType } from '@/components/products/b-type/FeatureCard';
+import ProductHeader from '@/components/products/b-type/ProductHeader';
+import ProductModelViewer from '@/components/products/b-type/ProductModelViewer';
+import ProductSpecifications from '@/components/products/b-type/ProductSpecifications';
+import ProductTestData from '@/components/products/b-type/ProductTestData';
+import ProductFeatures from '@/components/products/b-type/ProductFeatures';
+import ProductCautions from '@/components/products/b-type/ProductCautions';
+import ProductDocuments from '@/components/products/b-type/ProductDocuments';
 
 /**
  * 안전장비 제품 상세 인터페이스
@@ -52,7 +52,7 @@ export function SafetyEquipmentProductDetail({
   documents,
   specTable,
   cautions,
-  category = 'safety-equipment'
+  category = 'b-type'
 }: ProductDetailProps) {
   const [isModelLoaded, setIsModelLoaded] = useState(false);
   const [showFallback, setShowFallback] = useState(true);
@@ -148,7 +148,7 @@ export function SafetyEquipmentProductDetail({
     { text: '홈', href: '/' },
     { text: '제품', href: '/products' },
     { text: categoryName, href: `/products/category/${category}` },
-    { text: productName, href: `/products/safety-equipment/${productId}`, active: true }
+    { text: productName, href: `/products/b-type/${productId}`, active: true }
   ];
 
   // 불필요한 외부 래핑 레이어를 제거하고 React Fragment로 대체

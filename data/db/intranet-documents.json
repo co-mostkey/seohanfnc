@@ -1,0 +1,36 @@
+{
+    "documents": [],
+    "categories": [
+        {
+            "id": "general",
+            "name": "일반 문서",
+            "description": "일반적인 업무 문서"
+        },
+        {
+            "id": "hr",
+            "name": "인사 관련",
+            "description": "인사 및 급여 관련 문서"
+        },
+        {
+            "id": "finance",
+            "name": "재무 관련",
+            "description": "재무 및 회계 관련 문서"
+        },
+        {
+            "id": "project",
+            "name": "프로젝트",
+            "description": "프로젝트 관련 문서"
+        },
+        {
+            "id": "manual",
+            "name": "매뉴얼",
+            "description": "업무 매뉴얼 및 가이드"
+        }
+    ],
+    "metadata": {
+        "lastUpdated": "2025-01-01T00:00:00.000Z",
+        "totalDocuments": 0,
+        "totalSize": 0,
+        "lastId": 0
+    }
+}

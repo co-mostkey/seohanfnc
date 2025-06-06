@@ -98,42 +98,24 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   const { id: productId } = await params;
   const visualExceptions: ProductVisualExceptions = visualExceptionsData;
 
-  if (productId === "descender-hanger-summary") {
-    const hangerList = findProductsByCategory("descender-hangers");
-    const categoryName = getCategoryName("descenders", 'ko'); // 또는 "descender-hangers" 카테고리 이름
-    const summaryProductData = getProductById("descender-hanger-summary"); // 요약 페이지용 기본 정보
-
-    return (
-      <ProductDetailFrameLayout>
-        <ProductDetailClient
-          productId={productId} // 현재 ID 전달 (Client에서 어떤 페이지인지 구분용)
-          product={summaryProductData} // 요약 페이지의 기본 정보 전달 (nameKo, descriptionKo 등 사용 가능)
-          categoryName={categoryName} // "완강기 지지대" 또는 "완강기"
-          hangerList={hangerList} // 지지대 목록 전달
-          visualExceptions={visualExceptions} // 예외 데이터 전달
-        />
-      </ProductDetailFrameLayout>
-    );
-  } else {
-    const product = await getProductData(productId);
-    if (!product) {
-      notFound();
-    }
-    const initialRelatedProducts: Product[] = product.relatedProducts
-      ? product.relatedProducts.map((id: string) => getProductById(id)).filter(Boolean) as Product[]
-      : [];
-    const categoryName = product.category ? getCategoryName(product.category, 'ko') : '기타';
-
-    return (
-      <ProductDetailFrameLayout>
-        <ProductDetailClient
-          productId={productId} // 현재 ID 전달
-          product={product}
-          initialRelatedProducts={initialRelatedProducts}
-          categoryName={categoryName}
-          visualExceptions={visualExceptions} // 예외 데이터 전달
-        />
-      </ProductDetailFrameLayout>
-    );
+  const product = await getProductData(productId);
+  if (!product) {
+    notFound();
   }
+  const initialRelatedProducts: Product[] = product.relatedProducts
+    ? product.relatedProducts.map((id: string) => getProductById(id)).filter(Boolean) as Product[]
+    : [];
+  const categoryName = product.category ? getCategoryName(product.category, 'ko') : '기타';
+
+  return (
+    <ProductDetailFrameLayout>
+      <ProductDetailClient
+        productId={productId} // 현재 ID 전달
+        product={product}
+        initialRelatedProducts={initialRelatedProducts}
+        categoryName={categoryName}
+        visualExceptions={visualExceptions} // 예외 데이터 전달
+      />
+    </ProductDetailFrameLayout>
+  );
 }

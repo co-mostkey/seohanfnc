@@ -56,7 +56,7 @@ export default function SimpleImageViewer({ modelPath, productName }: SimpleImag
   return (
     <div className="w-full h-full relative">
       {/* 이미지 컨테이너 - 3D 모델 대신 임시로 사용 */}
-      <div className="w-full h-full rounded-xl overflow-hidden bg-gradient-to-b from-slate-800 to-slate-900">
+      <div className="w-full h-full rounded-xl overflow-hidden bg-transparent">
         <ImageWithAnimation src={imagePath} alt={productName} />
         
         {/* 제품 이름 */}

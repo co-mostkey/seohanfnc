@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 /**
  * 이동식 수조 상세 페이지
- * products/safety-equipment/Portable-Water-Tank
+ * products/b-type/Portable-Water-Tank
  */
 export default function PortableWaterTankPage() {
     // 제품 데이터 가져오기

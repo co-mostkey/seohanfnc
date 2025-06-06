@@ -66,20 +66,21 @@ const getEventIcon = (eventType: HistoryEvent['eventType']) => {
     }
 };
 
-// 연도별 색상을 반환하는 함수
+// 연도별 텍스트/테두리 색상 분리
 const getYearColor = (year: number, allYears: number[]) => {
-    const sortedYears = [...allYears].sort((a, b) => b - a); // 내림차순 정렬
+    const sortedYears = [...allYears].sort((a, b) => b - a);
     const index = sortedYears.indexOf(year);
     const total = sortedYears.length;
 
     if (index < total * 0.3) {
-        return 'text-blue-400 border-blue-400'; // 최신 30%
+        return { text: 'text-blue-600', border: 'border-blue-300' };
     } else if (index < total * 0.7) {
-        return 'text-green-400 border-green-400'; // 중간 40%
+        return { text: 'text-green-600', border: 'border-green-300' };
     } else {
-        return 'text-gray-400 border-gray-400'; // 과거 30%
+        return { text: 'text-gray-600', border: 'border-gray-300' };
     }
 };
+// 사용 시: yearColor.text, yearColor.border 각각 적용
 
 // 연혁 텍스트를 파싱하는 함수
 const parseHistoryText = (text: string): HistoryYear[] => {
@@ -231,11 +232,11 @@ const HistoryTimeline: React.FC<HistoryTimelineProps> = ({ historyText, customSt
                     const index = allYears.indexOf(yearData.year);
                     const total = allYears.length;
                     if (index < total * 0.3) {
-                        yearColor = colorScheme.primary;
+                        yearColor = { text: colorScheme.primary.replace(/border-/, 'text-'), border: colorScheme.primary };
                     } else if (index < total * 0.7) {
-                        yearColor = colorScheme.secondary;
+                        yearColor = { text: colorScheme.secondary.replace(/border-/, 'text-'), border: colorScheme.secondary };
                     } else {
-                        yearColor = colorScheme.tertiary;
+                        yearColor = { text: colorScheme.tertiary.replace(/border-/, 'text-'), border: colorScheme.tertiary };
                     }
                 }
 
@@ -245,13 +246,13 @@ const HistoryTimeline: React.FC<HistoryTimelineProps> = ({ historyText, customSt
                         <div className={cn(
                             "flex items-center pb-2 border-b-2",
                             styles.compactMode ? "mb-2" : "mb-4",
-                            yearColor
+                            yearColor.border
                         )}>
                             <div className={cn(
                                 "font-bold mr-3 px-3 py-1 rounded-lg border-2",
                                 styles.compactMode ? "text-xl" : "text-2xl",
-                                yearColor.replace('border-', 'bg-').replace('-400', '-400/20'),
-                                yearColor
+                                yearColor.text,
+                                yearColor.border
                             )}>
                                 {yearData.year}년
                             </div>

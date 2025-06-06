@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 /**
  * 에어슬라이드 상세 페이지
- * products/safety-equipment/Air-Slide
+ * products/b-type/Air-Slide
  */
 export default function AirSlidePage() {
     // 제품 데이터 가져오기

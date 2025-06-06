@@ -1,0 +1,4 @@
+[33mdd4aeb8[m feat: CDN 및 서브디렉토리 배포 지원을 위한 정적 경로 마이그레이션 완료
+[33m37cb219[m fix: 제품 상세 페이지 빌드 에러 수정 - findProductById를 getProductById로 변경 - next.config.js 실험적 설정 최적화
+[33m8b85925[m deploy: Railway 배포 설정 추가 - railway.json 설정 파일 추가 - Dockerfile 최적화 - next.config.js 배포 설정 개선
+[33m0b3bde7[m B타입 제품 관련 파일 삭제 및 JSON 오류 수정 준비

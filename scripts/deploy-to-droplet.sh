@@ -34,6 +34,10 @@ DROPLET_USER="root"  # 또는 실제 사용자명
 PROJECT_DIR="/var/www/seohan-website"  # 서버의 프로젝트 경로
 REPO_URL="https://github.com/co-mostkey/seohanfnc.git"
 
+# SSH 연결 설정
+SSH_KEY="~/.ssh/digitalocean_rsa"
+SSH_OPTIONS="-i $SSH_KEY -o ConnectTimeout=10 -o StrictHostKeyChecking=no"
+
 echo "🚀 [TRISID] DigitalOcean Droplet 자동 배포"
 echo "=========================================="
 echo ""
@@ -84,6 +88,15 @@ fi
 
 # 2. SSH를 통한 원격 배포
 log_info "SSH를 통해 원격 서버에 연결 중..."
+
+# SSH 연결 테스트
+log_info "SSH 연결 테스트 중..."
+if ssh $SSH_OPTIONS $DROPLET_USER@$DROPLET_IP "echo 'SSH 연결 성공'" 2>/dev/null; then
+    log_success "SSH 연결 확인됨"
+else
+    log_error "SSH 연결 실패. SSH 키와 서버 상태를 확인하세요."
+    exit 1
+fi
 
 # SSH 배포 스크립트 생성
 cat > /tmp/deploy_script.sh << DEPLOY_SCRIPT
@@ -351,8 +364,8 @@ DEPLOY_SCRIPT
 
 # 원격 서버에서 스크립트 실행
 log_info "원격 서버에서 배포 스크립트 실행 중..."
-scp /tmp/deploy_script.sh $DROPLET_USER@$DROPLET_IP:/tmp/deploy_script.sh
-ssh $DROPLET_USER@$DROPLET_IP "chmod +x /tmp/deploy_script.sh && /tmp/deploy_script.sh"
+scp -i $SSH_KEY /tmp/deploy_script.sh $DROPLET_USER@$DROPLET_IP:/tmp/deploy_script.sh
+ssh $SSH_OPTIONS $DROPLET_USER@$DROPLET_IP "chmod +x /tmp/deploy_script.sh && /tmp/deploy_script.sh"
 
 # 임시 파일 정리
 rm -f /tmp/deploy_script.sh

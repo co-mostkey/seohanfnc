@@ -1,0 +1,132 @@
+/* iOS Safari 전용 스타일 수정 - 일반 환경에는 영향 없음 */
+@supports (-webkit-touch-callout: none) {
+    /* iOS Safari만 적용 */
+
+    /* iOS 히어로 배경 높이 수정 */
+    .ios-viewport-height {
+        min-height: 100vh;
+        min-height: -webkit-fill-available;
+        height: 100vh;
+        height: -webkit-fill-available;
+    }
+
+    .ios-scroll-container {
+        position: relative;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .ios-scroll-fix {
+        min-height: 100vh;
+        min-height: -webkit-fill-available;
+        height: 100%;
+    }
+
+    /* iOS에서 히어로 섹션 하단 패딩 조정 */
+    @media (max-width: 768px) {
+        section.ios-scroll-fix {
+            padding-bottom: calc(140px + env(safe-area-inset-bottom)) !important;
+        }
+
+        /* 메인 콘텐츠 하단 패딩 추가 - 하단 네비게이션과 겹치지 않도록 */
+        .ios-main-content {
+            padding-bottom: calc(160px + env(safe-area-inset-bottom)) !important;
+        }
+
+        /* 전체 body에 하단 패딩 추가 */
+        body {
+            padding-bottom: calc(140px + env(safe-area-inset-bottom)) !important;
+        }
+
+        /* 메인 레이아웃 컨테이너에 하단 마진 추가 */
+        main {
+            margin-bottom: calc(140px + env(safe-area-inset-bottom)) !important;
+        }
+
+        /* MainTitleBox 컴포넌트에 하단 마진 추가 */
+        .ios-maintitle-box {
+            margin-bottom: calc(150px + env(safe-area-inset-bottom)) !important;
+        }
+
+        /* 콘텐츠의 마지막 요소에 추가 패딩 */
+        .ios-main-content>*:last-child {
+            padding-bottom: calc(60px + env(safe-area-inset-bottom)) !important;
+        }
+    }
+
+    /* CertPatentBox iOS 수정사항 */
+    .ios-cert-wrapper {
+        position: relative;
+        -webkit-overflow-scrolling: touch;
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        /* iOS에서 overflow 문제 해결 */
+        overflow: visible !important;
+    }
+
+    .ios-cert-container {
+        position: relative;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        /* 높이 제한 해제 */
+        max-height: none !important;
+    }
+
+    .ios-cert-scroll-wrapper {
+        position: relative;
+        -webkit-mask-image: -webkit-radial-gradient(white, black);
+        mask-image: radial-gradient(white, black);
+        /* iOS에서 flex 문제 해결 */
+        display: -webkit-flex;
+        display: flex;
+        -webkit-flex: 1;
+        flex: 1;
+    }
+
+    .ios-cert-scroll {
+        -webkit-transform-style: preserve-3d;
+        transform-style: preserve-3d;
+        -webkit-perspective: 1000;
+        perspective: 1000;
+        /* will-change 최적화 */
+        will-change: transform, -webkit-transform;
+    }
+
+    .ios-cert-item {
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        /* flex-shrink 문제 해결 */
+        -webkit-flex-shrink: 0;
+        flex-shrink: 0;
+    }
+
+    .ios-cert-image-wrapper {
+        -webkit-overflow-scrolling: touch;
+        position: relative !important;
+        /* 이미지 컨테이너 안정화 */
+        overflow: hidden !important;
+    }
+
+    .ios-cert-title {
+        position: relative;
+        z-index: 1;
+        /* 텍스트 렌더링 최적화 */
+        -webkit-font-smoothing: antialiased;
+    }
+
+    /* 모바일 iOS 추가 수정 */
+    @media (max-width: 768px) {
+        .ios-cert-wrapper {
+            /* 모바일에서 최소/최대 높이 조정 */
+            min-height: 160px !important;
+            max-height: 280px !important;
+        }
+
+        .ios-cert-scroll {
+            /* 패딩 조정 */
+            padding-bottom: 10px !important;
+        }
+    }
+}

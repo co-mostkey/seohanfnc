@@ -71,7 +71,7 @@ export function SafetyEquipmentProductDetail({
   documents,
   specTable,
   cautions,
-  category = 'safety-equipment'
+  category = 'b-type'
 }: ProductDetailProps) {
   const [isModelLoaded, setIsModelLoaded] = useState(false);
   const [showFallback, setShowFallback] = useState(true);
@@ -132,7 +132,7 @@ export function SafetyEquipmentProductDetail({
     { text: '홈', href: '/' },
     { text: '제품', href: '/products' },
     { text: categoryName, href: `/products/category/${category}` },
-    { text: productName, href: `/products/safety-equipment/${productId}`, active: true }
+    { text: productName, href: `/products/b-type/${productId}`, active: true }
   ];
 
   return (
@@ -155,7 +155,7 @@ export function SafetyEquipmentProductDetail({
               priority
               onError={(e) => {
                 console.error('비주얼 이미지 로드 오류', productId);
-                (e.target as HTMLImageElement).src={getImagePath('/images/products/default-visual.jpg')};
+                (e.target as HTMLImageElement).src = { getImagePath('/images/products/default-visual.jpg') };
               }}
             />
           </div>

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Inter, Playfair_Display } from "next/font/google";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import {
     ExternalLink,
     User,
@@ -84,6 +84,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [userInfo, setUserInfo] = useState<any>(null);
     const router = useRouter();
+    const pathname = usePathname();
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -91,8 +92,17 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         }
     }, []);
 
+    // 로그인 페이지인지 확인
+    const isLoginPage = pathname === '/admin/login';
+
     // 세션 검증
     useEffect(() => {
+        // 로그인 페이지에서는 인증 체크를 건너뜀
+        if (isLoginPage) {
+            setIsLoading(false);
+            return;
+        }
+
         const validateSession = async () => {
             try {
                 console.log('[AdminLayout] 세션 검증 시작');
@@ -124,7 +134,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         };
 
         validateSession();
-    }, [router]);
+    }, [router, isLoginPage]);
 
     // 로그아웃 처리
     const handleLogout = async () => {
@@ -168,6 +178,11 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         // 다른 메뉴는 현재 경로가 해당 경로로 시작할 때 활성화
         return currentPath === path || currentPath.startsWith(path + '/');
     };
+
+    // 로그인 페이지인 경우 children만 렌더링
+    if (pathname === '/admin/login') {
+        return <>{children}</>;
+    }
 
     // 로딩 중일 때 표시할 컴포넌트
     if (isLoading) {

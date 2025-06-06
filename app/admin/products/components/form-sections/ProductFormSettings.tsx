@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Control, FieldErrors, UseFormRegister, UseFormSetValue, UseFormWatch, useFieldArray } from 'react-hook-form';
+import { Control, FieldErrors, UseFormRegister, UseFormSetValue, UseFormWatch, useFieldArray, useFormContext } from 'react-hook-form';
 import { ProductFormData } from '@/lib/validators/product-validator';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -13,22 +13,10 @@ import { FileUpload } from '@/components/admin/FileUpload';
 import NextImage from 'next/image';
 import { Trash2, Plus, Settings, Tag, Link, Eye, EyeOff, Wand2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { Switch } from "@/components/ui/switch";
 
-interface ProductFormSettingsProps {
-    control: Control<ProductFormData>;
-    register: UseFormRegister<ProductFormData>;
-    errors: FieldErrors<ProductFormData>;
-    setValue: UseFormSetValue<ProductFormData>;
-    watch: UseFormWatch<ProductFormData>;
-}
-
-const ProductFormSettings: React.FC<ProductFormSettingsProps> = ({
-    control,
-    register,
-    errors,
-    setValue,
-    watch
-}) => {
+const ProductFormSettings = () => {
+    const { control, register, errors, setValue, watch } = useFormContext<ProductFormData>();
     const { fields: tagFields, append: appendTag, remove: removeTag } =
         useFieldArray({ control, name: "tags" as any });
 
@@ -41,6 +29,7 @@ const ProductFormSettings: React.FC<ProductFormSettingsProps> = ({
     const watchedShowInProductList = watch('showInProductList');
     const watchedIsSummaryPage = watch('isSummaryPage');
     const watchedPageBackgroundImage = watch('pageBackgroundImage');
+    const isPublished = watch('isPublished');
 
     // SEO 구조화 데이터 자동생성 함수
     const generateStructuredData = () => {
@@ -63,7 +52,7 @@ const ProductFormSettings: React.FC<ProductFormSettingsProps> = ({
                     "name": "서한F&C",
                     "url": "https://seohanfc.com"
                 },
-                "category": formData.categoryId || "safety-equipment",
+                "category": formData.categoryId || "b-type",
                 "productID": formData.id || "",
                 "sku": formData.id || "",
                 "offers": {
@@ -549,6 +538,30 @@ const ProductFormSettings: React.FC<ProductFormSettingsProps> = ({
                                 💡 <strong>자동 생성</strong> 버튼을 클릭하면 입력된 제품 정보를 기반으로 구조화 데이터가 자동으로 생성됩니다.
                             </p>
                         </div>
+                    </div>
+                </CardContent>
+            </Card>
+
+            {/* 게시 설정 */}
+            <Card className="bg-gray-800 border-gray-700">
+                <CardHeader>
+                    <CardTitle>게시 설정</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <div className="flex items-center space-x-4">
+                        <Switch
+                            id="isPublished"
+                            checked={isPublished}
+                            onCheckedChange={(checked) => {
+                                control.setValue('isPublished', checked, { shouldValidate: true });
+                            }}
+                        />
+                        <Label htmlFor="isPublished" className="flex flex-col space-y-1">
+                            <span>제품 게시</span>
+                            <span className="font-normal leading-snug text-muted-foreground">
+                                이 옵션을 켜면 웹사이트에 제품이 표시됩니다.
+                            </span>
+                        </Label>
                     </div>
                 </CardContent>
             </Card>

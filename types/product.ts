@@ -92,9 +92,6 @@ export interface Product {
   descriptionEn?: string;
   descriptionCn?: string;
 
-  // 제품 스타일 타입 (A: 기본 업로드 스타일, B: 에어매트 스타일)
-  productStyle?: 'A' | 'B';
-
   longDescription?: string;
   image: string;
   gallery_images_data?: MediaGalleryItem[];

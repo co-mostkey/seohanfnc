@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 /**
  * 대인소독기 실내형 상세 페이지
- * products/safety-equipment/Indoor-Human-Disinfector
+ * products/b-type/Indoor-Human-Disinfector
  */
 export default function IndoorHumanDisinfectorPage() {
     // 제품 데이터 가져오기

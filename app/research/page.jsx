@@ -133,7 +133,7 @@ export default async function ResearchPage() {
 
   return (
     <main
-      className="relative text-gray-100"
+      className="relative text-gray-100 bg-transparent"
       style={mainStyle}
     >
       {heroBackgroundImageFinalUrl && (

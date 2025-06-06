@@ -12,13 +12,13 @@ import { cn, getImagePath } from '@/lib/utils'; // cn 함수 임포트 추가
 
 // 컴포넌트 임포트
 import DynamicModelViewer from '@/components/products/DynamicModelViewer';
-import ProductModelViewer from '@/components/products/safety-equipment/ProductModelViewer';
-import ProductSpecifications from '@/components/products/safety-equipment/ProductSpecifications'; // 기존 상세 표시용
-import ProductFeaturesComponent from '@/components/products/safety-equipment/ProductFeatures'; // 이름 변경 ProductFeatures -> ProductFeaturesComponent
+import ProductModelViewer from '@/components/products/b-type/ProductModelViewer';
+import ProductSpecifications from '@/components/products/b-type/ProductSpecifications'; // 기존 상세 표시용
+import ProductFeaturesComponent from '@/components/products/b-type/ProductFeatures'; // 이름 변경 ProductFeatures -> ProductFeaturesComponent
 // import ProductDocuments 컴포넌트는 새 스니펫의 documents 탭에서 직접 사용되므로, 기존 방식은 주석 처리 또는 수정
-// import ProductDocuments, { Document } from '@/components/products/safety-equipment/ProductDocuments'; 
+// import ProductDocuments, { Document } from '@/components/products/b-type/ProductDocuments'; 
 import { ModelSpecTable } from '@/components/products/ModelSpecTable'; // ModelSpecTable 임포트 추가
-import ProductImageGallery from '@/components/products/safety-equipment/ProductImageGallery';
+import ProductImageGallery from '@/components/products/b-type/ProductImageGallery';
 
 // ProductDetailClient가 page.tsx로부터 받는 Prop 타입 정의
 interface ProductDetailClientProps {
@@ -230,8 +230,8 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
 
   return (
     <div
-      className="px-4 sm:px-6 lg:px-18 py-8 flex flex-col lg:flex-row lg:gap-x-16 xl:gap-x-24 bg-background text-foreground"
-      style={{ minHeight: 'calc(100vh - var(--header-height) - var(--footer-height) - var(--main-content-top-padding) - var(--main-content-bottom-padding))' }}
+      className="px-4 sm:px-6 lg:px-18 py-8 flex flex-col lg:flex-row lg:gap-x-16 xl:gap-x-24 bg-transparent text-foreground"
+      style={{ minHeight: 'calc(100vh - var(--header-height) - var(--footer-height) - var(--main-content-top-padding) - var(--main-content-bottom-padding))', backgroundColor: 'transparent' }}
     >
       <div
         className="w-full flex flex-col lg:w-1/2 xl:w-5/12 lg:sticky lg:self-start lg:justify-center lg:h-[calc(100vh_-_var(--header-height)_-_var(--main-content-top-padding)_-_var(--footer-height)_-_var(--main-content-bottom-padding))] lg:top-[calc(var(--header-height)_+_var(--main-content-top-padding))]"

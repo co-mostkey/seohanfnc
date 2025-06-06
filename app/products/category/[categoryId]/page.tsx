@@ -38,14 +38,14 @@ export async function generateStaticParams() {
 //   try {
 //     // 완전히 하드코딩된 카테고리 목록으로 빌드 에러 방지
 //     return [
-//       { categoryId: 'safety-equipment' },
+//       { categoryId: 'b-type' },
 //       { categoryId: 'descenders' },
 //       { categoryId: 'disinfection-equipment' }
 //     ];
 //   } catch (error) {
 //     console.error('generateStaticParams (category)에서 오류 발생:', error);
 //     return [
-//       { categoryId: 'safety-equipment' }
+//       { categoryId: 'b-type' }
 //     ];
 //   }
 // }

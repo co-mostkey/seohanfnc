@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-// Experimental Edge Runtime 사용 (Next.js 15.3.3 호환)
-export const runtime = 'experimental-edge';
+// experimental-edge runtime 경고를 방지하기 위해 주석 처리
+// export const runtime = 'experimental-edge';
 
 // [TRISID] 유지보수 모드 체크 - 간단하게 false로 고정 (추후 API로 구현 가능)
 function checkMaintenanceMode(): boolean {
@@ -98,12 +98,18 @@ export async function middleware(request: NextRequest) {
     console.log('[Middleware] /admin 루트 접근, 세션 ID:', sessionId ? '존재함' : '없음');
     // 세션이 없어도 NextResponse.next()로 통과
   } else if (pathname.startsWith('/admin')) {
+    // 로그인 페이지는 인증 체크에서 제외
+    if (pathname === '/admin/login') {
+      console.log('[Middleware] 관리자 로그인 페이지 접근 허용');
+      return NextResponse.next();
+    }
+
     // /admin 하위 경로에서는 기존처럼 세션 체크/리다이렉트 유지
     const sessionId = request.cookies.get('sessionId')?.value;
     console.log('[Middleware] 관리자 하위 경로 접근:', pathname, '세션 ID:', sessionId ? '존재함' : '없음');
     if (!sessionId) {
-      console.log('[Middleware] 관리자 세션 ID 없음, /admin으로 리다이렉트');
-      return NextResponse.redirect(new URL('/admin', request.url));
+      console.log('[Middleware] 관리자 세션 ID 없음, /admin/login으로 리다이렉트');
+      return NextResponse.redirect(new URL('/admin/login', request.url));
     }
     console.log('[Middleware] 관리자 세션 ID 존재, 페이지 로드 허용 (세션 검증은 클라이언트에서 처리)');
   }

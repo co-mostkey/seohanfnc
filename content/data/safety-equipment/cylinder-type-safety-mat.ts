@@ -4,7 +4,7 @@
  * 제품의 기본 정보, 기술 사양, 특징, 관련 문서 등의 정보를 포함합니다.
  */
 
-import { SafetyEquipment } from '../../../types/safety-equipment';
+import { SafetyEquipment } from '../../../types/b-type';
 
 const cylinderTypeSafetyMat: SafetyEquipment = {
   id: 'Cylinder-Type-SafetyAirMat',
@@ -12,18 +12,18 @@ const cylinderTypeSafetyMat: SafetyEquipment = {
   nameEn: 'Cylinder Type Safety Air Mat',
   slug: 'cylinder-type-safety-air-mat',
   description: '실린더형 공기안전매트는 고층 건물, 공사 현장 등에서 추락 사고 발생 시 충격을 완화하여 인명 피해를 최소화하는 장비입니다.',
-  
+
   // 제품 이미지 경로
-  thumbnail: '/images/products/safety-equipment/cylinder-type-safety-air-mat/thumbnail.jpg',
+  thumbnail: '/images/products/b-type/cylinder-type-safety-air-mat/thumbnail.jpg',
   images: [
-    '/images/products/safety-equipment/cylinder-type-safety-air-mat/image1.jpg',
-    '/images/products/safety-equipment/cylinder-type-safety-air-mat/image2.jpg',
-    '/images/products/safety-equipment/cylinder-type-safety-air-mat/image3.jpg',
+    '/images/products/b-type/cylinder-type-safety-air-mat/image1.jpg',
+    '/images/products/b-type/cylinder-type-safety-air-mat/image2.jpg',
+    '/images/products/b-type/cylinder-type-safety-air-mat/image3.jpg',
   ],
-  
+
   // 3D 모델 정보
-  modelPath: '/models/safety-equipment/cylinder-safety-mat.glb',
-  
+  modelPath: '/models/b-type/cylinder-safety-mat.glb',
+
   // 제품 사양
   specifications: {
     '모델': '10형, 20형, 30형',
@@ -37,7 +37,7 @@ const cylinderTypeSafetyMat: SafetyEquipment = {
     '무게': '45kg ~ 120kg (모델별 상이)',
     '사용 환경': '-20℃ ~ 70℃',
   },
-  
+
   // 주요 특징
   features: [
     {
@@ -66,7 +66,7 @@ const cylinderTypeSafetyMat: SafetyEquipment = {
       icon: 'Zap'
     }
   ],
-  
+
   // 관련 문서
   documents: [
     {
@@ -74,26 +74,26 @@ const cylinderTypeSafetyMat: SafetyEquipment = {
       nameKo: '사용자 매뉴얼',
       nameEn: 'User Manual',
       type: 'manual',
-      filePath: '/documents/safety-equipment/cylinder-type-safety-mat-manual.pdf'
+      filePath: '/documents/b-type/cylinder-type-safety-mat-manual.pdf'
     },
     {
       id: 'cylinder-safety-mat-certification',
       nameKo: '제품 인증서',
       nameEn: 'Product Certification',
       type: 'certification',
-      filePath: '/documents/safety-equipment/cylinder-type-safety-mat-certification.pdf'
+      filePath: '/documents/b-type/cylinder-type-safety-mat-certification.pdf'
     },
     {
       id: 'cylinder-safety-mat-maintenance',
       nameKo: '유지보수 안내서',
       nameEn: 'Maintenance Guide',
       type: 'guide',
-      filePath: '/documents/safety-equipment/cylinder-type-safety-mat-maintenance.pdf'
+      filePath: '/documents/b-type/cylinder-type-safety-mat-maintenance.pdf'
     }
   ],
-  
+
   // 카테고리 및 태그
-  category: 'safety-equipment',
+  category: 'b-type',
   tags: ['안전매트', '추락방지', '구조장비', '소방장비'],
 
   // 추가 정보

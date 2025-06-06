@@ -13,7 +13,7 @@ const path = require('path');
 
 // 안전장비 데이터 로드 함수
 function loadSafetyEquipmentData() {
-    const safetyEquipmentDir = path.join(__dirname, '../content/data/safety-equipment');
+    const safetyEquipmentDir = path.join(__dirname, '../content/data/b-type');
 
     const cylinderData = require(path.join(safetyEquipmentDir, 'cylinder-type-safety-mat.ts'));
     const fanData = require(path.join(safetyEquipmentDir, 'fan-type-air-safety-mat.ts'));
@@ -37,7 +37,7 @@ function convertSafetyEquipmentToProduct(safetyEquipment, existingProduct) {
         nameEn: safetyEquipment.nameEn,
         nameCn: existingProduct.nameCn || '',
         isPublished: existingProduct.isPublished,
-        category: existingProduct.category || 'safety-equipment',
+        category: existingProduct.category || 'b-type',
 
         // 설명
         descriptionKo: safetyEquipment.description,
@@ -195,14 +195,14 @@ async function main() {
                         nameKo: '사용자 매뉴얼',
                         nameEn: 'User Manual',
                         type: 'manual',
-                        filePath: '/documents/safety-equipment/cylinder-type-safety-mat-manual.pdf'
+                        filePath: '/documents/b-type/cylinder-type-safety-mat-manual.pdf'
                     },
                     {
                         id: 'cylinder-safety-mat-certification',
                         nameKo: '제품 인증서',
                         nameEn: 'Product Certification',
                         type: 'certification',
-                        filePath: '/documents/safety-equipment/cylinder-type-safety-mat-certification.pdf'
+                        filePath: '/documents/b-type/cylinder-type-safety-mat-certification.pdf'
                     }
                 ],
                 tags: ['안전매트', '추락방지', '구조장비', '소방장비'],
@@ -262,14 +262,14 @@ async function main() {
                         nameKo: '사용자 매뉴얼',
                         nameEn: 'User Manual',
                         type: 'manual',
-                        filePath: '/documents/safety-equipment/fan-type-air-safety-mat-manual.pdf'
+                        filePath: '/documents/b-type/fan-type-air-safety-mat-manual.pdf'
                     },
                     {
                         id: 'fan-type-air-safety-mat-certification',
                         nameKo: '제품 인증서',
                         nameEn: 'Product Certification',
                         type: 'certification',
-                        filePath: '/documents/safety-equipment/fan-type-air-safety-mat-certification.pdf'
+                        filePath: '/documents/b-type/fan-type-air-safety-mat-certification.pdf'
                     }
                 ],
                 tags: ['안전매트', '추락방지', '구조장비', '소방장비', '팬형'],
@@ -328,14 +328,14 @@ async function main() {
                         nameKo: '사용자 매뉴얼',
                         nameEn: 'User Manual',
                         type: 'manual',
-                        filePath: '/documents/safety-equipment/training-air-mattress-manual.pdf'
+                        filePath: '/documents/b-type/training-air-mattress-manual.pdf'
                     },
                     {
                         id: 'training-air-mattress-guide',
                         nameKo: '훈련 가이드',
                         nameEn: 'Training Guide',
                         type: 'guide',
-                        filePath: '/documents/safety-equipment/training-air-mattress-guide.pdf'
+                        filePath: '/documents/b-type/training-air-mattress-guide.pdf'
                     }
                 ],
                 tags: ['훈련용', '안전매트', '추락방지', '교육장비', '에어매트리스'],
@@ -393,14 +393,14 @@ async function main() {
                         nameKo: '사용자 매뉴얼',
                         nameEn: 'User Manual',
                         type: 'manual',
-                        filePath: '/documents/safety-equipment/lifesaving-mat-manual.pdf'
+                        filePath: '/documents/b-type/lifesaving-mat-manual.pdf'
                     },
                     {
                         id: 'lifesaving-mat-certification',
                         nameKo: '제품 인증서',
                         nameEn: 'Product Certification',
                         type: 'certification',
-                        filePath: '/documents/safety-equipment/lifesaving-mat-certification.pdf'
+                        filePath: '/documents/b-type/lifesaving-mat-certification.pdf'
                     }
                 ],
                 tags: ['인명구조', '안전매트', '화재대응', '내열성', '구조장비'],

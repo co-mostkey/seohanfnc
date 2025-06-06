@@ -1654,7 +1654,7 @@ ${styles.showDates ? `
                                             endpoint="/api/admin/upload"
                                             onUploadSuccess={handleLogo3DGlbUpload}
                                             fileType="company/3d"
-                                            accept=".glb,.gltf"
+                                            accept=".glb"
                                             maxSizeMb={10}
                                             buttonText="3D 모델 업로드"
                                         />

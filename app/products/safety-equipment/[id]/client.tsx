@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { SafetyEquipment } from '@/types/safety-equipment';
+import { SafetyEquipment } from '@/types/b-type';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -11,7 +11,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { ChevronRight, FileText, Download, Shield, Award, Clock, LucideProps } from 'lucide-react';
 import DynamicModelViewer from '@/components/products/DynamicModelViewer';
 import dynamic from 'next/dynamic';
-import { getRelatedProducts } from '@/lib/safety-equipment';
+import { getRelatedProducts } from '@/lib/b-type';
 import SafetyEquipmentRelatedProducts from '@/components/products/SafetyEquipmentRelatedProducts';
 
 // 동적으로 아이콘 가져오기
@@ -79,7 +79,7 @@ export default function SafetyEquipmentDetailClient({ product }: SafetyEquipment
           제품
         </Link>
         <ChevronRight className="h-4 w-4 mx-2" />
-        <Link href="/products/safety-equipment" className="hover:text-white transition-colors">
+        <Link href="/products/b-type" className="hover:text-white transition-colors">
           안전장비
         </Link>
         <ChevronRight className="h-4 w-4 mx-2" />
