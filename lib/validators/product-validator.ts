@@ -14,7 +14,7 @@ const mediaGalleryItemSchema = z.object({
 const documentSchema = z.object({
     id: z.string().optional(), // UUID 검증 제거
     name: z.string().optional(), // name을 optional로 변경
-    nameKo: z.string().optional(), // 다국어 필드는 optional 또는 min(1) 추가 가능
+    nameKo: z.string().min(1, '문서 이름을 입력해주세요.'),
     nameEn: z.string().optional(),
     nameCn: z.string().optional(),
     description: z.string().optional(),
@@ -28,8 +28,8 @@ const documentSchema = z.object({
 
 // Feature 스키마
 const featureSchema = z.object({
-    title: z.string().min(1, "특징 제목은 필수입니다."),
-    description: z.string().min(1, "특징 설명은 필수입니다."),
+    title: z.string().min(1, '제목을 입력해주세요.'),
+    description: z.string().min(1, '설명을 입력해주세요.'),
     icon: z.string().optional(),
 });
 
@@ -46,8 +46,8 @@ const additionalSectionSchema = z.object({
 
 // Specification Item 스키마 (키-값 쌍)
 const specificationItemSchema = z.object({
-    key: z.string().min(1, "항목명(Key)은 필수입니다."),
-    value: z.string().min(1, "값(Value)은 필수입니다."),
+    key: z.string().min(1, "항목명을 입력해주세요."),
+    value: z.string().min(1, "값을 입력해주세요."),
 });
 
 // Model3D 스키마 (B타입 전용)
@@ -65,15 +65,15 @@ const model3DSchema = z.object({
 
 // TechnicalData 스키마 (B타입 전용)
 const technicalDataSchema = z.object({
-    key: z.string().min(1, "기술 사양 항목명은 필수입니다."),
-    value: z.string().min(1, "기술 사양 값은 필수입니다."),
+    key: z.string().min(1, "항목명을 입력해주세요."),
+    value: z.string().min(1, "값을 입력해주세요."),
     unit: z.string().optional(),
 });
 
 // Certification 스키마 (B타입 전용)
 const certificationSchema = z.object({
-    title: z.string().min(1, "인증/특징 제목은 필수입니다."),
-    description: z.string().min(1, "인증/특징 설명은 필수입니다."),
+    title: z.string().min(1, "제목을 입력해주세요."),
+    description: z.string().min(1, "설명을 입력해주세요."),
     icon: z.string().optional(),
 });
 
@@ -180,6 +180,7 @@ export const productSchema = z.object({
 
     // Product 타입의 [key: string]: any; 와 충돌하지 않도록 주의
     // category 필드는 API 저장 시 categoryId를 기반으로 생성되므로 스키마에는 불필요
+    productStyle: z.string().optional(), // A타입, B타입 구분
 });
 
 export type ProductFormData = z.infer<typeof productSchema>;
@@ -196,15 +197,67 @@ export type TechnicalDataFormData = z.infer<typeof technicalDataSchema>;
 export type CertificationFormData = z.infer<typeof certificationSchema>;
 
 export const productFormSchema = z.object({
-    id: z.string().min(1, 'ID를 입력해주세요.'),
-    nameKo: z.string().min(1, '한글 제품명을 입력해주세요.'),
+    id: z.string().min(3, '제품 ID는 3자 이상이어야 합니다.'),
+    nameKo: z.string().min(1, '제품명(한글)을 입력해주세요.'),
     nameEn: z.string().optional(),
     nameCn: z.string().optional(),
     categoryId: z.string().min(1, '카테고리를 선택해주세요.'),
-    productStyle: z.string(), // A타입, B타입 구분
+    productStyle: z.enum(['A', 'B']).default('A'),
     descriptionKo: z.string().optional(),
     descriptionEn: z.string().optional(),
     descriptionCn: z.string().optional(),
     mainImage: z.string().optional(),
-    // ... existing code ...
+    longDescription: z.string().optional(),
+    cautions: z.array(z.string()).optional(),
+    videos: z.array(z.string()).optional(),
+    pageBackgroundImage: z.string().optional(),
+    features: z.array(featureSchema).optional(),
+    documents: z.array(documentSchema).optional(),
+    gallery_images_data: z.array(mediaGalleryItemSchema).optional(),
+    model3D: model3DSchema.optional(),
+    technicalData: z.array(technicalDataSchema).optional(),
+    certifications: z.array(certificationSchema).optional(),
+    specifications: z.array(specificationItemSchema).optional(),
+    detailedSpecTable: z.array(specTableItemSchema).optional(),
+    impactAbsorptionData: z.object({
+        title: z.string().optional(),
+        subtitle: z.string().optional(),
+        testInfo: z.object({
+            standard: z.string().optional(),
+            testDate: z.string().optional(),
+            testSubject: z.string().optional(),
+            testDummy: z.string().optional(),
+            testHeight: z.string().optional(),
+            note: z.string().optional(),
+            reference: z.string().optional(),
+            conversion: z.string().optional(),
+        }).optional(),
+        testResults: z.array(z.object({
+            name: z.string().optional(),
+            voltage: z.string().optional(),
+            gForce: z.string().optional(),
+            percentage: z.number().optional(),
+            chartImage: z.string().optional(),
+        })).optional(),
+        comparisonChart: z.object({
+            title: z.string().optional(),
+            data: z.array(z.object({
+                name: z.string().optional(),
+                percentage: z.number().optional(),
+                color: z.string().optional(),
+            })).optional(),
+            comparisonImages: z.object({
+                groundImpact: z.string().optional(),
+                airMatImpact: z.string().optional(),
+            }).optional(),
+        }).optional(),
+        analysis: z.array(z.string()).optional(),
+    }).optional(),
+    specTable: z.array(z.record(z.string())).optional(),
+    specTableOptions: z.object({
+        title: z.string().optional(),
+        firstColumnTitle: z.string().optional(),
+    }).optional(),
+    isPublished: z.boolean().default(true),
+    sortOrder: z.number().default(0),
 }); 

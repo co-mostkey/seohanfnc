@@ -20,14 +20,19 @@ import { cn, getImagePath } from '@/lib/utils';
 import { ProductVideoSection } from '@/components/products/ProductVideoSection';
 
 // 제품 비주얼 이미지 경로 처리 함수
-const getProductVisualImage = (productId: string): string => {
-  // Cylinder-Type-SafetyAirMat 제품에 대한 특별 처리
-  if (productId === 'Cylinder-Type-SafetyAirMat') {
-    return `/images/products/${productId}/Cylinder-Type-SafetyAirMat02.jpg`;
+const getProductVisualImage = (product: Product): string => {
+  // 1. 제품 데이터에 pageBackgroundImage가 있으면 해당 경로 사용
+  if (product.pageBackgroundImage && typeof product.pageBackgroundImage === 'string') {
+    return product.pageBackgroundImage;
   }
 
-  // 기본 경로
-  return `/images/products/visuals/${productId.toLowerCase().replace(/-/g, '-')}-visual.jpg`;
+  // 2. 예외 처리: Cylinder-Type-SafetyAirMat 제품에 대한 특별 처리
+  if (product.id === 'Cylinder-Type-SafetyAirMat') {
+    return `/images/products/${product.id}/Cylinder-Type-SafetyAirMat02.jpg`;
+  }
+
+  // 3. 기본 경로
+  return `/images/products/visuals/${product.id.toLowerCase().replace(/-/g, '-')}-visual.jpg`;
 };
 
 type ProductDetailClientProps = {
@@ -206,7 +211,7 @@ export function ProductDetailClient({
           {/* 전체 배경 이미지 */}
           <div className="absolute inset-0 z-0">
             <Image
-              src={getProductVisualImage(productId)}
+              src={getProductVisualImage(product)}
               alt={`${productName} 비주얼 이미지`}
               fill
               className="object-cover w-full h-full transition-transform duration-1000 ease-out group-hover:scale-105"

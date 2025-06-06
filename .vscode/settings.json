@@ -1,4 +1,5 @@
 {
+    "css.validate": false,
     "typescript.tsserver.nodePath": "",
     "typescript.tsserver.log": "normal",
     "typescript.tsserver.maxTsServerMemory": 8192,
@@ -28,7 +29,8 @@
     },
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
-        "source.fixAll": "explicit"
+        "source.fixAll": "explicit",
+        "source.fixAll.eslint": "explicit"
     },
     "files.exclude": {
         "**/.git": true,

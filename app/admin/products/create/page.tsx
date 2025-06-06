@@ -14,7 +14,6 @@ export default function CreateProductPage() {
     const handleSubmit = async (productData: Product) => {
         setIsSubmitting(true);
         setError(null);
-        console.log("Creating new product with API:", productData);
 
         try {
             const response = await fetch('/api/admin/products', {
@@ -22,15 +21,19 @@ export default function CreateProductPage() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(productData),
             });
+
+            const responseData = await response.json();
+
             if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || '제품 생성에 실패했습니다.');
+                throw new Error(responseData.message || '제품 생성에 실패했습니다.');
             }
+
             toast.success('제품이 성공적으로 생성되었습니다.');
             router.push('/admin/products');
+
         } catch (err: any) {
             setError(err.message);
-            toast.error(err.message);
+            toast.error(`제품 생성 오류: ${err.message}`);
             console.error("Failed to create product via API:", err);
         } finally {
             setIsSubmitting(false);
@@ -49,7 +52,11 @@ export default function CreateProductPage() {
                 </div>
             )}
 
-            <ProductForm onSubmit={handleSubmit} isSubmitting={isSubmitting} />
+            <ProductForm
+                initialData={null}
+                onSubmitAction={handleSubmit}
+                isSubmitting={isSubmitting}
+            />
         </div>
     );
 } 

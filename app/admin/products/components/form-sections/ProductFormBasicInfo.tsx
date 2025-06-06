@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ProductFormData } from '@/lib/validators/product-validator';
+import { FileUpload } from '@/components/admin/FileUpload';
 
 // Define CATEGORIES directly in the file to remove external dependency
 const CATEGORIES = [
@@ -19,7 +20,8 @@ const CATEGORIES = [
 ];
 
 export const ProductFormBasicInfo = () => {
-    const { register, formState: { errors }, control } = useFormContext<ProductFormData>();
+    const { register, formState: { errors }, control, setValue, watch } = useFormContext<ProductFormData>();
+    const mainImage = watch('image');
 
     return (
         <Card>
@@ -32,7 +34,7 @@ export const ProductFormBasicInfo = () => {
                     <Label htmlFor="productStyle">제품 스타일</Label>
                     <Select
                         defaultValue={control._defaultValues.productStyle || 'A'}
-                        onValueChange={(value) => control.setValue('productStyle', value as 'A' | 'B')}
+                        onValueChange={(value) => setValue('productStyle', value as 'A' | 'B')}
                     >
                         <SelectTrigger>
                             <SelectValue placeholder="스타일 선택" />
@@ -64,7 +66,7 @@ export const ProductFormBasicInfo = () => {
                     <Label htmlFor="categoryId">카테고리</Label>
                     <Select
                         defaultValue={control._defaultValues.categoryId}
-                        onValueChange={(value) => control.setValue('categoryId', value)}
+                        onValueChange={(value) => setValue('categoryId', value)}
                     >
                         <SelectTrigger>
                             <SelectValue placeholder="카테고리 선택" />
@@ -80,10 +82,30 @@ export const ProductFormBasicInfo = () => {
                     {errors.categoryId && <p className="text-red-500 text-sm">{errors.categoryId.message}</p>}
                 </div>
 
+                {/* Main Image */}
+                <div className="space-y-2 col-span-1 md:col-span-2">
+                    <Label>메인 이미지</Label>
+                    <FileUpload
+                        endpoint="/api/admin/upload"
+                        fileType="product-images"
+                        onUploadSuccess={(file) => {
+                            setValue('image', file.url, { shouldValidate: true });
+                        }}
+                        currentImageUrl={mainImage}
+                    />
+                </div>
+
                 {/* Description (Korean) */}
                 <div className="space-y-2 col-span-1 md:col-span-2">
-                    <Label htmlFor="descriptionKo">제품 설명 (한글)</Label>
-                    <Textarea id="descriptionKo" {...register("descriptionKo")} placeholder="제품에 대한 설명을 입력하세요." />
+                    <Label htmlFor="descriptionKo">제품 요약 설명 (한글)</Label>
+                    <Textarea id="descriptionKo" {...register("descriptionKo")} placeholder="제품 목록 및 요약에 표시될 짧은 설명을 입력하세요." />
+                </div>
+
+                {/* Long Description (Korean) */}
+                <div className="space-y-2 col-span-1 md:col-span-2">
+                    <Label htmlFor="longDescription">제품 상세 설명 (HTML 가능)</Label>
+                    <Textarea id="longDescription" {...register("longDescription")} placeholder="제품 상세 페이지에 표시될 전체 설명을 입력하세요. <p>, <ul> 등의 HTML 태그를 사용할 수 있습니다." rows={8} />
+                    <p className="text-xs text-muted-foreground">상세 페이지의 주요 설명 부분입니다. HTML 태그를 사용하여 서식을 지정할 수 있습니다.</p>
                 </div>
             </CardContent>
         </Card>

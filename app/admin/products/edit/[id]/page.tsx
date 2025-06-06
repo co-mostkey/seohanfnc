@@ -132,7 +132,7 @@ export default function EditProductPage() {
             )}
 
             {initialData ? (
-                <ProductForm initialData={initialData} onSubmit={handleSubmit} isSubmitting={isSubmitting} />
+                <ProductForm initialData={initialData} onSubmitAction={handleSubmit} isSubmitting={isSubmitting} />
             ) : (
                 !loading && !error && <p className="text-gray-400">제품 데이터를 불러올 수 없습니다. ID를 확인해주세요.</p>
             )}

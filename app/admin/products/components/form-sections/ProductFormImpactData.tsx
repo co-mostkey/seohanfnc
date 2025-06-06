@@ -9,9 +9,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Trash2 } from 'lucide-react';
+import { FileUpload } from '@/components/admin/FileUpload';
 
 export const ProductFormImpactData = () => {
-    const { control, register, formState: { errors } } = useFormContext<ProductFormData>();
+    const { control, register, formState: { errors }, setValue, watch } = useFormContext<ProductFormData>();
 
     const { fields: testResultFields, append: appendTestResult, remove: removeTestResult } = useFieldArray({
         control,
@@ -27,6 +28,9 @@ export const ProductFormImpactData = () => {
         control,
         name: "impactAbsorptionData.comparisonChart.data"
     });
+
+    const groundImpactImage = watch("impactAbsorptionData.comparisonChart.comparisonImages.groundImpact");
+    const airMatImpactImage = watch("impactAbsorptionData.comparisonChart.comparisonImages.airMatImpact");
 
     return (
         <Card>
@@ -88,13 +92,59 @@ export const ProductFormImpactData = () => {
                         <Label>차트 제목</Label>
                         <Input {...register("impactAbsorptionData.comparisonChart.title")} />
                     </div>
-                    <div>
+                    <div className="space-y-2">
                         <Label>비교 이미지 (지면 충돌)</Label>
-                        <Input {...register("impactAbsorptionData.comparisonChart.comparisonImages.groundImpact")} />
+                        <FileUpload
+                            endpoint="/api/admin/upload"
+                            fileType="product-assets"
+                            onUploadSuccess={(file) => {
+                                setValue('impactAbsorptionData.comparisonChart.comparisonImages.groundImpact', file.url, { shouldValidate: true });
+                            }}
+                            currentImageUrl={groundImpactImage}
+                            accept="image/*"
+                            buttonText="이미지 업로드"
+                            idSuffix="ground-impact-image"
+                        />
+                        {groundImpactImage && (
+                            <div className="flex items-center gap-2 mt-2">
+                                <Input {...register("impactAbsorptionData.comparisonChart.comparisonImages.groundImpact")} />
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => setValue('impactAbsorptionData.comparisonChart.comparisonImages.groundImpact', '', { shouldValidate: true })}
+                                >
+                                    경로 삭제
+                                </Button>
+                            </div>
+                        )}
                     </div>
-                    <div>
+                    <div className="space-y-2">
                         <Label>비교 이미지 (에어매트 충돌)</Label>
-                        <Input {...register("impactAbsorptionData.comparisonChart.comparisonImages.airMatImpact")} />
+                        <FileUpload
+                            endpoint="/api/admin/upload"
+                            fileType="product-assets"
+                            onUploadSuccess={(file) => {
+                                setValue('impactAbsorptionData.comparisonChart.comparisonImages.airMatImpact', file.url, { shouldValidate: true });
+                            }}
+                            currentImageUrl={airMatImpactImage}
+                            accept="image/*"
+                            buttonText="이미지 업로드"
+                            idSuffix="airmat-impact-image"
+                        />
+                        {airMatImpactImage && (
+                            <div className="flex items-center gap-2 mt-2">
+                                <Input {...register("impactAbsorptionData.comparisonChart.comparisonImages.airMatImpact")} />
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => setValue('impactAbsorptionData.comparisonChart.comparisonImages.airMatImpact', '', { shouldValidate: true })}
+                                >
+                                    경로 삭제
+                                </Button>
+                            </div>
+                        )}
                     </div>
                     {chartDataFields.map((field, index) => (
                         <div key={field.id} className="flex items-center gap-4 p-3 border rounded-lg">

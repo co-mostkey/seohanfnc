@@ -17,6 +17,11 @@ import { ProductFormModel3D } from './form-sections/ProductFormModel3D';
 import { ProductFormTechnicalData } from './form-sections/ProductFormTechnicalData';
 import { ProductFormSettings } from './form-sections/ProductFormSettings';
 import { ProductFormImpactData } from './form-sections/ProductFormImpactData';
+import { ProductFormCautions } from './form-sections/ProductFormCautions';
+import { ProductFormVideos } from './form-sections/ProductFormVideos';
+import { ProductFormPageSettings } from './form-sections/ProductFormPageSettings';
+import { ProductFormSpecTable } from './form-sections/ProductFormSpecTable';
+import { ProductFormCertifications } from './form-sections/ProductFormCertifications';
 
 const transformToFormData = (product: Product | null | undefined): Partial<ProductFormData> => {
     if (!product) return {};
@@ -29,13 +34,13 @@ const transformToProduct = (formData: ProductFormData): Product => {
 
 interface ProductFormProps {
     initialData?: Product | null;
-    onSubmit: (data: Product) => Promise<void>;
+    onSubmitAction: (data: Product) => Promise<void>;
     isSubmitting?: boolean;
 }
 
 export const ProductForm: React.FC<ProductFormProps> = ({
     initialData,
-    onSubmit,
+    onSubmitAction,
     isSubmitting: isParentSubmitting = false,
 }) => {
     const methods = useForm<ProductFormData>({
@@ -50,7 +55,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
     const handleFormSubmit = async (data: ProductFormData) => {
         try {
             const productData = transformToProduct(data);
-            await onSubmit(productData);
+            await onSubmitAction(productData);
         } catch (error) {
             toast.error("데이터 변환 또는 제출 중 오류가 발생했습니다.");
             console.error(error);
@@ -69,10 +74,15 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 
                 {watchedProductStyle === 'B' && (
                     <>
+                        <ProductFormPageSettings />
                         <ProductFormModel3D />
+                        <ProductFormSpecTable />
                         <ProductFormTechnicalData />
+                        <ProductFormCertifications />
                         <ProductFormSpecifications />
                         <ProductFormImpactData />
+                        <ProductFormCautions />
+                        <ProductFormVideos />
                     </>
                 )}
 

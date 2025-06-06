@@ -11,74 +11,10 @@
       "image": "/images/products/b-type.jpg",
       "products": [
         {
-          "id": "Vertical-Rescue-Equipment",
-          "nameKo": "수직강하식 구조대",
-          "nameEn": "Vertical Rescue Equipment",
-          "category": "b-type",
-          "isPublished": true,
-          "descriptionKo": "화재시 또는 재난상황 발생시는 이동설치가 가능한 구조로 가볍고 신속한 설치가 가능한 구조의 인명구조 장비입니다.",
-          "image": "/images/products/Vertical-Rescue-Equipment/thumbnail.jpg",
-          "features": [
-            {
-              "title": "이동 설치 가능한 구조",
-              "description": "화재나 재난 상황에 따라 필요한 위치로 이동하여 설치할 수 있는 유연한 구조로 설계"
-            },
-            {
-              "title": "경량 디자인",
-              "description": "가볍게 제작되어 빠른 운반과 설치가 가능한 장비"
-            },
-            {
-              "title": "신속한 설치",
-              "description": "비상 상황 시 신속하게 설치하여 즉시 구조 작업 진행 가능"
-            },
-            {
-              "title": "공식 인증",
-              "description": "한국소방산업기술원 형식승인 (형식승인번호: 구23-3)"
-            }
-          ],
-          "specTable": [
-            {
-              "title": "구분",
-              "value": "제원"
-            },
-            {
-              "title": "보관규격 가로×세로×높이(mm)",
-              "value": "880 X 500 X 960"
-            },
-            {
-              "title": "보관규격 가로×세로×높이(mm)",
-              "value": "880 × 450 × 1,300"
-            },
-            {
-              "title": "활강포 길이 (m)",
-              "value": "4.5 ~ 70 m"
-            },
-            {
-              "title": "활강시간 (sec.)",
-              "value": "3 ~ 4 m/sec."
-            },
-            {
-              "title": "활강간격 (sec.)",
-              "value": "4 ~ 5 sec."
-            },
-            {
-              "title": "관련검사",
-              "value": "한국소방산업기술원 제품승인품"
-            }
-          ],
-          "cautions": [
-            "반드시 1회에 1인이 낙하해야 합니다.",
-            "다음 탈출자는 전 탈출자가 착지한 후, 탈출하도록 합니다 (권고)."
-          ],
-          "categoryId": "b-type",
-          "productStyle": "A"
-        },
-        {
           "id": "Sloping-Rescue-Chute",
           "nameKo": "경사강하식 구조대",
           "nameEn": "Sloping Rescue Chute",
           "category": "b-type",
-          "isPublished": true,
           "descriptionKo": "화재시 또는 재난상황 발생시 자루 형태의 포지를 이용하여 45도 각도의 경사면을 만들어 미끄럼 타듯 내려가는 구조로, 짧은 시간에 많은 인원이 탈출 할 수 있는 구조 장비입니다.",
           "image": "/images/products/Sloping-Rescue-Chute/thumbnail.jpg",
           "approvalNumber": "구 04-2-1",
@@ -137,15 +73,13 @@
             "다음 탈출자는 전 탈출자가 착지한 후, 탈출하도록 합니다 (권고).",
             "탈출전 지상에 반드시 설치를 위한 요원이 배치되어야 합니다."
           ],
-          "showInProductList": true,
-          "productStyle": "A"
+          "showInProductList": true
         },
         {
           "id": "Fire-Truck-Rescue-Equipment",
           "nameKo": "소방차용 구조대",
           "nameEn": "Fire Truck Rescue Equipment",
           "category": "b-type",
-          "isPublished": true,
           "descriptionKo": "화재시 또는 재난상황 발생시 출동 소방차의 사다리 바스켓에 설치하여 사용하는 구조대로 수직으로 펼쳐지는 자루형태의 포지 내에 나선형의 활강포가 구성되어 짧은 시간에 많은 인원이 탈출 할 수 있는 구조 장비입니다.",
           "image": "/images/products/Fire-Truck-Rescue-Equipment/thumbnail.jpg",
           "features": [
@@ -196,200 +130,382 @@
             "반드시 1회에 1인이 낙하해야 합니다.",
             "다음 탈출자는 전 탈출자가 착지한 후, 탈출하도록 합니다 (권고)."
           ],
-          "showInProductList": true,
-          "productStyle": "A"
+          "showInProductList": true
         },
         {
           "id": "Cylinder-Type-SafetyAirMat",
-          "nameKo": "실린더형 안전 에어매트",
+          "nameKo": "실린더형 공기안전매트",
           "nameEn": "Cylinder Type Safety Air Mat",
           "nameCn": "防坠落垫",
-          "isPublished": true,
-          "category": "b-type",
-          "descriptionKo": "실린더형 공기안전매트는 고층 건물, 공사 현장 등에서 추락 사고 발생 시 충격을 완화하여 인명 피해를 최소화하는 장비입니다.",
+          "descriptionKo": "화재 또는 재난 상황 발생 시 고층에서 낙하하는 피난자를 구조하기 위한 인명구조 장비입니다. 압축 공기를 사용하여 빠르게 공기 기둥을 팽창시켜 안전한 착지 지점을 제공합니다.",
           "descriptionEn": "A life-saving equipment designed to rescue people falling from high floors during fire or disaster situations. It uses compressed air to quickly inflate air columns, providing a safe landing point.",
           "descriptionCn": "一种救生设备，旨在火灾或灾难情况下救援从高层坠落的人员。它使用压缩空气快速膨胀空气柱，提供安全着陆点。",
           "image": "/images/products/Cylinder-Type-SafetyAirMat/thumbnail.jpg",
-          "longDescription": "<p>실린더형 공기안전매트는 고층 건물, 공사 현장 등에서 추락 사고 발생 시 충격을 완화하여 인명 피해를 최소화하는 장비입니다.</p><p>한국소방산업기술원의 제품 승인을 받았습니다 (제품 승인 번호: 공매 22-3). 실린더 자동 충전 방식으로 약 90초 이내에 신속 전개가 가능하며, 고강도 폴리에스테르 원단으로 제작되어 내구성과 안전성이 우수합니다.</p><p>건물 높이 및 설치 공간에 따라 다양한 규격을 선택할 수 있으며, 접이식 구조로 운반 및 보관이 용이하고 재사용이 가능합니다.</p>",
+          "approvalNumber": "공매 19-4-1",
+          "longDescription": "<p>실린더형 공기안전매트는 화재 또는 재난 상황 발생 시 고층에서 낙하하는 피난자를 구조하기 위한 인명구조 장비입니다. 압축 공기를 사용하여 빠르게 공기 기둥을 팽창시켜 안전한 착지 지점을 제공합니다.</p><p>한국소방산업기술원의 제품 승인을 받았습니다 (제품 승인 번호: 19-4-1). 층수에 따라 다양한 모델이 있으며, 빠른 설치 시간과 안전한 연속 대피가 가능하도록 설계되었습니다.</p><p>각 모델에는 공기 주입 밸브와 실린더가 장착되어 있어 신속한 팽창이 가능하며, 소방관 공기 호흡기와 호환되도록 설계되어 비상 상황에서도 유연하게 대응할 수 있습니다.</p>",
           "features": [
             {
-              "title": "빠른 전개 방식",
-              "description": "실린더 자동 충전 방식으로 약 90초 이내에 신속 전개 가능"
+              "title": "신속한 설치 시간",
+              "description": "25초에서 80초 내에 설치 완료 가능한 빠른 대응 시스템"
             },
             {
-              "title": "내구성 있는 소재",
-              "description": "고강도 폴리에스테르 원단으로 제작되어 내구성과 안전성이 우수"
+              "title": "다양한 모델 옵션",
+              "description": "5F A 타입, 5F B 타입, 10F 타입 및 15F 타입 등 층수별 맞춤형 모델"
             },
             {
-              "title": "다양한 규격",
-              "description": "건물 높이 및 설치 공간에 따라 다양한 규격 선택 가능"
+              "title": "안전한 연속 대피",
+              "description": "8초에서 35초까지의 연속 대피 시간 제공"
             },
             {
-              "title": "편리한 운반",
-              "description": "접이식 구조로 운반 및 보관이 용이하며 재사용 가능"
+              "title": "한국소방산업기술원 승인",
+              "description": "제품 승인 번호 19-4-1로 공인된 안전 장비"
             },
             {
-              "title": "강화된 내충격성",
-              "description": "소방청 안전기준에 적합한 내충격성으로 안전하게 추락 충격 흡수"
+              "title": "소방 장비 호환성",
+              "description": "소방관 공기 호흡기와 호환되어 비상 상황에서 유연한 대응 가능"
             }
           ],
           "specifications": {
-            "모델": "10형, 20형, 30형",
-            "규격(m)": "5×5×2.5 / 5×7×3.5 / 5×10×3.5",
-            "제품승인번호": "공매 22-3",
-            "내충격성": "KFI인정기준(공기안전매트의 성능인정 및 제품검사 기술기준) 적합",
-            "팽창시간": "약 90초 이내",
-            "충진방식": "자동 실린더 방식",
-            "적용 높이": "10~25m 이하",
-            "재질": "내구성 폴리에스테르 원단 (1500데니어)",
-            "무게": "45kg ~ 120kg (모델별 상이)",
-            "사용 환경": "-20℃ ~ 70℃"
+            "모델": "5F A 타입, 5F B 타입, 10F 타입, 15F 타입",
+            "승인 번호": "한국소방산업기술원 제품 승인 번호: 19-4-1"
           },
-          "modelName": "10형, 20형, 30형",
-          "modelNumber": "공매 22-3",
-          "modelImage": "/images/products/Cylinder-Type-SafetyAirMat/Cylinder-Type-SafetyAirMat02.jpg",
-          "modelFile": "/models/products/Cylinder-Type-SafetyAirMat/Cylinder-Type-SafetyAirMat.glb",
-          "modelStyle": "modern",
-          "series": "실린더형 안전 에어매트",
-          "approvalNumber": "공매 22-3",
-          "applicableHeight": "10~25m 이하",
-          "technicalData": [
+          "specTable": [
             {
-              "key": "모델",
-              "value": "10형, 20형, 30형"
+              "title": "구분",
+              "5F_A": "5F A 형",
+              "5F_B": "5F B 형",
+              "10F": "10F 형",
+              "15F": "15F 형"
             },
             {
-              "key": "규격(m)",
-              "value": "5×5×2.5 / 5×7×3.5 / 5×10×3.5"
+              "title": "제품 규격 (m)",
+              "5F_A": "3.5 x 3.5 x 1.7 (m)",
+              "5F_B": "4 x 4 x 2 (m)",
+              "10F": "5 x 7 x 2.5 (m)",
+              "15F": "6 x 8 x 3 (m)"
             },
             {
-              "key": "제품승인번호",
-              "value": "공매 22-3"
+              "title": "제품 중량 (kg)",
+              "5F_A": "55 kg",
+              "5F_B": "85 kg",
+              "10F": "110 kg",
+              "15F": "170 kg"
             },
             {
-              "key": "내충격성",
-              "value": "KFI인정기준(공기안전매트의 성능인정 및 제품검사 기술기준) 적합"
+              "title": "설치 시간 (초)",
+              "5F_A": "25 초",
+              "5F_B": "40 초",
+              "10F": "60 초",
+              "15F": "80 초"
             },
             {
-              "key": "팽창시간",
-              "value": "약 90초 이내"
+              "title": "연속 대피 시간 (초)",
+              "5F_A": "8 초",
+              "5F_B": "17 초",
+              "10F": "25 초",
+              "15F": "35 초"
             },
             {
-              "key": "충진방식",
-              "value": "자동 실린더 방식"
+              "title": "주입 밸브 수량",
+              "5F_A": "1 개",
+              "5F_B": "1 개",
+              "10F": "2 개",
+              "15F": "2 개"
             },
             {
-              "key": "적용 높이",
-              "value": "10~25m 이하"
+              "title": "실린더 수량",
+              "5F_A": "1 개",
+              "5F_B": "1 개",
+              "10F": "2 개",
+              "15F": "3 개"
             },
             {
-              "key": "재질",
-              "value": "내구성 폴리에스테르 원단 (1500데니어)"
-            },
-            {
-              "key": "무게",
-              "value": "45kg ~ 120kg (모델별 상이)"
-            },
-            {
-              "key": "사용 환경",
-              "value": "-20℃ ~ 70℃"
+              "title": "관련 검사",
+              "5F_A": "한국소방산업기술원 제품 승인품",
+              "5F_B": "한국소방산업기술원 제품 승인품",
+              "10F": "자체 검사",
+              "15F": "자체 검사"
             }
           ],
-          "certificationsAndFeatures": [
+          "impactAbsorptionData": {
+            "title": "피난안전장비 충격흡수 비교 데이터",
+            "testInfo": {
+              "standard": "충격흡수 비교 데이터 (DIN-14151-3)",
+              "reference": "독일 구조용 에어매트 기준 (DIN-14151-3)",
+              "testSubject": "공기안전매트(5층형)",
+              "testDate": "2017년 4월 19일",
+              "testDummy": "75kg (DIN 14151-3 기준)",
+              "testHeight": "16 (m) 시험법 (DIN 14151-3 기준)",
+              "note": "본 시험은 독일 DIN 14151-3의 기준에 의한 낙하 충격흡수량(충격가속도의 배수[g]로 표기) 단위 (g)",
+              "conversion": "0.01 (V)=1 (g) [사용센서 : SAE-J211준용 센서]"
+            },
+            "testResults": [
+              {
+                "name": "지면 충돌시",
+                "voltage": "33.620 (V)",
+                "gForce": "3,362 (g)",
+                "chartImage": "/images/products/Cylinder-Type-SafetyAirMat/data/Cylinder-Type-SafetyAirMat-test1.jpg"
+              },
+              {
+                "name": "공기안전매트",
+                "voltage": "220 (mV)",
+                "gForce": "22 (g)",
+                "chartImage": "/images/products/Cylinder-Type-SafetyAirMat/data/Cylinder-Type-SafetyAirMat-test2.jpg"
+              }
+            ],
+            "comparisonChart": {
+              "title": "충격흡수량 비교 그래프",
+              "data": [
+                {
+                  "name": "지면",
+                  "percentage": 100,
+                  "color": "#EF4444"
+                },
+                {
+                  "name": "스펀지",
+                  "percentage": 32,
+                  "color": "#F87171"
+                },
+                {
+                  "name": "인명구조매트",
+                  "percentage": 2,
+                  "color": "#FBBF24"
+                },
+                {
+                  "name": "공기안전매트",
+                  "percentage": 0.6,
+                  "color": "#4ADE80"
+                }
+              ]
+            },
+            "analysis": [
+              "공기안전매트는 여러 종류의 안전장비 중 최저의 충격흡수량을 보이고 있습니다.",
+              "낙하자의 자세, 날씨, 지형 등 환경적 요인에 의해 충격흡수량이 차이가 있을 수 있으나",
+              "독일 기준 : 충격수량 (80 ~ 60 (g) 이내) 에 의거 '인명구조매트'와 '공기안전매트'가 적합한 장비임이 확인되었습니다.",
+              "공기안전매트는 약 [6/1000] 충격이 감소하였습니다."
+            ]
+          },
+          "gallery": [
+            "/images/products/Cylinder-Type-SafetyAirMat/gallery/main_01.jpg",
+            "/images/products/Cylinder-Type-SafetyAirMat/gallery/01.jpg",
+            "/images/products/Cylinder-Type-SafetyAirMat/gallery/02.jpg",
+            "/images/products/Cylinder-Type-SafetyAirMat/gallery/Cylinder-Type-SafetyAirMat-perspective.jpg",
+            "/images/products/Cylinder-Type-SafetyAirMat/gallery/1 (1).jpg",
+            "/images/products/Cylinder-Type-SafetyAirMat/gallery/1 (2).jpg",
+            "/images/products/Cylinder-Type-SafetyAirMat/gallery/1 (3).jpg",
+            "/images/products/Cylinder-Type-SafetyAirMat/gallery/주입밸브.jpg"
+          ],
+          "documents": [
             {
-              "title": "제품 인증",
-              "description": "한국소방산업기술원 제품 승인 (공매 22-3)"
+              "id": "safety-air-mat-certificate-211125",
+              "nameKo": "성능인증서 (21.11.25)",
+              "nameEn": "Performance Certificate (21.11.25)",
+              "path": "/documents/Cylinder-Type-SafetyAirMat/211125-성능인증서(실린더식)공매 19-4-1.pdf",
+              "type": "pdf"
             },
             {
-              "title": "품질 보증",
-              "description": "3년 제한 보증"
+              "id": "safety-air-mat-certificate-190701",
+              "nameKo": "성능인증서 (19.07.01)",
+              "nameEn": "Performance Certificate (19.07.01)",
+              "path": "/documents/Cylinder-Type-SafetyAirMat/190701-성능인증서(실린더식).pdf",
+              "type": "pdf"
             },
             {
-              "title": "사용 환경",
-              "description": "-20℃ ~ 70℃ 실내외 사용 가능"
+              "id": "fall-prevention-mat-catalog",
+              "nameKo": "추락방지매트 카달로그",
+              "nameEn": "Fall Prevention Mat Catalog",
+              "nameCn": "防坠落垫目录"
+            }
+          ],
+          "cautions": [
+            "피난자는 매트의 중앙으로 낙하해야 합니다.",
+            "매트 설치 시 주변에 장애물이 없는지 확인해야 합니다.",
+            "반드시 1회에 1인만 낙하해야 합니다. 다음 탈출자는 매트가 원래 모양으로 돌아온 후에 뛰어내려야 합니다.",
+            "실린더 압력을 정기적으로 확인해야 합니다. 실린더 압력이 부족하거나 실린더가 없는 경우 소방관 공기 호흡기와 호환되도록 설계되었습니다.",
+            "매트 설치 시 탈출자가 매트 중앙에 낙하하도록 위치를 선정해야 합니다."
+          ],
+          "productStyle": "B"
+        },
+        {
+          "id": "Fan-Type-Air-Safety-Mat",
+          "nameKo": "팬형 공기안전매트",
+          "nameEn": "Fan Type Air Safety Mat",
+          "nameCn": "风扇式防坠落垫",
+          "descriptionKo": "화재 또는 재난 상황 발생 시 고층에서 낙하하는 피난자를 구조하기 위한 인명구조 장비입니다. 송풍기로 지속적인 공기를 주입하여 매트의 형태를 유지하며, 여러 명의 피난자를 연속적으로 구조할 수 있습니다.",
+          "image": "/images/products/Fan-Type-Air-Safety-Mat/thumbnail.jpg",
+          "approvalNumber": "공매 19-3-1",
+          "longDescription": "<p>팬형 공기안전매트는 화재 또는 재난 상황 발생 시 고층에서 낙하하는 피난자를 구조하기 위한 인명구조 장비입니다. 송풍기로 지속적인 공기를 주입하여 매트의 형태를 유지하며, 여러 명의 피난자를 연속적으로 구조할 수 있습니다.</p><p>한국소방산업기술원의 제품 승인을 받았습니다 (제품 승인 번호: 19-3-1). 층수에 따라 다양한 모델이 있으며, 빠른 설치 시간과 안전한 연속 대피가 가능하도록 설계되었습니다.</p><p>각 모델에는 송풍기, 배기구, 공기 주입 밸브 등이 장착되어 있어 신속한 설치와 효율적인 공기 관리가 가능합니다.</p>",
+          "features": [
+            {
+              "title": "고효율 팬 시스템",
+              "description": "강력한 팬 시스템으로 50~135초 이내에 매트 팽창이 가능한 빠른 설치 속도"
             },
             {
-              "title": "안전 기준",
-              "description": "KFI인정기준(공기안전매트의 성능인정 및 제품검사 기술기준) 적합"
+              "title": "경량 디자인",
+              "description": "70kg~170kg의 가벼운 무게로 이동과 설치가 용이한 설계"
+            },
+            {
+              "title": "내구성 있는 소재",
+              "description": "특수 코팅된 폴리에스터 소재로 내구성과 내마모성 강화"
+            },
+            {
+              "title": "에너지 효율성",
+              "description": "저전력 고효율 팬 사용으로 배터리 또는 일반 전원으로 작동 가능"
+            },
+            {
+              "title": "내후성 설계",
+              "description": "다양한 기후 조건에서도 안정적으로 사용 가능한 내후성 설계"
+            }
+          ],
+          "specifications": {
+            "모델": "5F 형, 10F 형, 15F 형, 20F 형",
+            "제품승인번호": "공매 23-1",
+            "관련검사": "한국소방산업기술원 제품승인품"
+          },
+          "specTable": [
+            {
+              "title": "구분",
+              "5F": "5F 형",
+              "10F": "10F 형",
+              "15F": "15F 형",
+              "20F": "20F 형"
+            },
+            {
+              "title": "제품규격(m)",
+              "5F": "4 × 6 × 2 (m)",
+              "10F": "5 × 7 × 2.5 (m)",
+              "15F": "6 × 8 × 3 (m)",
+              "20F": "7 × 10 × 3 (m)"
+            },
+            {
+              "title": "제품중량(kg)",
+              "5F": "70 kg",
+              "10F": "145 kg",
+              "15F": "150 kg",
+              "20F": "170 kg"
+            },
+            {
+              "title": "설치시간(sec.)",
+              "5F": "50 sec.",
+              "10F": "75 sec.",
+              "15F": "110 sec.",
+              "20F": "135 sec."
+            },
+            {
+              "title": "연속대피시간(sec.)",
+              "5F": "17 sec.",
+              "10F": "25 sec.",
+              "15F": "35 sec.",
+              "20F": "40 sec."
+            },
+            {
+              "title": "팬 수량",
+              "5F": "1 개",
+              "10F": "2 개",
+              "15F": "2 개",
+              "20F": "2 개"
+            },
+            {
+              "title": "관련검사",
+              "5F": "한국소방산업기술원 제품승인품",
+              "10F": "자체검사",
+              "15F": "자체검사",
+              "20F": "자체검사"
             }
           ],
           "documents": [
             {
-              "id": "cylinder-safety-mat-manual",
-              "nameKo": "사용자 매뉴얼",
-              "nameEn": "User Manual",
-              "type": "manual",
-              "url": "/documents/b-type/cylinder-type-safety-mat-manual.pdf"
+              "id": "fan-type-mat-manual",
+              "nameKo": "팬형 안전매트 사용설명서",
+              "nameEn": "Fan Type Safety Mat Manual",
+              "nameCn": "风扇式安全气垫使用手册",
+              "path": "/documents/팬형안전매트_사용설명서.pdf",
+              "type": "pdf"
             },
             {
-              "id": "cylinder-safety-mat-certification",
-              "nameKo": "제품 인증서",
-              "nameEn": "Product Certification",
-              "type": "certification",
-              "url": "/documents/b-type/cylinder-type-safety-mat-certification.pdf"
-            },
-            {
-              "id": "cylinder-safety-mat-maintenance",
-              "nameKo": "유지보수 안내서",
-              "nameEn": "Maintenance Guide",
-              "type": "guide",
-              "url": "/documents/b-type/cylinder-type-safety-mat-maintenance.pdf"
+              "id": "fan-type-mat-certificate",
+              "nameKo": "팬형 안전매트 인증서",
+              "nameEn": "Fan Type Safety Mat Certificate",
+              "nameCn": "风扇式安全气垫认证",
+              "path": "/documents/팬형안전매트_인증서.pdf",
+              "type": "pdf"
             }
           ],
-          "gallery_images_data": [
-            {
-              "id": "gallery_1",
-              "src": "/images/products/Cylinder-Type-SafetyAirMat/Cylinder-Type-SafetyAirMat02.jpg",
-              "alt": "실린더형 안전 에어매트 이미지 1",
-              "type": "image"
-            },
-            {
-              "id": "gallery_2",
-              "src": "/images/products/Cylinder-Type-SafetyAirMat/Cylinder-Type-SafetyAirMat-main-ex.png",
-              "alt": "실린더형 안전 에어매트 이미지 2",
-              "type": "image"
-            },
-            {
-              "id": "gallery_3",
-              "src": "/images/products/Cylinder-Type-SafetyAirMat/thumbnail.jpg",
-              "alt": "실린더형 안전 에어매트 이미지 3",
-              "type": "image"
-            }
-          ],
-          "tags": [
-            "안전매트",
-            "추락방지",
-            "구조장비",
-            "소방장비"
-          ],
-          "relatedProductIds": [],
           "cautions": [
-            "사용 전 반드시 제품 상태를 점검하세요.",
-            "사용 설명서를 숙지한 후 사용하세요.",
-            "정기적인 유지보수를 실시하세요.",
-            "실린더 압력을 정기적으로 확인해야 합니다.",
-            "매트 설치 시 탈출자가 매트 중앙에 낙하하도록 위치를 선정해야 합니다."
+            "반드시 1회에 1인이 낙하해야 합니다.",
+            "다음 탈출자는 매트의 원형이 복원된 후, 탈출해야 합니다.",
+            "반드시 상용전원이 공급되거나, 비상전원이 공급되는 곳에서만 설치가 가능합니다.",
+            "매트 설치시 탈출자가 매트 중앙에 낙하할 수 있도록 위치를 선정해야 합니다.",
+            "특히, 야간에는 탈출자의 시야확보가 어려우므로, 유의하여 선정합니다."
           ],
-          "productStyle": "B",
-          "showInProductList": true,
-          "isSummaryPage": false,
-          "pageHeroTitle": "실린더형 안전 에어매트",
-          "pageHeroSubtitles": [],
-          "pageBackgroundImage": "",
-          "seoStructuredData": ""
+          "impactAbsorptionData": {
+            "title": "피난안전장비 충격흡수 비교 데이터",
+            "testInfo": {
+              "standard": "충격흡수 비교 데이터 (DIN-14151-3)",
+              "reference": "독일 구조용 에어매트 기준 (DIN-14151-3)",
+              "testSubject": "공기안전매트(5층형)",
+              "testDate": "2017년 4월 19일",
+              "testDummy": "75kg (DIN 14151-3 기준)",
+              "testHeight": "16 (m) 시험법 (DIN 14151-3 기준)",
+              "note": "본 시험은 독일 DIN 14151-3의 기준에 의한 낙하 충격흡수량(충격가속도의 배수[g]로 표기) 단위 (g)",
+              "conversion": "0.01 (V)=1 (g) [사용센서 : SAE-J211준용 센서]"
+            },
+            "testResults": [
+              {
+                "name": "지면 충돌시",
+                "voltage": "33.620 (V)",
+                "gForce": "3,362 (g)",
+                "chartImage": "/images/products/Fan-Type-Air-Safety-Mat/data/Fan-Type-Air-Safety-Mat-test1.jpg"
+              },
+              {
+                "name": "공기안전매트 (전기팬식, 규격 : 4.0 X 6.0 X 2.2m / 전기팬 풍량 : 6,900 ㎡/h 1대 사용)",
+                "voltage": "220 (mV)",
+                "gForce": "22 (g)",
+                "chartImage": "/images/products/Fan-Type-Air-Safety-Mat/data/Fan-Type-Air-Safety-Mat-test2.jpg"
+              }
+            ],
+            "comparisonChart": {
+              "title": "충격흡수량 비교 그래프",
+              "data": [
+                {
+                  "name": "지면",
+                  "percentage": 100,
+                  "color": "#EF4444"
+                },
+                {
+                  "name": "스펀지",
+                  "percentage": 32,
+                  "color": "#F87171"
+                },
+                {
+                  "name": "인명구조매트",
+                  "percentage": 2,
+                  "color": "#FBBF24"
+                },
+                {
+                  "name": "공기안전매트",
+                  "percentage": 0.6,
+                  "color": "#4ADE80"
+                }
+              ]
+            },
+            "analysis": [
+              "공기안전매트는 여러 종류의 안전장비 중 최저의 충격흡수량을 보이고 있습니다.",
+              "낙하자의 자세, 날씨, 지형 등 환경적 요인에 의해 충격흡수량이 차이가 있을 수 있으나",
+              "독일 기준 : 충격수량 (80 ~ 60 (g) 이내) 에 의거 '인명구조매트'와 '공기안전매트'가 적합한 장비임이 확인되었습니다.",
+              "공기안전매트는 약 [6/1000] 충격이 감소하였습니다."
+            ]
+          },
+          "productStyle": "B"
         },
         {
           "id": "Training-Air-Mattress-Fall-Prevention-Mat",
-          "nameKo": "훈련용 에어매트(추락방지매트)",
-          "nameEn": "Training Air Mattress (Fall Prevention Mat)",
-          "nameCn": "训练用气垫(防坠落垫)",
-          "isPublished": true,
-          "category": "b-type",
-          "descriptionKo": "공기주입을 통한 에어백을 형성하여, 지상에 설치하는 안전을 위한 보조장비로서 평시에는 고소 작업 또는 훈련 등의 상황에서 추락사고를 예방하고, 화재에 의한 피난 또는 응급상황 발생시에는 요구조자의 추락을 막아주는 안전장비입니다.",
-          "descriptionEn": "A safety mat designed for fire training and fall prevention, featuring premium materials and durability optimized for fire training sites.",
-          "descriptionCn": "为火灾训练和防坠落设计的安全垫，采用优质材料，耐用性强，专为消防训练场地优化。",
+          "nameKo": "훈련용 에어매트/낙상방지매트",
+          "nameEn": "Training Air Mattress/Fall Prevention Mat",
+          "nameCn": "训练气垫/防坠落垫",
+          "descriptionKo": "스포츠 훈련, 영화 촬영, 고소 작업 등 다양한 환경에서 안전을 확보하기 위한 특수 에어매트입니다. 사용 목적에 따라 맞춤형 설계 및 제작이 가능하여 최적의 안전 솔루션을 제공합니다.",
           "image": "/images/products/Training-Air-Mattress-Fall-Prevention-Mat/thumbnail.jpg",
-          "longDescription": "<p>훈련용 에어매트(추락방지매트)는 공기주입을 통한 에어백을 형성하여, 지상에 설치하는 안전을 위한 보조장비입니다. 평시에는 고소 작업 또는 훈련 등의 상황에서 추락사고를 예방하고, 화재에 의한 피난 또는 응급상황 발생시에는 요구조자의 추락을 막아주는 안전장비입니다.</p><p>협소공간 구조용으로 사용이 가능하며, 블록처럼 적재가 가능한 구조로 신속한 초동 대처에 유리합니다. 부피가 적어 출동차량에 많은 수량 적재가 가능하며, 무게가 가벼워 사고현장 이동에 유리합니다. 추가로 충격흡수력이 뛰어나 효과적인 안전 장비로 사용됩니다.</p>",
+          "longDescription": "<p>훈련용 에어매트 및 낙상방지매트는 스포츠 훈련, 영화 촬영, 고소 작업 등 다양한 환경에서 안전을 확보하기 위한 특수 에어매트입니다. 사용 목적에 따라 맞춤형 설계 및 제작이 가능하여 최적의 안전 솔루션을 제공합니다.</p><p>고객의 요구사항에 맞춰 사이즈, 형태, 공기압 등을 조절할 수 있으며, 고품질 소재를 사용하여 내구성과 안전성을 극대화했습니다.</p><p>전문적인 훈련 시설부터 산업 현장까지, 다양한 분야에서 활용될 수 있는 맞춤형 안전 솔루션입니다.</p>",
           "features": [
             {
               "title": "협소공간 구조용",
@@ -496,17 +612,12 @@
         },
         {
           "id": "Lifesaving-Mat",
-          "nameKo": "인명구조 매트",
+          "nameKo": "인명구조매트",
           "nameEn": "Lifesaving Mat",
           "nameCn": "救生垫",
-          "isPublished": true,
-          "category": "b-type",
-          "approvalNumber": "매트 17-1",
-          "descriptionKo": "비상 상황 발생 시 고층에서 낙하하는 인원을 안전하게 구조하기 위한 특수 제작된 생명 구조 장비입니다. 경량 소재와 신속한 설치 시간으로 인명 구조에 최적화되어 있습니다.",
-          "descriptionEn": "A specially designed life-saving equipment for safely rescuing people falling from high floors in emergency situations. Optimized for life-saving with lightweight materials and rapid installation time.",
-          "descriptionCn": "一种专门设计的救生设备，用于在紧急情况下安全地救援从高层坠落的人员。采用轻质材料和快速安装时间，优化了救生效果。",
+          "descriptionKo": "차량 및 선박의 전복, 추락 사고 시 안전하게 인명을 구조하기 위한 특수 에어매트입니다. 차량의 추가 전복을 방지하고 구조대원의 안전한 작업 공간을 확보하는 데 사용됩니다.",
           "image": "/images/products/Lifesaving-Mat/thumbnail.jpg",
-          "longDescription": "<p>인명구조 매트는 화재 및 긴급 상황에서 고층 건물에서 낙하하는 인원들을 안전하게 구조하기 위해 개발된 첨단 안전 장비입니다. 특수 설계된 완충 구조와 내구성 높은 소재로 제작되어 충격을 효과적으로 흡수하고 분산시킵니다.</p><p>신속하게 설치할 수 있는 설계로 긴급 상황에서 소중한 시간을 절약하며, 다양한 층수에 맞게 최적화된 여러 모델이 제공됩니다. 또한 인체공학적 구조로 낙하 충격을 최소화하고 부상 위험을 크게 줄입니다.</p><p>경량 소재를 사용하여 이동과 배치가 용이하며, 접이식 구조로 보관 및 운송이 편리합니다. 긴급 구조 상황에서 신뢰할 수 있는 안전 솔루션입니다.</p>",
+          "longDescription": "<p>인명구조매트는 차량 및 선박의 전복, 추락 사고 시 안전하게 인명을 구조하기 위한 특수 에어매트입니다. 차량의 추가 전복을 방지하고 구조대원의 안전한 작업 공간을 확보하는 데 사용됩니다.</p><p>빠른 설치와 높은 내구성을 바탕으로 긴급한 구조 상황에서 신속하고 효과적으로 대응할 수 있도록 설계되었습니다.</p><p>다양한 사고 현장에 적용할 수 있도록 맞춤형 제작이 가능하며, 구조 활동의 안전성과 효율성을 크게 향상시킵니다.</p>",
           "features": [
             {
               "title": "경량 소재 사용",
@@ -596,6 +707,64 @@
             "실린더의 충전압이 모자라거나, 실린더 미 비치시 소방대원용 공기호흡기와 호환이 가능 하도록 설계되어 있습니다.",
             "매트 설치시 탈출자가 매트 중앙에 낙하할 수 있도록 위치를 선정해 합니다."
           ],
+          "impactAbsorptionData": {
+            "title": "피난안전장비 충격흡수 비교 데이터",
+            "testInfo": {
+              "standard": "충격흡수 비교 데이터 (DIN-14151-3)",
+              "reference": "독일 구조용 에어매트 기준 (DIN-14151-3)",
+              "testSubject": "인명구조매트",
+              "testDate": "2017년 4월 19일",
+              "testDummy": "75kg (DIN 14151-3 기준)",
+              "testHeight": "16 (m) 시험법 (DIN 14151-3 기준)",
+              "note": "본 시험은 독일 DIN 14151-3의 기준에 의한 낙하 충격흡수량(충격가속도의 배수[g]로 표기) 단위 (g)",
+              "conversion": "0.01 (V)=1 (g) [사용센서 : SAE-J211준용 센서]"
+            },
+            "testResults": [
+              {
+                "name": "지면 충돌시",
+                "voltage": "33.620 (V)",
+                "gForce": "3,362 (g)",
+                "chartImage": "/images/products/Lifesaving-Mat/data/Lifesaving-Mat-test1.jpg"
+              },
+              {
+                "name": "인명구조매트 (규격 : Ø3.1X1.1m/300bar 실린더 사용)",
+                "voltage": "725 (mV)",
+                "gForce": "72.5 (g)",
+                "chartImage": "/images/products/Lifesaving-Mat/data/Lifesaving-Mat-test2.jpg"
+              }
+            ],
+            "comparisonChart": {
+              "title": "충격흡수량 비교 그래프",
+              "data": [
+                {
+                  "name": "지면",
+                  "percentage": 100,
+                  "color": "#EF4444"
+                },
+                {
+                  "name": "스펀지",
+                  "percentage": 32,
+                  "color": "#F87171"
+                },
+                {
+                  "name": "인명구조매트",
+                  "percentage": 2,
+                  "color": "#4ADE81"
+                },
+                {
+                  "name": "공기안전매트",
+                  "percentage": 0.6,
+                  "color": "#4ADE80"
+                }
+              ]
+            },
+            "analysis": [
+              "인명구조매트와 공기안전매트는 여러 종류의 안전장비 중 최저의 충격흡수량을 보이고 있습니다.",
+              "낙하자의 자세, 날씨, 지형 등 환경적 요인에 의해 충격흡수량이 차이가 있을 수 있으나",
+              "독일 기준 : 충격수량 (80 ~ 60 (g) 이내) 에 의거 '인명구조매트'와 '공기안전매트'가 적합한 장비임이 확인되었습니다.",
+              "'인명구조매트' 는 약 2/100 충격이 감소하였습니다."
+            ]
+          },
           "productStyle": "B"
         },
         {
@@ -603,7 +772,6 @@
           "nameKo": "에어슬라이드",
           "nameEn": "Air Slide",
           "category": "b-type",
-          "isPublished": true,
           "descriptionKo": "고압으로 압축된 에어를 사용하여, 순간적으로 에어가 주입되어 피난층에서 지상까지 이르는 미끄럼틀이 형성되는 '에어슬라이드'로 외부 전원 또는 동력원이 없어도 독립적으로 작동이 가능하며, 복잡한 사용방법의 숙지가 필요없이 미끄럼을 타듯 하강하여 탈출할 수 있는 장비입니다.",
           "image": "/images/products/Air-Slide/thumbnail.jpg",
           "additionalGalleryImages": [],
@@ -665,15 +833,13 @@
             "별도의 보조인원이 없어도, 1인이 설치 가능함.",
             "빠른 탈출시간으로 단시간에 많은 인원이 피난 가능함. (20명 / 1 min.)",
             "임산부, 노약자, 장애우도 제약없이 탈출 가능함."
-          ],
-          "productStyle": "A"
+          ]
         },
         {
           "id": "Solid-Aerosol-Extinguisher",
           "nameKo": "고체 에어로졸 소화기",
           "nameEn": "Solid Aerosol Extinguisher",
           "category": "b-type",
-          "isPublished": true,
           "descriptionKo": "SAFE-g는 세계 최초의 기계식 무화약 점화 장치를 이용한 고체 에어로졸 소화기로 무인 상태에서도 화재를 자동으로 감지하여 소화 시킴으로써, 화재의 확산을 막고, 화학반응을 통한 소화 원리로 화재 진압으로 인한 중요설비, 기록물, 문화재 등의 2차 훼손없는 보존을 위한 제품입니다.",
           "image": "/images/products/Solid-Aerosol-Extinguisher/thumbnail.jpg",
           "approvalNumber": "소공 13-1",
@@ -775,15 +941,13 @@
               "content": "발전소/전기실 : 변전, 변압실, 케이블실, 배전함, 전산실, 교환실, 관제실, 방송실등\n\n자동차/선박/항공 : 기관실, 보일러실, 화물실, 엔진실, 펌프실\n\n생산설비 : 케미컬, 가스생산, 공급시설, 반도체, 석유화학시설등\n\n문화재/보관소 : 박물관, 미술관, 문화재, 도서관, 액세스 자료 보관소\n\n군용장비 : 전투기, 헬리콥터, 전차, 장갑차, 자주포, 군함정등 중요시설"
             }
           ],
-          "showInProductList": true,
-          "productStyle": "A"
+          "showInProductList": true
         },
         {
           "id": "Outdoor-Human-Disinfector",
           "nameKo": "대인소독기 실외형",
           "nameEn": "Outdoor Human Disinfector",
           "nameCn": "户外人体消毒器",
-          "isPublished": true,
           "descriptionKo": "코로나19 바이러스 등 세균 감염 예방을 위한 실외형 대인소독기로, 인체에 해롭지 않은 친환경 소독액을 미세 안개 분사하여 바이러스를 제거합니다. 약제 소독 → 출입 → 자동 손소독의 3단계 보안 프로세스를 제공합니다.",
           "descriptionEn": "An outdoor human disinfector for preventing bacterial infections including COVID-19, which removes viruses by spraying eco-friendly disinfectant that is harmless to humans. It provides a 3-step security process: disinfection → entry → automatic hand sanitizing.",
           "descriptionCn": "一种户外人体消毒器，用于预防包括新冠病毒在内的细菌感染，通过喷洒对人体无害的环保消毒剂来去除病毒。它提供三步安全程序：消毒→进入→自动洗手消毒。",
@@ -871,8 +1035,7 @@
               "title": "적용현장",
               "content": "공장 출입구 : 대형 공장, 물류창고, 식품가공시설 등 다수 인원이 출입하는 산업시설\n\n상업시설 : 백화점, 대형마트, 쇼핑몰, 영화관 등 다중이용시설\n\n교육시설 : 학교, 유치원, 학원 등 교육관련 시설\n\n의료시설 : 병원, 요양원, 의원, 약국 등 보건의료시설\n\n공공시설 : 관공서, 도서관, 박물관 등 공공이용시설"
             }
-          ],
-          "productStyle": "A"
+          ]
         },
         {
           "id": "Indoor-Human-Disinfector",
@@ -880,7 +1043,6 @@
           "nameEn": "Indoor Human Disinfector",
           "nameCn": "室内型人体消毒器",
           "category": "b-type",
-          "isPublished": true,
           "descriptionKo": "실내간 이동시 고정 설치하여 사용하는 대인 소독 장비입니다. 출입구에 설치하여 인체와 물품의 소독을 효과적으로 수행합니다.",
           "descriptionEn": "Indoor disinfection equipment used for fixed installation between indoor spaces. Installed at entrances to effectively disinfect people and items.",
           "descriptionCn": "室内移动时固定安装使用的人体消毒设备。安装在入口处，有效消毒人体和物品。",
@@ -940,8 +1102,7 @@
             "설치 후 정기적인 유지보수 점검이 필요합니다.",
             "직접적인 분사가 인체에 닿지 않도록 주의해야 합니다."
           ],
-          "showInProductList": true,
-          "productStyle": "A"
+          "showInProductList": true
         },
         {
           "id": "Vehicle-Disinfector",
@@ -949,7 +1110,6 @@
           "nameEn": "Vehicle Disinfector",
           "nameCn": "车辆消毒器室外型",
           "category": "b-type",
-          "isPublished": true,
           "descriptionKo": "인체에 심각한 위협을 가하는 바이러스로 인해 부지불식간에 전염될 수 있는 환경에서 안전하게 이동 차량들을 소독하기 위하여, 상황에 맞는 소독액을 분사할 수 있는 차량소독소 장비입니다. 고압 미스트 방식으로 광범위하게 분사하여, 차량 전체를 효율적으로 소독을 할 수 있습니다.",
           "descriptionEn": "Vehicle disinfection equipment that sprays appropriate disinfectant in environments where viruses threatening human health can be unknowingly transmitted. Using high-pressure mist method, it effectively disinfects the entire vehicle by spraying widely.",
           "descriptionCn": "在病毒可能对人体造成严重威胁的环境中，为安全消毒移动车辆而设计的车辆消毒设备。采用高压雾化方式广泛喷洒，能够有效消毒整个车辆。",
@@ -1015,8 +1175,7 @@
               "content": "차량 소독이 필요한 실외 환경\n\n물류센터 출입구 : 입출고 차량 소독\n\n농장/축산시설 : 출입 차량 방역\n\n공항/항만 시설 : 수출입 물류 방역\n\n대형 공장 : 생산 물품 운송 차량 소독\n\n긴급 방역 상황 : 바이러스 확산 방지를 위한 이동형 방역"
             }
           ],
-          "showInProductList": true,
-          "productStyle": "A"
+          "showInProductList": true
         },
         {
           "id": "Portable-Water-Tank",
@@ -1024,7 +1183,6 @@
           "nameEn": "Portable Water Tank",
           "nameCn": "便携式水箱",
           "category": "b-type",
-          "isPublished": true,
           "descriptionKo": "긴급 용수, 산불 화재 진압, 재난 대비용 저장 장비로 사용되는 이동식 수조입니다. 세 가지 모델(3,000/5,000/10,000 리터)로 제공되며, 빠른 설치와 이동이 가능합니다.",
           "descriptionEn": "Portable water tank used for emergency water supply, forest fire fighting, and disaster preparedness. Available in three models (3,000/5,000/10,000 liters) with quick installation and mobility.",
           "descriptionCn": "用于紧急供水、森林火灾扑灭和灾害应急的便携式水箱。提供三种型号（3,000/5,000/10,000升），可快速安装和移动。",
@@ -1108,295 +1266,128 @@
             "겨울철 영하의 온도에서는 얼음 형성으로 인한 손상이 발생할 수 있으니 주의하십시오.",
             "정기적으로 손상 여부를 점검하여 누수를 예방하십시오."
           ],
-          "showInProductList": true,
-          "productStyle": "A"
+          "showInProductList": true
         },
         {
-          "id": "Fan-Type-Air-Safety-Mat",
-          "name": "팬형 공기안전매트",
-          "nameKo": "팬형 공기안전매트",
-          "nameEn": "Fan Type Air Safety Mat",
-          "categoryId": "b-type",
+          "id": "Vertical-Rescue-Equipment",
+          "nameKo": "수직강하식 구조대",
+          "nameEn": "Vertical Rescue Equipment",
           "category": "b-type",
-          "description": "팬형 공기안전매트는 전기 모터로 구동되는 송풍기를 통해 에어매트에 공기를 주입하여 사용하는 추락 안전장비입니다. 고층 건물 화재 및 재난 현장에서 효과적으로 활용됩니다.",
-          "descriptionKo": "팬형 공기안전매트는 전기 모터로 구동되는 송풍기를 통해 에어매트에 공기를 주입하여 사용하는 추락 안전장비입니다. 고층 건물 화재 및 재난 현장에서 효과적으로 활용됩니다.",
-          "descriptionEn": "An innovative safety mat that uses fans to inject air. It can be quickly deployed in emergency situations due to its lightweight design and rapid installation time.",
-          "productStyle": "B",
-          "image": "/images/products/Fan-Type-Air-Safety-Mat/thumbnail.jpg",
-          "gallery_images_data": [
-            {
-              "id": "gallery_1",
-              "src": "/images/products/Fan-Type-Air-Safety-Mat/thumbnail.jpg",
-              "alt": "팬형 공기안전매트 이미지 1",
-              "type": "image",
-              "description": ""
-            },
-            {
-              "id": "gallery_2",
-              "src": "/images/products/Fan-Type-Air-Safety-Mat/Fan-Type-Air-Safety-Mat.png",
-              "alt": "팬형 공기안전매트 이미지 2",
-              "type": "image",
-              "description": ""
-            }
-          ],
+          "descriptionKo": "화재시 또는 재난상황 발생시는 이동설치가 가능한 구조로 가볍고 신속한 설치가 가능한 구조의 인명구조 장비입니다.",
+          "image": "/images/products/Vertical-Rescue-Equipment/thumbnail.jpg",
           "features": [
             {
-              "title": "안정적인 전력 사용",
-              "description": "전기 모터 송풍기로 지속적인 공기 공급이 가능하여 장시간 사용에 유리",
-              "icon": "Info"
+              "title": "이동 설치 가능한 구조",
+              "description": "화재나 재난 상황에 따라 필요한 위치로 이동하여 설치할 수 있는 유연한 구조로 설계"
             },
             {
-              "title": "대형 크기 가능",
-              "description": "다양한 규격으로 제작 가능하여 넓은 공간 커버 가능",
-              "icon": "Info"
+              "title": "경량 디자인",
+              "description": "가볍게 제작되어 빠른 운반과 설치가 가능한 장비"
             },
             {
-              "title": "간편한 유지보수",
-              "description": "전기 모터 시스템으로 유지보수가 용이하고 반복 사용이 가능",
-              "icon": "Info"
+              "title": "신속한 설치",
+              "description": "비상 상황 시 신속하게 설치하여 즉시 구조 작업 진행 가능"
             },
             {
-              "title": "견고한 내구성",
-              "description": "고강도 폴리에스테르 원단으로 제작되어 장기간 사용이 가능",
-              "icon": "Info"
-            },
-            {
-              "title": "비상 백업 시스템",
-              "description": "정전 시 비상 전원 연결이 가능한 시스템 장착",
-              "icon": "Info"
+              "title": "공식 인증",
+              "description": "한국소방산업기술원 형식승인 (형식승인번호: 구23-3)"
             }
           ],
-          "documents": [
+          "specTable": [
             {
-              "id": "fan-type-air-safety-mat-manual",
-              "name": "사용자 매뉴얼",
-              "nameKo": "사용자 매뉴얼",
-              "nameEn": "User Manual",
-              "url": "/documents/b-type/fan-type-air-safety-mat-manual.pdf",
-              "type": "manual",
-              "path": "/documents/b-type/fan-type-air-safety-mat-manual.pdf"
+              "title": "구분",
+              "value": "제원"
             },
             {
-              "id": "fan-type-air-safety-mat-certification",
-              "name": "제품 인증서",
-              "nameKo": "제품 인증서",
-              "nameEn": "Product Certification",
-              "url": "/documents/b-type/fan-type-air-safety-mat-certification.pdf",
-              "type": "certification",
-              "path": "/documents/b-type/fan-type-air-safety-mat-certification.pdf"
+              "title": "보관규격 가로×세로×높이(mm)",
+              "value": "880 X 500 X 960"
             },
             {
-              "id": "fan-type-air-safety-mat-maintenance",
-              "name": "유지보수 안내서",
-              "nameKo": "유지보수 안내서",
-              "nameEn": "Maintenance Guide",
-              "url": "/documents/b-type/fan-type-air-safety-mat-maintenance.pdf",
-              "type": "guide",
-              "path": "/documents/b-type/fan-type-air-safety-mat-maintenance.pdf"
+              "title": "보관규격 가로×세로×높이(mm)",
+              "value": "880 × 450 × 1,300"
             },
             {
-              "id": "fan-type-air-safety-mat-datasheet",
-              "name": "기술 사양서",
-              "nameKo": "기술 사양서",
-              "nameEn": "Technical Datasheet",
-              "url": "/documents/b-type/fan-type-air-safety-mat-datasheet.pdf",
-              "type": "datasheet",
-              "path": "/documents/b-type/fan-type-air-safety-mat-datasheet.pdf"
+              "title": "활강포 길이 (m)",
+              "value": "4.5 ~ 70 m"
+            },
+            {
+              "title": "활강시간 (sec.)",
+              "value": "3 ~ 4 m/sec."
+            },
+            {
+              "title": "활강간격 (sec.)",
+              "value": "4 ~ 5 sec."
+            },
+            {
+              "title": "관련검사",
+              "value": "한국소방산업기술원 제품승인품"
             }
           ],
-          "modelName": "5F 형, 10F 형, 15F 형, 20F 형",
-          "modelNumber": "공매 23-1",
-          "modelImage": "/images/products/Fan-Type-Air-Safety-Mat/Fan-Type-Air-Safety-Mat.png",
-          "modelFile": "/models/products/Fan-Type-Air-Safety-Mat/Fan-Type-Air-Safety-Mat.glb",
+          "cautions": [
+            "반드시 1회에 1인이 낙하해야 합니다.",
+            "다음 탈출자는 전 탈출자가 착지한 후, 탈출하도록 합니다 (권고)."
+          ],
+          "name": "",
+          "categoryId": "b-type",
+          "description": "",
+          "descriptionEn": "",
+          "gallery_images_data": [],
+          "documents": [],
+          "detailedSpecTable": [],
+          "impactAbsorptionData": {
+            "title": "",
+            "subtitle": "",
+            "testInfo": {
+              "standard": "",
+              "testDate": "",
+              "testSubject": "",
+              "testDummy": "",
+              "testHeight": "",
+              "note": "",
+              "reference": "",
+              "conversion": ""
+            },
+            "testResults": [],
+            "comparisonChart": {
+              "title": "",
+              "data": [],
+              "comparisonImages": {
+                "groundImpact": "",
+                "airMatImpact": ""
+              }
+            },
+            "analysis": []
+          },
+          "modelName": "",
+          "modelNumber": "",
+          "modelImage": "",
+          "modelFile": "",
           "modelStyle": "realistic",
-          "series": "팬형 공기안전매트",
+          "series": "",
           "showInProductList": true,
           "isSummaryPage": false,
-          "pageBackgroundImage": "",
-          "pageHeroTitle": "팬형 공기안전매트",
+          "pageHeroTitle": "",
           "pageHeroSubtitles": [],
-          "specifications": {
-            "모델": "5F 형, 10F 형, 15F 형, 20F 형",
-            "규격(m)": "3.5×3.5×1.5 / 4.5×4.5×2.0 / 5.5×5.5×2.5 / 6.5×6.5×3.0",
-            "제품승인번호": "공매 23-1",
-            "내충격성": "KFI인정기준(공기안전매트의 성능인정 및 제품검사 기술기준) 적합",
-            "송풍기": "220V, 1.5HP ~ 2.5HP (모델별 상이)",
-            "팽창시간": "약 60~120초 (모델별 상이)",
-            "충진방식": "전기 모터 팬 방식",
-            "적용 높이": "5~20m 이하",
-            "재질": "내구성 폴리에스테르 원단 (1000데니어)",
-            "무게": "35kg ~ 90kg (모델별 상이)",
-            "사용 환경": "-20℃ ~ 70℃"
-          },
-          "approvalNumber": "공매 23-1",
-          "applicableHeight": "5~20m 이하",
+          "seoStructuredData": "{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"Product\",\n  \"name\": \"수직강하식 구조대\",\n  \"description\": \"화재시 또는 재난상황 발생시는 이동설치가 가능한 구조로 가볍고 신속한 설치가 가능한 구조의 인명구조 장비입니다.\",\n  \"image\": \"/images/products/Vertical-Rescue-Equipment/thumbnail.jpg\",\n  \"brand\": {\n    \"@type\": \"Brand\",\n    \"name\": \"서한F&C\"\n  },\n  \"manufacturer\": {\n    \"@type\": \"Organization\",\n    \"name\": \"서한F&C\",\n    \"url\": \"https://seohanfc.com\"\n  },\n  \"category\": \"b-type\",\n  \"productID\": \"Vertical-Rescue-Equipment\",\n  \"sku\": \"Vertical-Rescue-Equipment\",\n  \"offers\": {\n    \"@type\": \"Offer\",\n    \"availability\": \"https://schema.org/InStock\",\n    \"seller\": {\n      \"@type\": \"Organization\",\n      \"name\": \"서한F&C\"\n    }\n  },\n  \"additionalProperty\": [\n    {\n      \"@type\": \"PropertyValue\",\n      \"name\": \"이동 설치 가능한 구조\",\n      \"value\": \"화재나 재난 상황에 따라 필요한 위치로 이동하여 설치할 수 있는 유연한 구조로 설계\"\n    },\n    {\n      \"@type\": \"PropertyValue\",\n      \"name\": \"경량 디자인\",\n      \"value\": \"가볍게 제작되어 빠른 운반과 설치가 가능한 장비\"\n    },\n    {\n      \"@type\": \"PropertyValue\",\n      \"name\": \"신속한 설치\",\n      \"value\": \"비상 상황 시 신속하게 설치하여 즉시 구조 작업 진행 가능\"\n    },\n    {\n      \"@type\": \"PropertyValue\",\n      \"name\": \"공식 인증\",\n      \"value\": \"한국소방산업기술원 형식승인 (형식승인번호: 구23-3)\"\n    }\n  ]\n}",
+          "specifications": {},
+          "approvalNumber": "",
+          "applicableHeight": "",
           "model3D": {
-            "modelName": "5F 형, 10F 형, 15F 형, 20F 형",
-            "modelNumber": "공매 23-1",
-            "series": "팬형 공기안전매트",
-            "modelImage": "/images/products/Fan-Type-Air-Safety-Mat/Fan-Type-Air-Safety-Mat.png",
-            "approvalNumber": "공매 23-1",
-            "applicableHeight": "5~20m 이하",
+            "modelName": "",
+            "modelNumber": "",
+            "series": "",
+            "modelImage": "",
+            "approvalNumber": "",
+            "applicableHeight": "",
             "additionalOptions": "",
-            "glbFile": "/models/products/Fan-Type-Air-Safety-Mat/Fan-Type-Air-Safety-Mat.glb",
+            "glbFile": "",
             "modelStyle": "realistic"
           },
-          "technicalData": [
-            {
-              "key": "모델",
-              "value": "5F 형, 10F 형, 15F 형, 20F 형"
-            },
-            {
-              "key": "규격(m)",
-              "value": "3.5×3.5×1.5 / 4.5×4.5×2.0 / 5.5×5.5×2.5 / 6.5×6.5×3.0"
-            },
-            {
-              "key": "제품승인번호",
-              "value": "공매 23-1"
-            },
-            {
-              "key": "내충격성",
-              "value": "KFI인정기준(공기안전매트의 성능인정 및 제품검사 기술기준) 적합"
-            },
-            {
-              "key": "송풍기",
-              "value": "220V, 1.5HP ~ 2.5HP (모델별 상이)"
-            },
-            {
-              "key": "팽창시간",
-              "value": "약 60~120초 (모델별 상이)"
-            },
-            {
-              "key": "충진방식",
-              "value": "전기 모터 팬 방식"
-            },
-            {
-              "key": "적용 높이",
-              "value": "5~20m 이하"
-            },
-            {
-              "key": "재질",
-              "value": "내구성 폴리에스테르 원단 (1000데니어)"
-            },
-            {
-              "key": "무게",
-              "value": "35kg ~ 90kg (모델별 상이)"
-            },
-            {
-              "key": "사용 환경",
-              "value": "-20℃ ~ 70℃"
-            }
-          ],
-          "certifications": [
-            {
-              "title": "제품 인증",
-              "description": "한국소방산업기술원 제품 승인 (공매 23-1)"
-            },
-            {
-              "title": "품질 보증",
-              "description": "2년 제한 보증"
-            },
-            {
-              "title": "사용 환경",
-              "description": "-20℃ ~ 70℃ 실내외 사용 가능"
-            },
-            {
-              "title": "전력 요구사항",
-              "description": "AC 220V, 60Hz"
-            },
-            {
-              "title": "KFI 인증",
-              "description": "한국소방산업기술원 공식 인증 제품"
-            }
-          ],
+          "technicalData": [],
+          "certifications": [],
           "isPublished": true,
-          "otherOptions": "",
-          "tags": [],
-          "cautions": [
-            "제품 설치 시 반드시 전문 기술자의 지도를 받으시기 바랍니다.",
-            "사용 전 제품의 손상 여부를 반드시 점검해주세요.",
-            "정기적인 유지보수를 통해 제품의 안전성을 확보해주세요.",
-            "전원 공급이 안정적인지 확인해주세요.",
-            "제품 사용 중 이상이 발견되면 즉시 사용을 중단해주세요."
-          ]
-        },
-        {
-          "id": "test-b-type-product",
-          "nameKo": "B?? ??? ??",
-          "nameEn": "B Type Test Product",
-          "nameCn": "B?????",
-          "categoryId": "b-type",
-          "price": 200000,
-          "isPublished": true,
-          "productStyle": "B",
-          "specifications": {
-            "material": "Steel",
-            "weight": "3kg"
-          },
-          "features": [
-            {
-              "title": "B?? ?? 1",
-              "description": "??? ?????? ???? ??"
-            },
-            {
-              "title": "B?? ?? 2",
-              "description": "???? ??? ?? ?????"
-            }
-          ],
-          "applications": [
-            "B?? ????"
-          ],
-          "certifications": [
-            "ISO",
-            "KS"
-          ],
-          "images": [],
-          "documents": [
-            {
-              "id": "b-type-manual",
-              "nameKo": "B?? ?????",
-              "nameEn": "B Type Manual",
-              "path": "/documents/b-type-manual.pdf",
-              "type": "pdf",
-              "fileSize": "3.0MB"
-            }
-          ],
-          "gallery_images_data": [
-            {
-              "id": "b-gallery-1",
-              "src": "/images/products/placeholder-product.png",
-              "alt": "B?? ??? ??? 1",
-              "type": "image"
-            },
-            {
-              "id": "b-gallery-2",
-              "src": "/images/placeholder-image.png",
-              "alt": "B?? ??? ??? 2",
-              "type": "image"
-            },
-            {
-              "id": "b-gallery-3",
-              "src": "/images/products/placeholder-product.png",
-              "alt": "B?? ??? ??? 3",
-              "type": "image"
-            }
-          ],
-          "videos": [
-            {
-              "id": "b-video-1",
-              "src": "/videos/promo/airmat_demo.mp4",
-              "alt": "B?? ?? ??",
-              "type": "video"
-            }
-          ],
-          "relatedProducts": [],
-          "seoTitle": "B?? ??? ??",
-          "seoDescription": "B?? ????? ????? ?????",
-          "seoKeywords": [
-            "B??",
-            "???"
-          ],
-          "category": "b-type"
+          "videos": [],
+          "certificationsAndFeatures": []
         }
       ]
     },
@@ -1415,7 +1406,6 @@
           "nameKo": "완강기",
           "nameEn": "Descending Life Line",
           "category": "descenders",
-          "isPublished": true,
           "descriptionKo": "사람이 화재시 탈출할 수 있는 장비로 완강기는 사용자의 체중에 따라 자동으로 하강 속도가 7.5초에 1m씩 천천히 내려갈 수 있게 하는 특수한 완강기로, 외부 전원 장치 없이, 단순한 작동으로 신속하게 지상이나 안전지대로 피난할 수 있는 제품 입니다.",
           "image": "/images/products/Descending-Life-Line/thumbnail.jpg",
           "additionalGalleryImages": [],
@@ -1491,8 +1481,7 @@
               "path": "/documents/인명구조매트_품질인증서.pdf",
               "type": "pdf"
             }
-          ],
-          "productStyle": "A"
+          ]
         },
         {
           "id": "Handy-Descending-Life-Line",
@@ -1500,7 +1489,6 @@
           "nameEn": "Handy Descending Life Line",
           "nameCn": "便携式救生缓降器",
           "category": "descenders",
-          "isPublished": true,
           "descriptionKo": "간편한 1회용 완강기로 긴급 상황 시 빠르게 탈출하기 위한 직관적인 사용법과 컴팩트한 디자인의 피난 기구입니다.",
           "image": "/images/products/Handy-Descending-Life-Line/thumbnail.jpg",
           "additionalGalleryImages": [],
@@ -1566,20 +1554,17 @@
               "path": "/documents/products/Handy-Descending-Life-Line/manual.pdf",
               "type": "pdf"
             }
-          ],
-          "productStyle": "A"
+          ]
         },
         {
           "id": "descender-hanger-summary",
           "nameKo": "완강기 지지대",
           "nameEn": "Descender Hangers",
           "category": "descender-hangers",
-          "isPublished": true,
           "descriptionKo": "설치 환경과 필요에 맞는 다양한 완강기 지지대를 확인하세요.",
           "image": "/images/category/descender-supports-category.jpg",
           "isSummaryPage": true,
-          "showInProductList": true,
-          "productStyle": "A"
+          "showInProductList": true
         }
       ]
     },
@@ -1596,7 +1581,6 @@
           "nameKo": "1절형 지지대",
           "category": "descender-hangers",
           "showInProductList": false,
-          "isPublished": true,
           "descriptionKo": "형식승인번호 : 지지13-1-1 (1절형, 내벽부착형)",
           "image": "/images/products/G-prodigious_13-1-1/main.jpg",
           "specTable": [
@@ -1629,15 +1613,13 @@
               "value": "한국소방산업기술원 형식승인품"
             }
           ],
-          "gallery_images_data": [],
-          "productStyle": "A"
+          "gallery_images_data": []
         },
         {
           "id": "G-prodigious_13-2-1",
           "nameKo": "2절형 지지대",
           "category": "descender-hangers",
           "showInProductList": false,
-          "isPublished": true,
           "descriptionKo": "형식승인번호 : 지지13-2-1 (2절형, 내벽부착형)",
           "image": "/images/products/G-prodigious_13-2-1/main.jpg",
           "specTable": [
@@ -1670,8 +1652,7 @@
               "value": "한국소방산업기술원 형식승인품"
             }
           ],
-          "gallery_images_data": [],
-          "productStyle": "A"
+          "gallery_images_data": []
         },
         {
           "id": "G-prodigious_13-2-2",
@@ -1710,9 +1691,7 @@
               "value": "한국소방산업기술원 형식승인품"
             }
           ],
-          "gallery_images_data": [],
-          "isPublished": true,
-          "productStyle": "A"
+          "gallery_images_data": []
         },
         {
           "id": "G-prodigious_13-5",
@@ -1751,9 +1730,7 @@
               "value": "한국소방산업기술원 형식승인품"
             }
           ],
-          "gallery_images_data": [],
-          "isPublished": true,
-          "productStyle": "A"
+          "gallery_images_data": []
         },
         {
           "id": "G-prodigious_16-1",
@@ -1792,9 +1769,7 @@
               "value": "한국소방산업기술원 형식승인품"
             }
           ],
-          "gallery_images_data": [],
-          "isPublished": true,
-          "productStyle": "A"
+          "gallery_images_data": []
         },
         {
           "id": "G-prodigious_20-2",
@@ -1833,9 +1808,7 @@
               "value": "한국소방산업기술원 형식승인품"
             }
           ],
-          "gallery_images_data": [],
-          "isPublished": true,
-          "productStyle": "A"
+          "gallery_images_data": []
         },
         {
           "id": "G-prodigious_15-15",
@@ -1874,9 +1847,7 @@
               "value": "한국소방산업기술원 형식승인품"
             }
           ],
-          "gallery_images_data": [],
-          "isPublished": true,
-          "productStyle": "A"
+          "gallery_images_data": []
         },
         {
           "id": "G-prodigious_15-15-1",
@@ -1915,9 +1886,7 @@
               "value": "한국소방산업기술원 형식승인품"
             }
           ],
-          "gallery_images_data": [],
-          "isPublished": true,
-          "productStyle": "A"
+          "gallery_images_data": []
         },
         {
           "id": "G-prodigious_13-11",
@@ -1956,9 +1925,7 @@
               "value": "한국소방산업기술원 형식승인품"
             }
           ],
-          "gallery_images_data": [],
-          "isPublished": true,
-          "productStyle": "A"
+          "gallery_images_data": []
         },
         {
           "id": "G-prodigious_17-13",
@@ -1997,9 +1964,7 @@
               "value": "한국소방산업기술원 형식승인품"
             }
           ],
-          "gallery_images_data": [],
-          "isPublished": true,
-          "productStyle": "A"
+          "gallery_images_data": []
         },
         {
           "id": "G-prodigious_18-3",
@@ -2038,9 +2003,7 @@
               "value": "한국소방산업기술원 형식승인품"
             }
           ],
-          "gallery_images_data": [],
-          "isPublished": true,
-          "productStyle": "A"
+          "gallery_images_data": []
         },
         {
           "id": "G-prodigious_Handy-Hanger",
@@ -2088,9 +2051,7 @@
             }
           ],
           "gallery_images_data": [],
-          "documents": [],
-          "isPublished": true,
-          "productStyle": "A"
+          "documents": []
         }
       ]
     },
@@ -2184,111 +2145,29 @@
               "path": "/documents/products/descender-footrest-and-case/overall_manual.pdf",
               "type": "pdf"
             }
-          ],
-          "isPublished": true,
-          "productStyle": "A"
+          ]
         }
       ]
     },
     {
-      "id": "TEST01",
-      "nameKo": "TEST01",
-      "products": []
-    },
-    {
-      "id": "TEST02",
-      "nameKo": "TEST02",
-      "products": []
-    },
-    {
-      "id": "TEST05",
-      "nameKo": "TEST05",
-      "products": []
-    },
-    {
-      "id": "TEST06",
-      "nameKo": "기본 카테고리",
-      "nameEn": "Default Category",
-      "nameCn": "默认类别",
-      "products": []
-    },
-    {
-      "id": "TEST09",
+      "id": "fire-safety",
       "nameKo": "기본 카테고리",
       "nameEn": "Default Category",
       "nameCn": "默认类别",
       "products": [
         {
-          "id": "TEST09",
-          "name": "",
+          "id": "TEST01",
           "nameKo": "테스트제품",
-          "nameEn": "Seohan F&C Co., Ltd.",
-          "categoryId": "TEST09",
-          "description": "",
-          "descriptionKo": "테스트",
-          "descriptionEn": "",
+          "categoryId": "fire-safety",
           "productStyle": "A",
-          "image": "/uploads/temp/thumbnails/1748308206375-5694ce3b.jpg",
-          "gallery_images_data": [
-            {
-              "id": "fb223dc0-038e-4178-85ff-c3b3a36a86e1",
-              "src": "/uploads/temp/gallery/1748308267361-d091f2b4.jpg",
-              "alt": "19",
-              "type": "image",
-              "description": ""
-            }
-          ],
-          "features": [
-            {
-              "title": "ㅇㅇ",
-              "description": "테스트"
-            }
-          ],
-          "documents": [
-            {
-              "id": "fc004aaa-950d-4591-b90a-3c59f2c4ce89",
-              "name": "서한에프앤씨 웹사이트 이미지 스펙 가이드.pdf",
-              "type": "pdf",
-              "path": "/uploads/temp/documents/1748308249724-6f510253.pdf",
-              "nameKo": "서한에프앤씨 웹사이트 이미지 스펙 가이드.pdf",
-              "url": "/uploads/temp/documents/1748308249724-6f510253.pdf"
-            }
-          ],
-          "tags": [
-            "테스트"
-          ],
-          "relatedProductIds": [],
-          "showInProductList": true,
-          "isSummaryPage": false,
-          "pageBackgroundImage": "/uploads/temp/background/1748308213346-f96be016.jpg",
-          "pageHeroTitle": "",
-          "pageHeroSubtitles": [],
-          "seoStructuredData": "{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"Product\",\n  \"name\": \"테스트제품\",\n  \"description\": \"테스트\",\n  \"image\": [\n    \"/uploads/temp/thumbnails/1748308206375-5694ce3b.jpg\",\n    \"/uploads/temp/gallery/1748308267361-d091f2b4.jpg\"\n  ],\n  \"brand\": {\n    \"@type\": \"Brand\",\n    \"name\": \"서한F&C\"\n  },\n  \"manufacturer\": {\n    \"@type\": \"Organization\",\n    \"name\": \"서한F&C\",\n    \"url\": \"https://seohanfc.com\"\n  },\n  \"category\": \"TEST09\",\n  \"productID\": \"TEST09\",\n  \"sku\": \"TEST09\",\n  \"offers\": {\n    \"@type\": \"Offer\",\n    \"availability\": \"https://schema.org/InStock\",\n    \"seller\": {\n      \"@type\": \"Organization\",\n      \"name\": \"서한F&C\"\n    }\n  },\n  \"additionalProperty\": [\n    {\n      \"@type\": \"PropertyValue\",\n      \"name\": \"ㅇㅇ\",\n      \"value\": \"테스트\"\n    }\n  ],\n  \"hasProductReturnPolicy\": {\n    \"@type\": \"ProductReturnPolicy\",\n    \"hasWarrantyPromise\": {\n      \"@type\": \"WarrantyPromise\",\n      \"durationOfWarranty\": {\n        \"@type\": \"QuantitativeValue\",\n        \"value\": \"1\",\n        \"unitCode\": \"ANN\"\n      }\n    }\n  },\n  \"keywords\": \"테스트\"\n}",
-          "specifications": {},
-          "model3D": {
-            "modelName": "",
-            "modelNumber": "",
-            "series": "",
-            "modelImage": "",
-            "approvalNumber": "",
-            "applicableHeight": "",
-            "additionalOptions": "",
-            "glbFile": "",
-            "modelStyle": "realistic"
-          },
-          "technicalData": [],
-          "certifications": [],
+          "descriptionKo": "테스트 제목요약",
+          "longDescription": "<!DOCTYPE html>\n<html lang=\"ko\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>스마트워치 Pro - 제품 상세</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n\n        body {\n            font-family: 'Arial', sans-serif;\n            line-height: 1.6;\n            color: #333;\n            background-color: #f8f9fa;\n        }\n\n        .container {\n            max-width: 1200px;\n            margin: 0 auto;\n            padding: 20px;\n        }\n\n        .header {\n            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);\n            color: white;\n            padding: 2rem 0;\n            text-align: center;\n            margin-bottom: 2rem;\n            border-radius: 10px;\n        }\n\n        .product-section {\n            display: grid;\n            grid-template-columns: 1fr 1fr;\n            gap: 3rem;\n            background: white;\n            padding: 2rem;\n            border-radius: 15px;\n            box-shadow: 0 10px 30px rgba(0,0,0,0.1);\n            margin-bottom: 2rem;\n        }\n\n        .product-image {\n            text-align: center;\n        }\n\n        .product-image img {\n            width: 100%;\n            max-width: 400px;\n            height: 400px;\n            object-fit: cover;\n            border-radius: 15px;\n            background: linear-gradient(45deg, #e0e0e0, #f5f5f5);\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            font-size: 1.2rem;\n            color: #666;\n        }\n\n        .product-placeholder {\n            width: 100%;\n            height: 400px;\n            background: linear-gradient(45deg, #e0e0e0, #f5f5f5);\n            border-radius: 15px;\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            font-size: 1.2rem;\n            color: #666;\n            border: 2px dashed #ccc;\n        }\n\n        .product-info h1 {\n            font-size: 2.5rem;\n            margin-bottom: 1rem;\n            color: #2c3e50;\n        }\n\n        .price {\n            font-size: 2rem;\n            color: #e74c3c;\n            font-weight: bold;\n            margin-bottom: 1rem;\n        }\n\n        .rating {\n            display: flex;\n            align-items: center;\n            margin-bottom: 1.5rem;\n        }\n\n        .stars {\n            color: #f39c12;\n            font-size: 1.2rem;\n            margin-right: 10px;\n        }\n\n        .description {\n            font-size: 1.1rem;\n            line-height: 1.8;\n            margin-bottom: 2rem;\n            color: #555;\n        }\n\n        .features {\n            background: #f8f9fa;\n            padding: 1.5rem;\n            border-radius: 10px;\n            margin-bottom: 2rem;\n        }\n\n        .features h3 {\n            margin-bottom: 1rem;\n            color: #2c3e50;\n        }\n\n        .features ul {\n            list-style: none;\n        }\n\n        .features li {\n            padding: 0.5rem 0;\n            border-bottom: 1px solid #eee;\n        }\n\n        .features li:before {\n            content: \"✓\";\n            color: #27ae60;\n            font-weight: bold;\n            margin-right: 10px;\n        }\n\n        .buttons {\n            display: flex;\n            gap: 1rem;\n        }\n\n        .btn {\n            padding: 12px 30px;\n            border: none;\n            border-radius: 25px;\n            cursor: pointer;\n            font-size: 1.1rem;\n            font-weight: bold;\n            text-decoration: none;\n            display: inline-block;\n            text-align: center;\n            transition: all 0.3s ease;\n        }\n\n        .btn-primary {\n            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);\n            color: white;\n        }\n\n        .btn-primary:hover {\n            transform: translateY(-2px);\n            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);\n        }\n\n        .btn-secondary {\n            background: #ecf0f1;\n            color: #2c3e50;\n            border: 2px solid #bdc3c7;\n        }\n\n        .btn-secondary:hover {\n            background: #d5dbdb;\n            transform: translateY(-2px);\n        }\n\n        .tabs {\n            background: white;\n            border-radius: 15px;\n            box-shadow: 0 10px 30px rgba(0,0,0,0.1);\n            overflow: hidden;\n        }\n\n        .tab-buttons {\n            display: flex;\n            background: #f8f9fa;\n        }\n\n        .tab-button {\n            flex: 1;\n            padding: 1rem;\n            border: none;\n            background: transparent;\n            cursor: pointer;\n            font-size: 1.1rem;\n            font-weight: bold;\n            color: #666;\n            transition: all 0.3s ease;\n        }\n\n        .tab-button.active {\n            background: white;\n            color: #667eea;\n            border-bottom: 3px solid #667eea;\n        }\n\n        .tab-content {\n            padding: 2rem;\n            display: none;\n        }\n\n        .tab-content.active {\n            display: block;\n        }\n\n        .spec-table {\n            width: 100%;\n            border-collapse: collapse;\n        }\n\n        .spec-table th,\n        .spec-table td {\n            padding: 12px;\n            text-align: left;\n            border-bottom: 1px solid #eee;\n        }\n\n        .spec-table th {\n            background: #f8f9fa;\n            font-weight: bold;\n            color: #2c3e50;\n        }\n\n        @media (max-width: 768px) {\n            .product-section {\n                grid-template-columns: 1fr;\n                gap: 2rem;\n            }\n            \n            .buttons {\n                flex-direction: column;\n            }\n            \n            .tab-buttons {\n                flex-direction: column;\n            }\n        }\n    </style>\n</head>\n<body>\n    <div class=\"container\">\n        <header class=\"header\">\n            <h1>스마트워치 Pro</h1>\n            <p>차세대 웨어러블 기술의 혁신</p>\n        </header>\n\n        <div class=\"product-section\">\n            <div class=\"product-image\">\n                <div class=\"product-placeholder\">\n                    제품 이미지\n                </div>\n            </div>\n            \n            <div class=\"product-info\">\n                <h1>스마트워치 Pro</h1>\n                <div class=\"price\">₩299,000</div>\n                <div class=\"rating\">\n                    <div class=\"stars\">★★★★★</div>\n                    <span>(4.8/5.0) 리뷰 1,234개</span>\n                </div>\n                \n                <div class=\"description\">\n                    최신 기술을 집약한 프리미엄 스마트워치입니다. \n                    건강 모니터링, 피트니스 추적, 스마트 알림 등 \n                    다양한 기능을 하나의 세련된 디자인에 담았습니다.\n                </div>\n\n                <div class=\"features\">\n                    <h3>주요 특징</h3>\n                    <ul>\n                        <li>심박수 및 혈압 실시간 모니터링</li>\n                        <li>GPS 내장으로 정확한 운동 추적</li>\n                        <li>방수 기능 (IP68 등급)</li>\n                        <li>최대 7일 배터리 수명</li>\n                        <li>다양한 운동 모드 지원</li>\n                        <li>스마트폰 연동 알림 기능</li>\n                    </ul>\n                </div>\n\n                <div class=\"buttons\">\n                    <button class=\"btn btn-primary\" onclick=\"addToCart()\">장바구니 담기</button>\n                    <button class=\"btn btn-secondary\" onclick=\"addToWishlist()\">찜하기</button>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"tabs\">\n            <div class=\"tab-buttons\">\n                <button class=\"tab-button active\" onclick=\"openTab(event, 'details')\">상세정보</button>\n                <button class=\"tab-button\" onclick=\"openTab(event, 'specs')\">제품사양</button>\n                <button class=\"tab-button\" onclick=\"openTab(event, 'reviews')\">리뷰</button>\n            </div>\n\n            <div id=\"details\" class=\"tab-content active\">\n                <h3>제품 상세 정보</h3>\n                <p>스마트워치 Pro는 현대적인 라이프스타일에 맞춘 혁신적인 웨어러블 디바이스입니다. \n                고급스러운 알루미늄 소재와 사파이어 글래스를 사용하여 내구성과 미적 완성도를 동시에 추구했습니다.</p>\n                \n                <p>건강 관리 측면에서는 24시간 심박수 모니터링, 수면 패턴 분석, 스트레스 레벨 측정 등 \n                포괄적인 건강 데이터를 제공합니다. 또한 50가지 이상의 운동 모드를 지원하여 \n                다양한 피트니스 활동을 정확하게 추적할 수 있습니다.</p>\n            </div>\n\n            <div id=\"specs\" class=\"tab-content\">\n                <h3>기술 사양</h3>\n                <table class=\"spec-table\">\n                    <tr>\n                        <th>디스플레이</th>\n                        <td>1.4인치 AMOLED, 454 x 454 해상도</td>\n                    </tr>\n                    <tr>\n                        <th>프로세서</th>\n                        <td>듀얼코어 1.2GHz</td>\n                    </tr>\n                    <tr>\n                        <th>메모리</th>\n                        <td>512MB RAM, 4GB 내장 저장소</td>\n                    </tr>\n                    <tr>\n                        <th>배터리</th>\n                        <td>450mAh, 최대 7일 사용</td>\n                    </tr>\n                    <tr>\n                        <th>연결성</th>\n                        <td>Bluetooth 5.0, Wi-Fi, GPS</td>\n                    </tr>\n                    <tr>\n                        <th>방수 등급</th>\n                        <td>IP68 (수심 50m)</td>\n                    </tr>\n                    <tr>\n                        <th>무게</th>\n                        <td>45g (스트랩 제외)</td>\n                    </tr>\n                </table>\n            </div>\n\n            <div id=\"reviews\" class=\"tab-content\">\n                <h3>고객 리뷰</h3>\n                <div style=\"border-bottom: 1px solid #eee; padding-bottom: 1rem; margin-bottom: 1rem;\">\n                    <div style=\"display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;\">\n                        <strong>김○○</strong>\n                        <div class=\"stars\">★★★★★</div>\n                    </div>\n                    <p>배터리 수명이 정말 좋고, 건강 기능들이 매우 정확합니다. 디자인도 세련되어서 만족스럽습니다.</p>\n                </div>\n                \n                <div style=\"border-bottom: 1px solid #eee; padding-bottom: 1rem; margin-bottom: 1rem;\">\n                    <div style=\"display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;\">\n                        <strong>이○○</strong>\n                        <div class=\"stars\">★★★★☆</div>\n                    </div>\n                    <p>운동 추적 기능이 뛰어나고 방수 기능도 확실합니다. 다만 초기 설정이 조금 복잡했어요.</p>\n                </div>\n                \n                <div>\n                    <div style=\"display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;\">\n                        <strong>박○○</strong>\n                        <div class=\"stars\">★★★★★</div>\n                    </div>\n                    <p>가격 대비 성능이 훌륭합니다. 특히 수면 분석 기능이 매우 유용해서 생활 패턴 개선에 도움이 되고 있어요.</p>\n                </div>\n            </div>\n        </div>\n    </div>\n\n    <script>\n        function openTab(evt, tabName) {\n            var i, tabcontent, tabbuttons;\n            \n            tabcontent = document.getElementsByClassName(\"tab-content\");\n            for (i = 0; i < tabcontent.length; i++) {\n                tabcontent[i].classList.remove(\"active\");\n            }\n            \n            tabbuttons = document.getElementsByClassName(\"tab-button\");\n            for (i = 0; i < tabbuttons.length; i++) {\n                tabbuttons[i].classList.remove(\"active\");\n            }\n            \n            document.getElementById(tabName).classList.add(\"active\");\n            evt.currentTarget.classList.add(\"active\");\n        }\n\n        function addToCart() {\n            alert(\"장바구니에 상품이 추가되었습니다!\");\n        }\n\n        function addToWishlist() {\n            alert(\"찜 목록에 상품이 추가되었습니다!\");\n        }\n    </script>\n</body>\n</html>",
+          "features": [],
+          "documents": [],
+          "gallery_images_data": [],
           "isPublished": true,
-          "videos": [],
-          "modelName": "",
-          "modelNumber": "",
-          "series": "",
-          "modelImage": "",
-          "modelFile": "",
-          "modelStyle": "realistic",
-          "applicableHeight": "",
-          "certificationsAndFeatures": [],
-          "category": "TEST09"
+          "sortOrder": 0,
+          "category": "fire-safety"
         }
       ]
     }

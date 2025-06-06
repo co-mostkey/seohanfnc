@@ -1,7 +1,7 @@
 'use client';
 
 import React, { Suspense, useRef, useState, useEffect } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { Canvas, useFrame, useThree, RootState } from '@react-three/fiber';
 import { OrbitControls, useGLTF, Html, Environment, ContactShadows, useProgress } from '@react-three/drei';
 import { RotateCcw, ZoomIn, ZoomOut, Play, Pause, Info } from 'lucide-react';
 import * as THREE from 'three';
@@ -10,8 +10,6 @@ interface ModelViewerProps {
   modelPath: string; // GLB 파일 경로
   productName: string;
   showHotspots?: boolean;
-  onLoad?: () => void; // 3D 모델 로딩 성공 콜백 추가
-  onError?: () => void; // 3D 모델 로딩 실패 콜백 추가
 }
 
 interface HotspotData {
@@ -39,82 +37,28 @@ function Loader() {
 /**
  * 3D 모델 컴포넌트
  */
-function Model({ modelPath, showHotspots = true, autoRotate = false, fallbackImage = '/images/placeholder-3d.jpg' }: {
-  modelPath: string;
-  showHotspots?: boolean;
-  autoRotate?: boolean;
-  fallbackImage?: string;
-}) {
-  // 모델 로드 실패 시에 사용할 상태
-  const [loadError, setLoadError] = useState(false);
-
-  // Load GLB model - with proper error handling
-  console.log('Attempting to load model from:', modelPath);
-
-  // Directly use useGLTF without third parameter which causes issues
-  let gltf;
-  try {
-    gltf = useGLTF(modelPath);
-  } catch (error) {
-    console.error('Failed to load GLTF model:', error);
-    setLoadError(true);
-    gltf = { scene: null, nodes: {}, materials: {} };
-  }
-
-  const { scene, nodes, materials } = gltf;
-
+function ModelContent({ modelPath, showHotspots, autoRotate }: { modelPath: string; showHotspots: boolean; autoRotate: boolean; }) {
+  const { scene } = useGLTF(modelPath);
   const modelRef = useRef<THREE.Group>(null);
-  const [hovered, setHovered] = useState(false);
 
-  // 모델 자동 회전
-  useFrame((state, delta) => {
+  useFrame((_state: RootState, delta: number) => {
     if (modelRef.current && autoRotate) {
       modelRef.current.rotation.y += delta * 0.5;
     }
   });
 
-  // 모델 로드 오류가 있으면 대체 요소 반환
-  if (loadError || !scene) {
-    // 대체 박스 모델 렌더링
-    return (
-      <group ref={modelRef}>
-        <mesh>
-          <boxGeometry args={[1, 1, 1]} />
-          <meshStandardMaterial color="gray" />
-        </mesh>
-        <Html center>
-          <div className="flex flex-col items-center justify-center p-4 bg-gray-800/80 rounded-lg">
-            <p className="text-white text-sm mb-2">Unable to load 3D model</p>
-            <p className="text-gray-300 text-xs">Please check the file: {modelPath}</p>
-          </div>
-        </Html>
-      </group>
-    );
-  }
-
-  // 모델 복제 및 최적화
   const model = React.useMemo(() => {
-    if (!scene) return null;
-
     const clone = scene.clone();
-
-    // 모델 크기 조정 및 중앙 정렬
     const box = new THREE.Box3().setFromObject(clone);
     const center = box.getCenter(new THREE.Vector3());
     const size = box.getSize(new THREE.Vector3());
-
-    // 모델이 화면에 적절히 표시되도록 크기 조정
     const maxDimension = Math.max(size.x, size.y, size.z);
     const scale = 2 / maxDimension;
     clone.scale.set(scale, scale, scale);
-
-    // 모델 위치 조정 (중앙으로)
     clone.position.set(-center.x * scale, -center.y * scale, -center.z * scale);
-
     return clone;
   }, [scene]);
 
-  // 임시 핫스팟 데이터 (실제로는 모델별로 지정된 데이터 사용)
   const hotspots: HotspotData[] = [
     { position: [0.5, 0.5, 0.5], label: '안전밸브' },
     { position: [-0.5, 0.3, 0.2], label: '견인고리' },
@@ -123,9 +67,7 @@ function Model({ modelPath, showHotspots = true, autoRotate = false, fallbackIma
 
   return (
     <group ref={modelRef}>
-      {model && <primitive object={model} />}
-
-      {/* 핫스팟 (정보 포인트) */}
+      <primitive object={model} />
       {showHotspots && hotspots.map((hotspot, index) => (
         <group key={index} position={new THREE.Vector3(...hotspot.position)}>
           <Html distanceFactor={10} zIndexRange={[100, 0]}>
@@ -143,166 +85,136 @@ function Model({ modelPath, showHotspots = true, autoRotate = false, fallbackIma
 }
 
 /**
+ * 에러 바운더리 컴포넌트
+ */
+function ModelErrorBoundary({ modelPath, showHotspots, autoRotate }: { modelPath: string; showHotspots: boolean; autoRotate: boolean; }) {
+  const [hasError, setHasError] = useState(false);
+
+  useEffect(() => {
+    const Catcher = () => {
+      try {
+        useGLTF.preload(modelPath);
+        return null;
+      } catch (e) {
+        setHasError(true);
+        return null;
+      }
+    };
+    Catcher();
+  }, [modelPath]);
+
+  if (hasError) {
+    return (
+      <Html center>
+        <div className="flex flex-col items-center justify-center p-4 bg-gray-800/80 rounded-lg">
+          <p className="text-white text-sm mb-2">3D 모델을 불러올 수 없습니다.</p>
+          <p className="text-gray-300 text-xs">파일 경로를 확인하세요: {modelPath}</p>
+        </div>
+      </Html>
+    );
+  }
+
+  return (
+    <Suspense fallback={<Loader />}>
+      <ModelContent modelPath={modelPath} showHotspots={showHotspots} autoRotate={autoRotate} />
+    </Suspense>
+  );
+}
+
+/**
  * 카메라 컨트롤러
  */
 function CameraController() {
-  const { camera } = useThree();
+  const { camera, controls } = useThree();
 
   useEffect(() => {
-    // 카메라 초기 위치 설정
     camera.position.set(0, 0, 5);
-  }, [camera]);
+    if (controls) {
+      (controls as any).target.set(0, 0, 0);
+    }
+  }, [camera, controls]);
 
   return null;
-}
-
-// Preload handler to catch errors
-const ErrorBoundaryGLTF = (url: string) => {
-  try {
-    return useGLTF.preload(url);
-  } catch (e) {
-    console.error('Preload failed:', e);
-    return null;
-  }
-};
-
-// [TRISID] glb/gltf 우선순위 경로 생성 함수
-function resolveModelPath(modelPath: string): { path: string | null, isGLTF: boolean } {
-  if (!modelPath) return { path: null, isGLTF: false };
-  if (modelPath.endsWith('.glb')) return { path: modelPath, isGLTF: false };
-  if (modelPath.endsWith('.gltf')) return { path: modelPath, isGLTF: true };
-  // 폴더/제품ID일 경우 glb 우선, 없으면 gltf (실제 파일 존재 여부는 서버/데이터에서 체크 필요)
-  const glbPath = modelPath + '/model.glb';
-  const gltfPath = modelPath + '/model.gltf';
-  // 실제 파일 존재 여부를 동적으로 체크하려면 fetch 등 필요, 여기선 glb 우선 반환
-  return { path: glbPath, isGLTF: false };
 }
 
 /**
  * 3D 모델 뷰어 컴포넌트
  * 제품의 3D 모델을 인터랙티브하게 표시합니다.
  */
-export default function ModelViewer({ modelPath, productName, showHotspots = true, onLoad, onError }: ModelViewerProps) {
+export default function ModelViewer({ modelPath, productName, showHotspots = true }: ModelViewerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [zoom, setZoom] = useState(1);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [modelLoadError, setModelLoadError] = useState(false);
+  const controlsRef = useRef<any>(null);
 
-  // [TRISID] glb 우선, gltf 부가 지원 경로 처리
-  const { path: resolvedPath, isGLTF } = resolveModelPath(modelPath);
-
-  // Create the actual GLB file path ("/models/products/{productID}/model.glb")
-  const glbPath = resolvedPath || `/models/products/Cylinder-Type-SafetyAirMat/model.glb`;
-  console.log('Using model path:', glbPath);
-
-  // Fallback image path (used if model loading fails)
-  const fallbackImage = `/images/placeholder-3d.jpg`;
-
-  // 확대
   const handleZoomIn = () => {
-    setZoom(prev => Math.min(prev + 0.1, 2.0));
+    if (controlsRef.current) {
+      controlsRef.current.dollyIn(1.2);
+    }
   };
 
-  // 축소
   const handleZoomOut = () => {
-    setZoom(prev => Math.max(prev - 0.1, 0.5));
+    if (controlsRef.current) {
+      controlsRef.current.dollyOut(1.2);
+    }
   };
 
-  // 리셋
   const handleReset = () => {
-    setZoom(1);
+    if (controlsRef.current) {
+      controlsRef.current.reset();
+    }
     setIsPlaying(false);
   };
 
-  // 자동 회전 토글
-  const togglePlay = () => {
-    setIsPlaying(!isPlaying);
-  };
+  const togglePlay = () => setIsPlaying(!isPlaying);
 
   return (
     <div className="relative w-full h-full flex items-center justify-center">
-      {/* gltf 안내 메시지 */}
-      {isGLTF && (
-        <div className="absolute top-2 left-2 z-20 bg-yellow-500/80 text-black px-3 py-1 rounded text-xs font-bold shadow">[TRISID] glb 파일 사용을 권장합니다 (gltf는 부가 지원)</div>
-      )}
-      {/* Three.js 캔버스 */}
       <div className="w-full h-full rounded-xl overflow-hidden bg-transparent">
         <Canvas
-          ref={canvasRef}
           camera={{ fov: 45 }}
-          style={{ width: '100%', height: '100%' }}
           shadows
-          dpr={[1, 2]} // 해상도 최적화
+          dpr={[1, 2]}
         >
           <CameraController />
-
-          {/* 환경광 설정 */}
           <ambientLight intensity={0.5} />
           <directionalLight position={[5, 5, 5]} intensity={1} castShadow />
           <Environment preset="city" />
 
-          {/* 모델 및 로딩 화면 */}
-          <Suspense fallback={<Loader />}>
-            <Model
-              modelPath={glbPath}
-              showHotspots={showHotspots}
-              autoRotate={isPlaying}
-              fallbackImage={fallbackImage}
-            />
-            <ContactShadows opacity={0.4} scale={5} blur={2} far={10} resolution={256} color="#000000" />
-          </Suspense>
+          <ModelErrorBoundary modelPath={modelPath} showHotspots={showHotspots} autoRotate={isPlaying} />
 
-          {/* 카메라 컨트롤 (마우스로 드래그하여 모델 회전) */}
-          <OrbitControls
-            enableZoom={true}
-            zoomSpeed={0.5}
-            autoRotate={isPlaying}
-            autoRotateSpeed={2}
-          />
+          <ContactShadows opacity={0.4} scale={5} blur={2} far={10} resolution={256} color="#000000" />
+
+          <OrbitControls ref={controlsRef} autoRotate={isPlaying} autoRotateSpeed={2} />
         </Canvas>
       </div>
 
-      {/* 컨트롤 버튼 */}
-      <div className="model-controls">
-        <button
-          className="model-control-btn"
-          onClick={handleZoomIn}
-          aria-label="확대"
-        >
-          <ZoomIn size={18} />
+      {/* UI Controls */}
+      <div className="absolute bottom-4 right-4 z-20 flex flex-col items-center gap-2">
+        <button onClick={handleReset} className="control-button group">
+          <RotateCcw className="w-5 h-5 text-gray-300 group-hover:text-white" />
+          <span className="control-tooltip">리셋</span>
         </button>
-        <button
-          className="model-control-btn"
-          onClick={handleZoomOut}
-          aria-label="축소"
-        >
-          <ZoomOut size={18} />
+        <button onClick={handleZoomIn} className="control-button group">
+          <ZoomIn className="w-5 h-5 text-gray-300 group-hover:text-white" />
+          <span className="control-tooltip">확대</span>
         </button>
-        <button
-          className="model-control-btn"
-          onClick={togglePlay}
-          aria-label={isPlaying ? "정지" : "자동 회전"}
-        >
-          {isPlaying ? <Pause size={18} /> : <Play size={18} />}
+        <button onClick={handleZoomOut} className="control-button group">
+          <ZoomOut className="w-5 h-5 text-gray-300 group-hover:text-white" />
+          <span className="control-tooltip">축소</span>
         </button>
-        <button
-          className="model-control-btn"
-          onClick={handleReset}
-          aria-label="초기화"
-        >
-          <RotateCcw size={18} />
+        <button onClick={togglePlay} className="control-button group">
+          {isPlaying ? <Pause className="w-5 h-5 text-gray-300 group-hover:text-white" /> : <Play className="w-5 h-5 text-gray-300 group-hover:text-white" />}
+          <span className="control-tooltip">{isPlaying ? '정지' : '회전'}</span>
         </button>
       </div>
 
-      {/* 제품 이름 */}
-      <div className="absolute bottom-6 left-6 text-white text-xl font-bold">
-        {productName}
-      </div>
-
-      {/* 정보 아이콘 */}
-      <div className="absolute top-6 right-6">
-        <button className="p-2 bg-gray-800/70 rounded-full text-white hover:bg-primary-600/70 transition-colors">
-          <Info size={20} />
+      <div className="absolute top-4 right-4 z-20">
+        <button className="control-button group">
+          <Info className="w-5 h-5 text-gray-300 group-hover:text-white" />
+          <span className="control-tooltip right-full mr-2">
+            <strong>{productName}</strong><br />
+            - 마우스 휠: 확대/축소<br />
+            - 드래그: 회전
+          </span>
         </button>
       </div>
     </div>

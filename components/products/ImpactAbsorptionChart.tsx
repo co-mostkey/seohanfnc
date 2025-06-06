@@ -8,23 +8,47 @@ interface ChartDataItem {
     color?: string | null;
 }
 
-interface ComparisonChartData {
+// 보다 구체적인 타입 정의
+interface TestResultItem {
+    name?: string;
+    voltage?: string;
+    gForce?: string;
+    chartImage?: string;
+}
+
+interface TestInfo {
+    standard?: string;
+    reference?: string;
+    testSubject?: string;
+    testDate?: string;
+    testDummy?: string;
+    testHeight?: string;
+    note?: string;
+    conversion?: string;
+}
+
+interface ComparisonChart {
     title?: string | null;
     data?: ChartDataItem[] | null;
     comparisonImages?: {
         groundImpact?: string | null;
         airMatImpact?: string | null;
     } | null;
-    testInfo?: any; // 기존 구조와 호환성을 위해 추가
-    testResults?: any[]; // 기존 구조와 호환성을 위해 추가
-    analysis?: string[]; // 기존 구조와 호환성을 위해 추가
+}
+
+interface ImpactAbsorptionData {
+    title?: string | null;
+    comparisonChart?: ComparisonChart | null;
+    testInfo?: TestInfo | null;
+    testResults?: TestResultItem[] | null;
+    analysis?: string[] | null;
 }
 
 interface ImpactAbsorptionChartProps {
-    data: ComparisonChartData;
+    data: ImpactAbsorptionData;
 }
 
-const Bar = ({ percentage, color, name }: { percentage: number; color: string; name: string; }) => (
+const Bar = ({ percentage, color }: { percentage: number; color: string; }) => (
     <div className="flex flex-col items-center w-full max-w-[60px]">
         <div className="flex items-end justify-center w-full h-64">
             <div
@@ -54,7 +78,7 @@ export const ImpactAbsorptionChart = ({ data }: ImpactAbsorptionChartProps) => {
 
     if (!chartData || chartData.length === 0) return null;
 
-    const legendItems = Array.from(new Set(chartData?.map(d => d.color).filter(Boolean)));
+    const legendItems = Array.from(new Set(chartData.map((d: ChartDataItem) => d.color).filter((c): c is string => !!c)));
 
     return (
         <div className="mt-12 bg-gray-800/30 rounded-xl p-6 border border-red-900/30">
@@ -126,12 +150,11 @@ export const ImpactAbsorptionChart = ({ data }: ImpactAbsorptionChartProps) => {
                                     )}
                                     {/* 데이터 바 */}
                                     <div className="absolute bottom-0 flex justify-around items-end w-full h-full px-2">
-                                        {chartData.map((item, index) => (
+                                        {chartData.map((item: ChartDataItem, index: number) => (
                                             <Bar
                                                 key={index}
                                                 percentage={item.percentage || 0}
                                                 color={item.color || '#ccc'}
-                                                name={item.name || ''}
                                             />
                                         ))}
                                     </div>
@@ -141,11 +164,11 @@ export const ImpactAbsorptionChart = ({ data }: ImpactAbsorptionChartProps) => {
                         {/* 레전드 */}
                         {legendItems.length > 0 && (
                             <div className="mt-3 flex justify-center flex-wrap gap-2">
-                                {legendItems.map((color, index) => (
+                                {legendItems.map((color: string, index: number) => (
                                     <div key={index} className="flex items-center px-3 py-1.5 bg-gray-800/40 rounded-full border border-gray-700/30">
-                                        <span className="w-3 h-3 rounded-sm mr-1.5" style={{ backgroundColor: color || 'transparent' }}></span>
+                                        <span className="w-3 h-3 rounded-sm mr-1.5" style={{ backgroundColor: color }}></span>
                                         <span className="text-xs text-gray-300">
-                                            {chartData?.find(d => d.color === color)?.name || '데이터'}
+                                            {chartData?.find((d: ChartDataItem) => d.color === color)?.name || '데이터'}
                                         </span>
                                     </div>
                                 ))}
@@ -159,7 +182,7 @@ export const ImpactAbsorptionChart = ({ data }: ImpactAbsorptionChartProps) => {
                     <div className="mt-4 p-3 bg-red-900/20 rounded-md border border-red-900/30 text-sm">
                         <p className="text-white font-medium mb-2">※ 분석결과</p>
                         <ul className="text-gray-300 space-y-1.5 text-sm">
-                            {analysis.map((item, index) => (
+                            {analysis.map((item: string, index: number) => (
                                 <li key={index} className="flex">
                                     <span className="text-amber-400 mr-1.5">•</span>
                                     <span>{item}</span>

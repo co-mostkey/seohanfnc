@@ -1,65 +1,38 @@
 'use client';
 
 import React from 'react';
-import { Control, FieldErrors, UseFormRegister, UseFormSetValue, UseFormWatch, useFieldArray, UseFieldArrayAppend, UseFieldArrayRemove } from 'react-hook-form';
+import { useFormContext, useFieldArray } from 'react-hook-form';
 import { ProductFormData } from '@/lib/validators/product-validator';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Product } from '@/types/product';
 import { Trash2, Plus, Settings, Database, Award } from 'lucide-react';
 
-interface ProductFormTechnicalDataProps {
-    control: Control<ProductFormData>;
-    register: UseFormRegister<ProductFormData>;
-    errors: FieldErrors<ProductFormData>;
-    setValue: UseFormSetValue<ProductFormData>;
-    watch: UseFormWatch<ProductFormData>;
-    handleFileDelete: (
-        filePathToDelete: string,
-        fieldName: keyof ProductFormData,
-        listIndex?: number,
-        subFieldName?: 'src' | 'path'
-    ) => Promise<void>;
-    initialData?: Product | null;
-    technicalDataFields: { id: string; title: string; content: string; }[];
-    appendTechnicalData: UseFieldArrayAppend<ProductFormData, "technicalData">;
-    removeTechnicalData: UseFieldArrayRemove;
-    certificationFields: { id: string; name: string; description: string; image: string; }[];
-    appendCertification: UseFieldArrayAppend<ProductFormData, "certifications">;
-    removeCertification: UseFieldArrayRemove;
-}
+export const ProductFormTechnicalData = () => {
+    const { control, register, formState: { errors } } = useFormContext<ProductFormData>();
 
-export const ProductFormTechnicalData: React.FC<ProductFormTechnicalDataProps> = ({
-    control,
-    register,
-    errors,
-    setValue,
-    watch,
-    handleFileDelete,
-    initialData,
-    technicalDataFields,
-    appendTechnicalData,
-    removeTechnicalData,
-    certificationFields,
-    appendCertification,
-    removeCertification
-}) => {
-    const safeTechnicalDataFields = technicalDataFields || [];
-    const safeCertificationFields = certificationFields || [];
+    const { fields: technicalDataFields, append: appendTechnicalData, remove: removeTechnicalData } = useFieldArray({
+        control,
+        name: "technicalData",
+    });
+
+    const { fields: certificationFields, append: appendCertification, remove: removeCertification } = useFieldArray({
+        control,
+        name: "certifications",
+    });
 
     return (
         <div className="space-y-6">
             {/* 기술 사양 섹션 */}
-            <Card className="bg-gray-800 border-gray-700">
+            <Card>
                 <CardHeader>
-                    <CardTitle className="text-green-400 flex items-center">
+                    <CardTitle className="flex items-center">
                         <Database className="h-5 w-5 mr-2" />
                         기술 데이터 (B타입 전용)
                     </CardTitle>
-                    <CardDescription className="text-gray-400">
+                    <CardDescription>
                         B타입 제품의 기술 사양과 인증 정보를 입력하세요.
                     </CardDescription>
                 </CardHeader>
@@ -68,20 +41,19 @@ export const ProductFormTechnicalData: React.FC<ProductFormTechnicalDataProps> =
                         <Label className="text-base font-medium">기술 사양 항목</Label>
                         <Button
                             type="button"
-                            onClick={() => appendTechnicalData({ title: '', content: '' })}
+                            onClick={() => appendTechnicalData({ key: '', value: '' })}
                             size="sm"
                             variant="outline"
-                            className="border-gray-600 text-gray-300 hover:bg-gray-700"
                         >
                             <Plus className="h-4 w-4 mr-2" />
                             사양 추가
                         </Button>
                     </div>
 
-                    {safeTechnicalDataFields.map((field, index) => (
-                        <div key={field.id} className="p-4 border border-gray-700 rounded-md bg-gray-800 space-y-3">
+                    {technicalDataFields.map((field, index) => (
+                        <div key={field.id} className="p-4 border rounded-md bg-gray-800/50 space-y-3">
                             <div className="flex items-center justify-between">
-                                <span className="text-sm font-medium text-gray-300">사양 #{index + 1}</span>
+                                <span className="text-sm font-medium">사양 #{index + 1}</span>
                                 <Button
                                     type="button"
                                     onClick={() => removeTechnicalData(index)}
@@ -95,57 +67,40 @@ export const ProductFormTechnicalData: React.FC<ProductFormTechnicalDataProps> =
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                 <div>
-                                    <Label htmlFor={`spec_key_${index}`}>항목명</Label>
+                                    <Label>항목명</Label>
                                     <Input
-                                        {...register(`specifications.${index}.key`)}
+                                        {...register(`technicalData.${index}.key`)}
                                         placeholder="예: 재질, 크기, 중량 등"
-                                        className="bg-gray-700 border-gray-600 text-white"
                                     />
-                                    {errors.specifications?.[index]?.key && (
-                                        <p className="text-red-500 text-xs mt-1">{errors.specifications[index]?.key?.message}</p>
+                                    {errors.technicalData?.[index]?.key && (
+                                        <p className="text-red-500 text-xs mt-1">{errors.technicalData[index]?.key?.message}</p>
                                     )}
                                 </div>
 
                                 <div>
-                                    <Label htmlFor={`spec_value_${index}`}>값</Label>
+                                    <Label>값</Label>
                                     <Input
-                                        {...register(`specifications.${index}.value`)}
+                                        {...register(`technicalData.${index}.value`)}
                                         placeholder="해당 항목의 값"
-                                        className="bg-gray-700 border-gray-600 text-white"
                                     />
-                                    {errors.specifications?.[index]?.value && (
-                                        <p className="text-red-500 text-xs mt-1">{errors.specifications[index]?.value?.message}</p>
+                                    {errors.technicalData?.[index]?.value && (
+                                        <p className="text-red-500 text-xs mt-1">{errors.technicalData[index]?.value?.message}</p>
                                     )}
                                 </div>
                             </div>
                         </div>
                     ))}
-
-                    {safeTechnicalDataFields.length === 0 && (
-                        <div className="p-8 text-center bg-gray-800 rounded-md border border-gray-700">
-                            <p className="text-gray-500 mb-4">추가된 기술 사양이 없습니다.</p>
-                            <Button
-                                type="button"
-                                onClick={() => appendTechnicalData({ title: '재질', content: '' })}
-                                variant="outline"
-                                className="border-gray-600 text-gray-300 hover:bg-gray-700"
-                            >
-                                <Plus className="h-4 w-4 mr-2" />
-                                첫 번째 사양 추가
-                            </Button>
-                        </div>
-                    )}
                 </CardContent>
             </Card>
 
             {/* 인증 및 특징 섹션 */}
-            <Card className="bg-gray-800 border-gray-700">
+            <Card>
                 <CardHeader>
-                    <CardTitle className="text-yellow-400 flex items-center">
+                    <CardTitle className="flex items-center">
                         <Award className="h-5 w-5 mr-2" />
                         인증 및 특징 (B타입 전용)
                     </CardTitle>
-                    <CardDescription className="text-gray-400">
+                    <CardDescription>
                         B타입 제품의 인증 정보와 주요 특징을 입력하세요.
                     </CardDescription>
                 </CardHeader>
@@ -154,20 +109,19 @@ export const ProductFormTechnicalData: React.FC<ProductFormTechnicalDataProps> =
                         <Label className="text-base font-medium">인증 및 특징 항목</Label>
                         <Button
                             type="button"
-                            onClick={() => appendCertification({ name: '', description: '', image: '' })}
+                            onClick={() => appendCertification({ title: '', description: '', icon: '' })}
                             size="sm"
                             variant="outline"
-                            className="border-gray-600 text-gray-300 hover:bg-gray-700"
                         >
                             <Plus className="h-4 w-4 mr-2" />
                             항목 추가
                         </Button>
                     </div>
 
-                    {safeCertificationFields.map((field, index) => (
-                        <div key={field.id} className="p-4 border border-gray-700 rounded-md bg-gray-800 space-y-3">
+                    {certificationFields.map((field, index) => (
+                        <div key={field.id} className="p-4 border rounded-md bg-gray-800/50 space-y-3">
                             <div className="flex items-center justify-between">
-                                <span className="text-sm font-medium text-gray-300">인증/특징 #{index + 1}</span>
+                                <span className="text-sm font-medium">인증/특징 #{index + 1}</span>
                                 <Button
                                     type="button"
                                     onClick={() => removeCertification(index)}
@@ -181,23 +135,22 @@ export const ProductFormTechnicalData: React.FC<ProductFormTechnicalDataProps> =
 
                             <div className="grid grid-cols-1 gap-3">
                                 <div>
-                                    <Label htmlFor={`cert_title_${index}`}>제목</Label>
+                                    <Label>제목</Label>
                                     <Input
-                                        {...register(`certifications.${index}.name`)}
+                                        {...register(`certifications.${index}.title`)}
                                         placeholder="예: KC 인증, 방염 처리, 내구성 등"
-                                        className="bg-gray-700 border-gray-600 text-white"
                                     />
-                                    {errors.certifications?.[index]?.name && (
-                                        <p className="text-red-500 text-xs mt-1">{errors.certifications[index]?.name?.message}</p>
+                                    {errors.certifications?.[index]?.title && (
+                                        <p className="text-red-500 text-xs mt-1">{errors.certifications[index]?.title?.message}</p>
                                     )}
                                 </div>
 
                                 <div>
-                                    <Label htmlFor={`cert_description_${index}`}>설명</Label>
+                                    <Label>설명</Label>
                                     <Textarea
                                         {...register(`certifications.${index}.description`)}
                                         placeholder="해당 인증이나 특징에 대한 상세 설명"
-                                        className="bg-gray-700 border-gray-600 text-white min-h-[80px]"
+                                        className="min-h-[80px]"
                                     />
                                     {errors.certifications?.[index]?.description && (
                                         <p className="text-red-500 text-xs mt-1">{errors.certifications[index]?.description?.message}</p>
@@ -205,32 +158,16 @@ export const ProductFormTechnicalData: React.FC<ProductFormTechnicalDataProps> =
                                 </div>
 
                                 <div>
-                                    <Label htmlFor={`cert_icon_${index}`}>아이콘 (선택사항)</Label>
+                                    <Label>아이콘 (선택사항)</Label>
                                     <Input
-                                        {...register(`certifications.${index}.image`)}
+                                        {...register(`certifications.${index}.icon`)}
                                         placeholder="예: shield, award, check-circle 등"
-                                        className="bg-gray-700 border-gray-600 text-white"
                                     />
                                     <p className="text-xs text-gray-500 mt-1">Lucide React 아이콘 이름을 입력하세요.</p>
                                 </div>
                             </div>
                         </div>
                     ))}
-
-                    {safeCertificationFields.length === 0 && (
-                        <div className="p-8 text-center bg-gray-800 rounded-md border border-gray-700">
-                            <p className="text-gray-500 mb-4">추가된 인증/특징이 없습니다.</p>
-                            <Button
-                                type="button"
-                                onClick={() => appendCertification({ name: 'KC 인증', description: '', image: 'shield' })}
-                                variant="outline"
-                                className="border-gray-600 text-gray-300 hover:bg-gray-700"
-                            >
-                                <Plus className="h-4 w-4 mr-2" />
-                                첫 번째 항목 추가
-                            </Button>
-                        </div>
-                    )}
                 </CardContent>
             </Card>
 

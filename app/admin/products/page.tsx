@@ -378,6 +378,8 @@ function AdminProductsContent() {
   const searchParams = useSearchParams();
 
   const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const [currentPage, setCurrentPage] = useState(Number(searchParams?.get('page')) || 1);
   const [itemsPerPage, setItemsPerPage] = useState(Number(searchParams?.get('limit')) || DEFAULT_ITEMS_PER_PAGE);
@@ -396,12 +398,10 @@ function AdminProductsContent() {
   const [isSavingOrder, setIsSavingOrder] = useState(false);
 
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
-  const [loading, setLoading] = useState(true);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [selectedProductForDetail, setSelectedProductForDetail] = useState<Product | null>(null);
-  const [error, setError] = useState<string | null>(null);
   const [isBatchDeleting, setIsBatchDeleting] = useState(false);
   const [isBatchPublishing, setIsBatchPublishing] = useState(false);
 
@@ -439,21 +439,31 @@ function AdminProductsContent() {
   }, [searchParams]);
 
   const filteredAndSortedProducts = useMemo(() => {
-    // 필터링
-    let filtered = products.filter(product => {
-      const nameKo = product.nameKo || '';
-      const nameEn = typeof product.name === 'string' ? product.name : '';
-      const matchesSearch =
-        (nameKo || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (nameEn || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.id.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesCategory = selectedProductCategoryId
-        ? product.productCategoryId === selectedProductCategoryId
-        : true;
-      return matchesSearch && matchesCategory;
-    });
+    if (!Array.isArray(products)) {
+      return [];
+    }
+    let filtered = products;
 
-    // 정렬
+    if (searchTerm) {
+      const lowercasedTerm = searchTerm.toLowerCase();
+      filtered = filtered.filter(product => {
+        const nameKo = product.nameKo || '';
+        const nameEn = typeof product.name === 'string' ? product.name : '';
+        const matchesSearch =
+          (nameKo || '').toLowerCase().includes(lowercasedTerm) ||
+          (nameEn || '').toLowerCase().includes(lowercasedTerm) ||
+          product.id.toLowerCase().includes(lowercasedTerm);
+        const matchesCategory = selectedProductCategoryId
+          ? product.productCategoryId === selectedProductCategoryId
+          : true;
+        return matchesSearch && matchesCategory;
+      });
+    }
+
+    if (selectedProductCategoryId) {
+      filtered = filtered.filter(product => product.productCategoryId === selectedProductCategoryId);
+    }
+
     filtered.sort((a, b) => {
       let aValue: any, bValue: any;
 
@@ -853,15 +863,19 @@ function AdminProductsContent() {
       try {
         const response = await fetch('/api/admin/products');
         if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.message || '제품 목록을 불러오는데 실패했습니다.');
+          throw new Error('제품 목록을 불러오는 데 실패했습니다.');
         }
-        const data: Product[] = await response.json();
-        setProducts(data);
+        const data = await response.json();
+        if (Array.isArray(data)) {
+          setProducts(data);
+        } else {
+          console.error("API did not return an array:", data);
+          setProducts([]); // API 응답이 배열이 아닐 경우 빈 배열로 설정
+        }
       } catch (err: any) {
-        console.error("Failed to fetch products from API:", err);
         setError(err.message);
-        setProducts([]);
+        toast.error(err.message);
+        setProducts([]); // 에러 발생 시 빈 배열로 설정
       } finally {
         setLoading(false);
       }

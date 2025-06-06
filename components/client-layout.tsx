@@ -127,7 +127,13 @@ const ClientLayout = ({ children }: { children: React.ReactNode }) => {
   }
 
   // [TRISID] 에어매트 4종 상세페이지에서만 투명 배경 및 패딩 제거 적용
-  const isAirMatDetailPage = pathname?.startsWith('/products/Cylinder-Type-SafetyAirMat') || pathname?.startsWith('/products/에어매트제품ID'); // 필요시 4종 모두 추가
+  const airMatProductIds = [
+    'Cylinder-Type-SafetyAirMat',
+    'Fan-Type-Air-Safety-Mat',
+    'Lifesaving-Mat',
+    'Training-Air-Mattress-Fall-Prevention-Mat'
+  ];
+  const isAirMatDetailPage = pathname ? airMatProductIds.some(id => pathname.startsWith(`/products/${id}`)) : false;
 
   const mainClassName = isAirMatDetailPage
     ? 'min-h-[calc(100vh-56px)]' // 패딩 없이 Hero가 네비게이션까지 채워지도록

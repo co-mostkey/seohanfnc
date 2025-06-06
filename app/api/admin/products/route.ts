@@ -6,10 +6,11 @@ import {
     writeItems,
     DATA_DIR
 } from '@/lib/file-db';
-import { readProductsData, writeProductsData, getAllProductIds } from '@/lib/file-utils';
+import { readProductsData, writeProductsData, getAllProductIds, ProductsDataStructure, getCategoryName } from '@/lib/file-utils';
 import { getAllProductsForAdmin } from '@/data/products'; // getAllProducts 대신 getAllProductsForAdmin 사용
 import fs from 'fs';
 import path from 'path';
+import { productFormSchema } from '@/lib/validators/product-validator';
 // import { v4 as uuidv4 } from 'uuid'; // 클라이언트에서 ID를 제공하므로 주석 처리 또는 삭제
 
 // 제품 데이터 파일 경로
@@ -18,75 +19,88 @@ const PRODUCTS_FILE_PATH = path.join(process.cwd(), 'data', 'db', 'products.json
 // 모든 제품 조회 (data/products.ts의 getAllProductsForAdmin와 유사한 로직)
 export async function GET() {
     try {
-        // getAllProductsForAdmin 함수를 사용하여 관리자용 제품 목록 가져오기 (isPublished 필터링 없음)
-        const products = getAllProductsForAdmin();
-
-        return NextResponse.json(products, { status: 200 });
+        const products = await getAllProductsForAdmin();
+        return NextResponse.json(products);
     } catch (error) {
-        console.error('제품 목록 조회 중 오류:', error);
-        return NextResponse.json(
-            { message: '제품 목록을 불러오는데 실패했습니다.' },
-            { status: 500 }
-        );
+        console.error('Failed to read products data:', error);
+        // getAllProductsForAdmin에서 오류 발생 시 빈 배열 반환하여 프론트엔드 오류 방지
+        return NextResponse.json([], { status: 500 });
     }
 }
 
 // 새 제품 추가
 export async function POST(request: NextRequest) {
+    console.log('[API POST] 새 제품 추가 요청 시작');
     try {
-        // 클라이언트로부터 id가 포함된 Product 데이터를 받음 (스키마에 따라 id는 필수)
-        const productDataFromRequest = await request.json() as Product;
+        const body = await request.json();
+        console.log('[API POST] 받은 데이터:', JSON.stringify(body, null, 2));
 
-        // 1. ID 중복 검사
-        const existingProductIds = await getAllProductIds();
-        if (existingProductIds.includes(productDataFromRequest.id)) {
-            return NextResponse.json(
-                { message: `제품 ID '${productDataFromRequest.id}'는 이미 존재합니다. 다른 ID를 사용해주세요.` },
-                { status: 409 } // Conflict
-            );
+        // Zod 스키마로 데이터 유효성 검사
+        const validation = productFormSchema.safeParse(body);
+        if (!validation.success) {
+            console.error('[API POST] 데이터 유효성 검사 실패:', validation.error.errors);
+            return NextResponse.json({ message: '잘못된 데이터 형식입니다.', errors: validation.error.errors }, { status: 400 });
         }
 
-        // 2. Category ID 유효성 검사 (categoryId는 필수)
-        if (!productDataFromRequest.categoryId) {
-            return NextResponse.json({ message: '카테고리 ID(categoryId)는 필수입니다.' }, { status: 400 });
+        const newProductData = validation.data as Product;
+
+        const products = await readProductsData();
+
+        const existingProduct = findProductById(products, newProductData.id);
+        if (existingProduct) {
+            console.error('[API POST] 이미 존재하는 제품 ID:', newProductData.id);
+            return NextResponse.json({ message: '이미 존재하는 제품 ID입니다.' }, { status: 409 });
         }
 
-        // productCategoryId는 저장하지 않음. category 필드를 사용.
-        // API 요청에서는 categoryId를 사용하고, 실제 저장 시에는 Product 객체 내의 category 필드 사용
-        const { productCategoryId, ...restOfProductData } = productDataFromRequest;
-        const newProduct: Product = {
-            ...restOfProductData,
-            // id: productDataFromRequest.id, // 이미 productDataFromRequest에 포함되어 있음
-            category: productDataFromRequest.categoryId // products.json 구조에 맞춰 category 필드 사용
-        };
+        addProductToCategory(products, newProductData);
 
-        const currentData = await readProductsData();
-        const categoryIndex = currentData.categories.findIndex(cat => cat.id === newProduct.categoryId);
+        console.log('[API POST] 제품 데이터 저장 시작');
+        await writeProductsData(products);
+        console.log('[API POST] 제품 데이터 저장 완료');
 
-        if (categoryIndex === -1) {
-            // 해당 카테고리가 없으면 새로 생성 (운영에서는 별도 카테고리 관리 권장)
-            const categoryGroup: ProductCategoryGroup = {
-                id: newProduct.categoryId || 'default',
-                nameKo: '기본 카테고리',
-                nameEn: 'Default Category',
-                nameCn: '默认类别',
-                products: [newProduct] // 새 제품을 추가
-            };
-            currentData.categories.push(categoryGroup);
-        } else {
-            currentData.categories[categoryIndex].products.push(newProduct);
-        }
+        return NextResponse.json(newProductData, { status: 201 });
 
-        await writeProductsData(currentData);
-
-        // 클라이언트에는 productCategoryId를 포함하여 반환 (ProductForm과의 일관성)
-        return NextResponse.json({ ...newProduct, productCategoryId: newProduct.categoryId }, { status: 201 });
-
-    } catch (error: any) {
-        console.error('[API_PRODUCTS_POST_ERROR]', error);
-        if (error.message.includes('currently locked')) {
-            return NextResponse.json({ message: '데이터 저장 중 충돌이 발생했습니다. 잠시 후 다시 시도해주세요.', error: error.message }, { status: 409 });
-        }
-        return NextResponse.json({ message: '제품 생성에 실패했습니다.', error: error.message }, { status: 500 });
+    } catch (error) {
+        console.error('[API POST] 제품 추가 중 오류:', error);
+        return NextResponse.json({ message: '제품 추가 중 서버 오류가 발생했습니다.', error: error instanceof Error ? error.message : String(error) }, { status: 500 });
     }
+}
+
+// 헬퍼 함수들 (중복 방지를 위해 여기에 유지)
+function findProductById(data: ProductsDataStructure, productId: string): Product | undefined {
+    for (const category of data.categories || []) {
+        const product = category.products.find(p => p.id === productId);
+        if (product) {
+            return {
+                ...product,
+                productCategoryId: category.id
+            } as Product;
+        }
+    }
+    return undefined;
+}
+
+function addProductToCategory(data: ProductsDataStructure, product: Product): void {
+    const categoryId = product.categoryId || 'etc'; // categoryId가 없으면 'etc' 카테고리로
+    let category = data.categories?.find(c => c.id === categoryId);
+
+    if (!category) {
+        // 카테고리가 없으면 동적으로 생성
+        category = {
+            id: categoryId,
+            nameKo: getCategoryName(categoryId, 'ko'),
+            nameEn: getCategoryName(categoryId, 'en'),
+            nameCn: getCategoryName(categoryId, 'cn'),
+            products: []
+        };
+        if (!data.categories) {
+            data.categories = [];
+        }
+        data.categories.push(category);
+        console.log(`[Helper] 새 카테고리 생성: ${categoryId}`);
+    }
+
+    const { productCategoryId, ...productToAdd } = product;
+    category.products.push(productToAdd as Product);
+    console.log(`[Helper] 제품 ${product.id}을(를) 카테고리 ${categoryId}에 추가`);
 } 

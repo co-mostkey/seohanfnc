@@ -1,12 +1,10 @@
 'use client';
 import Image from 'next/image';
-import dynamic from 'next/dynamic';
 import { useState, useMemo } from 'react';
 import { ModelSpecTable } from '@/components/products/ModelSpecTable';
 import { cn } from '@/lib/utils';
 import { ImpactAbsorptionChart } from '@/components/products/ImpactAbsorptionChart';
-
-const SimpleModelViewer = dynamic(() => import('@/components/products/SimpleModelViewer'), { ssr: false });
+import { ProductHero } from '@/components/products/ProductHero';
 
 export default function CylinderTypeSafetyAirMatClient({ product }: { product: any }) {
     // [TRISID] B타입 데이터 우선 사용, 없으면 기존 방식(ID 기반 경로) 사용 (데이터 연동)
@@ -26,48 +24,24 @@ export default function CylinderTypeSafetyAirMatClient({ product }: { product: a
         return [...baseImages, ...galleryData];
     }, [thumbnailImage, product.gallery, product.gallery_images_data]);
 
-    const [activeImage, setActiveImage] = useState(galleryImages.length > 0 ? galleryImages[0] : (visualImage || ''));
+    const [activeImage, setActiveImage] = useState(galleryImages.length > 0 ? galleryImages[0] : (visualImage || '/images/placeholder.jpg'));
 
-    // [TRISID] 데이터 연동을 위한 주요 데이터 소스 정의 (B타입 우선)
-    const approvalNumber = product.model3D?.approvalNumber || product.approvalNumber;
-    const features = product.certifications || product.features;
+    // [TRISID] 데이터 연동을 위한 주요 데이터 소스 명확화
+    const features = product.features; // 순수 features 데이터
+    const certifications = product.certifications; // 순수 certifications 데이터
+
+    // 서브타이틀로 표시할 모든 인증 번호를 결합
+    const certificationSubtitle = certifications?.map((c: any) => c.description).join(' / ');
 
     return (
         <div>
-            {/* Hero Section: 3D 모델링 중앙 배치 */}
-            <section className="relative w-full h-screen flex flex-col items-center justify-center">
-                {/* Background Image & Overlay */}
-                <div className="absolute inset-0 z-0">
-                    <Image
-                        src={visualImage || ''}
-                        alt="제품 배경 이미지"
-                        fill
-                        className="object-cover"
-                        priority
-                    />
-                    <div className="absolute inset-0 bg-black/60" />
-                </div>
-
-                <div className="w-full h-[95vh] relative z-30">
-                    <SimpleModelViewer modelPath={model3dPath} interactive={true} productId={product.id} />
-                </div>
-
-                {/* Text Overlay */}
-                <div className="absolute bottom-10 left-0 right-0 z-20 text-center px-4 pointer-events-none">
-                    <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight drop-shadow-lg">
-                        {product.nameKo}
-                    </h2>
-                    <div
-                        className="h-0.5 mx-auto my-4 rounded-full bg-gradient-to-r from-transparent via-gray-300 to-transparent"
-                        style={{ width: 'clamp(300px, 50vw, 600px)' }}
-                    />
-                    {approvalNumber && (
-                        <p className="mt-4 text-xl text-gray-300 drop-shadow-md">
-                            제품승인번호: {approvalNumber}
-                        </p>
-                    )}
-                </div>
-            </section>
+            <ProductHero
+                productName={product.nameKo}
+                certificationSubtitle={certificationSubtitle}
+                backgroundImage={visualImage || ''}
+                modelPath={model3dPath}
+                productId={product.id}
+            />
 
             {/* Main Content Section */}
             <section className="container mx-auto px-4 py-16">
@@ -100,19 +74,19 @@ export default function CylinderTypeSafetyAirMatClient({ product }: { product: a
                         <div className="relative grid grid-cols-1 md:grid-cols-5 gap-8 p-8">
                             <div className="md:col-span-3 w-full h-96 md:h-[450px] relative overflow-hidden rounded-lg border border-gray-600/50">
                                 <Image
-                                    src={activeImage || ''}
+                                    src={activeImage || '/images/placeholder.jpg'}
                                     alt={product.nameKo}
                                     fill
                                     className="object-cover"
-                                    onError={() => setActiveImage(visualImage || '')}
+                                    onError={() => setActiveImage(visualImage || '/images/placeholder.jpg')}
                                     sizes="(max-width: 768px) 90vw, 54vw"
                                 />
                             </div>
                             <div className="md:col-span-2 flex flex-col justify-center text-white">
                                 <h3 className="text-3xl font-bold mb-3">{product.nameKo}</h3>
-                                {approvalNumber && (
+                                {certificationSubtitle && (
                                     <div className="text-lg text-gray-300 mb-4">
-                                        <span className="font-semibold text-gray-100">제품승인번호:</span> {approvalNumber}
+                                        <span className="font-semibold text-gray-100">제품승인번호:</span> {certificationSubtitle}
                                     </div>
                                 )}
                                 <ul className="space-y-3 text-gray-200">
