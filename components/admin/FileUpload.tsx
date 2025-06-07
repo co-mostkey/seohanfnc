@@ -62,7 +62,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
 
     const addFiles = (newFiles: File[]) => {
         setUploadError(null);
-        let validFiles = newFiles.filter(file => {
+        const validFiles = newFiles.filter(file => {
             if (file.size > maxSizeMb * 1024 * 1024) {
                 setUploadError(`${file.name} 파일 크기가 너무 큽니다 (최대 ${maxSizeMb}MB).`);
                 return false;

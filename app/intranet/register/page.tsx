@@ -24,13 +24,13 @@ export default function IntranetRegisterPage() {
         setIsLoading(true);
         setError(''); setSuccess('');
         try {
-            const response = await fetch('/api/intranet/auth/register', {
+            const response = await fetch('/api/auth/intranet-register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
             });
             const data = await response.json();
-            if (!response.ok || !data.ok) {
+            if (!response.ok || !data.success) {
                 throw new Error(data.error || '계정 신청에 실패했습니다.');
             }
             setSuccess('계정 신청이 완료되었습니다. 관리자의 승인을 기다려주세요.');

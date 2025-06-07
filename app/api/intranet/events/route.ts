@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
         const month = searchParams.get('month');
         const year = searchParams.get('year');
 
-        const data = await safeReadJSON(dbPath);
+        const data = await safeReadJSON(dbPath, { events: [], lastId: 0 });
         let events = data.events || [];
 
         // 월별 필터링
@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        const data = await safeReadJSON(dbPath);
+        const data = await safeReadJSON(dbPath, { events: [], lastId: 0 });
         const newId = (data.lastId || 0) + 1;
 
         const eventDate = new Date(date);
@@ -106,7 +106,7 @@ export async function PUT(request: NextRequest) {
             );
         }
 
-        const data = await safeReadJSON(dbPath);
+        const data = await safeReadJSON(dbPath, { events: [], lastId: 0 });
         const eventIndex = data.events.findIndex((event: any) => event.id === id);
 
         if (eventIndex === -1) {
@@ -158,7 +158,7 @@ export async function DELETE(request: NextRequest) {
             );
         }
 
-        const data = await safeReadJSON(dbPath);
+        const data = await safeReadJSON(dbPath, { events: [], lastId: 0 });
         const eventIndex = data.events.findIndex((event: any) => event.id === eventId);
 
         if (eventIndex === -1) {

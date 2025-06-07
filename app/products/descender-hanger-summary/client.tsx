@@ -306,7 +306,7 @@ const ProductDetail: React.FC<DescenderHangerSummaryProps> = ({
         window.addEventListener('scroll', handleScroll);
         handleScroll();
         return () => window.removeEventListener('scroll', handleScroll);
-    }, [isScrolling, activeSection]);
+    }, [isScrolling]); // [TRISID] activeSection 의존성 제거하여 무한 리렌더링 방지
 
     const scrollToSection = (sectionId: SectionId) => {
         setIsScrolling(true);

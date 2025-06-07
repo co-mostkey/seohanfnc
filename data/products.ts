@@ -85,6 +85,77 @@ function loadProductsData(): ProductsData {
               showInProductList: true,
               description: '실린더형 공기안전매트입니다.',
               image: '/images/products/Cylinder-Type-SafetyAirMat.jpg'
+            },
+            {
+              id: 'test-b-type-advanced',
+              nameKo: '테스트 B타입 고급 제품',
+              name: 'Test B-Type Advanced Product',
+              category: 'b-type',
+              productCategoryId: 'b-type',
+              showInProductList: true,
+              description: 'A타입 수준 디자인과 3D 모델링이 통합된 고급 B타입 제품입니다.',
+              descriptionKo: 'A타입 수준 디자인과 3D 모델링이 통합된 고급 B타입 제품입니다.',
+              image: '/images/products/test-b-type-advanced/thumbnail.jpg',
+              pageBackgroundImage: '/images/products/test-b-type-advanced/main/visual.jpg',
+              features: [
+                { title: "고급 디자인", description: "A타입 수준의 세련된 인터페이스와 애니메이션" },
+                { title: "3D 모델링", description: "실시간 3D 모델 뷰어로 제품을 360도 확인" },
+                { title: "스크롤 네비게이션", description: "부드러운 스크롤 기반 섹션 네비게이션" },
+                { title: "고급 갤러리", description: "이미지와 비디오를 분리한 탭형 갤러리" }
+              ],
+              model3D: {
+                glbFile: '/models/products/test-b-type-advanced/test-b-type-advanced.glb',
+                scale: 1.0,
+                position: [0, 0, 0],
+                rotation: [0, 0, 0]
+              },
+              specTable: [
+                { title: "제품명", value: "테스트 B타입 고급 제품" },
+                { title: "타입", value: "B타입 (고급 버전)" },
+                { title: "디자인 수준", value: "A타입 수준 (5성급)" },
+                { title: "3D 모델링", value: "지원" },
+                { title: "개발 상태", value: "완료" }
+              ],
+              certifications: [
+                { description: "테스트-승인-2024-001" }
+              ],
+              cautions: [
+                "이 제품은 새로운 B타입 고급 템플릿 테스트용입니다.",
+                "실제 제품이 아닌 시스템 검증 목적으로 생성되었습니다.",
+                "모든 기능이 정상 작동하는지 확인 후 실제 제품에 적용하세요."
+              ],
+              gallery_images_data: [
+                {
+                  id: "test-b-1",
+                  type: "image",
+                  src: "/images/products/test-b-type-advanced/gallery/image1.jpg",
+                  alt: "테스트 B타입 이미지 1"
+                },
+                {
+                  id: "test-b-2",
+                  type: "image",
+                  src: "/images/products/test-b-type-advanced/gallery/image2.jpg",
+                  alt: "테스트 B타입 이미지 2"
+                }
+              ],
+              videos: [
+                {
+                  type: "video",
+                  id: "test-video-1",
+                  src: "/videos/products/test-b-type-advanced/demo.mp4",
+                  alt: "테스트 B타입 데모 영상"
+                }
+              ],
+              documents: [
+                {
+                  id: "test-doc-1",
+                  nameKo: "테스트 B타입 카탈로그",
+                  name: "Test B-Type Catalog",
+                  path: "/documents/test-b-type-advanced-catalog.pdf",
+                  url: "/documents/test-b-type-advanced-catalog.pdf",
+                  type: "pdf"
+                }
+              ]
             }
           ]
         }
@@ -93,42 +164,15 @@ function loadProductsData(): ProductsData {
   }
 }
 
-// 최초 로드 (SSR 빌드 단계에서도 빈 구조를 최소 보장)
+// [TRISID] 성능 최적화: 파일 감시 완전 제거
+// Next.js 자체 Hot Reload에 의존하여 중복 감시 제거
 let productsDataSource: ProductsData = loadProductsData();
-
-// 개발 환경에서 파일 변동 시 자동으로 다시 읽도록 설정
-if (process.env.NODE_ENV !== 'production') {
-  const mainJsonPath = path.join(process.cwd(), 'content', 'data', 'products', 'products.json');
-  const newJsonPath = path.join(process.cwd(), 'content', 'data', 'new_products', 'products.json');
-  if (fs.existsSync(mainJsonPath)) {
-    fs.watchFile(mainJsonPath, { interval: 1000 }, () => {
-      try {
-        productsDataSource = loadProductsData();
-        console.log('[data/products.ts] products.json 변경 감지 → 데이터 자동 리로드');
-      } catch (err) {
-        console.error('[data/products.ts] 데이터 리로드 실패:', err);
-      }
-    });
-  }
-  if (fs.existsSync(newJsonPath)) {
-    fs.watchFile(newJsonPath, { interval: 1000 }, () => {
-      try {
-        productsDataSource = loadProductsData();
-        console.log('[data/products.ts] products.json 변경 감지 → 데이터 자동 리로드');
-      } catch (err) {
-        console.error('[data/products.ts] 데이터 리로드 실패:', err);
-      }
-    });
-  }
-}
 
 // 모든 제품을 단일 배열로 추출 (showInProductList 및 isPublished 필터링 적용)
 export function getAllProducts(options?: { includeUnpublished?: boolean }): Product[] {
   try {
-    // 개발 환경에서는 항상 최신 데이터를 로드
-    if (process.env.NODE_ENV !== 'production') {
-      productsDataSource = loadProductsData();
-    }
+    // [TRISID] 성능 최적화: 메모리 캐싱 활용
+    // Next.js Hot Reload 시에만 데이터가 자동으로 새로 로드됨
 
     let allProductsList: Product[] = [];
 
@@ -270,6 +314,20 @@ export function getAllProducts(options?: { includeUnpublished?: boolean }): Prod
     } catch (sortError) {
       console.error('[getAllProducts] 정렬 중 오류:', sortError);
     }
+
+    // [TRISID] B 타입 4개를 제외한 b-type 카테고리 제품은 A 타입으로 분류
+    const bTypeIds = new Set([
+      'Cylinder-Type-SafetyAirMat',
+      'Fan-Type-Air-Safety-Mat',
+      'Training-Air-Mattress-Fall-Prevention-Mat',
+      'Lifesaving-Mat',
+    ]);
+    filteredList = filteredList.map(p => {
+      if (p.productCategoryId === 'b-type') {
+        (p as any).productStyle = bTypeIds.has(p.id) ? 'B' : 'A';
+      }
+      return p;
+    });
 
     return Array.isArray(filteredList) ? filteredList : [];
 

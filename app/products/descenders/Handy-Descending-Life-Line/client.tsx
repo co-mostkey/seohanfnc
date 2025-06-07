@@ -90,14 +90,12 @@ const ProductDetail: React.FC<ProductDetailClientProps> = ({
                     }
                 }
             });
-            if (currentActiveSection !== activeSection) {
-                setActiveSection(currentActiveSection);
-            }
+            setActiveSection(prev => prev !== currentActiveSection ? currentActiveSection : prev);
         };
         window.addEventListener('scroll', handleScroll);
         handleScroll();
         return () => window.removeEventListener('scroll', handleScroll);
-    }, [isScrolling, activeSection]);
+    }, [isScrolling]);
 
     const scrollToSection = (sectionId: SectionId) => {
         setIsScrolling(true);

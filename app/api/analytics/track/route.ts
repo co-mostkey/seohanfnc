@@ -97,7 +97,7 @@ export async function POST(request: NextRequest) {
         }
 
         // 분석 데이터 읽기
-        let analyticsData = await readAnalyticsData();
+        const analyticsData = await readAnalyticsData();
 
         if (!analyticsData) {
             return NextResponse.json(

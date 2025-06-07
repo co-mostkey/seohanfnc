@@ -43,6 +43,10 @@
     "node_modules",
     "public/**",
     ".next/**",
-    "out/**"
+    "out/**",
+    "__reference_full_backup/**",
+    "backup_*/**",
+    "**/_backups/**",
+    "**/backups/**"
   ]
 }

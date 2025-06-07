@@ -163,19 +163,44 @@ export default function NoticeCreatePage() {
     setIsSubmitting(true);
 
     try {
-      // 실제 구현에서는 API 호출로 공지사항 등록
-      // 등록 성공 시뮬레이션
-      setTimeout(() => {
-        setIsSubmitting(false);
-        alert('공지사항이 성공적으로 등록되었습니다.');
-        router.push('/intranet/notices');
-      }, 1500);
+      // [TRISID] 인트라넷 공지사항 등록 API 호출
+      const response = await fetch('/api/intranet/notices', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title: noticeData.title.trim(),
+          content: noticeData.content.trim(),
+          category: noticeData.category,
+          isPinned: noticeData.isPinned,
+          isImportant: noticeData.isImportant,
+          // 작성자 정보는 세션에서 가져오거나 기본값 사용
+          author: {
+            id: 'current-user',
+            name: '현재 사용자',
+            position: '직원',
+            department: '부서',
+            avatar: '/images/avatars/default.jpg'
+          }
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || '공지사항 등록에 실패했습니다.');
+      }
+
+      alert('공지사항이 성공적으로 등록되었습니다.');
+      router.push('/intranet/notices');
     } catch (error) {
       console.error('Submit error:', error);
       setErrors({
         ...errors,
-        general: '공지사항 등록 중 오류가 발생했습니다. 다시 시도해주세요.',
+        general: error instanceof Error ? error.message : '공지사항 등록 중 오류가 발생했습니다. 다시 시도해주세요.',
       });
+    } finally {
       setIsSubmitting(false);
     }
   };
@@ -390,8 +415,8 @@ export default function NoticeCreatePage() {
             onClick={handleSaveDraft}
             disabled={isSaving || isSubmitting}
             className={`px-4 py-2 rounded-md text-white transition-colors flex items-center ${isSaving || isSubmitting
-                ? 'bg-gray-600 cursor-not-allowed'
-                : 'bg-gray-700 hover:bg-gray-600'
+              ? 'bg-gray-600 cursor-not-allowed'
+              : 'bg-gray-700 hover:bg-gray-600'
               }`}
           >
             <Save className="h-4 w-4 mr-1.5" />
@@ -409,8 +434,8 @@ export default function NoticeCreatePage() {
             type="submit"
             disabled={isSubmitting || isSaving}
             className={`px-4 py-2 rounded-md text-white transition-colors flex items-center ${isSubmitting || isSaving
-                ? 'bg-gray-600 cursor-not-allowed'
-                : 'bg-blue-600 hover:bg-blue-700'
+              ? 'bg-gray-600 cursor-not-allowed'
+              : 'bg-blue-600 hover:bg-blue-700'
               }`}
           >
             <Send className="h-4 w-4 mr-1.5" />

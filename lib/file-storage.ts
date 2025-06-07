@@ -133,7 +133,7 @@ export async function saveFile(
         throw new Error(`Failed to write file ${filePath}: ${writeError.message}`);
     }
 
-    let publicPath = normalizePath(`/uploads/${normalizedSubDir}/${fileName}`);
+    const publicPath = normalizePath(`/uploads/${normalizedSubDir}/${fileName}`);
     // console.log(`[file-storage] Generated public URL: ${publicPath}`);
 
     return {

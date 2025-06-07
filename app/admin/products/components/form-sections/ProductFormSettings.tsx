@@ -369,7 +369,28 @@ const ProductFormSettings = () => {
                     {/* 배경 이미지 */}
                     <div>
                         <Label htmlFor="pageBackgroundImage">배경 이미지</Label>
+
+                        {/* [TRISID] 투명 배경 옵션 */}
                         <div className="space-y-3">
+                            <div className="flex items-center space-x-4 p-3 bg-gray-800 rounded-md border border-gray-700">
+                                <Switch
+                                    id="useTransparentBackground"
+                                    checked={watch('useTransparentBackground')}
+                                    onCheckedChange={(checked) => {
+                                        setValue('useTransparentBackground', checked, { shouldValidate: true });
+                                        if (checked) {
+                                            setValue('pageBackgroundImage', '', { shouldValidate: true });
+                                        }
+                                    }}
+                                />
+                                <Label htmlFor="useTransparentBackground" className="flex flex-col space-y-1">
+                                    <span className="text-sm font-medium text-white">투명 배경 사용</span>
+                                    <span className="text-xs text-gray-400">히어로 섹션 없이 깔끔한 레이아웃으로 표시</span>
+                                </Label>
+                            </div>
+
+                            {!watch('useTransparentBackground') && (
+                                <>
                             <FileUpload
                                 endpoint="/api/admin/upload"
                                 onUploadSuccess={(file) => setValue('pageBackgroundImage', file.url, { shouldValidate: true })}
@@ -400,6 +421,8 @@ const ProductFormSettings = () => {
                                         <Trash2 className="h-3 w-3" />
                                     </Button>
                                 </div>
+                                    )}
+                                </>
                             )}
                         </div>
                     </div>

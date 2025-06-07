@@ -130,7 +130,7 @@ const ProductDetail: React.FC<ProductDetailClientProps> = ({
         return () => {
             window.removeEventListener('scroll', handleScroll);
         };
-    }, [isScrolling, activeSection]);
+    }, [isScrolling]); // [TRISID] activeSection 의존성 제거하여 무한 리렌더링 방지
 
     // 특정 섹션으로 스크롤
     const scrollToSection = (sectionId: SectionId) => {

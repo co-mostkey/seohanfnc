@@ -1,29 +1,51 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { promises as fs } from 'fs';
 import path from 'path';
+import { safeReadJSON, safeWriteJSON } from '@/lib/file-lock';
 
 // [TRISID] 인트라넷 할 일 관리 API
 
-export async function GET() {
-    try {
-        const dbPath = path.join(process.cwd(), 'data/db/intranet-tasks.json');
+const dbPath = path.join(process.cwd(), 'data/db/intranet-tasks.json');
 
-        let tasksData;
-        try {
-            const fileData = await fs.readFile(dbPath, 'utf8');
-            tasksData = JSON.parse(fileData);
-        } catch (error) {
-            // 파일이 없으면 기본 데이터로 초기화
-            tasksData = {
-                tasks: [],
-                lastId: 0
-            };
-            await fs.writeFile(dbPath, JSON.stringify(tasksData, null, 4), 'utf8');
+export async function GET(request: NextRequest) {
+    try {
+        const { searchParams } = new URL(request.url);
+        const assignee = searchParams.get('assignee');
+        const status = searchParams.get('status');
+        const priority = searchParams.get('priority');
+
+        const data = await safeReadJSON(dbPath, { tasks: [], lastId: 0 });
+        let tasks = data.tasks || [];
+
+        // 담당자 필터링
+        if (assignee) {
+            tasks = tasks.filter((task: any) =>
+                task.assignees && task.assignees.some((a: any) => a.id === assignee)
+            );
         }
+
+        // 상태 필터링
+        if (status === 'completed') {
+            tasks = tasks.filter((task: any) => task.completed);
+        } else if (status === 'pending') {
+            tasks = tasks.filter((task: any) => !task.completed);
+        }
+
+        // 우선순위 필터링
+        if (priority) {
+            tasks = tasks.filter((task: any) => task.priority === priority);
+        }
+
+        // 마감일 순 정렬
+        tasks.sort((a: any, b: any) => {
+            if (a.completed && !b.completed) return 1;
+            if (!a.completed && b.completed) return -1;
+            return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
+        });
 
         return NextResponse.json({
             success: true,
-            tasks: tasksData.tasks
+            tasks
         });
 
     } catch (error) {
@@ -37,7 +59,7 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
     try {
-        const { title, dueDate, priority, assignees } = await request.json();
+        const { title, description, dueDate, priority, assignees, category } = await request.json();
 
         if (!title || !dueDate) {
             return NextResponse.json(
@@ -46,32 +68,27 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        const dbPath = path.join(process.cwd(), 'data/db/intranet-tasks.json');
-
-        let tasksData;
-        try {
-            const fileData = await fs.readFile(dbPath, 'utf8');
-            tasksData = JSON.parse(fileData);
-        } catch (error) {
-            tasksData = {
-                tasks: [],
-                lastId: 0
-            };
-        }
+        const data = await safeReadJSON(dbPath, { tasks: [], lastId: 0 });
+        const newId = (data.lastId || 0) + 1;
 
         const newTask = {
-            id: (++tasksData.lastId).toString(),
+            id: String(newId),
             title,
+            description: description || '',
             dueDate,
             priority: priority || 'medium',
             assignees: assignees || [],
+            category: category || 'general',
             completed: false,
+            progress: 0,
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString()
         };
 
-        tasksData.tasks.push(newTask);
-        await fs.writeFile(dbPath, JSON.stringify(tasksData, null, 4), 'utf8');
+        data.tasks.push(newTask);
+        data.lastId = newId;
+
+        await safeWriteJSON(dbPath, data);
 
         console.log('[TRISID] 새 할 일 추가:', newTask.title);
 
@@ -91,7 +108,7 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
     try {
-        const { id, title, dueDate, priority, assignees, completed } = await request.json();
+        const { id, title, description, dueDate, priority, assignees, completed, progress } = await request.json();
 
         if (!id) {
             return NextResponse.json(
@@ -100,11 +117,8 @@ export async function PUT(request: NextRequest) {
             );
         }
 
-        const dbPath = path.join(process.cwd(), 'data/db/intranet-tasks.json');
-        const fileData = await fs.readFile(dbPath, 'utf8');
-        const tasksData = JSON.parse(fileData);
-
-        const taskIndex = tasksData.tasks.findIndex((task: any) => task.id === id);
+        const data = await safeReadJSON(dbPath, { tasks: [], lastId: 0 });
+        const taskIndex = data.tasks.findIndex((task: any) => task.id === id);
 
         if (taskIndex === -1) {
             return NextResponse.json(
@@ -115,17 +129,19 @@ export async function PUT(request: NextRequest) {
 
         // 업데이트할 필드만 변경
         const updatedTask = {
-            ...tasksData.tasks[taskIndex],
+            ...data.tasks[taskIndex],
             ...(title !== undefined && { title }),
+            ...(description !== undefined && { description }),
             ...(dueDate !== undefined && { dueDate }),
             ...(priority !== undefined && { priority }),
             ...(assignees !== undefined && { assignees }),
             ...(completed !== undefined && { completed }),
+            ...(progress !== undefined && { progress }),
             updatedAt: new Date().toISOString()
         };
 
-        tasksData.tasks[taskIndex] = updatedTask;
-        await fs.writeFile(dbPath, JSON.stringify(tasksData, null, 4), 'utf8');
+        data.tasks[taskIndex] = updatedTask;
+        await safeWriteJSON(dbPath, data);
 
         console.log('[TRISID] 할 일 업데이트:', updatedTask.title);
 
@@ -145,21 +161,18 @@ export async function PUT(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
     try {
-        const url = new URL(request.url);
-        const id = url.searchParams.get('id');
+        const { searchParams } = new URL(request.url);
+        const taskId = searchParams.get('id');
 
-        if (!id) {
+        if (!taskId) {
             return NextResponse.json(
                 { success: false, error: '할 일 ID가 필요합니다.' },
                 { status: 400 }
             );
         }
 
-        const dbPath = path.join(process.cwd(), 'data/db/intranet-tasks.json');
-        const fileData = await fs.readFile(dbPath, 'utf8');
-        const tasksData = JSON.parse(fileData);
-
-        const taskIndex = tasksData.tasks.findIndex((task: any) => task.id === id);
+        const data = await safeReadJSON(dbPath, { tasks: [], lastId: 0 });
+        const taskIndex = data.tasks.findIndex((task: any) => task.id === taskId);
 
         if (taskIndex === -1) {
             return NextResponse.json(
@@ -168,8 +181,8 @@ export async function DELETE(request: NextRequest) {
             );
         }
 
-        const deletedTask = tasksData.tasks.splice(taskIndex, 1)[0];
-        await fs.writeFile(dbPath, JSON.stringify(tasksData, null, 4), 'utf8');
+        const deletedTask = data.tasks.splice(taskIndex, 1)[0];
+        await safeWriteJSON(dbPath, data);
 
         console.log('[TRISID] 할 일 삭제:', deletedTask.title);
 

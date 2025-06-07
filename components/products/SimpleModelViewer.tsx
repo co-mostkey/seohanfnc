@@ -60,11 +60,20 @@ const getProductSettings = (productId: string): ProductSettings => {
   }
 };
 
-function Model({ url, onLoad, onError, productId }: { url: string; onLoad?: () => void; onError?: () => void; productId?: string }) {
+function Model({ url, onLoad, onError, productId, customSettings }: { url: string; onLoad?: () => void; onError?: () => void; productId?: string; customSettings?: any }) {
   const [model, setModel] = useState<THREE.Group | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
-  const { position, scale, rotation } = getProductSettings(productId || '');
+
+  // [TRISID] 관리자 설정이 있으면 우선 사용, 없으면 기본 설정 사용
+  const defaultSettings = getProductSettings(productId || '');
+  const position: [number, number, number] = customSettings?.position ?
+    [customSettings.position.x || 0, customSettings.position.y || -0.5, customSettings.position.z || 0] :
+    defaultSettings.position;
+  const scale = customSettings?.scale || defaultSettings.scale;
+  const rotation: [number, number, number] = customSettings?.rotation ?
+    [customSettings.rotation.x || 0, customSettings.rotation.y || 0, customSettings.rotation.z || 0] :
+    defaultSettings.rotation;
 
   useEffect(() => {
     setIsLoading(true);
@@ -175,6 +184,7 @@ interface SimpleModelViewerProps {
   productId?: string;
   transparent?: boolean;
   interactive?: boolean;
+  customSettings?: any; // 관리자에서 설정한 3D 모델 설정
 }
 
 // [TRISID] 3D 모델 경로 자동 생성 함수 (공식 경로)
@@ -200,7 +210,7 @@ function resolveModelPath(props: SimpleModelViewerProps): { path: string | null,
 }
 
 export default function SimpleModelViewer(props: SimpleModelViewerProps) {
-  const { productName, onLoad, onError, productId, transparent = false, interactive = false } = props;
+  const { productName, onLoad, onError, productId, transparent = false, interactive = false, customSettings } = props;
   const [isRotating, setIsRotating] = useState(true);
   const settings = getProductSettings(productId || '');
   const toggleRotation = () => setIsRotating(!isRotating);
@@ -242,7 +252,7 @@ export default function SimpleModelViewer(props: SimpleModelViewerProps) {
             castShadow={false}
           />
           <Suspense fallback={<Loader />}>
-            <Model url={resolvedPath || ''} onLoad={onLoad} onError={onError} productId={productId} />
+            <Model url={resolvedPath || ''} onLoad={onLoad} onError={onError} productId={productId} customSettings={customSettings} />
           </Suspense>
           <OrbitControls
             autoRotate={isRotating}

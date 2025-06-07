@@ -6,6 +6,7 @@ import { Providers } from "./providers"
 import ClientLayout from "@/components/client-layout"
 import { Toaster } from 'sonner'
 
+
 // 폰트 설정: Inter - 기본 텍스트용
 const inter = Inter({
   subsets: ["latin"],
@@ -61,6 +62,8 @@ export function generateViewport(): Viewport {
 interface RootLayoutProps {
   children: React.ReactNode
 }
+
+
 
 /**
  * 애플리케이션 루트 레이아웃 컴포넌트

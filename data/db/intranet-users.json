@@ -3,7 +3,7 @@
         {
             "id": "intranet-admin-001",
             "username": "intranet_admin",
-            "password": "$2b$10$hashedPasswordForIntranetAdmin123",
+            "password": "$2b$10$7vrJCJQ4W0BkkzIj0zYvuuy95mSWpvxTkjdNJxbEfChNmTsH5FtXq",
             "email": "intranet_admin@seohanfc.com",
             "role": "인트라넷관리자",
             "name": "인트라넷 관리자",
@@ -12,12 +12,108 @@
             "employeeId": "EMP001",
             "isActive": true,
             "createdAt": "2024-01-01T00:00:00.000Z",
+            "lastLogin": "2025-06-07T16:42:51.183Z",
+            "permissions": [
+                "intranet.admin",
+                "intranet.users.manage",
+                "intranet.content.manage",
+                "intranet.access.all"
+            ]
+        },
+        {
+            "id": "user_001",
+            "username": "kim_employee",
+            "password": "$2b$10$7vrJCJQ4W0BkkzIj0zYvuuy95mSWpvxTkjdNJxbEfChNmTsH5FtXq",
+            "email": "kim@seohanfc.com",
+            "role": "직원",
+            "name": "김직원",
+            "department": "마케팅팀",
+            "position": "대리",
+            "employeeId": "EMP002",
+            "isActive": true,
+            "createdAt": "2024-01-01T00:00:00.000Z",
+            "lastLogin": null,
+            "permissions": [
+                "intranet.access",
+                "intranet.documents.read",
+                "intranet.notices.read"
+            ]
+        },
+        {
+            "id": "user_002",
+            "username": "park_manager",
+            "password": "$2b$10$7vrJCJQ4W0BkkzIj0zYvuuy95mSWpvxTkjdNJxbEfChNmTsH5FtXq",
+            "email": "park@seohanfc.com",
+            "role": "팀장",
+            "name": "박팀장",
+            "department": "마케팅팀",
+            "position": "팀장",
+            "employeeId": "EMP003",
+            "isActive": true,
+            "createdAt": "2024-01-01T00:00:00.000Z",
+            "lastLogin": null,
+            "permissions": [
+                "intranet.team.manage",
+                "intranet.documents.manage",
+                "intranet.notices.write"
+            ]
+        },
+        {
+            "id": "user_003",
+            "username": "lee_director",
+            "password": "$2b$10$7vrJCJQ4W0BkkzIj0zYvuuy95mSWpvxTkjdNJxbEfChNmTsH5FtXq",
+            "email": "lee@seohanfc.com",
+            "role": "임원",
+            "name": "이상무",
+            "department": "경영진",
+            "position": "상무",
+            "employeeId": "EMP004",
+            "isActive": true,
+            "createdAt": "2024-01-01T00:00:00.000Z",
             "lastLogin": null,
             "permissions": [
                 "intranet.admin",
                 "intranet.users.manage",
                 "intranet.content.manage",
                 "intranet.access.all"
+            ]
+        },
+        {
+            "id": "user_004",
+            "username": "choi_accounting",
+            "password": "$2b$10$7vrJCJQ4W0BkkzIj0zYvuuy95mSWpvxTkjdNJxbEfChNmTsH5FtXq",
+            "email": "choi@seohanfc.com",
+            "role": "팀장",
+            "name": "최회계",
+            "department": "회계팀",
+            "position": "팀장",
+            "employeeId": "EMP005",
+            "isActive": true,
+            "createdAt": "2024-01-01T00:00:00.000Z",
+            "lastLogin": null,
+            "permissions": [
+                "intranet.team.manage",
+                "intranet.documents.manage",
+                "intranet.notices.write"
+            ]
+        },
+        {
+            "id": "user_005",
+            "username": "jung_hr",
+            "password": "$2b$10$7vrJCJQ4W0BkkzIj0zYvuuy95mSWpvxTkjdNJxbEfChNmTsH5FtXq",
+            "email": "jung@seohanfc.com",
+            "role": "팀장",
+            "name": "정인사",
+            "department": "인사팀",
+            "position": "팀장",
+            "employeeId": "EMP006",
+            "isActive": true,
+            "createdAt": "2024-01-01T00:00:00.000Z",
+            "lastLogin": null,
+            "permissions": [
+                "intranet.team.manage",
+                "intranet.documents.manage",
+                "intranet.notices.write"
             ]
         }
     ],
@@ -52,24 +148,44 @@
                 "intranet.notices.read"
             ],
             "level": 30
+        },
+        "임원": {
+            "name": "임원",
+            "description": "임원급 권한",
+            "permissions": [
+                "intranet.admin",
+                "intranet.users.manage",
+                "intranet.content.manage",
+                "intranet.access.all"
+            ],
+            "level": 90
         }
     },
     "sessions": [
         {
-            "id": "93c930da-f39d-43e3-8465-c6bbd58bc9bf",
+            "id": "de6b038a-9a25-4dad-898e-77403909cf27",
             "userId": "intranet-admin-001",
             "username": "intranet_admin",
             "role": "인트라넷관리자",
-            "createdAt": "2025-06-02T00:24:13.443Z",
-            "expiresAt": "2025-06-09T00:24:13.443Z",
+            "createdAt": "2025-06-07T16:42:11.965Z",
+            "expiresAt": "2025-06-14T16:42:11.965Z",
+            "isActive": false
+        },
+        {
+            "id": "506adcf2-288f-4d5f-8b64-affd60dd5434",
+            "userId": "intranet-admin-001",
+            "username": "intranet_admin",
+            "role": "인트라넷관리자",
+            "createdAt": "2025-06-07T16:42:51.183Z",
+            "expiresAt": "2025-06-14T16:42:51.183Z",
             "isActive": true
         }
     ],
     "pendingUsers": [],
     "metadata": {
-        "lastUpdated": "2025-06-02T00:24:13.443Z",
-        "totalUsers": 1,
-        "activeUsers": 1,
+        "lastUpdated": "2025-06-08T05:30:00.000Z",
+        "totalUsers": 6,
+        "activeUsers": 6,
         "totalSessions": 1,
         "pendingApprovals": 0
     }

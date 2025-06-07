@@ -1,933 +1,888 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
-  ArrowLeft,
-  Calendar,
-  CheckCircle2,
-  Clock,
-  Edit,
-  FileText,
-  MessageSquare,
-  MoreHorizontal,
-  Plus,
-  Tag,
-  Trash2,
-  Users,
-  ChevronRight,
-  AlertCircle,
-  PauseCircle,
-  ArrowUpRight,
-  ArrowDownRight,
-  ListTodo
+    ArrowLeft, Calendar, Users, Clock, Edit, Trash2,
+    CheckCircle2, Circle, Plus, Tag, Briefcase, X, Check,
+    MessageSquare, Send
 } from 'lucide-react';
 
-// 임시 프로젝트 데이터
-const initialProjects = [
-  {
-    id: 1,
-    name: '신제품 개발 프로젝트',
-    description: '2024년 하반기 출시 예정 신제품 개발 프로젝트',
-    status: 'ongoing',
-    progress: 65,
-    startDate: '2024-01-15',
-    endDate: '2024-07-31',
-    category: '제품개발',
-    priority: 'high',
+// [TRISID] 프로젝트 상세 페이지 - 유연한 담당자 선택 및 실시간 활동 로그 + 실시간 채팅
+
+interface Project {
+    id: string;
+    name: string;
+    description: string;
+    status: string;
+    priority: string;
+    category: string;
+    startDate: string;
+    endDate: string;
+    progress: number;
     manager: {
-      id: 8,
-      name: '한지민',
-      position: '부장',
-      department: '개발',
-      avatar: '/images/avatars/avatar-8.jpg'
-    },
-    team: [
-      {
-        id: 8,
-        name: '한지민',
-        position: '부장',
-        department: '개발',
-        avatar: '/images/avatars/avatar-8.jpg'
-      },
-      {
-        id: 9,
-        name: '오승환',
-        position: '차장',
-        department: '개발',
-        avatar: '/images/avatars/avatar-9.jpg'
-      },
-      {
-        id: 10,
-        name: '윤서연',
-        position: '과장',
-        department: '개발',
-        avatar: '/images/avatars/avatar-10.jpg'
-      },
-      {
-        id: 5,
-        name: '정수민',
-        position: '과장',
-        department: '마케팅',
-        avatar: '/images/avatars/avatar-5.jpg'
-      }
-    ],
-    tasks: {
-      total: 24,
-      completed: 16
-    },
-    taskList: [
-      {
-        id: 1,
-        title: '시장 조사 보고서 작성',
-        description: '경쟁사 제품 분석 및 시장 동향 조사',
-        assignee: {
-          id: 5,
-          name: '정수민',
-          avatar: '/images/avatars/avatar-5.jpg'
-        },
-        status: 'completed',
-        dueDate: '2024-02-10',
-        completedDate: '2024-02-09',
-        priority: 'high'
-      },
-      {
-        id: 2,
-        title: '디자인 컨셉 기획',
-        description: '제품 디자인 방향성 및 컨셉 기획안 작성',
-        assignee: {
-          id: 10,
-          name: '윤서연',
-          avatar: '/images/avatars/avatar-10.jpg'
-        },
-        status: 'completed',
-        dueDate: '2024-02-25',
-        completedDate: '2024-02-23',
-        priority: 'high'
-      },
-      {
-        id: 3,
-        title: '프로토타입 개발',
-        description: '초기 기능 구현 및 프로토타입 제작',
-        assignee: {
-          id: 9,
-          name: '오승환',
-          avatar: '/images/avatars/avatar-9.jpg'
-        },
-        status: 'completed',
-        dueDate: '2024-03-20',
-        completedDate: '2024-03-22',
-        priority: 'high'
-      },
-      {
-        id: 4,
-        title: '사용자 테스트 진행',
-        description: '프로토타입에 대한 사용자 테스트 및 피드백 수집',
-        assignee: {
-          id: 5,
-          name: '정수민',
-          avatar: '/images/avatars/avatar-5.jpg'
-        },
-        status: 'completed',
-        dueDate: '2024-04-10',
-        completedDate: '2024-04-08',
-        priority: 'medium'
-      },
-      {
-        id: 5,
-        title: '기능 개선 및 추가 개발',
-        description: '사용자 피드백 기반 기능 개선 및 추가 개발',
-        assignee: {
-          id: 9,
-          name: '오승환',
-          avatar: '/images/avatars/avatar-9.jpg'
-        },
-        status: 'in_progress',
-        dueDate: '2024-05-15',
-        priority: 'high'
-      },
-      {
-        id: 6,
-        title: '품질 테스트',
-        description: '개선된 기능에 대한 품질 테스트 및 버그 수정',
-        assignee: {
-          id: 8,
-          name: '한지민',
-          avatar: '/images/avatars/avatar-8.jpg'
-        },
-        status: 'in_progress',
-        dueDate: '2024-06-10',
-        priority: 'medium'
-      },
-      {
-        id: 7,
-        title: '제품 패키징 디자인',
-        description: '최종 출시 제품의 패키징 디자인 작업',
-        assignee: {
-          id: 10,
-          name: '윤서연',
-          avatar: '/images/avatars/avatar-10.jpg'
-        },
-        status: 'todo',
-        dueDate: '2024-06-25',
-        priority: 'medium'
-      },
-      {
-        id: 8,
-        title: '출시 준비 및 마케팅 계획',
-        description: '제품 출시 준비 및 마케팅 전략 수립',
-        assignee: {
-          id: 5,
-          name: '정수민',
-          avatar: '/images/avatars/avatar-5.jpg'
-        },
-        status: 'todo',
-        dueDate: '2024-07-20',
-        priority: 'high'
-      }
-    ],
-    milestones: [
-      {
-        id: 1,
-        title: '기획 단계 완료',
-        dueDate: '2024-02-28',
-        status: 'completed',
-        completedDate: '2024-02-26'
-      },
-      {
-        id: 2,
-        title: '프로토타입 개발 완료',
-        dueDate: '2024-03-30',
-        status: 'completed',
-        completedDate: '2024-03-28'
-      },
-      {
-        id: 3,
-        title: '베타 버전 출시',
-        dueDate: '2024-05-30',
-        status: 'in_progress'
-      },
-      {
-        id: 4,
-        title: '최종 제품 출시',
-        dueDate: '2024-07-31',
-        status: 'todo'
-      }
-    ],
-    recentActivities: [
-      {
-        id: 1,
+        id: string;
+        name: string;
+        avatar?: string;
+    };
+    team: Array<{
+        id: string;
+        name: string;
+        role: string;
+        avatar?: string;
+    }>;
+    tasks: Array<{
+        id: string;
+        title: string;
+        status: string;
+        assignee: string;
+        dueDate: string;
+    }>;
+    recentActivities: Array<{
+        id: string;
+        action: string;
         user: {
-          id: 8,
-          name: '한지민',
-          avatar: '/images/avatars/avatar-8.jpg'
-        },
-        action: '디자인 명세서를 업데이트했습니다.',
-        timestamp: '2024-04-15T14:30:00'
-      },
-      {
-        id: 2,
+            name: string;
+            avatar?: string;
+        };
+        timestamp: string;
+    }>;
+    messages?: Array<{
+        id: string;
+        message: string;
         user: {
-          id: 10,
-          name: '윤서연',
-          avatar: '/images/avatars/avatar-10.jpg'
-        },
-        action: '기능 개발 태스크를 완료했습니다.',
-        timestamp: '2024-04-14T11:20:00'
-      },
-      {
-        id: 3,
-        user: {
-          id: 9,
-          name: '오승환',
-          avatar: '/images/avatars/avatar-9.jpg'
-        },
-        action: '새로운 태스크를 할당받았습니다.',
-        timestamp: '2024-04-12T09:45:00'
-      },
-      {
-        id: 4,
-        user: {
-          id: 5,
-          name: '정수민',
-          avatar: '/images/avatars/avatar-5.jpg'
-        },
-        action: '마일스톤 일정을 업데이트했습니다.',
-        timestamp: '2024-04-10T16:15:00'
-      }
-    ],
-    documents: [
-      {
-        id: 1,
-        name: '프로젝트 기획서',
-        type: 'pdf',
-        size: '2.4MB',
-        uploadedBy: {
-          id: 8,
-          name: '한지민'
-        },
-        uploadedAt: '2024-01-20T10:15:00'
-      },
-      {
-        id: 2,
-        name: '시장 조사 보고서',
-        type: 'docx',
-        size: '3.8MB',
-        uploadedBy: {
-          id: 5,
-          name: '정수민'
-        },
-        uploadedAt: '2024-02-05T14:30:00'
-      },
-      {
-        id: 3,
-        name: '제품 디자인 컨셉',
-        type: 'ppt',
-        size: '5.2MB',
-        uploadedBy: {
-          id: 10,
-          name: '윤서연'
-        },
-        uploadedAt: '2024-02-22T09:45:00'
-      },
-      {
-        id: 4,
-        name: '사용자 테스트 결과',
-        type: 'xlsx',
-        size: '1.8MB',
-        uploadedBy: {
-          id: 5,
-          name: '정수민'
-        },
-        uploadedAt: '2024-04-09T16:20:00'
-      }
-    ]
-  }
-];
+            name: string;
+            avatar?: string;
+        };
+        timestamp: string;
+        type: string;
+    }>;
+}
 
-// 상태별 색상 및 아이콘
+interface NewTask {
+    title: string;
+    assignee: string;
+    dueDate: string;
+}
+
 const statusConfig = {
-  ongoing: {
-    label: '진행 중',
-    color: 'bg-blue-500',
-    textColor: 'text-blue-500',
-    borderColor: 'border-blue-500',
-    bgColor: 'bg-blue-500/10',
-    icon: <CheckCircle2 className="h-4 w-4" />
-  },
-  completed: {
-    label: '완료됨',
-    color: 'bg-green-500',
-    textColor: 'text-green-500',
-    borderColor: 'border-green-500',
-    bgColor: 'bg-green-500/10',
-    icon: <CheckCircle2 className="h-4 w-4" />
-  },
-  delayed: {
-    label: '지연됨',
-    color: 'bg-red-500',
-    textColor: 'text-red-500',
-    borderColor: 'border-red-500',
-    bgColor: 'bg-red-500/10',
-    icon: <AlertCircle className="h-4 w-4" />
-  },
-  planning: {
-    label: '계획 중',
-    color: 'bg-purple-500',
-    textColor: 'text-purple-500',
-    borderColor: 'border-purple-500',
-    bgColor: 'bg-purple-500/10',
-    icon: <Calendar className="h-4 w-4" />
-  },
-  onhold: {
-    label: '보류 중',
-    color: 'bg-yellow-500',
-    textColor: 'text-yellow-500',
-    borderColor: 'border-yellow-500',
-    bgColor: 'bg-yellow-500/10',
-    icon: <PauseCircle className="h-4 w-4" />
-  }
+    planning: { label: '계획 중', bgColor: 'bg-gray-500/10', textColor: 'text-gray-500', color: 'bg-gray-500', icon: '📋' },
+    'in-progress': { label: '진행 중', bgColor: 'bg-blue-500/10', textColor: 'text-blue-500', color: 'bg-blue-500', icon: '🚀' },
+    'on-hold': { label: '보류', bgColor: 'bg-yellow-500/10', textColor: 'text-yellow-500', color: 'bg-yellow-500', icon: '⏸️' },
+    completed: { label: '완료', bgColor: 'bg-green-500/10', textColor: 'text-green-500', color: 'bg-green-500', icon: '✅' },
+    cancelled: { label: '취소', bgColor: 'bg-red-500/10', textColor: 'text-red-500', color: 'bg-red-500', icon: '❌' }
 };
 
-// 우선순위별 색상 및 아이콘
 const priorityConfig = {
-  high: {
-    label: '높음',
-    color: 'bg-red-500',
-    textColor: 'text-red-500',
-    icon: <ArrowUpRight className="h-4 w-4" />
-  },
-  medium: {
-    label: '중간',
-    color: 'bg-yellow-500',
-    textColor: 'text-yellow-500',
-    icon: <ArrowUpRight className="h-4 w-4 rotate-45" />
-  },
-  low: {
-    label: '낮음',
-    color: 'bg-green-500',
-    textColor: 'text-green-500',
-    icon: <ArrowDownRight className="h-4 w-4" />
-  }
+    low: { label: '낮음', textColor: 'text-green-500', icon: '🔽' },
+    normal: { label: '보통', textColor: 'text-gray-500', icon: '🔹' },
+    high: { label: '높음', textColor: 'text-yellow-500', icon: '🔸' },
+    urgent: { label: '긴급', textColor: 'text-red-500', icon: '🔺' }
 };
 
-// 태스크 상태별 색상 및 아이콘
-const taskStatusConfig = {
-  completed: {
-    label: '완료',
-    color: 'bg-green-500',
-    textColor: 'text-green-500',
-    borderColor: 'border-green-500',
-    bgColor: 'bg-green-500/10',
-    icon: <CheckCircle2 className="h-4 w-4" />
-  },
-  in_progress: {
-    label: '진행 중',
-    color: 'bg-blue-500',
-    textColor: 'text-blue-500',
-    borderColor: 'border-blue-500',
-    bgColor: 'bg-blue-500/10',
-    icon: <Clock className="h-4 w-4" />
-  },
-  todo: {
-    label: '예정',
-    color: 'bg-gray-500',
-    textColor: 'text-gray-400',
-    borderColor: 'border-gray-500',
-    bgColor: 'bg-gray-500/10',
-    icon: <ListTodo className="h-4 w-4" />
-  },
-  delayed: {
-    label: '지연',
-    color: 'bg-red-500',
-    textColor: 'text-red-500',
-    borderColor: 'border-red-500',
-    bgColor: 'bg-red-500/10',
-    icon: <AlertCircle className="h-4 w-4" />
-  }
-};
-
-// 파일 타입별 아이콘 설정
-const fileTypeIcons = {
-  pdf: <FileText className="text-red-500" />,
-  docx: <FileText className="text-blue-500" />,
-  xlsx: <FileText className="text-green-500" />,
-  ppt: <FileText className="text-orange-500" />,
-  jpg: <FileText className="text-purple-500" />,
-  png: <FileText className="text-purple-500" />,
-  default: <FileText className="text-gray-500" />
-};
-
-// 날짜 포맷팅
 const formatDate = (dateString: string) => {
-  const date = new Date(dateString);
-  return date.toLocaleDateString('ko-KR', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
+    return new Date(dateString).toLocaleDateString('ko-KR');
 };
 
-// 상대적 시간 계산
 const getRelativeTime = (dateString: string) => {
-  const date = new Date(dateString);
-  const now = new Date();
-  const diffInMs = now.getTime() - date.getTime();
-  const diffInMinutes = Math.floor(diffInMs / (1000 * 60));
-  const diffInHours = Math.floor(diffInMinutes / 60);
-  const diffInDays = Math.floor(diffInHours / 24);
+    const now = new Date();
+    const date = new Date(dateString);
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / (1000 * 60));
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
-  if (diffInMinutes < 1) {
-    return '방금 전';
-  } else if (diffInMinutes < 60) {
-    return `${diffInMinutes}분 전`;
-  } else if (diffInHours < 24) {
-    return `${diffInHours}시간 전`;
-  } else if (diffInDays < 7) {
-    return `${diffInDays}일 전`;
-  } else {
-    return formatDate(dateString).slice(0, -3); // 연도 제외
-  }
+    if (diffMins < 60) return `${diffMins}분 전`;
+    if (diffHours < 24) return `${diffHours}시간 전`;
+    return `${diffDays}일 전`;
 };
 
 export default function ProjectDetailPage() {
-  const params = useParams();
-  const router = useRouter();
-  const projectId = typeof params.id === 'string' ? parseInt(params.id) : 1;
+    const params = useParams();
+    const router = useRouter();
+    const projectId = params.id as string;
 
-  const [project, setProject] = useState<typeof initialProjects[0] | null>(null);
-  const [activeTab, setActiveTab] = useState<'overview' | 'tasks' | 'team' | 'documents'>('overview');
+    const [project, setProject] = useState<Project | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState('');
 
-  // 프로젝트 데이터 로드 (실제로는 API 호출)
-  useEffect(() => {
-    const foundProject = initialProjects.find(p => p.id === projectId);
-    if (foundProject) {
-      setProject(foundProject);
-    } else {
-      // 프로젝트를 찾을 수 없는 경우 목록 페이지로 리다이렉트
-      router.push('/intranet/projects');
+    // [TRISID] 채팅 관리 상태
+    const [messages, setMessages] = useState<any[]>([]);
+    const [newMessage, setNewMessage] = useState('');
+    const [sendingMessage, setSendingMessage] = useState(false);
+
+    // [TRISID] 할일 관리 상태
+    const [showAddTask, setShowAddTask] = useState(false);
+    const [newTask, setNewTask] = useState<NewTask>({
+        title: '',
+        assignee: '',
+        dueDate: ''
+    });
+    const [savingTask, setSavingTask] = useState(false);
+
+    // [TRISID] 활동 로그 추가 함수
+    const addActivityLog = async (action: string, userName: string = '사용자', userAvatar?: string) => {
+        try {
+            const response = await fetch(`/api/intranet/projects/${projectId}/activities`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    action,
+                    userName,
+                    userAvatar: userAvatar || '/images/avatars/avatar-3.svg'
+                }),
+            });
+
+            if (response.ok) {
+                console.log('[TRISID] 활동 로그 추가 성공:', action);
+            }
+        } catch (error) {
+            console.error('[TRISID] 활동 로그 추가 실패:', error);
+        }
+    };
+
+    // [TRISID] 실시간 활동 로그 업데이트
+    const updateRecentActivities = (newActivity: any) => {
+        setProject(prev => {
+            if (!prev) return prev;
+            return {
+                ...prev,
+                recentActivities: [
+                    newActivity,
+                    ...(prev.recentActivities || [])
+                ].slice(0, 20)
+            };
+        });
+    };
+
+    // [TRISID] 채팅 메시지 로드
+    const loadMessages = async () => {
+        try {
+            console.log('[TRISID] 채팅 메시지 로드 시작:', projectId);
+            const response = await fetch(`/api/intranet/projects/${projectId}/messages`);
+            const data = await response.json();
+
+            if (data.success) {
+                setMessages(data.messages || []);
+                console.log('[TRISID] 채팅 메시지 로드 성공:', data.messages?.length || 0, '개');
+            } else {
+                console.error('[TRISID] 채팅 메시지 로드 실패:', data.error);
+            }
+        } catch (error) {
+            console.error('[TRISID] 채팅 메시지 로드 중 오류:', error);
+        }
+    };
+
+    // [TRISID] 새 메시지 전송
+    const handleSendMessage = async () => {
+        if (!newMessage.trim() || sendingMessage) return;
+
+        setSendingMessage(true);
+        try {
+            const response = await fetch(`/api/intranet/projects/${projectId}/messages`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: newMessage.trim(),
+                    userName: '사용자', // 실제로는 로그인한 사용자 정보를 사용
+                    userAvatar: '/images/avatars/avatar-3.svg'
+                }),
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                // 메시지 목록에 새 메시지 추가
+                setMessages(prev => [...prev, data.message]);
+                setNewMessage('');
+                console.log('[TRISID] 메시지 전송 성공:', data.message);
+            } else {
+                console.error('[TRISID] 메시지 전송 실패:', data.error);
+            }
+        } catch (error) {
+            console.error('[TRISID] 메시지 전송 중 오류:', error);
+        } finally {
+            setSendingMessage(false);
+        }
+    };
+
+    // [TRISID] Enter 키로 메시지 전송
+    const handleMessageKeyPress = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            handleSendMessage();
+        }
+    };
+
+    useEffect(() => {
+        if (projectId) {
+            loadProject();
+            loadMessages();
+        }
+    }, [projectId]);
+
+    const loadProject = async () => {
+        try {
+            console.log('[TRISID] 프로젝트 로드 시작:', projectId);
+            const response = await fetch(`/api/intranet/projects/${projectId}`);
+            const data = await response.json();
+
+            if (data.success) {
+                setProject(data.project);
+                console.log('[TRISID] 프로젝트 로드 성공:', data.project);
+            } else {
+                setError(data.error || '프로젝트를 찾을 수 없습니다.');
+            }
+        } catch (error) {
+            console.error('[TRISID] 프로젝트 로드 실패:', error);
+            setError('프로젝트 로드 중 오류가 발생했습니다.');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    // [TRISID] 할일 완료/미완료 토글
+    const toggleTaskCompletion = async (taskId: string) => {
+        if (!project) return;
+
+        const task = project.tasks.find(t => t.id === taskId);
+        if (!task) return;
+
+        const newStatus = task.status === 'completed' ? 'in-progress' : 'completed';
+
+        try {
+            const response = await fetch(`/api/intranet/projects/${projectId}/tasks/${taskId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ status: newStatus }),
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                // 로컬 상태 업데이트
+                setProject(prev => {
+                    if (!prev) return prev;
+                    return {
+                        ...prev,
+                        tasks: prev.tasks.map(t =>
+                            t.id === taskId ? { ...t, status: newStatus } : t
+                        )
+                    };
+                });
+
+                // 활동 로그 추가
+                const actionText = newStatus === 'completed'
+                    ? `할일 "${task.title}"을(를) 완료했습니다`
+                    : `할일 "${task.title}"을(를) 미완료로 변경했습니다`;
+
+                addActivityLog(actionText, task.assignee);
+
+                // 실시간 UI 업데이트
+                const newActivity = {
+                    id: `activity-${Date.now()}`,
+                    action: actionText,
+                    user: {
+                        name: task.assignee,
+                        avatar: '/images/avatars/avatar-3.svg'
+                    },
+                    timestamp: new Date().toISOString()
+                };
+
+                updateRecentActivities(newActivity);
+
+            } else {
+                alert('할일 상태 변경에 실패했습니다.');
+            }
+        } catch (error) {
+            console.error('[TRISID] 할일 상태 변경 오류:', error);
+            alert('할일 상태 변경 중 오류가 발생했습니다.');
+        }
+    };
+
+    // [TRISID] 새 할일 추가
+    const handleAddTask = async () => {
+        if (!newTask.title.trim() || !newTask.assignee.trim() || !newTask.dueDate) {
+            alert('모든 항목을 입력해주세요.');
+            return;
+        }
+
+        setSavingTask(true);
+
+        try {
+            const response = await fetch(`/api/intranet/projects/${projectId}/tasks`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newTask),
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                // 로컬 상태 업데이트
+                setProject(prev => {
+                    if (!prev) return prev;
+                    return {
+                        ...prev,
+                        tasks: [...prev.tasks, data.task]
+                    };
+                });
+
+                // 활동 로그 추가
+                const actionText = `새 할일 "${newTask.title}"을(를) 추가했습니다`;
+                addActivityLog(actionText, newTask.assignee);
+
+                // 실시간 UI 업데이트
+                const newActivity = {
+                    id: `activity-${Date.now()}-add`,
+                    action: actionText,
+                    user: {
+                        name: newTask.assignee,
+                        avatar: '/images/avatars/avatar-3.svg'
+                    },
+                    timestamp: new Date().toISOString()
+                };
+
+                updateRecentActivities(newActivity);
+
+                // 폼 초기화
+                setNewTask({ title: '', assignee: '', dueDate: '' });
+                setShowAddTask(false);
+
+                console.log('[TRISID] 새 할일 추가 성공:', data.task);
+            } else {
+                alert('할일 추가에 실패했습니다.');
+            }
+        } catch (error) {
+            console.error('[TRISID] 할일 추가 오류:', error);
+            alert('할일 추가 중 오류가 발생했습니다.');
+        } finally {
+            setSavingTask(false);
+        }
+    };
+
+    // [TRISID] 할일 삭제
+    const handleDeleteTask = async (taskId: string) => {
+        if (!confirm('이 할일을 삭제하시겠습니까?')) return;
+
+        const taskToDelete = project?.tasks.find(t => t.id === taskId);
+        if (!taskToDelete) return;
+
+        try {
+            const response = await fetch(`/api/intranet/projects/${projectId}/tasks/${taskId}`, {
+                method: 'DELETE',
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                // 로컬 상태 업데이트
+                setProject(prev => {
+                    if (!prev) return prev;
+                    return {
+                        ...prev,
+                        tasks: prev.tasks.filter(t => t.id !== taskId)
+                    };
+                });
+
+                // 활동 로그 추가
+                const actionText = `할일 "${taskToDelete.title}"을(를) 삭제했습니다`;
+                addActivityLog(actionText, taskToDelete.assignee);
+
+                // 실시간 UI 업데이트
+                const newActivity = {
+                    id: `activity-${Date.now()}-delete`,
+                    action: actionText,
+                    user: {
+                        name: taskToDelete.assignee,
+                        avatar: '/images/avatars/avatar-3.svg'
+                    },
+                    timestamp: new Date().toISOString()
+                };
+
+                updateRecentActivities(newActivity);
+
+                console.log('[TRISID] 할일 삭제 성공:', taskId);
+            } else {
+                alert('할일 삭제에 실패했습니다.');
+            }
+        } catch (error) {
+            console.error('[TRISID] 할일 삭제 오류:', error);
+            alert('할일 삭제 중 오류가 발생했습니다.');
+        }
+    };
+
+    if (isLoading) {
+        return (
+            <div className="flex items-center justify-center h-64">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+            </div>
+        );
     }
-  }, [projectId, router]);
 
-  if (!project) {
-    return (
-      <div className="h-[calc(100vh-6rem)] flex items-center justify-center">
-        <div className="text-center">
-          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-blue-500 border-r-transparent"></div>
-          <p className="mt-4 text-lg text-gray-400">프로젝트 정보를 로드 중입니다...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // 상태 및 우선순위 설정
-  const status = statusConfig[project.status as keyof typeof statusConfig];
-  const priority = priorityConfig[project.priority as keyof typeof priorityConfig];
-
-  return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-      {/* 헤더 */}
-      <div className="mb-6">
-        <div className="flex items-center mb-4">
-          <Link
-            href="/intranet/projects"
-            className="inline-flex items-center text-gray-400 hover:text-white mr-3"
-          >
-            <ArrowLeft className="h-4 w-4 mr-1" />
-            <span>프로젝트 목록</span>
-          </Link>
-          <div className="h-6 border-l border-gray-700 mr-3"></div>
-          <div className="flex space-x-1">
-            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${status.bgColor} ${status.textColor}`}>
-              {status.icon}
-              <span className="ml-1">{status.label}</span>
-            </span>
-            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-700 text-gray-300`}>
-              <Tag className="h-3.5 w-3.5 mr-1" />
-              {project.category}
-            </span>
-            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${priority.textColor}`}>
-              {priority.icon}
-              <span className="ml-1">우선순위: {priority.label}</span>
-            </span>
-          </div>
-        </div>
-
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <h1 className="text-2xl font-semibold text-white">{project.name}</h1>
-            <p className="text-gray-400 mt-1">{project.description}</p>
-          </div>
-
-          <div className="flex items-center space-x-2">
-            <Link
-              href={`/intranet/projects/${project.id}/edit`}
-              className="inline-flex items-center px-3 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-md transition-colors"
-            >
-              <Edit className="h-4 w-4 mr-1.5" />
-              편집
-            </Link>
-            <button className="p-2 bg-gray-700 hover:bg-gray-600 text-white rounded-md transition-colors">
-              <MoreHorizontal className="h-5 w-5" />
-            </button>
-          </div>
-        </div>
-      </div>
-      {/* 탭 네비게이션 */}
-      <div className="border-b border-gray-700 mb-6">
-        <nav className="flex space-x-8">
-          <button
-            className={`py-4 px-1 font-medium border-b-2 ${activeTab === 'overview'
-                ? 'border-blue-500 text-blue-500'
-                : 'border-transparent text-gray-400 hover:text-gray-300'
-              }`}
-            onClick={() => setActiveTab('overview')}
-          >
-            개요
-          </button>
-          <button
-            className={`py-4 px-1 font-medium border-b-2 ${activeTab === 'tasks'
-                ? 'border-blue-500 text-blue-500'
-                : 'border-transparent text-gray-400 hover:text-gray-300'
-              }`}
-            onClick={() => setActiveTab('tasks')}
-          >
-            태스크
-          </button>
-          <button
-            className={`py-4 px-1 font-medium border-b-2 ${activeTab === 'team'
-                ? 'border-blue-500 text-blue-500'
-                : 'border-transparent text-gray-400 hover:text-gray-300'
-              }`}
-            onClick={() => setActiveTab('team')}
-          >
-            팀원
-          </button>
-          <button
-            className={`py-4 px-1 font-medium border-b-2 ${activeTab === 'documents'
-                ? 'border-blue-500 text-blue-500'
-                : 'border-transparent text-gray-400 hover:text-gray-300'
-              }`}
-            onClick={() => setActiveTab('documents')}
-          >
-            문서
-          </button>
-        </nav>
-      </div>
-      {/* 개요 탭 */}
-      {activeTab === 'overview' && (
-        <div className="space-y-6">
-          {/* 프로젝트 정보 */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-gray-800 rounded-lg p-6">
-              <h2 className="text-lg font-medium text-white mb-4">프로젝트 정보</h2>
-
-              <div className="space-y-4">
-                <div>
-                  <h3 className="text-sm font-medium text-gray-400 mb-1">진행률</h3>
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-white font-medium">{project.progress}%</span>
-                  </div>
-                  <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
-                    <div
-                      className={`h-full ${status.color}`}
-                      style={{ width: `${project.progress}%` }}
-                    ></div>
-                  </div>
-                </div>
-
-                <div className="flex items-center">
-                  <Calendar className="h-5 w-5 text-gray-500 mr-3" />
-                  <div>
-                    <p className="text-sm font-medium text-gray-400">기간</p>
-                    <p className="text-white">{formatDate(project.startDate)} - {formatDate(project.endDate)}</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center">
-                  <Users className="h-5 w-5 text-gray-500 mr-3" />
-                  <div>
-                    <p className="text-sm font-medium text-gray-400">담당자</p>
-                    <p className="text-white">{project.manager.name} ({project.manager.position}, {project.manager.department})</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center">
-                  <CheckCircle2 className="h-5 w-5 text-gray-500 mr-3" />
-                  <div>
-                    <p className="text-sm font-medium text-gray-400">태스크</p>
-                    <p className="text-white">{project.tasks.completed}/{project.tasks.total} 완료</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* 마일스톤 */}
-            <div className="bg-gray-800 rounded-lg p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-medium text-white">마일스톤</h2>
-                <button className="inline-flex items-center text-sm text-blue-500 hover:text-blue-400">
-                  <Plus className="h-4 w-4 mr-1" />
-                  마일스톤 추가
-                </button>
-              </div>
-
-              <div className="space-y-4">
-                {project.milestones.map(milestone => {
-                  const isCompleted = milestone.status === 'completed';
-                  const isPast = new Date(milestone.dueDate) < new Date();
-                  const isOverdue = isPast && !isCompleted;
-
-                  return (
-                    <div
-                      key={milestone.id}
-                      className={`border-l-2 pl-4 ${isCompleted
-                          ? 'border-green-500'
-                          : isOverdue
-                            ? 'border-red-500'
-                            : 'border-blue-500'
-                        }`}
+    if (error || !project) {
+        return (
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+                <div className="bg-gray-800 rounded-lg p-12 text-center">
+                    <Briefcase className="h-12 w-12 text-gray-600 mx-auto mb-3" />
+                    <p className="text-gray-400 mb-1">{error || '프로젝트를 찾을 수 없습니다'}</p>
+                    <Link
+                        href="/intranet/projects"
+                        className="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors mt-4"
                     >
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <h3 className="text-white font-medium">{milestone.title}</h3>
-                          <p className="text-sm text-gray-400">
-                            {isCompleted
-                              ? `완료: ${formatDate(milestone.completedDate!)}`
-                              : `마감: ${formatDate(milestone.dueDate)}`
-                            }
-                          </p>
-                        </div>
-                        <span className={`inline-flex items-center px-2 py-1 rounded-md text-xs font-medium ${isCompleted
-                            ? 'bg-green-500/10 text-green-500'
-                            : isOverdue
-                              ? 'bg-red-500/10 text-red-500'
-                              : 'bg-blue-500/10 text-blue-500'
-                          }`}>
-                          {isCompleted
-                            ? '완료됨'
-                            : isOverdue
-                              ? '지연됨'
-                              : '진행 중'
-                          }
-                        </span>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-
-          {/* 팀원 섹션 */}
-          <div className="bg-gray-800 rounded-lg p-6">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-medium text-white">팀원</h2>
-              <button className="inline-flex items-center text-sm text-blue-500 hover:text-blue-400">
-                <Plus className="h-4 w-4 mr-1" />
-                팀원 추가
-              </button>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {project.team.map(member => (
-                <div key={member.id} className="flex items-center p-3 bg-gray-750 rounded-lg">
-                  <div className="relative h-10 w-10 rounded-full overflow-hidden mr-3">
-                    <Image
-                      src={member.avatar}
-                      alt={member.name}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                  <div>
-                    <h3 className="text-white font-medium">{member.name}</h3>
-                    <p className="text-xs text-gray-400">{member.position}, {member.department}</p>
-                  </div>
+                        <ArrowLeft className="h-4 w-4 mr-2" />
+                        프로젝트 목록으로
+                    </Link>
                 </div>
-              ))}
             </div>
-          </div>
+        );
+    }
 
-          {/* 최근 활동 */}
-          <div className="bg-gray-800 rounded-lg p-6">
-            <h2 className="text-lg font-medium text-white mb-4">최근 활동</h2>
+    const status = statusConfig[project.status as keyof typeof statusConfig] || statusConfig.planning;
+    const priority = priorityConfig[project.priority as keyof typeof priorityConfig] || priorityConfig.normal;
+    const completedTasks = project.tasks?.filter(t => t.status === 'completed').length || 0;
+    const totalTasks = project.tasks?.length || 0;
 
-            <div className="space-y-4">
-              {project.recentActivities.map(activity => (
-                <div key={activity.id} className="flex items-start">
-                  <div className="relative h-10 w-10 rounded-full overflow-hidden mr-3">
-                    <Image
-                      src={activity.user.avatar}
-                      alt={activity.user.name}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                  <div>
-                    <div className="flex items-center">
-                      <h3 className="text-white font-medium">{activity.user.name}</h3>
-                      <span className="mx-2 text-gray-600">•</span>
-                      <span className="text-sm text-gray-400">{getRelativeTime(activity.timestamp)}</span>
-                    </div>
-                    <p className="text-gray-300 mt-1">{activity.action}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-      {/* 태스크 탭 */}
-      {activeTab === 'tasks' && (
-        <div className="space-y-6">
-          <div className="flex justify-between items-center">
-            <h2 className="text-lg font-medium text-white">태스크 목록</h2>
-            <Link
-              href={`/intranet/projects/${project.id}/tasks/create`}
-              className="inline-flex items-center px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors"
-            >
-              <Plus className="h-4 w-4 mr-1.5" />
-              새 태스크
-            </Link>
-          </div>
-
-          <div className="bg-gray-800 rounded-lg overflow-hidden">
-            <div className="grid grid-cols-12 gap-4 p-4 border-b border-gray-700 text-sm font-medium text-gray-400">
-              <div className="col-span-6">태스크</div>
-              <div className="col-span-2">담당자</div>
-              <div className="col-span-2">마감일</div>
-              <div className="col-span-2">상태</div>
-            </div>
-
-            <div className="divide-y divide-gray-700">
-              {project.taskList.map(task => {
-                const taskStatus = taskStatusConfig[task.status as keyof typeof taskStatusConfig];
-                const taskPriority = priorityConfig[task.priority as keyof typeof priorityConfig];
-
-                return (
-                  <div key={task.id} className="grid grid-cols-12 gap-4 p-4 hover:bg-gray-750">
-                    <div className="col-span-6">
-                      <div className="flex items-start">
-                        <div className={`mt-1 h-5 w-5 rounded-full ${taskStatus.bgColor} flex items-center justify-center mr-3`}>
-                          <span className={taskStatus.textColor}>{taskStatus.icon}</span>
-                        </div>
-                        <div>
-                          <Link
-                            href={`/intranet/projects/${project.id}/tasks/${task.id}`}
-                            className="text-white font-medium hover:text-blue-400"
-                          >
-                            {task.title}
-                          </Link>
-                          <p className="text-sm text-gray-400">{task.description}</p>
-                          <div className="flex items-center mt-1">
-                            <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs ${taskPriority.textColor}`}>
-                              {taskPriority.icon}
-                              <span className="ml-1">{taskPriority.label}</span>
+    return (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            {/* 헤더 */}
+            <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center">
+                    <Link
+                        href="/intranet/projects"
+                        className="mr-4 p-2 hover:bg-gray-700 rounded-md transition-colors"
+                    >
+                        <ArrowLeft className="h-5 w-5 text-gray-400" />
+                    </Link>
+                    <div>
+                        <h1 className="text-2xl font-semibold text-white">{project.name}</h1>
+                        <div className="flex items-center mt-2">
+                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${status.bgColor} ${status.textColor} mr-2`}>
+                                {status.icon}
+                                <span className="ml-1">{status.label}</span>
                             </span>
-                          </div>
+                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-700 text-gray-300 mr-2`}>
+                                <Tag className="h-3.5 w-3.5 mr-1" />
+                                {project.category}
+                            </span>
+                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${priority.textColor}`}>
+                                {priority.icon}
+                                <span className="ml-1">우선순위: {priority.label}</span>
+                            </span>
                         </div>
-                      </div>
                     </div>
-                    <div className="col-span-2">
-                      <div className="flex items-center">
-                        <div className="relative h-6 w-6 rounded-full overflow-hidden mr-2">
-                          <Image
-                            src={task.assignee.avatar}
-                            alt={task.assignee.name}
-                            fill
-                            className="object-cover"
-                          />
-                        </div>
-                        <span className="text-gray-300">{task.assignee.name}</span>
-                      </div>
-                    </div>
-                    <div className="col-span-2">
-                      <span className="text-gray-300">{formatDate(task.dueDate).slice(0, -3)}</span>
-                    </div>
-                    <div className="col-span-2">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs ${taskStatus.bgColor} ${taskStatus.textColor}`}>
-                        {taskStatus.icon}
-                        <span className="ml-1">{taskStatus.label}</span>
-                      </span>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      )}
-      {/* 팀원 탭 */}
-      {activeTab === 'team' && (
-        <div className="space-y-6">
-          <div className="flex justify-between items-center">
-            <h2 className="text-lg font-medium text-white">팀원 관리</h2>
-            <button className="inline-flex items-center px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors">
-              <Plus className="h-4 w-4 mr-1.5" />
-              팀원 추가
-            </button>
-          </div>
-
-          <div className="bg-gray-800 rounded-lg overflow-hidden">
-            {project.team.map((member, index) => (
-              <div key={member.id} className={`p-4 flex items-center justify-between ${index !== project.team.length - 1 ? 'border-b border-gray-700' : ''
-                }`}>
-                <div className="flex items-center">
-                  <div className="relative h-12 w-12 rounded-full overflow-hidden mr-4">
-                    <Image
-                      src={member.avatar}
-                      alt={member.name}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-medium text-white">{member.name}</h3>
-                    <p className="text-gray-400">{member.position}, {member.department}</p>
-                  </div>
                 </div>
 
-                <div className="flex items-center">
-                  {member.id === project.manager.id && (
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-500/10 text-blue-500 mr-3">
-                      프로젝트 관리자
-                    </span>
-                  )}
-
-                  <button className="p-2 text-gray-400 hover:text-gray-300 rounded-full hover:bg-gray-700">
-                    <MessageSquare className="h-5 w-5" />
-                  </button>
-
-                  <button className="p-2 text-gray-400 hover:text-gray-300 rounded-full hover:bg-gray-700">
-                    <MoreHorizontal className="h-5 w-5" />
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-      {/* 문서 탭 */}
-      {activeTab === 'documents' && (
-        <div className="space-y-6">
-          <div className="flex justify-between items-center">
-            <h2 className="text-lg font-medium text-white">프로젝트 문서</h2>
-            <button className="inline-flex items-center px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors">
-              <Plus className="h-4 w-4 mr-1.5" />
-              문서 업로드
-            </button>
-          </div>
-
-          <div className="bg-gray-800 rounded-lg overflow-hidden">
-            <div className="grid grid-cols-12 gap-4 p-4 border-b border-gray-700 text-sm font-medium text-gray-400">
-              <div className="col-span-6">파일명</div>
-              <div className="col-span-2">업로더</div>
-              <div className="col-span-2">업로드 날짜</div>
-              <div className="col-span-1">크기</div>
-              <div className="col-span-1"></div>
-            </div>
-
-            <div className="divide-y divide-gray-700">
-              {project.documents.map((document) => (
-                <div key={document.id} className="grid grid-cols-12 gap-4 p-4 hover:bg-gray-750">
-                  <div className="col-span-6">
-                    <div className="flex items-center">
-                      <div className="h-8 w-8 flex items-center justify-center mr-3">
-                        {fileTypeIcons[document.type as keyof typeof fileTypeIcons] || fileTypeIcons.default}
-                      </div>
-                      <div>
-                        <p className="text-white font-medium">{document.name}</p>
-                        <p className="text-xs text-gray-400">.{document.type}</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="col-span-2 flex items-center">
-                    <span className="text-gray-300">{document.uploadedBy.name}</span>
-                  </div>
-
-                  <div className="col-span-2 flex items-center">
-                    <span className="text-gray-300">{formatDate(document.uploadedAt).slice(0, -3)}</span>
-                  </div>
-
-                  <div className="col-span-1 flex items-center">
-                    <span className="text-gray-300">{document.size}</span>
-                  </div>
-
-                  <div className="col-span-1 flex items-center justify-end">
-                    <button className="p-1.5 text-gray-400 hover:text-white rounded-full hover:bg-gray-700">
-                      <MoreHorizontal className="h-5 w-5" />
+                <div className="flex items-center space-x-3">
+                    <Link
+                        href={`/intranet/projects/${project.id}/edit`}
+                        className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors"
+                    >
+                        <Edit className="h-4 w-4 mr-2" />
+                        편집
+                    </Link>
+                    <button className="inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md transition-colors">
+                        <Trash2 className="h-4 w-4 mr-2" />
+                        삭제
                     </button>
-                  </div>
                 </div>
-              ))}
             </div>
-          </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* 메인 콘텐츠 */}
+                <div className="lg:col-span-2 space-y-6">
+                    {/* 프로젝트 정보 */}
+                    <div className="bg-gray-800 rounded-lg p-6">
+                        <h2 className="text-lg font-semibold text-white mb-4">프로젝트 개요</h2>
+                        <p className="text-gray-300 mb-6">{project.description}</p>
+
+                        {/* 진행률 */}
+                        <div className="mb-6">
+                            <div className="flex justify-between items-center mb-2">
+                                <span className="text-sm text-gray-400">진행률</span>
+                                <span className="text-sm font-medium text-white">{project.progress}%</span>
+                            </div>
+                            <div className="h-3 bg-gray-700 rounded-full overflow-hidden">
+                                <div
+                                    className={`h-full ${status.color}`}
+                                    style={{ width: `${project.progress}%` }}
+                                ></div>
+                            </div>
+                        </div>
+
+                        {/* 일정 정보 */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="flex items-center">
+                                <Calendar className="h-5 w-5 text-gray-400 mr-3" />
+                                <div>
+                                    <p className="text-sm text-gray-400">시작일</p>
+                                    <p className="text-white">{formatDate(project.startDate)}</p>
+                                </div>
+                            </div>
+                            <div className="flex items-center">
+                                <Clock className="h-5 w-5 text-gray-400 mr-3" />
+                                <div>
+                                    <p className="text-sm text-gray-400">마감일</p>
+                                    <p className="text-white">{formatDate(project.endDate)}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* 할일 목록 - [TRISID] 완전한 CRUD 및 활동 로그 기능 */}
+                    <div className="bg-gray-800 rounded-lg p-6">
+                        <div className="flex justify-between items-center mb-4">
+                            <h2 className="text-lg font-semibold text-white">
+                                할일 목록
+                                <span className="ml-2 text-sm font-normal text-gray-400">
+                                    ({completedTasks}/{totalTasks})
+                                </span>
+                            </h2>
+                            <button
+                                onClick={() => setShowAddTask(true)}
+                                className="inline-flex items-center px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-md transition-colors"
+                            >
+                                <Plus className="h-4 w-4 mr-1" />
+                                새 할일
+                            </button>
+                        </div>
+
+                        {/* 새 할일 추가 폼 - [TRISID] 유연한 담당자 선택 */}
+                        {showAddTask && (
+                            <div className="bg-gray-750 rounded-lg p-4 mb-4 border border-gray-600">
+                                <div className="flex justify-between items-center mb-3">
+                                    <h3 className="text-white font-medium">새 할일 추가</h3>
+                                    <button
+                                        onClick={() => setShowAddTask(false)}
+                                        className="text-gray-400 hover:text-white"
+                                    >
+                                        <X className="h-5 w-5" />
+                                    </button>
+                                </div>
+
+                                <div className="space-y-3">
+                                    <div>
+                                        <label className="block text-sm text-gray-400 mb-1">할일 제목</label>
+                                        <input
+                                            type="text"
+                                            value={newTask.title}
+                                            onChange={(e) => setNewTask(prev => ({ ...prev, title: e.target.value }))}
+                                            className="w-full bg-gray-700 text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            placeholder="할일 제목을 입력하세요"
+                                        />
+                                    </div>
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                        <div>
+                                            <label className="block text-sm text-gray-400 mb-1">담당자</label>
+                                            <div className="relative">
+                                                <input
+                                                    type="text"
+                                                    value={newTask.assignee}
+                                                    onChange={(e) => setNewTask(prev => ({ ...prev, assignee: e.target.value }))}
+                                                    className="w-full bg-gray-700 text-white rounded-md px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                    placeholder="담당자 이름 입력 또는 선택"
+                                                    list="assignee-suggestions"
+                                                />
+                                                <datalist id="assignee-suggestions">
+                                                    {project.manager && (
+                                                        <option value={project.manager.name}>{project.manager.name} (매니저)</option>
+                                                    )}
+                                                    {project.team?.map((member) => (
+                                                        <option key={member.id} value={member.name}>
+                                                            {member.name} ({member.role})
+                                                        </option>
+                                                    ))}
+                                                    <option value="외부 협력사">외부 협력사</option>
+                                                    <option value="디자인팀">디자인팀</option>
+                                                    <option value="마케팅팀">마케팅팀</option>
+                                                    <option value="영업팀">영업팀</option>
+                                                    <option value="품질관리팀">품질관리팀</option>
+                                                    <option value="IT팀">IT팀</option>
+                                                </datalist>
+                                                <div className="absolute right-2 top-1/2 transform -translate-y-1/2">
+                                                    <Users className="h-4 w-4 text-gray-400" />
+                                                </div>
+                                            </div>
+                                            <p className="text-xs text-gray-500 mt-1">
+                                                💡 팀원 선택 또는 직접 입력 가능 (예: 외부업체, 다른 부서 등)
+                                            </p>
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-sm text-gray-400 mb-1">마감일</label>
+                                            <input
+                                                type="date"
+                                                value={newTask.dueDate}
+                                                onChange={(e) => setNewTask(prev => ({ ...prev, dueDate: e.target.value }))}
+                                                className="w-full bg-gray-700 text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="flex justify-end space-x-2 pt-2">
+                                        <button
+                                            onClick={() => setShowAddTask(false)}
+                                            className="px-4 py-2 text-gray-400 hover:text-white transition-colors"
+                                        >
+                                            취소
+                                        </button>
+                                        <button
+                                            onClick={handleAddTask}
+                                            disabled={savingTask}
+                                            className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 text-white rounded-md transition-colors"
+                                        >
+                                            {savingTask ? (
+                                                <>
+                                                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                                                    저장 중...
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Check className="h-4 w-4 mr-2" />
+                                                    추가
+                                                </>
+                                            )}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* 할일 목록 */}
+                        <div className="space-y-3">
+                            {project.tasks && project.tasks.length > 0 ? (
+                                project.tasks.map((task) => (
+                                    <div key={task.id} className="flex items-center p-3 bg-gray-750 rounded-lg group hover:bg-gray-700 transition-colors">
+                                        <button
+                                            onClick={() => toggleTaskCompletion(task.id)}
+                                            className="mr-3 hover:scale-110 transition-transform"
+                                        >
+                                            {task.status === 'completed' ? (
+                                                <CheckCircle2 className="h-5 w-5 text-green-500" />
+                                            ) : (
+                                                <Circle className="h-5 w-5 text-gray-400 hover:text-blue-500" />
+                                            )}
+                                        </button>
+                                        <div className="flex-1">
+                                            <p className={`${task.status === 'completed' ? 'line-through text-gray-500' : 'text-white'}`}>
+                                                {task.title}
+                                            </p>
+                                            <div className="flex items-center text-sm text-gray-400 mt-1">
+                                                <span>{task.assignee}</span>
+                                                <span className="mx-2">•</span>
+                                                <span>{formatDate(task.dueDate)}</span>
+                                                <span className="mx-2">•</span>
+                                                <span className={`px-2 py-0.5 rounded text-xs ${task.status === 'completed'
+                                                    ? 'bg-green-500/20 text-green-400'
+                                                    : task.status === 'in-progress'
+                                                        ? 'bg-blue-500/20 text-blue-400'
+                                                        : 'bg-gray-500/20 text-gray-400'
+                                                    }`}>
+                                                    {task.status === 'completed' ? '완료' : task.status === 'in-progress' ? '진행 중' : '대기'}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <button
+                                            onClick={() => handleDeleteTask(task.id)}
+                                            className="opacity-0 group-hover:opacity-100 ml-2 p-1 text-red-400 hover:text-red-300 transition-all"
+                                        >
+                                            <Trash2 className="h-4 w-4" />
+                                        </button>
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="text-center py-8 text-gray-500">
+                                    <Circle className="h-8 w-8 mx-auto mb-2" />
+                                    <p>아직 할일이 없습니다</p>
+                                    <button
+                                        onClick={() => setShowAddTask(true)}
+                                        className="mt-2 text-blue-400 hover:text-blue-300 text-sm"
+                                    >
+                                        첫 번째 할일을 추가해보세요
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+                {/* 사이드바 */}
+                <div className="space-y-6">
+                    {/* 팀 정보 */}
+                    <div className="bg-gray-800 rounded-lg p-6">
+                        <h3 className="text-lg font-semibold text-white mb-4">팀 정보</h3>
+
+                        {/* 프로젝트 매니저 */}
+                        {project.manager && (
+                            <div className="mb-4">
+                                <p className="text-sm text-gray-400 mb-2">프로젝트 매니저</p>
+                                <div className="flex items-center">
+                                    <div className="relative w-10 h-10 rounded-full overflow-hidden mr-3">
+                                        <Image
+                                            src={project.manager.avatar || '/images/avatars/avatar-3.svg'}
+                                            alt={project.manager.name}
+                                            fill
+                                            className="object-cover"
+                                        />
+                                    </div>
+                                    <div>
+                                        <p className="text-white font-medium">{project.manager.name}</p>
+                                        <p className="text-sm text-gray-400">매니저</p>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* 팀원 목록 */}
+                        <div>
+                            <p className="text-sm text-gray-400 mb-2">팀원 ({project.team?.length || 0}명)</p>
+                            <div className="space-y-3">
+                                {project.team && project.team.length > 0 ? (
+                                    project.team.map((member) => (
+                                        <div key={member.id} className="flex items-center">
+                                            <div className="relative w-8 h-8 rounded-full overflow-hidden mr-3">
+                                                <Image
+                                                    src={member.avatar || '/images/avatars/avatar-3.svg'}
+                                                    alt={member.name}
+                                                    fill
+                                                    className="object-cover"
+                                                />
+                                            </div>
+                                            <div>
+                                                <p className="text-white text-sm">{member.name}</p>
+                                                <p className="text-xs text-gray-400">{member.role}</p>
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className="text-center py-4 text-gray-500">
+                                        <Users className="h-6 w-6 mx-auto mb-1" />
+                                        <p className="text-sm">팀원이 없습니다</p>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* 채팅 섹션 - [TRISID] 실시간 채팅 기능 */}
+                    <div className="bg-gray-800 rounded-lg p-6">
+                        <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
+                            <MessageSquare className="h-5 w-5 mr-2" />
+                            팀 채팅
+                            <span className="ml-2 text-sm font-normal text-gray-400">
+                                (실시간 💬)
+                            </span>
+                        </h3>
+
+                        {/* 채팅 메시지 영역 */}
+                        <div className="space-y-3 max-h-80 overflow-y-auto mb-4 border-b border-gray-700 pb-4">
+                            {messages && messages.length > 0 ? (
+                                messages.map((message) => (
+                                    <div key={message.id} className="flex items-start space-x-3">
+                                        <div className="relative w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
+                                            <Image
+                                                src={message.user.avatar || '/images/avatars/avatar-3.svg'}
+                                                alt={message.user.name}
+                                                fill
+                                                className="object-cover"
+                                            />
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <div className="flex items-center space-x-2">
+                                                <span className="text-sm font-medium text-white">{message.user.name}</span>
+                                                <span className="text-xs text-gray-500">{getRelativeTime(message.timestamp)}</span>
+                                            </div>
+                                            <div className="mt-1 text-sm text-gray-300 break-words">
+                                                {message.message}
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="text-center py-6 text-gray-500">
+                                    <MessageSquare className="h-8 w-8 mx-auto mb-2" />
+                                    <p className="text-sm">아직 메시지가 없습니다</p>
+                                    <p className="text-xs text-gray-600 mt-1">첫 번째 메시지를 보내보세요!</p>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* 메시지 입력 영역 */}
+                        <div className="flex space-x-2">
+                            <input
+                                type="text"
+                                value={newMessage}
+                                onChange={(e) => setNewMessage(e.target.value)}
+                                onKeyPress={handleMessageKeyPress}
+                                placeholder="메시지를 입력하세요..."
+                                className="flex-1 bg-gray-700 text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                                disabled={sendingMessage}
+                            />
+                            <button
+                                onClick={handleSendMessage}
+                                disabled={!newMessage.trim() || sendingMessage}
+                                className="px-3 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white rounded-md transition-colors flex items-center"
+                            >
+                                {sendingMessage ? (
+                                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                                ) : (
+                                    <Send className="h-4 w-4" />
+                                )}
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* 최근 활동 - [TRISID] 실시간 동작하는 활동 로그 */}
+                    <div className="bg-gray-800 rounded-lg p-6">
+                        <h3 className="text-lg font-semibold text-white mb-4">
+                            최근 활동
+                            <span className="ml-2 text-sm font-normal text-gray-400">
+                                (실시간 ✨)
+                            </span>
+                        </h3>
+                        <div className="space-y-4 max-h-96 overflow-y-auto">
+                            {project.recentActivities && project.recentActivities.length > 0 ? (
+                                project.recentActivities.map((activity) => (
+                                    <div key={activity.id} className="flex items-start p-3 bg-gray-750 rounded-lg hover:bg-gray-700 transition-colors">
+                                        <div className="relative w-8 h-8 rounded-full overflow-hidden mr-3 flex-shrink-0">
+                                            <Image
+                                                src={activity.user.avatar || '/images/avatars/avatar-3.svg'}
+                                                alt={activity.user.name}
+                                                fill
+                                                className="object-cover"
+                                            />
+                                        </div>
+                                        <div className="flex-1">
+                                            <p className="text-sm text-gray-300">
+                                                <span className="font-medium text-white">{activity.user.name}</span>
+                                                {' 님이 '}{activity.action}
+                                            </p>
+                                            <p className="text-xs text-gray-500 mt-1">{getRelativeTime(activity.timestamp)}</p>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="text-center py-6 text-gray-500">
+                                    <Clock className="h-8 w-8 mx-auto mb-2" />
+                                    <p className="text-sm">최근 활동이 없습니다</p>
+                                    <p className="text-xs text-gray-600 mt-1">할일을 추가하거나 완료하면 활동이 기록됩니다</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      )}
-    </div>
-  );
+    );
 } 

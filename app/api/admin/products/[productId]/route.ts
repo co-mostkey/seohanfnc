@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { readProductsData, writeProductsData, ProductsDataStructure } from '@/lib/file-utils';
 import { Product } from '@/types/product';
+import { createStaticATypeProductPage } from '../create-static-a-type';
+import { createStaticBTypeProductPage } from '../create-static-b-type';
 
 interface RouteParams {
     params: Promise<{
@@ -76,6 +78,16 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
         console.log('[API PUT] 제품 데이터 저장 시작');
         await writeProductsData(products);
         console.log('[API PUT] 제품 데이터 저장 완료');
+
+        // 제품 타입에 따른 정적 페이지 재생성
+        if (updatedProduct.productStyle === 'B') {
+            await createStaticBTypeProductPage(updatedProduct);
+            console.log(`[TRISID] B타입 제품 ${updatedProduct.id} 정적 페이지 재생성 완료`);
+        } else {
+            // [TRISID] A타입 자동 재생성 - 완성된 시스템, 절대 수정 금지!
+            await createStaticATypeProductPage(updatedProduct);
+            console.log(`[TRISID] A타입 제품 ${updatedProduct.id} 고급 정적 페이지 재생성 완료 (Sloping-Rescue-Chute 기반)`);
+        }
 
         return NextResponse.json(updatedProduct);
     } catch (error) {

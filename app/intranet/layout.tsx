@@ -17,7 +17,8 @@ import {
     Menu,
     X,
     ChevronDown,
-    User
+    User,
+    ClipboardCheck
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
@@ -29,6 +30,7 @@ const navItems = [
     { id: 'documents', name: '자료실', icon: FileText, path: '/intranet/documents' },
     { id: 'calendar', name: '일정관리', icon: Calendar, path: '/intranet/calendar' },
     { id: 'projects', name: '프로젝트', icon: Briefcase, path: '/intranet/projects' },
+    { id: 'approvals', name: '결재', icon: ClipboardCheck, path: '/intranet/approvals' },
     { id: 'messages', name: '메시지', icon: MessageSquare, path: '/intranet/messages' },
     { id: 'employees', name: '직원목록', icon: Users, path: '/intranet/employees' },
 ];

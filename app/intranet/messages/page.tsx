@@ -84,8 +84,8 @@ const MessageBubble: React.FC<{ message: ChatMessage; isOwnMessage: boolean; sen
       )}
       <div
         className={`max-w-xs md:max-w-md lg:max-w-lg px-4 py-2 rounded-xl shadow ${isOwnMessage
-            ? 'bg-blue-500 text-white rounded-br-none'
-            : 'bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 rounded-bl-none'
+          ? 'bg-blue-500 text-white rounded-br-none'
+          : 'bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 rounded-bl-none'
           }`}
       >
         <p className="text-sm whitespace-pre-wrap break-words">{message.content}</p>
@@ -111,13 +111,28 @@ export default function MessagesPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  // [TRISID] 새 대화 시작 관련 상태
+  const [showNewConversationModal, setShowNewConversationModal] = useState(false);
+  const [userSearchTerm, setUserSearchTerm] = useState('');
+  const [startingConversation, setStartingConversation] = useState(false);
+
   // SWR hooks for data fetching
   const { data: users, error: usersError } = useSWR<ChatUser[]>('/api/intranet/chat/users', fetcher);
   const { data: conversations, error: conversationsError, mutate: mutateConversations } =
-    useSWR<EnrichedConversation[]>(`/api/intranet/chat/conversations`, fetcher, { refreshInterval: 5000 }); // 5초마다 폴링
+    useSWR<EnrichedConversation[]>(`/api/intranet/chat/conversations`, fetcher, {
+      refreshInterval: 0, // 폴링 비활성화 (개발 중 임시)
+      revalidateOnFocus: false, // 포커스 시 자동 재검증 비활성화
+      revalidateOnReconnect: false, // 재연결 시 자동 재검증 비활성화
+      dedupingInterval: 10000 // 10초 내 중복 요청 방지
+    });
 
   const { data: messages, error: messagesError, mutate: mutateMessages } =
-    useSWR<ChatMessage[]>(selectedConversationId ? `/api/intranet/chat/messages/${selectedConversationId}` : null, fetcher, { refreshInterval: 2000 }); // 2초마다 폴링
+    useSWR<ChatMessage[]>(selectedConversationId ? `/api/intranet/chat/messages/${selectedConversationId}` : null, fetcher, {
+      refreshInterval: 0, // 폴링 비활성화 (개발 중 임시)
+      revalidateOnFocus: false, // 포커스 시 자동 재검증 비활성화
+      revalidateOnReconnect: false, // 재연결 시 자동 재검증 비활성화
+      dedupingInterval: 5000 // 5초 내 중복 요청 방지
+    });
 
 
   const selectedConversation = conversations?.find(c => c.id === selectedConversationId);
@@ -127,6 +142,23 @@ export default function MessagesPage() {
     // 메시지 목록 맨 아래로 스크롤
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  // [TRISID] ESC 키로 모달 닫기
+  useEffect(() => {
+    const handleEscapeKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && showNewConversationModal) {
+        setShowNewConversationModal(false);
+        setUserSearchTerm('');
+      }
+    };
+
+    if (showNewConversationModal) {
+      document.addEventListener('keydown', handleEscapeKey);
+      return () => {
+        document.removeEventListener('keydown', handleEscapeKey);
+      };
+    }
+  }, [showNewConversationModal]);
 
   useEffect(() => {
     // 대화 선택 시, 해당 대화의 안 읽은 메시지 읽음 처리
@@ -145,7 +177,7 @@ export default function MessagesPage() {
         });
       }
     }
-  }, [selectedConversationId, conversations, currentUserId, mutateConversations]);
+  }, [selectedConversationId, currentUserId, mutateConversations]); // mutateConversations 추가하되 conversations는 제외
 
   const handleSelectConversation = (conversationId: string) => {
     setSelectedConversationId(conversationId);
@@ -205,6 +237,7 @@ export default function MessagesPage() {
   };
 
   const handleStartNewConversation = async (targetUserId: string) => {
+    setStartingConversation(true);
     try {
       const res = await fetch('/api/intranet/chat/conversations', {
         method: 'POST',
@@ -219,15 +252,40 @@ export default function MessagesPage() {
       if (window.innerWidth < 768) {
         setIsMobileConversationListVisible(false);
       }
-      // 모달 닫기 등 추가 UI 처리
+
+      // [TRISID] 모달 닫기 및 상태 초기화
+      setShowNewConversationModal(false);
+      setUserSearchTerm('');
+
+      console.log('[TRISID] 새 대화 시작 성공:', newConversation.id);
     } catch (error) {
-      console.error("새 대화 시작 오류:", error);
+      console.error("[TRISID] 새 대화 시작 오류:", error);
+      alert('대화 시작에 실패했습니다. 다시 시도해주세요.');
+    } finally {
+      setStartingConversation(false);
     }
   };
 
   const filteredConversations = conversations?.filter(conv => {
     const otherParticipant = conv.participants.find(p => p.id !== currentUserId);
     return otherParticipant?.name.toLowerCase().includes(searchTerm.toLowerCase());
+  });
+
+  // [TRISID] 새 대화를 위한 사용자 필터링 (이미 대화 중인 사용자 제외)
+  const availableUsers = users?.filter(user => {
+    // 자기 자신 제외
+    if (user.id === currentUserId) return false;
+
+    // 이미 대화 중인 사용자 제외
+    const hasExistingConversation = conversations?.some(conv =>
+      conv.participants.some(p => p.id === user.id)
+    );
+
+    // 검색어 필터링
+    const matchesSearch = user.name.toLowerCase().includes(userSearchTerm.toLowerCase()) ||
+      user.position?.toLowerCase().includes(userSearchTerm.toLowerCase());
+
+    return !hasExistingConversation && matchesSearch;
   });
 
   // 로딩 및 에러 상태 처리 (간단하게)
@@ -264,8 +322,9 @@ export default function MessagesPage() {
             <div className="flex justify-between items-center mb-3">
               <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">대화</h2>
               <button
-                onClick={() => {/* TODO: 새 대화 모달 열기. users 목록 사용 */ alert('새 대화 시작 기능 구현 필요 (사용자 목록 표시)'); }}
-                className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
+                onClick={() => setShowNewConversationModal(true)}
+                className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                title="새 대화 시작"
               >
                 <UserPlus size={20} className="text-gray-600 dark:text-gray-300" />
               </button>
@@ -383,6 +442,92 @@ export default function MessagesPage() {
           )}
         </main>
       </div>
+
+      {/* [TRISID] 새 대화 시작 모달 */}
+      {showNewConversationModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-md max-h-[80vh] flex flex-col">
+            {/* 모달 헤더 */}
+            <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">새 대화 시작</h3>
+              <button
+                onClick={() => {
+                  setShowNewConversationModal(false);
+                  setUserSearchTerm('');
+                }}
+                className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              >
+                <X size={20} className="text-gray-500 dark:text-gray-400" />
+              </button>
+            </div>
+
+            {/* 사용자 검색 */}
+            <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="사용자 이름 또는 직책 검색..."
+                  value={userSearchTerm}
+                  onChange={(e) => setUserSearchTerm(e.target.value)}
+                  className="w-full pl-10 pr-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:ring-blue-500 focus:border-blue-500 text-sm text-gray-700 dark:text-gray-200"
+                />
+                <Search size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500" />
+              </div>
+            </div>
+
+            {/* 사용자 목록 */}
+            <div className="flex-1 overflow-y-auto p-2">
+              {!users && <p className="p-4 text-center text-sm text-gray-500 dark:text-gray-400">사용자 목록을 불러오는 중...</p>}
+              {availableUsers && availableUsers.length === 0 && (
+                <div className="p-4 text-center">
+                  <UserPlus className="h-12 w-12 mx-auto text-gray-400 dark:text-gray-500 mb-2" />
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    {userSearchTerm ? '검색 결과가 없습니다.' : '새로 대화할 수 있는 사용자가 없습니다.'}
+                  </p>
+                  <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                    모든 사용자와 이미 대화 중입니다.
+                  </p>
+                </div>
+              )}
+              {availableUsers?.map(user => (
+                <button
+                  key={user.id}
+                  onClick={() => handleStartNewConversation(user.id)}
+                  disabled={startingConversation}
+                  className="w-full p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex items-center space-x-3 text-left disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <Image
+                    src={user.avatar || '/images/avatars/default-avatar.png'}
+                    alt={user.name}
+                    width={40}
+                    height={40}
+                    className="rounded-full object-cover"
+                  />
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-gray-800 dark:text-gray-100 truncate">{user.name}</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
+                      {user.position || '직책 없음'}
+                      {user.isOnline !== undefined && (
+                        <span className={`ml-2 inline-block w-2 h-2 rounded-full ${user.isOnline ? 'bg-green-500' : 'bg-gray-400'}`}></span>
+                      )}
+                    </p>
+                  </div>
+                  {startingConversation && (
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500"></div>
+                  )}
+                </button>
+              ))}
+            </div>
+
+            {/* 모달 푸터 */}
+            <div className="p-4 border-t border-gray-200 dark:border-gray-700 text-center">
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                {availableUsers?.length || 0}명의 사용자를 찾았습니다.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 } 

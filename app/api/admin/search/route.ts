@@ -285,7 +285,7 @@ export async function GET(request: NextRequest) {
         }
 
         const searchTerm = query.trim();
-        let allResults: SearchResult[] = [];
+        const allResults: SearchResult[] = [];
 
         // 회사 정보 검색
         if (!type || type === 'all' || type === 'company') {

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { ChevronDown, X, Home, Briefcase, Building, Users, FileText, Shield, Layers, LogIn } from 'lucide-react'
+import { ChevronDown, X, Home, Briefcase, Building, Users, FileText, Shield, Layers, LogIn, BookOpen } from 'lucide-react'
 import { cn } from '../lib/utils'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Button } from "@/components/ui/button"
@@ -27,6 +27,7 @@ export const SideMenu = ({
     { href: '/about', label: '회사소개', icon: Building },
     { href: '/support', label: '고객지원', icon: Users },
     { href: '/promotions', label: '홍보자료', icon: FileText },
+    { href: '/digital-catalog', label: '디지털 카다로그', icon: BookOpen },
     { href: '/intranet', label: '인트라넷', icon: Layers },
   ]
 

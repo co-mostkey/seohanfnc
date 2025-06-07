@@ -21,7 +21,7 @@ const CATEGORIES = [
 
 export const ProductFormBasicInfo = () => {
     const { register, formState: { errors }, control, setValue, watch } = useFormContext<ProductFormData>();
-    const mainImage = watch('image');
+    const mainImage = watch('mainImage');
 
     return (
         <Card>
@@ -89,10 +89,11 @@ export const ProductFormBasicInfo = () => {
                         endpoint="/api/admin/upload"
                         fileType="product-images"
                         onUploadSuccess={(file) => {
-                            setValue('image', file.url, { shouldValidate: true });
+                            setValue('mainImage', file.url, { shouldValidate: true });
                         }}
                         currentImageUrl={mainImage}
                     />
+                    {errors.mainImage && <p className="text-red-500 text-sm">{errors.mainImage.message}</p>}
                 </div>
 
                 {/* Description (Korean) */}

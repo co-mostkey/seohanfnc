@@ -295,14 +295,48 @@ const departmentColors: Record<string, string> = {
 };
 
 export default function MembersPage() {
-  const [members, setMembers] = useState(initialMembers);
-  const [filteredMembers, setFilteredMembers] = useState(initialMembers);
+  const [members, setMembers] = useState<any[]>([]);
+  const [filteredMembers, setFilteredMembers] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedDepartment, setSelectedDepartment] = useState('all');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [sortField, setSortField] = useState<'name' | 'department' | 'position'>('name');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [showManagersOnly, setShowManagersOnly] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  // [TRISID] API에서 멤버 데이터 로드
+  const loadMembers = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch('/api/intranet/members');
+      const data = await response.json();
+
+      if (data.success) {
+        setMembers(data.members);
+        setFilteredMembers(data.members);
+      } else {
+        setError('멤버 목록을 불러오는데 실패했습니다.');
+        // 백업용으로 임시 데이터 사용
+        setMembers(initialMembers);
+        setFilteredMembers(initialMembers);
+      }
+    } catch (error) {
+      console.error('멤버 로드 오류:', error);
+      setError('서버 연결에 실패했습니다.');
+      // 백업용으로 임시 데이터 사용
+      setMembers(initialMembers);
+      setFilteredMembers(initialMembers);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // 컴포넌트 마운트 시 데이터 로드
+  useEffect(() => {
+    loadMembers();
+  }, []);
 
   // 필터링 및 정렬 적용
   useEffect(() => {
@@ -427,8 +461,8 @@ export default function MembersPage() {
           <button
             onClick={() => setViewMode('grid')}
             className={`p-2 rounded-md ${viewMode === 'grid'
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+              ? 'bg-blue-600 text-white'
+              : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
               }`}
             title="그리드 보기"
           >
@@ -437,8 +471,8 @@ export default function MembersPage() {
           <button
             onClick={() => setViewMode('list')}
             className={`p-2 rounded-md ${viewMode === 'list'
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+              ? 'bg-blue-600 text-white'
+              : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
               }`}
             title="리스트 보기"
           >
@@ -491,8 +525,8 @@ export default function MembersPage() {
             <button
               onClick={() => setShowManagersOnly(!showManagersOnly)}
               className={`inline-flex items-center px-3 py-2 rounded-md ${showManagersOnly
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                 }`}
             >
               <Users className="h-4 w-4 mr-1.5" />

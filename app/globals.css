@@ -1308,3 +1308,152 @@ a:hover,
     }
   }
 }
+
+/* [TRISID] 디지털 카탈로그 인쇄 최적화 */
+@media print {
+
+  /* 기본 인쇄 설정 */
+  body {
+    -webkit-print-color-adjust: exact !important;
+    color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* 디지털 카탈로그 페이지 설정 */
+  .digital-catalog-page {
+    page-break-after: always;
+    page-break-inside: avoid;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  /* A4 사이즈 (210 × 297 mm) */
+  .digital-catalog-page.a4 {
+    width: 794px !important;
+    /* 210mm @ 96dpi */
+    height: 1123px !important;
+    /* 297mm @ 96dpi */
+  }
+
+  /* B4 사이즈 (250 × 354 mm) */
+  .digital-catalog-page.b4 {
+    width: 945px !important;
+    /* 250mm @ 96dpi */
+    height: 1336px !important;
+    /* 354mm @ 96dpi */
+  }
+
+  /* 카탈로그 요소들 인쇄 최적화 */
+  .catalog-element {
+    -webkit-print-color-adjust: exact !important;
+    color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* 텍스트 요소 인쇄 최적화 */
+  .catalog-element-text {
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* 이미지 요소 인쇄 최적화 */
+  .catalog-element-image img {
+    max-width: 100% !important;
+    height: auto !important;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+
+  /* 도형 요소 인쇄 최적화 */
+  .catalog-element-shape {
+    -webkit-print-color-adjust: exact !important;
+    color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* 숨김 요소들 (편집 UI) */
+  .print-hidden,
+  .catalog-toolbar,
+  .catalog-sidebar,
+  .catalog-element-controls,
+  .resize-handle {
+    display: none !important;
+  }
+
+  /* 페이지 브레이크 제어 */
+  .page-break-before {
+    page-break-before: always;
+  }
+
+  .page-break-after {
+    page-break-after: always;
+  }
+
+  .page-break-inside-avoid {
+    page-break-inside: avoid;
+  }
+
+  /* 고품질 인쇄를 위한 폰트 설정 */
+  .catalog-print-font {
+    font-family: "Arial", "Helvetica", "Noto Sans KR", sans-serif;
+    font-weight: normal;
+    line-height: 1.4;
+  }
+
+  .catalog-print-font-bold {
+    font-weight: bold;
+  }
+
+  /* 컬러 정확도 보장 */
+  .catalog-print-colors * {
+    -webkit-print-color-adjust: exact !important;
+    color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
+
+/* [TRISID] 디지털 카탈로그 화면 표시용 스타일 */
+.digital-catalog-canvas {
+  background: #f5f5f5;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.digital-catalog-canvas.preview-mode {
+  background: white;
+  padding: 0;
+}
+
+/* 캔버스 줌 컨트롤 */
+.catalog-zoom-controls {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 50;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 8px;
+  display: flex;
+  gap: 4px;
+}
+
+/* 프린트 프리뷰 모드 */
+.print-preview-mode .catalog-element {
+  pointer-events: none;
+}
+
+.print-preview-mode .catalog-element-controls {
+  display: none;
+}
+
+/* 고해상도 이미지 지원 */
+@media (-webkit-min-device-pixel-ratio: 2),
+(min-resolution: 192dpi) {
+  .catalog-element-image img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}

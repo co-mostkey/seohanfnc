@@ -3,9 +3,19 @@ import { z } from 'zod';
 // MediaGalleryItem 스키마 (이미지/비디오 공용)
 const mediaGalleryItemSchema = z.object({
     id: z.string().optional(), // UUID 검증 제거, optional로 변경
-    src: z.string().min(1, "경로는 필수입니다."), // URL 검증 제거
-    alt: z.string().min(1, "대체 텍스트는 필수입니다."),
-    type: z.enum(['image', 'video']),
+    src: z.string().optional(), // 빈 항목 허용
+    alt: z.string().optional(), // 빈 항목 허용
+    type: z.enum(['image', 'video']).default('image'),
+    description: z.string().optional(),
+    caption: z.string().optional(),
+});
+
+// 비디오 전용 스키마
+const videoGalleryItemSchema = z.object({
+    id: z.string().optional(),
+    src: z.string().optional(),
+    alt: z.string().optional(),
+    type: z.literal('video'),
     description: z.string().optional(),
     caption: z.string().optional(),
 });
@@ -61,6 +71,17 @@ const model3DSchema = z.object({
     additionalOptions: z.string().optional(),
     glbFile: z.string().optional(),
     modelStyle: z.enum(['realistic', 'wireframe', 'cartoon']).default('realistic'),
+    scale: z.number().min(0.001).max(100).optional().default(0.095), // 3D 모델 스케일 조정
+    position: z.object({
+        x: z.number().optional().default(0),
+        y: z.number().optional().default(-0.5),
+        z: z.number().optional().default(0)
+    }).optional(),
+    rotation: z.object({
+        x: z.number().optional().default(0),
+        y: z.number().optional().default(0),
+        z: z.number().optional().default(0)
+    }).optional(),
 });
 
 // TechnicalData 스키마 (B타입 전용)
@@ -95,7 +116,7 @@ export const productSchema = z.object({
     image: z.string().min(1, "대표 이미지는 필수입니다."), // 경로 검증 제거
 
     gallery_images_data: z.array(mediaGalleryItemSchema).optional(),
-    videos: z.array(mediaGalleryItemSchema.extend({ type: z.literal('video') })).optional(), // 비디오 타입 명시
+    videos: z.array(videoGalleryItemSchema).optional(), // 비디오 타입 명시
 
     features: z.array(featureSchema).optional(),
     documents: z.array(documentSchema).optional(),
@@ -149,6 +170,7 @@ export const productSchema = z.object({
     showInProductList: z.boolean().optional().default(true),
     isSummaryPage: z.boolean().optional().default(false),
     pageBackgroundImage: z.string().optional(), // 경로 검증 제거
+    useTransparentBackground: z.boolean().optional().default(false), // [TRISID] 투명 배경 사용 여부
     pageHeroTitle: z.string().optional(),
     pageHeroSubtitles: z
         .array(
@@ -206,10 +228,10 @@ export const productFormSchema = z.object({
     descriptionKo: z.string().optional(),
     descriptionEn: z.string().optional(),
     descriptionCn: z.string().optional(),
-    mainImage: z.string().optional(),
+    mainImage: z.string().min(1, '메인 이미지를 업로드해주세요.'),
     longDescription: z.string().optional(),
     cautions: z.array(z.string()).optional(),
-    videos: z.array(z.string()).optional(),
+    videos: z.array(videoGalleryItemSchema).optional(), // 비디오 객체 배열로 수정
     pageBackgroundImage: z.string().optional(),
     features: z.array(featureSchema).optional(),
     documents: z.array(documentSchema).optional(),
@@ -253,11 +275,35 @@ export const productFormSchema = z.object({
         }).optional(),
         analysis: z.array(z.string()).optional(),
     }).optional(),
-    specTable: z.array(z.record(z.string())).optional(),
+    specTable: z.array(specTableItemSchema).optional(), // 올바른 스키마로 수정
     specTableOptions: z.object({
         title: z.string().optional(),
         firstColumnTitle: z.string().optional(),
     }).optional(),
     isPublished: z.boolean().default(true),
     sortOrder: z.number().default(0),
+    // 추가 필드들
+    showInProductList: z.boolean().optional().default(true),
+    isSummaryPage: z.boolean().optional().default(false),
+    name: z.string().optional(),
+    description: z.string().optional(),
+    image: z.string().optional(),
+    // B타입 페이지 설정 필드들 추가
+    useTransparentBackground: z.boolean().optional().default(false),
+    pageHeroTitle: z.string().optional(),
+    pageHeroSubtitles: z
+        .array(
+            z.object({
+                text: z.string().min(1, '서브타이틀 텍스트는 필수입니다.'),
+                color: z.string().optional(),
+                size: z
+                    .number()
+                    .int()
+                    .positive()
+                    .max(120)
+                    .optional(), // 120px 이하 제한
+            }),
+        )
+        .max(2, '서브타이틀은 최대 2개까지 입력할 수 있습니다.')
+        .optional(),
 }); 

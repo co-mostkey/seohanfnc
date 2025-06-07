@@ -43,7 +43,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
 
 export async function PUT(request: Request, { params }: { params: { id: string } }) {
     const { id } = params;
-    let promotions = await readPromotionsData();
+    const promotions = await readPromotionsData();
     const promotionIndex = promotions.findIndex(p => p.id === id);
 
     if (promotionIndex === -1) {
@@ -70,7 +70,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
 
 export async function DELETE(request: Request, { params }: { params: { id: string } }) {
     const { id } = params;
-    let promotions = await readPromotionsData();
+    const promotions = await readPromotionsData();
     const filteredPromotions = promotions.filter(p => p.id !== id);
 
     if (promotions.length === filteredPromotions.length) {
@@ -88,7 +88,7 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
 
 export async function PATCH(request: Request, { params }: { params: { id: string } }) {
     const { id } = params;
-    let promotions = await readPromotionsData();
+    const promotions = await readPromotionsData();
     const promotionIndex = promotions.findIndex(p => p.id === id);
 
     if (promotionIndex === -1) {

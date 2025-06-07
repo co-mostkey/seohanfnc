@@ -55,7 +55,7 @@ export default function Footer({ variant = 'transparent', className }: FooterPro
             className="flex items-center hover:text-white transition-colors duration-200"
           >
             <LogIn className="h-3 w-3 mr-1" />
-            <span>사업자 로그인</span>
+            <span>회원 로그인</span>
           </Link>
         </div>
 

@@ -130,7 +130,7 @@ const ProductDetail: React.FC<ProductDetailClientProps> = ({
         return () => {
             window.removeEventListener('scroll', handleScroll);
         };
-    }, [isScrolling, activeSection]);
+    }, [isScrolling]); // [TRISID] activeSection 의존성 제거하여 무한 리렌더링 방지
 
     // 특정 섹션으로 스크롤
     const scrollToSection = (sectionId: SectionId) => {
@@ -296,7 +296,8 @@ const ProductDetail: React.FC<ProductDetailClientProps> = ({
                 </section>
 
                 {/* 히어로 이후 모든 콘텐츠 섹션을 감싸는 단일 배경 컨테이너 */}
-                <div className="relative bg-gradient-to-b from-black/[.70] via-black/50 to-transparent">
+                <div className="relative">
+                    <div className="sticky top-0 left-0 w-full h-32 pointer-events-none bg-gradient-to-b from-black/20 to-transparent z-10" />
                     {/* 제품 개요 섹션 - 개별 배경 제거 */}
                     <section
                         ref={sectionRefs.overview}

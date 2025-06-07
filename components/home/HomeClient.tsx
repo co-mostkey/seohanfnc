@@ -40,7 +40,6 @@ export default function HomeClient({
     initialPromotionsData,
     initialDeliveryData
 }: HomeClientProps) {
-    const [mounted, setMounted] = useState(false);
     const [activeSection, setActiveSection] = useState<'home' | 'products' | 'company' | 'support' | 'promo' | 'cert'>('home');
     const heroRef = useRef<HTMLDivElement>(null);
     const perspectiveRef = useRef<HTMLDivElement>(null);
@@ -60,7 +59,6 @@ export default function HomeClient({
     const [isIOS, setIsIOS] = useState(false);
 
     useEffect(() => {
-        setMounted(true);
         setIsIOS(isIOSDevice());
 
         const fetchCompanyData = async (retryCount = 0) => {
@@ -182,15 +180,7 @@ export default function HomeClient({
         };
         animationId = requestAnimationFrame(animate);
         return () => cancelAnimationFrame(animationId);
-    }, [isCertPaused, mounted]);
-
-    if (!mounted) {
-        return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-900">
-                <div className="h-10 w-10 animate-spin rounded-full border-4 border-red-500 border-t-transparent"></div>
-            </div>
-        );
-    }
+    }, [isCertPaused]);
 
     return (
         <main

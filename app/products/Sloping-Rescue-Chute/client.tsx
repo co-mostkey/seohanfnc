@@ -113,7 +113,7 @@ const ProductDetail: React.FC<ProductDetailClientProps> = ({
         return () => {
             window.removeEventListener('scroll', handleScroll);
         };
-    }, [isScrolling, activeSection, sectionRefs]);
+    }, [isScrolling]); // [TRISID] activeSection, sectionRefs 의존성 제거하여 무한 리렌더링 방지
 
     const scrollToSection = (sectionId: SectionId) => {
         setIsScrolling(true);
@@ -197,7 +197,8 @@ const ProductDetail: React.FC<ProductDetailClientProps> = ({
                     </button>
                 </section>
 
-                <div className="relative bg-gradient-to-b from-black/[.70] via-black/50 to-transparent">
+                <div className="relative">
+                    <div className="absolute top-0 left-0 w-full h-32 pointer-events-none bg-gradient-to-b from-black/20 to-transparent z-10" />
                     <section ref={sectionRefs.overview} id="overview" className="min-h-screen flex flex-col justify-center relative py-20 scroll-mt-20">
                         <div className="relative z-10 max-w-6xl mx-auto px-4 md:px-6 lg:px-8 w-full">
                             <div className="text-center mb-16">

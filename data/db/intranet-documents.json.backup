@@ -1,0 +1,91 @@
+{
+    "documents": [
+        {
+            "id": "doc-1",
+            "title": "인트라넷 사용 매뉴얼",
+            "description": "인트라넷 시스템 사용법에 대한 상세 가이드입니다. 로그인부터 각 기능별 사용법까지 포함되어 있습니다.",
+            "category": "manual",
+            "fileName": "인트라넷_사용_매뉴얼_v1.0.pdf",
+            "fileSize": 2048000,
+            "fileUrl": "/documents/intranet/intranet_manual_v1.0.pdf",
+            "uploadedBy": {
+                "id": "admin",
+                "name": "IT관리자",
+                "position": "관리자",
+                "department": "IT팀"
+            },
+            "downloads": 45,
+            "createdAt": "2025-01-01T09:00:00.000Z",
+            "updatedAt": "2025-01-01T09:00:00.000Z"
+        },
+        {
+            "id": "doc-2",
+            "title": "휴가신청서",
+            "description": "연차 및 특별휴가 신청을 위한 표준 양식입니다.",
+            "category": "hr",
+            "fileName": "휴가신청서_2025.docx",
+            "fileSize": 51200,
+            "fileUrl": "/documents/forms/vacation_request_2025.docx",
+            "uploadedBy": {
+                "id": "hr001",
+                "name": "김인사",
+                "position": "부장",
+                "department": "인사팀"
+            },
+            "downloads": 89,
+            "createdAt": "2025-01-08T11:15:00.000Z",
+            "updatedAt": "2025-01-08T11:15:00.000Z"
+        },
+        {
+            "id": "doc-3",
+            "title": "신제품 개발 계획서",
+            "description": "2025년 신제품 개발 프로젝트 상세 계획서입니다.",
+            "category": "project",
+            "fileName": "신제품_개발_계획서_2025.pptx",
+            "fileSize": 3072000,
+            "fileUrl": "/documents/projects/new_product_plan_2025.pptx",
+            "uploadedBy": {
+                "id": "dev001",
+                "name": "김개발",
+                "position": "팀장",
+                "department": "개발팀"
+            },
+            "downloads": 34,
+            "createdAt": "2025-01-12T13:20:00.000Z",
+            "updatedAt": "2025-01-12T13:20:00.000Z"
+        }
+    ],
+    "categories": [
+        {
+            "id": "general",
+            "name": "일반 문서",
+            "description": "일반적인 업무 문서"
+        },
+        {
+            "id": "hr",
+            "name": "인사 관련",
+            "description": "인사 및 급여 관련 문서"
+        },
+        {
+            "id": "finance",
+            "name": "재무 관련",
+            "description": "재무 및 회계 관련 문서"
+        },
+        {
+            "id": "project",
+            "name": "프로젝트",
+            "description": "프로젝트 관련 문서"
+        },
+        {
+            "id": "manual",
+            "name": "매뉴얼",
+            "description": "업무 매뉴얼 및 가이드"
+        }
+    ],
+    "metadata": {
+        "lastUpdated": "2025-01-13T00:00:00.000Z",
+        "totalDocuments": 3,
+        "totalSize": 5171200,
+        "lastId": 3
+    }
+}

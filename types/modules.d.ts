@@ -26,6 +26,68 @@ declare module 'lucide-react' {
     export const Download: Icon
     export const FileIcon: Icon
     export const MoreHorizontal: Icon
+    export const Globe: Icon
+    export const Bell: Icon
+    export const Newspaper: Icon
+    export const ArrowLeft: Icon
+    export const Check: Icon
+    export const BadgeCheck: Icon
+    export const ExternalLink: Icon
+    export const Activity: Icon
+    export const Film: Icon
+    export const MessageSquare: Icon
+    export const Maximize: Icon
+    export const Star: Icon
+    export const Zap: Icon
+    export const BarChart2: Icon
+    export const Smartphone: Icon
+    export const Monitor: Icon
+    export const Settings: Icon
+    export const Target: Icon
+    export const Link: Icon
+    export const Box: Icon
+    export const Compass: Icon
+    export const LifeBuoy: Icon
+    export const GitBranch: Icon
+    export const Aperture: Icon
+    export const Cpu: Icon
+    export const Speaker: Icon
+    export const Wifi: Icon
+    export const Bluetooth: Icon
+    export const Battery: Icon
+    export const WrenchIcon: Icon
+    export const RotateCcw: Icon
+    export const ZoomIn: Icon
+    export const ZoomOut: Icon
+    export const Play: Icon
+    export const Pause: Icon
+    export const Info: Icon
+    export const CheckCircle2: Icon
+    export const Eye: Icon
+    export const Tag: Icon
+    export const AlertCircle: Icon
+    export const Moon: Icon
+    export const Sun: Icon
+    export const ChevronDown: Icon
+    export const X: Icon
+    export const Circle: Icon
+    export const Printer: Icon
+    export const FileSpreadsheet: Icon
+    export const FileImage: Icon
+    export const FileBox: Icon
+    export const RotateCw: Icon
+    export const Dot: Icon
+    export const GripVertical: Icon
+    export const PanelLeft: Icon
+    export const Package: Icon
+    export const Mail: Icon
+    export const Grid: Icon
+    export const LucideIcon: Icon
+    export const BellRing: Icon
+    export const User: Icon
+    export const Search: Icon
+    export const MonitorIcon: Icon
+    export const MoveIcon: Icon
 }
 
 declare module 'framer-motion' {
@@ -67,4 +129,6 @@ declare module 'framer-motion' {
     export function useScroll(): any
     export function useMotionValue(initial: number): any
     export function useTransform(value: any, input: number[], output: any[]): any
+    export function useInView(): any
+    export function useAnimation(): any
 } 

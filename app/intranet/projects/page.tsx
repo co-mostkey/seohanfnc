@@ -479,14 +479,48 @@ const getRelativeTime = (dateString: string) => {
 };
 
 export default function ProjectsPage() {
-  const [projects, setProjects] = useState(initialProjects);
-  const [filteredProjects, setFilteredProjects] = useState(initialProjects);
+  const [projects, setProjects] = useState<any[]>([]);
+  const [filteredProjects, setFilteredProjects] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string | null>(null);
   const [categoryFilter, setCategoryFilter] = useState<string | null>(null);
   const [priorityFilter, setPriorityFilter] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState<'name' | 'progress' | 'endDate'>('endDate');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  // [TRISID] API에서 프로젝트 데이터 로드
+  const loadProjects = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch('/api/intranet/projects');
+      const data = await response.json();
+
+      if (data.success) {
+        setProjects(data.projects && Array.isArray(data.projects) ? data.projects : []);
+        setFilteredProjects(data.projects && Array.isArray(data.projects) ? data.projects : []);
+      } else {
+        setError('프로젝트를 불러오는데 실패했습니다.');
+        // 백업용으로 임시 데이터 사용
+        setProjects(initialProjects);
+        setFilteredProjects(initialProjects);
+      }
+    } catch (error) {
+      console.error('프로젝트 로드 오류:', error);
+      setError('서버 연결에 실패했습니다.');
+      // 백업용으로 임시 데이터 사용
+      setProjects(initialProjects);
+      setFilteredProjects(initialProjects);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // 컴포넌트 마운트 시 데이터 로드
+  useEffect(() => {
+    loadProjects();
+  }, []);
 
   // 필터링 및 정렬 적용
   useEffect(() => {
@@ -497,10 +531,10 @@ export default function ProjectsPage() {
       const term = searchTerm.toLowerCase();
       result = result.filter(
         project =>
-          project.name.toLowerCase().includes(term) ||
-          project.description.toLowerCase().includes(term) ||
-          project.category.toLowerCase().includes(term) ||
-          project.manager.name.toLowerCase().includes(term)
+          (project.name && project.name.toLowerCase().includes(term)) ||
+          (project.description && project.description.toLowerCase().includes(term)) ||
+          (project.category && project.category.toLowerCase().includes(term)) ||
+          (project.manager?.name && project.manager.name.toLowerCase().includes(term))
       );
     }
 
@@ -522,16 +556,20 @@ export default function ProjectsPage() {
     // 정렬 적용
     result.sort((a, b) => {
       if (sortBy === 'name') {
+        const nameA = a.name || '';
+        const nameB = b.name || '';
         return sortDirection === 'asc'
-          ? a.name.localeCompare(b.name)
-          : b.name.localeCompare(a.name);
+          ? nameA.localeCompare(nameB)
+          : nameB.localeCompare(nameA);
       } else if (sortBy === 'progress') {
+        const progressA = a.progress || 0;
+        const progressB = b.progress || 0;
         return sortDirection === 'asc'
-          ? a.progress - b.progress
-          : b.progress - a.progress;
+          ? progressA - progressB
+          : progressB - progressA;
       } else if (sortBy === 'endDate') {
-        const dateA = new Date(a.endDate);
-        const dateB = new Date(b.endDate);
+        const dateA = new Date(a.endDate || Date.now());
+        const dateB = new Date(b.endDate || Date.now());
         return sortDirection === 'asc'
           ? dateA.getTime() - dateB.getTime()
           : dateB.getTime() - dateA.getTime();
@@ -564,7 +602,7 @@ export default function ProjectsPage() {
   };
 
   // 전체 카테고리 목록 추출
-  const categories = Array.from(new Set(projects.map(project => project.category)));
+  const categories = Array.from(new Set(projects.map(project => project.category).filter(Boolean)));
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -648,8 +686,8 @@ export default function ProjectsPage() {
                   key={priority}
                   onClick={() => setPriorityFilter(priorityFilter === priority ? null : priority)}
                   className={`inline-flex items-center px-3 py-2 rounded-md ${priorityFilter === priority
-                      ? 'bg-gray-600 text-white'
-                      : 'bg-gray-700 text-gray-300 hover:bg-gray-650'
+                    ? 'bg-gray-600 text-white'
+                    : 'bg-gray-700 text-gray-300 hover:bg-gray-650'
                     }`}
                 >
                   <span className={`mr-1.5 ${config.textColor}`}>{config.icon}</span>
@@ -664,8 +702,8 @@ export default function ProjectsPage() {
       {filteredProjects.length > 0 ? (
         <div className="space-y-4">
           {filteredProjects.map(project => {
-            const status = statusConfig[project.status as keyof typeof statusConfig];
-            const priority = priorityConfig[project.priority as keyof typeof priorityConfig];
+            const status = statusConfig[project.status as keyof typeof statusConfig] || statusConfig.planning;
+            const priority = priorityConfig[project.priority as keyof typeof priorityConfig] || priorityConfig.normal;
 
             return (
               <div key={project.id} className="bg-gray-800 rounded-lg overflow-hidden shadow-sm">
@@ -673,17 +711,17 @@ export default function ProjectsPage() {
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
                     <div>
                       <div className="flex items-center mb-2">
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${status.bgColor} ${status.textColor} mr-2`}>
-                          {status.icon}
-                          <span className="ml-1">{status.label}</span>
+                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${status?.bgColor || 'bg-gray-600'} ${status?.textColor || 'text-gray-300'} mr-2`}>
+                          {status?.icon || '📋'}
+                          <span className="ml-1">{status?.label || '미정'}</span>
                         </span>
                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-700 text-gray-300 mr-2`}>
                           <Tag className="h-3.5 w-3.5 mr-1" />
                           {project.category}
                         </span>
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${priority.textColor}`}>
-                          {priority.icon}
-                          <span className="ml-1">우선순위: {priority.label}</span>
+                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${priority?.textColor || 'text-gray-300'}`}>
+                          {priority?.icon || '🔹'}
+                          <span className="ml-1">우선순위: {priority?.label || '보통'}</span>
                         </span>
                       </div>
                       <h2 className="text-xl font-semibold text-white hover:text-blue-400 transition-colors">
@@ -719,7 +757,7 @@ export default function ProjectsPage() {
                       </div>
                       <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
                         <div
-                          className={`h-full ${status.color}`}
+                          className={`h-full ${status?.color || 'bg-gray-500'}`}
                           style={{ width: `${project.progress}%` }}
                         ></div>
                       </div>
@@ -734,36 +772,36 @@ export default function ProjectsPage() {
                     {/* 태스크 */}
                     <div className="flex items-center text-sm text-gray-400">
                       <CheckCircle2 className="h-4 w-4 mr-1.5 text-gray-500" />
-                      <span>태스크: {project.tasks.completed}/{project.tasks.total}</span>
+                      <span>태스크: {project.tasks?.completed || 0}/{project.tasks?.total || 0}</span>
                     </div>
 
                     {/* 팀원 */}
                     <div className="flex items-center">
                       <div className="flex -space-x-2 mr-2">
-                        {project.team.slice(0, 3).map((member, index) => (
-                          <div key={member.id} className="relative w-8 h-8 rounded-full border-2 border-gray-800 overflow-hidden">
+                        {project.team && Array.isArray(project.team) && project.team.slice(0, 3).map((member, index) => (
+                          <div key={member.id || index} className="relative w-8 h-8 rounded-full border-2 border-gray-800 overflow-hidden">
                             <Image
-                              src={member.avatar}
-                              alt={member.name}
+                              src={member.avatar || '/images/avatars/avatar-3.svg'}
+                              alt={member.name || '팀원'}
                               fill
                               className="object-cover"
                             />
                           </div>
                         ))}
-                        {project.team.length > 3 && (
+                        {project.team && project.team.length > 3 && (
                           <div className="relative w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-sm text-white border-2 border-gray-800">
                             +{project.team.length - 3}
                           </div>
                         )}
                       </div>
                       <span className="text-sm text-gray-400">
-                        {project.manager.name} 외 {project.team.length - 1}명
+                        {project.manager?.name} 외 {(project.team?.length || 1) - 1}명
                       </span>
                     </div>
                   </div>
 
                   {/* 최근 활동 */}
-                  {project.recentActivities.length > 0 && (
+                  {project.recentActivities && Array.isArray(project.recentActivities) && project.recentActivities.length > 0 && (
                     <div className="mt-4 pt-4 border-t border-gray-700">
                       <h3 className="text-sm font-medium text-gray-400 mb-2">최근 활동</h3>
                       <div className="space-y-2">
@@ -771,15 +809,15 @@ export default function ProjectsPage() {
                           <div key={activity.id} className="flex items-start">
                             <div className="relative w-6 h-6 rounded-full overflow-hidden mr-2">
                               <Image
-                                src={activity.user.avatar}
-                                alt={activity.user.name}
+                                src={activity.user?.avatar || '/images/avatars/avatar-3.svg'}
+                                alt={activity.user?.name || '사용자'}
                                 fill
                                 className="object-cover"
                               />
                             </div>
                             <div className="flex-1">
                               <p className="text-sm text-gray-300">
-                                <span className="font-medium text-white">{activity.user.name}</span>
+                                <span className="font-medium text-white">{activity.user?.name || '사용자'}</span>
                                 {' '}{activity.action}
                               </p>
                               <p className="text-xs text-gray-500">{getRelativeTime(activity.timestamp)}</p>

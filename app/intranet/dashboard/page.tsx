@@ -79,30 +79,51 @@ export default function DashboardPage() {
                 }
 
                 // 오늘 일정
-                const today = new Date();
-                const eventsResponse = await fetch(`/api/intranet/events?year=${today.getFullYear()}&month=${today.getMonth() + 1}`);
-                const eventsData = await eventsResponse.json();
-                if (eventsData.success) {
-                    // 오늘 일정만 필터링
-                    const todayStr = today.toISOString().split('T')[0];
-                    const todayEvents = eventsData.events.filter((event: any) =>
-                        event.date.startsWith(todayStr)
-                    );
-                    setTodayEvents(todayEvents);
+                try {
+                    const today = new Date();
+                    const eventsResponse = await fetch(`/api/intranet/events?year=${today.getFullYear()}&month=${today.getMonth() + 1}`);
+                    const eventsData = await eventsResponse.json();
+                    if (eventsData.success && eventsData.events && Array.isArray(eventsData.events)) {
+                        // 오늘 일정만 필터링
+                        const todayStr = today.toISOString().split('T')[0];
+                        const todayEvents = eventsData.events.filter((event: any) =>
+                            event.date && event.date.startsWith(todayStr)
+                        );
+                        setTodayEvents(todayEvents);
+                    } else {
+                        setTodayEvents([]);
+                    }
+                } catch (eventError) {
+                    console.error('일정 로드 실패:', eventError);
+                    setTodayEvents([]);
                 }
 
                 // 내 프로젝트
-                const projectsResponse = await fetch('/api/intranet/projects?status=in-progress');
-                const projectsData = await projectsResponse.json();
-                if (projectsData.success) {
-                    setMyProjects(projectsData.projects.slice(0, 2)); // 최대 2개만 표시
+                try {
+                    const projectsResponse = await fetch('/api/intranet/projects?status=in-progress');
+                    const projectsData = await projectsResponse.json();
+                    if (projectsData.success && projectsData.projects && Array.isArray(projectsData.projects)) {
+                        setMyProjects(projectsData.projects.slice(0, 2)); // 최대 2개만 표시
+                    } else {
+                        setMyProjects([]);
+                    }
+                } catch (projectError) {
+                    console.error('프로젝트 로드 실패:', projectError);
+                    setMyProjects([]);
                 }
 
-                // 공지사항
-                const noticesResponse = await fetch('/api/notices');
-                const noticesData = await noticesResponse.json();
-                if (noticesData.success) {
-                    setNotices(noticesData.notices.slice(0, 3)); // 최대 3개만 표시
+                // 인트라넷 공지사항
+                try {
+                    const noticesResponse = await fetch('/api/intranet/notices?limit=3');
+                    const noticesData = await noticesResponse.json();
+                    if (noticesData.success && noticesData.notices && Array.isArray(noticesData.notices)) {
+                        setNotices(noticesData.notices.slice(0, 3)); // 최대 3개만 표시
+                    } else {
+                        setNotices([]);
+                    }
+                } catch (noticeError) {
+                    console.error('[TRISID] 인트라넷 공지사항 로드 실패:', noticeError);
+                    setNotices([]);
                 }
             } catch (error) {
                 console.error('데이터 로드 실패:', error);
@@ -147,9 +168,9 @@ export default function DashboardPage() {
                 if (newEvent.date === today) {
                     const eventsResponse = await fetch(`/api/intranet/events?year=${new Date().getFullYear()}&month=${new Date().getMonth() + 1}`);
                     const eventsData = await eventsResponse.json();
-                    if (eventsData.success) {
+                    if (eventsData.success && eventsData.events && Array.isArray(eventsData.events)) {
                         const todayEvents = eventsData.events.filter((event: any) =>
-                            event.date.startsWith(today)
+                            event.date && event.date.startsWith(today)
                         );
                         setTodayEvents(todayEvents);
                     }
@@ -198,7 +219,7 @@ export default function DashboardPage() {
                 // 프로젝트 목록 새로고침
                 const projectsResponse = await fetch('/api/intranet/projects?status=in-progress');
                 const projectsData = await projectsResponse.json();
-                if (projectsData.success) {
+                if (projectsData.success && projectsData.projects && Array.isArray(projectsData.projects)) {
                     setMyProjects(projectsData.projects.slice(0, 2));
                 }
             } else {
@@ -465,7 +486,9 @@ export default function DashboardPage() {
                                             {notice.content.substring(0, 100)}...
                                         </p>
                                         <div className="flex items-center text-xs text-gray-500 mt-2">
-                                            <span>{notice.author}</span>
+                                            <span>{typeof notice.author === 'object' && notice.author?.name
+                                                ? notice.author.name
+                                                : notice.author}</span>
                                             <span className="mx-2">•</span>
                                             <span>{formatDate(notice.createdAt)}</span>
                                         </div>
@@ -547,7 +570,7 @@ export default function DashboardPage() {
                             <div className="flex items-start">
                                 <div className="relative w-10 h-10 rounded-full overflow-hidden mr-3 flex-shrink-0">
                                     <Image
-                                        src={getImagePath('/images/avatars/avatar-3.jpg')}
+                                        src={getImagePath('/images/avatars/avatar-3.svg')}
                                         alt="User Avatar"
                                         fill
                                         className="object-cover"

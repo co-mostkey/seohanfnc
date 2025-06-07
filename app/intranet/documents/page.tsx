@@ -356,7 +356,12 @@ interface Document {
   fileName: string;
   fileSize: number;
   fileUrl: string;
-  uploadedBy: string;
+  uploadedBy: string | {
+    id: string;
+    name: string;
+    position: string;
+    department: string;
+  };
   downloads: number;
   createdAt: string;
   updatedAt: string;
@@ -364,7 +369,7 @@ interface Document {
 
 interface Category {
   id: string;
-    name: string;
+  name: string;
   description: string;
 }
 
@@ -382,9 +387,9 @@ export default function IntranetDocumentsPage() {
     category: 'general',
     file: null as File | null
   });
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // 문서 목록 가져오기
   const fetchDocuments = async () => {
@@ -412,11 +417,12 @@ export default function IntranetDocumentsPage() {
     fetchDocuments();
   }, [selectedCategory, searchQuery]);
 
-  // 파일 업로드 처리
+  // [TRISID] 파일 업로드 처리
   const handleFileUpload = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!uploadData.file) {
-      setError('파일을 선택해주세요.');
+
+    if (!uploadData.file || !uploadData.title || !uploadData.category) {
+      setError('파일, 제목, 카테고리는 필수 입력 항목입니다.');
       return;
     }
 
@@ -424,49 +430,42 @@ export default function IntranetDocumentsPage() {
     setError('');
 
     try {
-      // 1. 파일 업로드
+      // [TRISID] 파일과 메타데이터를 한 번에 업로드
       const formData = new FormData();
       formData.append('file', uploadData.file);
+      formData.append('title', uploadData.title);
+      formData.append('description', uploadData.description);
+      formData.append('category', uploadData.category);
 
-      const uploadResponse = await fetch('/api/upload', {
+      const response = await fetch('/api/intranet/documents/upload', {
         method: 'POST',
-        body: formData
+        body: formData,
       });
 
-      if (!uploadResponse.ok) {
-        throw new Error('파일 업로드 실패');
-      }
+      const result = await response.json();
 
-      const uploadResult = await uploadResponse.json();
+      if (result.success) {
+        // 문서 목록 새로고침
+        await fetchDocuments();
 
-      // 2. 문서 정보 저장
-      const response = await fetch('/api/intranet/documents', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          title: uploadData.title || uploadData.file.name,
-          description: uploadData.description,
-          category: uploadData.category,
-          fileName: uploadData.file.name,
-          fileSize: uploadData.file.size,
-          fileUrl: uploadResult.url,
-          uploadedBy: 'current-user' // TODO: 실제 사용자 정보 사용
-        })
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        setSuccess('문서가 성공적으로 업로드되었습니다.');
+        setSuccess(result.message || '문서가 성공적으로 업로드되었습니다.');
         setShowUploadModal(false);
         setUploadData({ title: '', description: '', category: 'general', file: null });
-        fetchDocuments();
+
+        // 파일 입력 필드 초기화
+        if (fileInputRef.current) {
+          fileInputRef.current.value = '';
+        }
+
+        // 성공 메시지 자동 제거
+        setTimeout(() => setSuccess(''), 5000);
+      } else {
+        throw new Error(result.error || '업로드에 실패했습니다.');
       }
+
     } catch (error) {
-      console.error('문서 업로드 실패:', error);
-      setError('문서 업로드에 실패했습니다.');
+      console.error('[TRISID] 문서 업로드 실패:', error);
+      setError(error instanceof Error ? error.message : '문서 업로드에 실패했습니다.');
     } finally {
       setIsUploading(false);
     }
@@ -521,8 +520,8 @@ export default function IntranetDocumentsPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
-                    </div>
-                  </div>
+            </div>
+          </div>
           <div className="flex gap-2">
             <select
               className="bg-gray-700 border-gray-600 text-white rounded-md px-3 py-2"
@@ -543,9 +542,9 @@ export default function IntranetDocumentsPage() {
               <Upload className="h-4 w-4 mr-2" />
               문서 업로드
             </Button>
-                      </div>
-                    </div>
-                      </div>
+          </div>
+        </div>
+      </div>
 
       {/* 알림 메시지 */}
       {error && (
@@ -595,29 +594,31 @@ export default function IntranetDocumentsPage() {
                 {documents.map((doc) => (
                   <tr key={doc.id} className="hover:bg-gray-750">
                     <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center">
+                      <div className="flex items-center">
                         {getFileIcon(doc.fileName)}
                         <div className="ml-3">
                           <p className="text-white font-medium">{doc.title}</p>
                           {doc.description && (
                             <p className="text-gray-400 text-sm">{doc.description}</p>
-                              )}
-                            </div>
-                          </div>
-                        </td>
+                          )}
+                        </div>
+                      </div>
+                    </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className="px-2 py-1 text-xs rounded-full bg-gray-700 text-gray-300">
                         {categories.find(c => c.id === doc.category)?.name || doc.category}
-                          </span>
-                        </td>
+                      </span>
+                    </td>
                     <td className="px-6 py-4 whitespace-nowrap text-gray-300">
                       {formatFileSize(doc.fileSize)}
-                        </td>
+                    </td>
                     <td className="px-6 py-4 whitespace-nowrap text-gray-300">
                       {formatDate(doc.createdAt)}
-                        </td>
+                    </td>
                     <td className="px-6 py-4 whitespace-nowrap text-gray-300">
-                      {doc.uploadedBy}
+                      {typeof doc.uploadedBy === 'object' && doc.uploadedBy?.name
+                        ? doc.uploadedBy.name
+                        : doc.uploadedBy}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-2">
@@ -625,8 +626,8 @@ export default function IntranetDocumentsPage() {
                           href={doc.fileUrl}
                           download={doc.fileName}
                           className="text-blue-400 hover:text-blue-300"
-                            >
-                              <Download className="h-4 w-4" />
+                        >
+                          <Download className="h-4 w-4" />
                         </a>
                         <button
                           onClick={() => handleDelete(doc.id)}
@@ -634,15 +635,15 @@ export default function IntranetDocumentsPage() {
                         >
                           <Trash2 className="h-4 w-4" />
                         </button>
-                          </div>
-                        </td>
-                      </tr>
+                      </div>
+                    </td>
+                  </tr>
                 ))}
               </tbody>
             </table>
           </div>
         )}
-            </div>
+      </div>
 
       {/* 업로드 모달 */}
       {showUploadModal && (
@@ -671,7 +672,7 @@ export default function IntranetDocumentsPage() {
                     className="w-full text-gray-300"
                     required
                   />
-          </div>
+                </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
@@ -684,7 +685,7 @@ export default function IntranetDocumentsPage() {
                     className="bg-gray-700 border-gray-600 text-white"
                     placeholder="문서 제목을 입력하세요"
                   />
-      </div>
+                </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
@@ -715,17 +716,17 @@ export default function IntranetDocumentsPage() {
                     ))}
                   </select>
                 </div>
-                    </div>
+              </div>
 
               <div className="flex justify-end gap-3 mt-6">
-            <Button
+                <Button
                   type="button"
-              variant="outline"
+                  variant="outline"
                   onClick={() => setShowUploadModal(false)}
                   className="border-gray-600 text-gray-300 hover:bg-gray-700"
-            >
+                >
                   취소
-            </Button>
+                </Button>
                 <Button
                   type="submit"
                   disabled={isUploading}
@@ -742,7 +743,7 @@ export default function IntranetDocumentsPage() {
                       업로드
                     </>
                   )}
-            </Button>
+                </Button>
               </div>
             </form>
           </div>

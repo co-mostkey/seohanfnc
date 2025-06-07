@@ -23,7 +23,8 @@ type SafetyProduct = ImportedProduct & {
   category?: string; // 선택적으로 만들어서 타입 호환성 확보
 };
 
-import './b-type-3d.css';
+// CSS 파일 누락으로 주석 처리
+// import './b-type-3d.css';
 
 /**
  * 안전장비 카테고리 3D 쇼케이스 페이지

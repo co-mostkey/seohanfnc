@@ -27,7 +27,35 @@ import {
   Download
 } from 'lucide-react';
 
-// 임시 공지사항 데이터
+// [TRISID] 인트라넷 공지사항 인터페이스
+interface IntranetNotice {
+  id: string;
+  title: string;
+  content: string;
+  category: string;
+  author: {
+    id: string;
+    name: string;
+    position: string;
+    department: string;
+    avatar?: string;
+  };
+  isPinned: boolean;
+  isImportant: boolean;
+  viewCount: number;
+  commentCount: number;
+  attachments: Array<{
+    id: string;
+    name: string;
+    size: string;
+    type: string;
+    url?: string;
+  }>;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// 임시 공지사항 데이터 (API 연동 전)
 const initialNotices = [
   {
     id: 1,
@@ -279,8 +307,8 @@ const getRelativeTimeString = (dateString: string) => {
 };
 
 export default function NoticesPage() {
-  const [notices, setNotices] = useState(initialNotices);
-  const [filteredNotices, setFilteredNotices] = useState(initialNotices);
+  const [notices, setNotices] = useState<IntranetNotice[]>([]);
+  const [filteredNotices, setFilteredNotices] = useState<IntranetNotice[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortField, setSortField] = useState<'createdAt' | 'views'>('createdAt');
@@ -288,6 +316,72 @@ export default function NoticesPage() {
   const [showImportantOnly, setShowImportantOnly] = useState(false);
   const [showAttachmentsOnly, setShowAttachmentsOnly] = useState(false);
   const [showPinnedOnly, setShowPinnedOnly] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  // [TRISID] API에서 공지사항 데이터 로드
+  const loadNotices = async () => {
+    try {
+      setIsLoading(true);
+      setError('');
+
+      // 전체 데이터를 가져오기 위해 limit을 크게 설정
+      const response = await fetch('/api/intranet/notices?limit=1000');
+      const data = await response.json();
+
+      if (data.success && data.notices && Array.isArray(data.notices)) {
+        // API 데이터를 적절한 타입으로 변환
+        const transformedNotices = data.notices.map((notice: any) => ({
+          ...notice,
+          // id를 숫자에서 문자열로 변환 (기존 코드와 호환성)
+          id: typeof notice.id === 'number' ? notice.id.toString() : notice.id,
+          // author 객체의 id도 처리
+          author: {
+            ...notice.author,
+            id: typeof notice.author?.id === 'number' ? notice.author.id.toString() : notice.author?.id || ''
+          }
+        }));
+
+        setNotices(transformedNotices);
+        setFilteredNotices(transformedNotices);
+        console.log('[TRISID] 공지사항 로드 성공:', transformedNotices.length, '건');
+      } else {
+        console.warn('[TRISID] 공지사항 API 응답이 올바르지 않음:', data);
+        setError('공지사항을 불러오는데 실패했습니다.');
+        // 백업용으로 임시 데이터 사용
+        setNotices(initialNotices);
+        setFilteredNotices(initialNotices);
+      }
+    } catch (error) {
+      console.error('[TRISID] 공지사항 로드 오류:', error);
+      setError('서버 연결에 실패했습니다.');
+      // 백업용으로 임시 데이터 사용
+      setNotices(initialNotices);
+      setFilteredNotices(initialNotices);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // 컴포넌트 마운트 시 데이터 로드
+  useEffect(() => {
+    loadNotices();
+  }, []);
+
+  // [TRISID] 새로고침 핸들러 
+  const handleRefresh = () => {
+    loadNotices();
+  };
+
+  // [TRISID] 페이지 포커스시 자동 새로고침
+  useEffect(() => {
+    const handleFocus = () => {
+      loadNotices();
+    };
+
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
+  }, []);
 
   // 필터링 및 정렬 적용
   useEffect(() => {
@@ -364,16 +458,27 @@ export default function NoticesPage() {
           <h1 className="text-2xl font-semibold text-white mb-2">공지사항</h1>
           <p className="text-gray-400">
             총 {filteredNotices.length}개의 공지사항이 있습니다
+            {error && <span className="text-red-400 ml-2">({error})</span>}
           </p>
         </div>
 
-        <Link
-          href="/intranet/notices/create"
-          className="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-md transition-colors"
-        >
-          <Plus className="h-4 w-4 mr-1.5" />
-          공지사항 작성
-        </Link>
+        <div className="flex gap-2">
+          <button
+            onClick={handleRefresh}
+            disabled={isLoading}
+            className="inline-flex items-center bg-gray-600 hover:bg-gray-700 disabled:bg-gray-700 disabled:opacity-50 text-white font-medium px-4 py-2 rounded-md transition-colors"
+          >
+            <Search className="h-4 w-4 mr-1.5" />
+            {isLoading ? '새로고침 중...' : '새로고침'}
+          </button>
+          <Link
+            href="/intranet/notices/create"
+            className="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-md transition-colors"
+          >
+            <Plus className="h-4 w-4 mr-1.5" />
+            공지사항 작성
+          </Link>
+        </div>
       </div>
       {/* 필터 및 검색 */}
       <div className="mb-6 bg-gray-800 rounded-lg p-4">
@@ -412,8 +517,8 @@ export default function NoticesPage() {
             <button
               onClick={() => setShowImportantOnly(!showImportantOnly)}
               className={`inline-flex items-center px-3 py-2 rounded-md ${showImportantOnly
-                  ? 'bg-red-600 text-white'
-                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                ? 'bg-red-600 text-white'
+                : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                 }`}
             >
               <CircleAlert className="h-4 w-4 mr-1.5" />
@@ -423,8 +528,8 @@ export default function NoticesPage() {
             <button
               onClick={() => setShowAttachmentsOnly(!showAttachmentsOnly)}
               className={`inline-flex items-center px-3 py-2 rounded-md ${showAttachmentsOnly
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                 }`}
             >
               <FileText className="h-4 w-4 mr-1.5" />

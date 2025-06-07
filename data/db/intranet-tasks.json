@@ -2,57 +2,122 @@
     "tasks": [
         {
             "id": "1",
-            "title": "2분기 제품 판매 계획 작성",
-            "dueDate": "2025-05-15",
+            "title": "신제품 기획 문서 작성",
+            "description": "2025년 상반기 출시 예정인 신제품의 기획 문서를 작성하고 관련 부서와 검토를 진행합니다.",
+            "dueDate": "2025-01-20",
             "priority": "high",
             "assignees": [
                 {
-                    "name": "김직원",
-                    "avatar": null
+                    "id": "dev001",
+                    "name": "김개발",
+                    "position": "팀장",
+                    "department": "개발팀",
+                    "avatar": "/images/avatars/dev001.jpg"
                 },
                 {
-                    "name": "이과장",
-                    "avatar": null
+                    "id": "mkt001",
+                    "name": "이마케팅",
+                    "position": "과장",
+                    "department": "마케팅팀",
+                    "avatar": "/images/avatars/mkt001.jpg"
                 }
             ],
+            "category": "product",
             "completed": false,
-            "createdAt": "2024-12-30T10:00:00.000Z",
-            "updatedAt": "2024-12-30T10:00:00.000Z"
+            "progress": 65,
+            "createdAt": "2025-01-10T09:00:00.000Z",
+            "updatedAt": "2025-01-13T14:30:00.000Z"
         },
         {
             "id": "2",
-            "title": "클라이언트 미팅 자료 준비",
-            "dueDate": "2025-05-09",
+            "title": "품질관리 매뉴얼 검토",
+            "description": "전사 품질관리 매뉴얼의 최신화 및 개선사항을 검토합니다.",
+            "dueDate": "2025-01-25",
             "priority": "medium",
             "assignees": [
                 {
-                    "name": "김직원",
-                    "avatar": null
+                    "id": "qc001",
+                    "name": "박품질",
+                    "position": "대리",
+                    "department": "품질관리팀",
+                    "avatar": "/images/avatars/qc001.jpg"
                 }
             ],
-            "completed": true,
-            "createdAt": "2024-12-30T10:00:00.000Z",
-            "updatedAt": "2024-12-30T10:00:00.000Z"
+            "category": "quality",
+            "completed": false,
+            "progress": 30,
+            "createdAt": "2025-01-08T14:30:00.000Z",
+            "updatedAt": "2025-01-12T10:15:00.000Z"
         },
         {
             "id": "3",
-            "title": "신규 프로젝트 일정 수립",
-            "dueDate": "2025-05-12",
+            "title": "월간 보고서 준비",
+            "description": "12월 월간 업무 보고서 작성 및 제출",
+            "dueDate": "2025-01-15",
             "priority": "medium",
             "assignees": [
                 {
-                    "name": "박부장",
-                    "avatar": null
-                },
-                {
-                    "name": "김직원",
-                    "avatar": null
+                    "id": "admin001",
+                    "name": "최총무",
+                    "position": "과장",
+                    "department": "총무팀",
+                    "avatar": "/images/avatars/admin001.jpg"
                 }
             ],
+            "category": "report",
+            "completed": true,
+            "progress": 100,
+            "createdAt": "2025-01-05T11:15:00.000Z",
+            "updatedAt": "2025-01-14T16:00:00.000Z"
+        },
+        {
+            "id": "4",
+            "title": "직원 교육 계획 수립",
+            "description": "2025년 1분기 직원 교육 프로그램 계획을 수립합니다.",
+            "dueDate": "2025-01-30",
+            "priority": "medium",
+            "assignees": [
+                {
+                    "id": "hr001",
+                    "name": "김인사",
+                    "position": "부장",
+                    "department": "인사팀",
+                    "avatar": "/images/avatars/hr001.jpg"
+                }
+            ],
+            "category": "hr",
             "completed": false,
-            "createdAt": "2024-12-30T10:00:00.000Z",
-            "updatedAt": "2024-12-30T10:00:00.000Z"
+            "progress": 20,
+            "createdAt": "2025-01-12T09:30:00.000Z",
+            "updatedAt": "2025-01-13T11:45:00.000Z"
         }
     ],
-    "lastId": 3
-}
+    "categories": [
+        {
+            "id": "general",
+            "name": "일반",
+            "color": "#6B7280"
+        },
+        {
+            "id": "product",
+            "name": "제품개발",
+            "color": "#3B82F6"
+        },
+        {
+            "id": "quality",
+            "name": "품질관리",
+            "color": "#10B981"
+        },
+        {
+            "id": "report",
+            "name": "보고서",
+            "color": "#F59E0B"
+        },
+        {
+            "id": "hr",
+            "name": "인사",
+            "color": "#8B5CF6"
+        }
+    ],
+    "lastId": 4
+} 

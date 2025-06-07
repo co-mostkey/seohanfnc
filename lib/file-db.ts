@@ -243,7 +243,7 @@ export async function readItems<T>(filename: string, listKey?: string): Promise<
         }
 
         // 파일 읽기
-        let fileContent = await fs.readFile(filePath, 'utf-8');
+        const fileContent = await fs.readFile(filePath, 'utf-8');
 
         // 파일이 비어있거나 유효하지 않은 JSON인 경우 처리
         if (!fileContent.trim()) {
